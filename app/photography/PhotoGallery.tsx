@@ -8,7 +8,7 @@ interface Photo {
   filename: string;
   title: string;
   date: string;
-  location: string;
+  location?: string;
   description: string;
 }
 
