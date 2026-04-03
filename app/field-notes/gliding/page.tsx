@@ -58,13 +58,23 @@ export default function GlidingPage() {
             <div>
               <p className="mb-4 text-sm text-stone-500">Flight Over the Hills</p>
               <div className="overflow-hidden rounded-2xl bg-stone-100">
-                <video src="/field-notes/gliding/video/01_gliding_flight.mp4" controls playsInline className="w-full" />
+                <iframe
+                  src="https://drive.google.com/file/d/1BKeb-mGGKFlqX9d-4M1UrsQSRON85XEQ/preview"
+                  allow="autoplay"
+                  className="w-full"
+                  style={{ border: "none", aspectRatio: "16/9" }}
+                />
               </div>
             </div>
             <div>
               <p className="mb-4 text-sm text-stone-500">Cockpit View</p>
               <div className="overflow-hidden rounded-2xl bg-stone-100">
-                <video src="/field-notes/gliding/video/02_gliding_cockpit.mp4" controls playsInline className="w-full" />
+                <iframe
+                  src="https://drive.google.com/file/d/1YdqSn68QnTurM3CDEkBV1Tc27eFqD8YE/preview"
+                  allow="autoplay"
+                  className="w-full"
+                  style={{ border: "none", aspectRatio: "16/9" }}
+                />
               </div>
             </div>
           </div>

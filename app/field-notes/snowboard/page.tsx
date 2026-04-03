@@ -205,22 +205,22 @@ export default function SnowboardPage() {
             <div>
               <p className="mb-4 text-sm text-stone-500">Ridge Glide</p>
               <div className="overflow-hidden rounded-2xl bg-stone-100">
-                <video
-                  src="/field-notes/snowboard/video/05_superdevoluy_ridge_glide.mp4"
-                  controls
-                  playsInline
+                <iframe
+                  src="https://drive.google.com/file/d/1ZUz-pVkL0zwbX4I-_ndkGHFp_bcdF32q/preview"
+                  allow="autoplay"
                   className="w-full"
+                  style={{ border: "none", aspectRatio: "16/9" }}
                 />
               </div>
             </div>
             <div>
               <p className="mb-4 text-sm text-stone-500">Foggy Base</p>
               <div className="overflow-hidden rounded-2xl bg-stone-100">
-                <video
-                  src="/field-notes/snowboard/video/06_superdevoluy_foggy_base.mp4"
-                  controls
-                  playsInline
+                <iframe
+                  src="https://drive.google.com/file/d/16BtJI5Cu3gzozP0ymO05EcIs_vO4seQL/preview"
+                  allow="autoplay"
                   className="w-full"
+                  style={{ border: "none", aspectRatio: "16/9" }}
                 />
               </div>
             </div>

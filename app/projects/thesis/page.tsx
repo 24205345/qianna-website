@@ -21,13 +21,11 @@ export default function ThesisPage() {
     <div className="bg-stone-950 text-stone-100 font-sans">
       {/* ── 1. Hero Video (fullscreen) ── */}
       <section className="relative h-screen w-full overflow-hidden">
-        <video
-          src="/projects/thesis/video/01_hero_video.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover"
+        <iframe
+          src="https://drive.google.com/file/d/1joJd34gPQ_bt23fcfRuxdXbv08hteVaK/preview"
+          allow="autoplay"
+          className="absolute inset-0 h-full w-full"
+          style={{ border: "none" }}
         />
         {/* dark overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
@@ -136,12 +134,11 @@ export default function ThesisPage() {
             Project Introduction
           </p>
           <div className="overflow-hidden rounded-2xl bg-stone-900">
-            <video
-              src="/projects/thesis/video/02_intro_video.mp4"
-              controls
-              playsInline
+            <iframe
+              src="https://drive.google.com/file/d/1YvNuMVlKYizcHRTqBWhPklIDExRCMYHk/preview"
+              allow="autoplay"
               className="w-full"
-              poster=""
+              style={{ border: "none", aspectRatio: "16/9" }}
             />
           </div>
         </div>
