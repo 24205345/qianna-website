@@ -10,7 +10,10 @@ const tripDetails = [
 
 const photos = [
   { filename: "00_gliding_cover.jpg", title: "Cover" },
-  ...Array.from({ length: 21 }, (_, i) => ({ filename: `${(i + 1).toString().padStart(2, '0')}_gliding_flight_${i + 1}.jpg`, title: `Flight ${i + 1}` })),
+  ...Array.from({ length: 20 }, (_, i) => {
+    const num = i < 12 ? i + 1 : i + 2;
+    return { filename: `${num.toString().padStart(2, '0')}_gliding_flight_${num}.jpg`, title: `Flight ${num}` };
+  }),
 ];
 
 export default function GlidingPage() {
@@ -47,7 +50,7 @@ export default function GlidingPage() {
       </section>
       <section className="border-t border-stone-200">
         <div className="mx-auto w-full max-w-5xl px-6 py-14 md:px-10">
-          <p className="text-[10px] tracking-[0.26em] text-stone-400 uppercase mb-8">Photos · 22</p>
+          <p className="text-[10px] tracking-[0.26em] text-stone-400 uppercase mb-8">Photos · 21</p>
           <PhotoGallery photos={photos} basePath="/field-notes/gliding/images" />
         </div>
       </section>
