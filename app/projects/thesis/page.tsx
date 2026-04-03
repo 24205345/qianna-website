@@ -22,7 +22,7 @@ export default function ThesisPage() {
       {/* ── 1. Hero Video (fullscreen) ── */}
       <section className="relative h-screen w-full overflow-hidden">
         <iframe
-          src="https://drive.google.com/file/d/1joJd34gPQ_bt23fcfRuxdXbv08hteVaK/preview"
+          src="//player.bilibili.com/player.html?bvid=BV1js9gBsENY&autoplay=1&muted=1&loop=1"
           allow="autoplay; encrypted-media"
           className="absolute inset-0 h-full w-full"
           style={{ border: "none" }}
