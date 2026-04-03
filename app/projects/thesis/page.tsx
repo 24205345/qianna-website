@@ -21,11 +21,13 @@ export default function ThesisPage() {
     <div className="bg-stone-950 text-stone-100 font-sans">
       {/* ── 1. Hero Video (fullscreen) ── */}
       <section className="relative h-screen w-full overflow-hidden">
-        <iframe
-          src="//player.bilibili.com/player.html?bvid=BV1js9gBsENY&autoplay=1&muted=1&loop=1&danmaku=0&hideCover=1&noFullScreenButton=1&highQuality=1"
-          allow="autoplay; encrypted-media"
-          className="absolute inset-0 h-full w-full"
-          style={{ border: "none" }}
+        <video
+          src="/projects/thesis/video/01_hero_video.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover"
         />
         {/* dark overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
