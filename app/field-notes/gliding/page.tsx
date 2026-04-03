@@ -10,10 +10,7 @@ const tripDetails = [
 
 const photos = [
   { filename: "00_gliding_cover.jpg", title: "Cover" },
-  ...Array.from({ length: 20 }, (_, i) => {
-    const num = i < 12 ? i + 1 : i + 2;
-    return { filename: `${num.toString().padStart(2, '0')}_gliding_flight_${num}.jpg`, title: `Flight ${num}` };
-  }),
+  ...Array.from({ length: 20 }, (_, i) => ({ filename: `${(i + 1).toString().padStart(2, '0')}_gliding_flight_${i + 1}.jpg`, title: `Flight ${i + 1}` })),
 ];
 
 export default function GlidingPage() {
