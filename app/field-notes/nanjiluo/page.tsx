@@ -36,7 +36,7 @@ export default function NanjiluoPage() {
           <div className="mx-auto max-w-5xl">
             <p className="text-[10px] tracking-[0.26em] text-white/60 uppercase">Field Notes</p>
             <h1 className="mt-4 font-serif text-5xl text-white md:text-7xl">Hiking in Nanjiluo</h1>
-            <p className="mt-4 max-w-2xl text-sm text-white/70">Alpine lakes and pristine wilderness in one of Yunnan's most remote mountain areas.</p>
+            <p className="mt-4 max-w-2xl text-sm text-white/70">Alpine lakes and pristine wilderness in one of Yunnan&apos;s most remote mountain areas.</p>
           </div>
         </div>
       </section>

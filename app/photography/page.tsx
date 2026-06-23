@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import PhotoGallery from "./PhotoGallery";
 import {
@@ -51,7 +50,7 @@ export default function PhotographyPage() {
                 18 photos · 2025
               </p>
               <p className="mt-3 text-sm leading-6 text-stone-600">
-                Richard Meier's modernist masterpiece — a symphony of travertine, light, and geometric precision perched above Los Angeles.
+                Richard Meier&apos;s modernist masterpiece — a symphony of travertine, light, and geometric precision perched above Los Angeles.
               </p>
             </div>
           </div>
@@ -70,7 +69,7 @@ export default function PhotographyPage() {
                 18 photos · June 2025
               </p>
               <p className="mt-3 text-sm leading-6 text-stone-600">
-                The world's most influential architectural exhibition — pavilions, installations, and spatial experiments across Giardini and Arsenale.
+                The world&apos;s most influential architectural exhibition — pavilions, installations, and spatial experiments across Giardini and Arsenale.
               </p>
             </div>
           </div>
