@@ -1,7 +1,38 @@
 import Link from "next/link";
-import { projects } from "@/app/_data/projects";
+import { projects as staticProjects, type Project } from "@/app/_data/projects";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 
-export default function ProjectsPage() {
+async function getProjects(): Promise<Project[]> {
+  // 未配置 Supabase 时回退到静态数据，保证前台正常显示、build 不报错。
+  if (!isSupabaseConfigured()) {
+    return staticProjects;
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("projects")
+    .select("slug, category, title, description, tags, year")
+    .eq("status", "published")
+    .order("sort_order", { ascending: true });
+
+  // 查询异常时同样回退到静态数据，避免前台空白。
+  if (error) {
+    return staticProjects;
+  }
+
+  return (data ?? []).map((row) => ({
+    slug: row.slug,
+    category: row.category ?? "",
+    title: row.title,
+    description: row.description ?? "",
+    tags: row.tags ?? [],
+    year: row.year ?? "",
+  }));
+}
+
+export default async function ProjectsPage() {
+  const projects = await getProjects();
+
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
       {/* back to home */}
