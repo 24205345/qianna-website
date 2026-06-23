@@ -12,6 +12,7 @@ export interface ProjectFormDefaults {
   status?: string | null;
   sort_order?: number | null;
   cover_image_url?: string | null;
+  hero_video_url?: string | null;
 }
 
 interface ProjectFormProps {
@@ -126,6 +127,22 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
             className={inputClass}
           />
         </div>
+      </div>
+
+      <div>
+        <label className={labelClass} htmlFor="hero_video_url">
+          顶部视频 Hero video URL（外链或 Storage 地址；留空则不变）
+        </label>
+        {d.hero_video_url ? (
+          <p className="mt-1 text-xs text-stone-500 break-all">当前：{d.hero_video_url}</p>
+        ) : null}
+        <input
+          id="hero_video_url"
+          name="hero_video_url"
+          defaultValue={d.hero_video_url ?? ""}
+          placeholder="https://..."
+          className={inputClass}
+        />
       </div>
 
       <div>

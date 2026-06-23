@@ -65,6 +65,7 @@ function buildPayload(formData: FormData, coverUrl: string | null) {
     year: emptyToNull(formData.get("year")),
     status: emptyToNull(formData.get("status")) ?? "draft",
     sort_order: Number(formData.get("sort_order") ?? 0) || 0,
+    hero_video_url: emptyToNull(formData.get("hero_video_url")),
   };
   // 仅在本次有上传新封面时才更新 cover_image_url，避免覆盖已有值。
   if (coverUrl) {

@@ -24,6 +24,7 @@ create table if not exists public.projects (
   tags            text[],
   year            text,
   cover_image_url text,
+  hero_video_url  text,
   status          text not null default 'draft' check (status in ('draft', 'published')),
   sort_order      int not null default 0,
   created_at      timestamptz default now(),
@@ -42,6 +43,7 @@ create table if not exists public.project_media (
   project_id  uuid references public.projects (id) on delete cascade,
   type        text check (type in ('image', 'video', 'pdf')),
   url         text,
+  title       text,
   caption     text,
   sort_order  int default 0,
   created_at  timestamptz default now()
@@ -67,6 +69,19 @@ create trigger projects_set_updated_at
   before update on public.projects
   for each row
   execute function public.set_updated_at();
+
+-- =============================================================================
+-- 表级授权（GRANT）
+-- 说明：RLS 只是“行级”过滤，前提是角色先拥有“表级”操作权限。
+-- 通过 SQL/MCP 迁移建表时，Supabase 自动默认授权不一定生效，需显式 GRANT，
+-- 否则 anon/authenticated 访问会报 "permission denied for table ..."。
+-- =============================================================================
+grant select on public.projects      to anon;
+grant select on public.project_media to anon;
+grant select, insert, update, delete on public.projects      to authenticated;
+grant select, insert, update, delete on public.project_media to authenticated;
+grant all on public.projects      to service_role;
+grant all on public.project_media to service_role;
 
 -- =============================================================================
 -- 行级安全（RLS）

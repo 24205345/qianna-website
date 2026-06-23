@@ -1,5 +1,10 @@
 import Link from "next/link";
 import ProjectGallery from "./ProjectGallery";
+import {
+  thesisGalleryFallback,
+  thesisHeroVideoFallback,
+} from "@/app/_data/project-galleries";
+import { getProjectBySlug, getProjectGallery } from "@/lib/projects/queries";
 
 const projectDetails = [
   { label: "Programme", value: "Urban Design MArch" },
@@ -16,13 +21,18 @@ const overviewParagraphs = [
   "In response, the project proposes a dual intervention: a mobile app that tracks users' emotional states in transit, offering a live affective overview of the network and suggesting neurodiverse routes; and a parasitic architectural system embedded in multimodal hubs, offering spaces from quiet rest to collective events, in a process that transforms commuting into civic time and reimagines mobility as a shared spatial practice of care.",
 ];
 
-export default function ThesisPage() {
+export default async function ThesisPage() {
+  const [galleryImages, project] = await Promise.all([
+    getProjectGallery("thesis", thesisGalleryFallback),
+    getProjectBySlug("thesis"),
+  ]);
+  const heroVideoSrc = project?.hero_video_url ?? thesisHeroVideoFallback;
   return (
     <div className="bg-stone-950 text-stone-100 font-sans">
       {/* ── 1. Hero Video (fullscreen) ── */}
       <section className="relative h-screen w-full overflow-hidden">
         <video
-          src="/projects/thesis/video/01_hero_video.mp4"
+          src={heroVideoSrc}
           autoPlay
           muted
           loop
@@ -147,7 +157,7 @@ export default function ThesisPage() {
       </section>
 
       {/* ── 6. Project Gallery ── */}
-      <ProjectGallery />
+      <ProjectGallery images={galleryImages} />
 
       {/* ── Footer nav ── */}
       <div className="border-t border-stone-800">

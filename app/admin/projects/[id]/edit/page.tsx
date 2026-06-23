@@ -2,7 +2,9 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import ProjectForm, { type ProjectFormDefaults } from "../../ProjectForm";
+import MediaManager from "../../MediaManager";
 import { updateProjectAction } from "../../actions";
+import type { ProjectMediaRow } from "@/lib/projects/queries";
 
 export default async function EditProjectPage({
   params,
@@ -26,7 +28,7 @@ export default async function EditProjectPage({
   const { data: project, error } = await supabase
     .from("projects")
     .select(
-      "id, title, slug, subtitle, description, content, category, tags, year, status, sort_order, cover_image_url"
+      "id, title, slug, subtitle, description, content, category, tags, year, status, sort_order, cover_image_url, hero_video_url"
     )
     .eq("id", id)
     .single();
@@ -38,6 +40,15 @@ export default async function EditProjectPage({
   const defaults = project as ProjectFormDefaults;
   const updateAction = updateProjectAction.bind(null, id);
 
+  const { data: mediaRows } = await supabase
+    .from("project_media")
+    .select("id, type, url, title, caption, sort_order")
+    .eq("project_id", id)
+    .eq("type", "image")
+    .order("sort_order", { ascending: true });
+
+  const media = (mediaRows ?? []) as ProjectMediaRow[];
+
   return (
     <div className="min-h-screen bg-stone-50 px-6 py-12 text-stone-700 md:px-10">
       <div className="mx-auto max-w-2xl">
@@ -46,6 +57,7 @@ export default async function EditProjectPage({
         </Link>
         <h1 className="mt-4 font-serif text-3xl text-stone-900">编辑项目</h1>
         <ProjectForm action={updateAction} defaults={defaults} submitLabel="保存修改" />
+        <MediaManager projectId={id} media={media} />
       </div>
     </div>
   );

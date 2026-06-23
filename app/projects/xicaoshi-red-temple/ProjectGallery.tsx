@@ -2,25 +2,13 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import type { GalleryImage } from "@/app/_data/project-galleries";
 
-const projectImages = [
-  { filename: "01_site_analysis.jpg", title: "Site Analysis" },
-  { filename: "02_current_situation_analysis.png", title: "Current Situation Analysis" },
-  { filename: "03_landscape_rendering.jpg", title: "Landscape Rendering" },
-  { filename: "04_planning_guidelines.jpg", title: "Planning Guidelines" },
-  { filename: "05_important_node_updates.png", title: "Important Node Updates" },
-  { filename: "07_courtyard_location_analysis.jpg", title: "Courtyard Location Analysis" },
-  { filename: "08_current_situation.png", title: "Current Situation of Courtyard" },
-  { filename: "09_morphological_evolution.png", title: "Morphological Evolution Process" },
-  { filename: "10_analysis_chart.png", title: "Analysis Chart" },
-  { filename: "11_profile_view.jpg", title: "Profile View" },
-  { filename: "12_ground_floor_plan.jpg", title: "Ground Floor Plan" },
-  { filename: "13_exploded_axonometric.jpg", title: "Exploded Axonometric" },
-];
+interface ProjectGalleryProps {
+  images: GalleryImage[];
+}
 
-const basePath = "/projects/xicaoshi-red-temple/images";
-
-export default function ProjectGallery() {
+export default function ProjectGallery({ images }: ProjectGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const openLightbox = (index: number) => setSelectedIndex(index);
@@ -28,33 +16,35 @@ export default function ProjectGallery() {
 
   const goToPrevious = () => {
     if (selectedIndex !== null) {
-      setSelectedIndex(selectedIndex === 0 ? projectImages.length - 1 : selectedIndex - 1);
+      setSelectedIndex(selectedIndex === 0 ? images.length - 1 : selectedIndex - 1);
     }
   };
 
   const goToNext = () => {
     if (selectedIndex !== null) {
-      setSelectedIndex(selectedIndex === projectImages.length - 1 ? 0 : selectedIndex + 1);
+      setSelectedIndex(selectedIndex === images.length - 1 ? 0 : selectedIndex + 1);
     }
   };
+
+  if (images.length === 0) return null;
 
   return (
     <>
       <section className="border-t border-stone-800">
         <div className="mx-auto w-full max-w-5xl px-6 py-14 md:px-10 md:py-18">
           <p className="text-[10px] tracking-[0.26em] text-stone-500 uppercase mb-8">
-            Project Gallery · {projectImages.length}
+            Project Gallery · {images.length}
           </p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {projectImages.map((img, index) => (
+            {images.map((img, index) => (
               <div
-                key={img.filename}
+                key={`${img.url}-${index}`}
                 className="group cursor-pointer overflow-hidden rounded-xl bg-stone-900"
                 onClick={() => openLightbox(index)}
               >
                 <div className="relative aspect-[4/3]">
                   <Image
-                    src={`${basePath}/${img.filename}`}
+                    src={img.url}
                     alt={img.title}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -70,7 +60,6 @@ export default function ProjectGallery() {
         </div>
       </section>
 
-      {/* Lightbox */}
       {selectedIndex !== null && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
@@ -86,7 +75,10 @@ export default function ProjectGallery() {
           </button>
           <button
             className="absolute left-4 z-10 rounded-full bg-white/10 p-3 text-white/80 hover:bg-white/20"
-            onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              goToPrevious();
+            }}
           >
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -94,7 +86,10 @@ export default function ProjectGallery() {
           </button>
           <button
             className="absolute right-4 z-10 rounded-full bg-white/10 p-3 text-white/80 hover:bg-white/20"
-            onClick={(e) => { e.stopPropagation(); goToNext(); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              goToNext();
+            }}
           >
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -106,8 +101,8 @@ export default function ProjectGallery() {
           >
             <div className="relative flex-1 w-full max-h-[80vh]">
               <Image
-                src={`${basePath}/${projectImages[selectedIndex].filename}`}
-                alt={projectImages[selectedIndex].title}
+                src={images[selectedIndex].url}
+                alt={images[selectedIndex].title}
                 fill
                 className="object-contain"
                 sizes="95vw"
@@ -115,8 +110,10 @@ export default function ProjectGallery() {
               />
             </div>
             <div className="mt-4 text-center">
-              <p className="text-sm text-white/80">{projectImages[selectedIndex].title}</p>
-              <p className="mt-1 text-xs text-white/50">{selectedIndex + 1} / {projectImages.length}</p>
+              <p className="text-sm text-white/80">{images[selectedIndex].title}</p>
+              <p className="mt-1 text-xs text-white/50">
+                {selectedIndex + 1} / {images.length}
+              </p>
             </div>
           </div>
         </div>

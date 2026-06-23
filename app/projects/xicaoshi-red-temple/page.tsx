@@ -1,6 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import ProjectGallery from "./ProjectGallery";
+import {
+  xicaoshiCoverFallback,
+  xicaoshiGalleryFallback,
+} from "@/app/_data/project-galleries";
+import { getProjectBySlug, getProjectGallery } from "@/lib/projects/queries";
 
 const projectDetails = [
   { label: "Category", value: "Architecture Project" },
@@ -14,13 +19,18 @@ const overviewParagraphs = [
   "The method of 'urban acupuncture' is proposed — taking relatively small-scale intervention measures at specific nodes of the block, so as to have a positive catalytic effect on social, economic, and environmental problems in a wider range.",
 ];
 
-export default function XicaoshiRedTemplePage() {
+export default async function XicaoshiRedTemplePage() {
+  const [galleryImages, project] = await Promise.all([
+    getProjectGallery("xicaoshi-red-temple", xicaoshiGalleryFallback),
+    getProjectBySlug("xicaoshi-red-temple"),
+  ]);
+  const coverSrc = project?.cover_image_url ?? xicaoshiCoverFallback;
   return (
     <div className="bg-stone-950 text-stone-100 font-sans">
       {/* ── 1. Hero Cover (fullscreen) ── */}
       <section className="relative h-screen w-full overflow-hidden">
         <Image
-          src="/projects/xicaoshi-red-temple/images/00_landscape_cover.jpg"
+          src={coverSrc}
           alt="Xicaoshi Red Temple cover"
           fill
           priority
@@ -114,7 +124,7 @@ export default function XicaoshiRedTemplePage() {
       </section>
 
       {/* ── 5. Project Gallery ── */}
-      <ProjectGallery />
+      <ProjectGallery images={galleryImages} />
 
       {/* ── Footer nav ── */}
       <div className="border-t border-stone-800">
