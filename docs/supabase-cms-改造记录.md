@@ -128,6 +128,71 @@ npm run dev        # 本地预览
 7. **迁移封面图 / 媒体（可选）**：现有项目封面图位于被排除的 `public/` 目录；如需在 Supabase 展示，可在后台「编辑项目」时把图片上传到 `portfolio-media`，系统会自动写入 `cover_image_url`。
 8. **本地验证联通**：`npm run dev`，访问 `/admin/login` 登录 → `/admin/projects` 应能看到项目列表并可增删改；`/projects` 前台应显示来自数据库的 `published` 项目。
 9. **Vercel 部署环境变量**：在 Vercel 项目 → Settings → Environment Variables 添加 `NEXT_PUBLIC_SUPABASE_URL` 与 `NEXT_PUBLIC_SUPABASE_ANON_KEY`（Production / Preview 均需），重新部署。
+10. **配置密码重置 Redirect URLs（必做，否则邮件链接只会跳首页）**：
+    - Supabase 控制台 → **Authentication** → **URL Configuration**
+    - **Site URL** 保持生产域名，例如 `https://qianna-site.vercel.app`
+    - **Redirect URLs** 追加（每行一条）：
+      ```
+      https://qianna-site.vercel.app/auth/callback
+      https://qianna-site.vercel.app/auth/confirm
+      http://localhost:3000/auth/callback
+      http://localhost:3000/auth/confirm
+      ```
+    - 保存后，重置邮件才会被站点正确接住并完成换 session。
+
+---
+
+## 四点五、管理员密码重置（`/admin/login`）
+
+> commit：`fix: add Supabase password reset callback flow`（`0f15bdb`）
+
+### 现象
+
+在 Supabase 控制台点 **Send password recovery**，邮件链接若只跳到作品集首页、没有「设新密码」界面，通常是因为：
+
+1. 站点缺少 Supabase Auth 回调路由（`code` / `token_hash` 无人消费）；
+2. Supabase **Redirect URLs** 未白名单 `/auth/callback` 与 `/auth/confirm`。
+
+### 正确流程
+
+```
+邮件链接（常带 ?code= 落在首页）
+  → middleware 或直达 /auth/callback
+  → exchangeCodeForSession / verifyOtp，写入 session cookie
+  → /admin/reset-password（输入新密码）
+  → updateUser({ password })
+  → /admin/projects
+```
+
+### 相关文件
+
+| 文件 | 作用 |
+| --- | --- |
+| `app/auth/callback/route.ts` | PKCE：`?code=` 换 session，再 302 到 `next`（默认 `/admin/reset-password`） |
+| `app/auth/confirm/route.ts` | 兼容 `token_hash` + `type` 型邮件链接 |
+| `app/admin/reset-password/page.tsx` | 设置新密码表单（`updateUser`） |
+| `app/admin/login/page.tsx` | 登录 + **Forgot password?**（`resetPasswordForEmail`，`redirectTo` 指向 callback） |
+| `middleware.ts` | 首页带 `?code=` / `?token_hash=` 时自动转 callback/confirm；`/admin/reset-password` 与 login 同为未登录可访问页 |
+
+### 三种重置方式
+
+| 方式 | 操作 | 适用 |
+| --- | --- | --- |
+| **A. 登录页自助** | `/admin/login` 填邮箱 → **Forgot password?** → 收邮件 → 设新密码 | 推荐，走完整 callback |
+| **B. Supabase 控制台** | Authentication → Users → 用户 → **Send password recovery** | 需已配置 Redirect URLs + 已部署 callback 代码 |
+| **C. 控制台直接改** | Authentication → Users → 用户 → 直接设新密码 | 救急，不依赖邮件 |
+
+### 账号信息在哪查
+
+- **邮箱**：本地 `.env.local` 的 `SUPABASE_ADMIN_EMAIL`，或 Supabase → Authentication → Users
+- **密码**：任何地方都**无法查看明文**；只能回忆、查 `.env.local` 是否曾保存 `SUPABASE_ADMIN_PASSWORD`，或走上面三种重置方式
+
+### 本地验证清单
+
+1. Supabase Redirect URLs 已保存（见第四节第 10 步）
+2. `npm run dev` 后访问 `/admin/login` → Forgot password → 收邮件
+3. 点链接应进入 **Set New Password**，不是首页空白
+4. 设完后能登录 `/admin/projects`
 
 ---
 
@@ -171,3 +236,5 @@ npm run dev        # 本地预览
 15. **Windows 安装 Cursor Skill 的坑**：PowerShell 可能因执行策略拦截 `npm.ps1` / `npx.ps1`。此时用 `G:\node-v24.16.0-win-x64\npm.cmd` / `npx.cmd` 可绕过；用户已安装 `ui-ux-pro-max`，适合做大范围 UI/UX 检查，但像素级微调仍应以截图和现有风格为准。
 16. **Home Hero CMS 化**：站点级单例内容用 `site_settings` 单表即可，固定 `singleton_key = 'home'`，比通用 pages 表更轻。首页仍保留 `app/_data/site-settings.ts` 回退，后台 `/admin/site` 只暴露 Hero title/subtitle/CTA/image/alt，避免把首页布局复杂度提前 CMS 化。
 17. **大图上传策略**：Next Server Action 默认 body size 较小，后台上传 Hero 图需在 `next.config.ts` 配置 `serverActions.bodySizeLimit`；更稳妥的方式仍是 `npm run migrate:home` 先用 sharp 压缩上传，再在后台微调文案。
+18. **Site Navigation Copy CMS**：首页入口卡片与子页页眉共用 `site_navigation_items`；后台 `/admin/site` 的 Homepage Cards 区域编辑。About 页标题/描述走同一表 `about` 项，时间轴正文仍硬编码在 `app/about/page.tsx`（P6 可 CMS 化）。
+19. **Supabase 密码重置必须配 Redirect URLs**：仅有 `/admin/login` 不够；邮件里的 `code` 须经 `/auth/callback`（或 `/auth/confirm`）换 session，再进 `/admin/reset-password`。未配置时链接会落在 Site URL（首页）且无任何 UI。生产域名示例：`https://qianna-site.vercel.app/auth/callback`。首页带 `?code=` 时 middleware 会自动转发到 callback。

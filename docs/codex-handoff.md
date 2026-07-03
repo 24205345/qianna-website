@@ -299,6 +299,8 @@ P5 可选：建 `site_settings` 表 + 压缩上传 Supabase + `/admin/site`。
 | 首页封面空白 | 缺 hero-image.jpg | `.\scripts\download-home-hero.ps1` + 强刷 Ctrl+Shift+R |
 | permission denied for table | 缺 GRANT | migration 里补 GRANT（见 0001 注释） |
 | migrate 登录失败 | 密码错 / 末尾漏字符 | 检查 `.env.local` SUPABASE_ADMIN_PASSWORD |
+| 重置密码邮件跳首页 | 缺 callback 路由或未配 Redirect URLs | 部署 `app/auth/callback` 等；Supabase → URL Configuration 加 `/auth/callback` 与 `/auth/confirm`；见 `docs/supabase-cms-改造记录.md` §4.5 |
+| 忘记管理员密码 | Supabase Auth 无明文可查 | `/admin/login` → Forgot password；或 Supabase Users 直接改密 |
 | build 失败 use server re-export | photography actions 曾 re-export signOutAction | 从 `@/app/admin/projects/actions` 直接 import |
 | Next 16 params | 动态路由 params 是 Promise | `const { slug } = await params` |
 | 公司网络 git clone 失败 | 大 binary | sparse-checkout + raw 下载脚本 |

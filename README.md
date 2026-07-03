@@ -61,6 +61,8 @@ npm run start:site
 
 The public portfolio is backed by a private `/admin` CMS for managing projects, media collections, field notes, homepage text, and site navigation copy. Local static fallbacks are included so the site can still render when Supabase is not configured.
 
+**Admin password reset:** use `/admin/login` → *Forgot password?*, or configure Supabase Redirect URLs (`/auth/callback`, `/auth/confirm`) as documented in `docs/supabase-cms-改造记录.md` §4.5.
+
 Implementation notes live in `docs/`.
 
 ## Rights
