@@ -9,12 +9,15 @@ export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [sendingReset, setSendingReset] = useState(false);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setMessage(null);
 
     if (
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -39,6 +42,41 @@ export default function AdminLoginPage() {
 
     router.push("/admin/projects");
     router.refresh();
+  }
+
+  async function handleForgotPassword() {
+    setError(null);
+    setMessage(null);
+
+    if (!email.trim()) {
+      setError("Enter your admin email first, then click Forgot password.");
+      return;
+    }
+
+    if (
+      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    ) {
+      setError("Supabase environment variables are not configured. Password reset is unavailable.");
+      return;
+    }
+
+    setSendingReset(true);
+
+    const supabase = createClient();
+    const redirectTo = `${window.location.origin}/auth/callback?next=/admin/reset-password`;
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo,
+    });
+
+    if (resetError) {
+      setError(resetError.message);
+      setSendingReset(false);
+      return;
+    }
+
+    setMessage("Password reset email sent. Open the link to set a new password.");
+    setSendingReset(false);
   }
 
   return (
@@ -82,12 +120,27 @@ export default function AdminLoginPage() {
             <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>
           ) : null}
 
+          {message ? (
+            <p className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+              {message}
+            </p>
+          ) : null}
+
           <button
             type="submit"
             disabled={loading}
             className="mt-2 rounded-md bg-stone-900 px-5 py-2 text-sm text-white transition-colors hover:bg-stone-700 disabled:opacity-60"
           >
             {loading ? "Signing in..." : "Sign In"}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            disabled={sendingReset}
+            className="text-sm text-stone-500 underline-offset-2 transition-colors hover:text-stone-800 hover:underline disabled:opacity-60"
+          >
+            {sendingReset ? "Sending reset email..." : "Forgot password?"}
           </button>
         </form>
       </div>
