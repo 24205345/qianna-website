@@ -24,7 +24,7 @@ export async function addProjectMediaAction(projectId: string, formData: FormDat
   const sortOrder = Number(formData.get("sort_order") ?? 0) || 0;
 
   if (!file || file.size === 0) {
-    throw new Error("请选择图片文件");
+    throw new Error("Please choose an image file.");
   }
 
   const ext = file.name.includes(".") ? file.name.split(".").pop() : "jpg";
@@ -34,7 +34,7 @@ export async function addProjectMediaAction(projectId: string, formData: FormDat
     contentType: file.type || "image/jpeg",
     upsert: false,
   });
-  if (uploadError) throw new Error(`上传失败：${uploadError.message}`);
+  if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`);
 
   const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(path);
 
@@ -46,7 +46,7 @@ export async function addProjectMediaAction(projectId: string, formData: FormDat
     caption: caption || null,
     sort_order: sortOrder,
   });
-  if (error) throw new Error(`保存媒体记录失败：${error.message}`);
+  if (error) throw new Error(`Failed to save media record: ${error.message}`);
 
   revalidatePath(`/admin/projects/${projectId}/edit`);
   revalidatePath("/projects");
@@ -56,7 +56,7 @@ export async function deleteProjectMediaAction(projectId: string, mediaId: strin
   const supabase = await requireUser();
 
   const { error } = await supabase.from("project_media").delete().eq("id", mediaId);
-  if (error) throw new Error(`删除失败：${error.message}`);
+  if (error) throw new Error(`Delete failed: ${error.message}`);
 
   revalidatePath(`/admin/projects/${projectId}/edit`);
   revalidatePath("/projects");

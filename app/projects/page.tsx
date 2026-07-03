@@ -5,6 +5,10 @@ import {
   filterProjectsByCategory,
   getCategoryBySlug,
 } from "@/lib/projects/categories";
+import {
+  getSiteNavigationItem,
+  getSiteNavigationItems,
+} from "@/lib/site/queries";
 
 async function getProjects(): Promise<Project[]> {
   if (!isSupabaseConfigured()) {
@@ -100,8 +104,14 @@ export default async function ProjectsPage({
 }) {
   const { category: categorySlug } = await searchParams;
   const activeCategory = getCategoryBySlug(categorySlug);
-  const projects = await getProjects();
+  const [projects, navigationItems] = await Promise.all([
+    getProjects(),
+    getSiteNavigationItems(),
+  ]);
   const sortedProjects = sortProjectsByYearDesc(projects);
+  const activeCategoryCopy = activeCategory
+    ? getSiteNavigationItem(navigationItems, activeCategory.slug)
+    : null;
 
   const isFiltered = Boolean(activeCategory);
   const filteredProjects = activeCategory
@@ -140,10 +150,11 @@ export default async function ProjectsPage({
             <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
               <div>
                 <h1 className="font-serif text-4xl text-stone-900 md:text-5xl">
-                  {activeCategory.title}
+                              {activeCategoryCopy?.title ?? activeCategory.title}
                 </h1>
                 <p className="mt-4 max-w-2xl leading-7 text-stone-500">
-                  {activeCategory.description}
+                              {activeCategoryCopy?.description ??
+                                activeCategory.description}
                 </p>
               </div>
               <Link

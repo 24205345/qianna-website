@@ -20,7 +20,7 @@ export default function AdminLoginPage() {
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
       !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     ) {
-      setError("尚未配置 Supabase 环境变量，无法登录。");
+      setError("Supabase environment variables are not configured. Sign-in is unavailable.");
       setLoading(false);
       return;
     }
@@ -44,13 +44,13 @@ export default function AdminLoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-stone-50 px-6 text-stone-700">
       <div className="w-full max-w-sm">
-        <h1 className="font-serif text-3xl text-stone-900">后台登录</h1>
-        <p className="mt-2 text-sm text-stone-500">使用管理员邮箱和密码登录。</p>
+        <h1 className="font-serif text-3xl text-stone-900">Admin Login</h1>
+        <p className="mt-2 text-sm text-stone-500">Sign in with the admin email and password.</p>
 
         <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-stone-700">
-              邮箱
+              Email
             </label>
             <input
               id="email"
@@ -65,7 +65,7 @@ export default function AdminLoginPage() {
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-stone-700">
-              密码
+              Password
             </label>
             <input
               id="password"
@@ -87,7 +87,7 @@ export default function AdminLoginPage() {
             disabled={loading}
             className="mt-2 rounded-md bg-stone-900 px-5 py-2 text-sm text-white transition-colors hover:bg-stone-700 disabled:opacity-60"
           >
-            {loading ? "登录中…" : "登录"}
+            {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
       </div>

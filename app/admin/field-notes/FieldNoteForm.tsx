@@ -27,7 +27,7 @@ export default function FieldNoteForm({ action, defaults, submitLabel }: FieldNo
   return (
     <form action={action} className="mt-8 flex flex-col gap-5">
       <div>
-        <label className={labelClass} htmlFor="title">标题 *</label>
+        <label className={labelClass} htmlFor="title">Title *</label>
         <input id="title" name="title" required defaultValue={d.title ?? ""} className={inputClass} />
       </div>
       <div>
@@ -36,32 +36,32 @@ export default function FieldNoteForm({ action, defaults, submitLabel }: FieldNo
       </div>
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label className={labelClass} htmlFor="date">日期 *</label>
+          <label className={labelClass} htmlFor="date">Date *</label>
           <input id="date" name="date" required defaultValue={d.date ?? ""} className={inputClass} />
         </div>
         <div>
-          <label className={labelClass} htmlFor="activity">活动 Activity</label>
+          <label className={labelClass} htmlFor="activity">Activity</label>
           <input id="activity" name="activity" defaultValue={d.activity ?? ""} className={inputClass} />
         </div>
       </div>
       <div>
-        <label className={labelClass} htmlFor="location">地点 *</label>
+        <label className={labelClass} htmlFor="location">Location *</label>
         <input id="location" name="location" required defaultValue={d.location ?? ""} className={inputClass} />
       </div>
       <div>
-        <label className={labelClass} htmlFor="description">描述 *</label>
+        <label className={labelClass} htmlFor="description">Description *</label>
         <textarea id="description" name="description" required rows={3} defaultValue={d.description ?? ""} className={inputClass} />
       </div>
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label className={labelClass} htmlFor="layout_template">布局模板</label>
+          <label className={labelClass} htmlFor="layout_template">Layout template</label>
           <select id="layout_template" name="layout_template" defaultValue={d.layout_template ?? "gallery"} className={inputClass}>
-            <option value="gallery">gallery（画廊 + 可选视频）</option>
-            <option value="narrative">narrative（叙事区块）</option>
+            <option value="gallery">gallery (gallery + optional video)</option>
+            <option value="narrative">narrative (narrative sections)</option>
           </select>
         </div>
         <div>
-          <label className={labelClass} htmlFor="status">状态</label>
+          <label className={labelClass} htmlFor="status">Status</label>
           <select id="status" name="status" defaultValue={d.status ?? "published"} className={inputClass}>
             <option value="published">published</option>
             <option value="draft">draft</option>
@@ -69,14 +69,14 @@ export default function FieldNoteForm({ action, defaults, submitLabel }: FieldNo
         </div>
       </div>
       <div>
-        <label className={labelClass} htmlFor="sort_order">排序</label>
+        <label className={labelClass} htmlFor="sort_order">Sort order</label>
         <input id="sort_order" name="sort_order" type="number" defaultValue={d.sort_order ?? 0} className={inputClass} />
       </div>
       <div>
-        <label className={labelClass} htmlFor="cover">封面图 Cover</label>
+        <label className={labelClass} htmlFor="cover">Cover image</label>
         {d.cover_image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={d.cover_image_url} alt="当前封面" className="mb-2 h-24 rounded object-cover" />
+          <img src={d.cover_image_url} alt="Current cover" className="mb-2 h-24 rounded object-cover" />
         ) : null}
         <input id="cover" name="cover" type="file" accept="image/*" className="mt-1 text-sm" />
       </div>

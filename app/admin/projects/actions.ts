@@ -25,6 +25,52 @@ function parseTags(value: FormDataEntryValue | null): string[] {
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
+function slugifyTitle(value: string): string {
+  const slug = value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/-{2,}/g, "-");
+
+  return slug || "project";
+}
+
+async function resolveUniqueProjectSlug(
+  supabase: SupabaseServerClient,
+  value: string,
+  currentProjectId?: string
+): Promise<string> {
+  const baseSlug = slugifyTitle(value);
+  const { data, error } = await supabase
+    .from("projects")
+    .select("id, slug")
+    .ilike("slug", `${baseSlug}%`);
+
+  if (error) {
+    throw new Error(`Failed to check project URL: ${error.message}`);
+  }
+
+  const usedSlugs = new Set(
+    (data ?? [])
+      .filter((project) => project.id !== currentProjectId)
+      .map((project) => project.slug)
+  );
+
+  if (!usedSlugs.has(baseSlug)) {
+    return baseSlug;
+  }
+
+  let suffix = 2;
+  while (usedSlugs.has(`${baseSlug}-${suffix}`)) {
+    suffix += 1;
+  }
+
+  return `${baseSlug}-${suffix}`;
+}
+
 async function requireUser(supabase: SupabaseServerClient) {
   const {
     data: { user },
@@ -50,17 +96,17 @@ async function uploadCover(
     contentType: file.type || undefined,
   });
   if (error) {
-    throw new Error(`封面上传失败：${error.message}`);
+    throw new Error(`Cover upload failed: ${error.message}`);
   }
 
   const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
   return data.publicUrl;
 }
 
-function buildPayload(formData: FormData, coverUrl: string | null) {
+function buildPayload(formData: FormData, coverUrl: string | null, slug: string) {
   const payload: Record<string, unknown> = {
     title: emptyToNull(formData.get("title")) ?? "",
-    slug: emptyToNull(formData.get("slug")) ?? "",
+    slug,
     subtitle: emptyToNull(formData.get("subtitle")),
     description: emptyToNull(formData.get("description")),
     content: emptyToNull(formData.get("content")),
@@ -75,7 +121,7 @@ function buildPayload(formData: FormData, coverUrl: string | null) {
     overview_paragraphs: parseOverviewParagraphs(formData.get("overview_paragraphs")),
     project_details: parseProjectDetails(formData.get("project_details")),
   };
-  // 仅在本次有上传新封面时才更新 cover_image_url，避免覆盖已有值。
+  // Only update cover_image_url when a new cover is uploaded, so existing values are preserved.
   if (coverUrl) {
     payload.cover_image_url = coverUrl;
   }
@@ -87,11 +133,16 @@ export async function createProjectAction(formData: FormData) {
   await requireUser(supabase);
 
   const coverUrl = await uploadCover(supabase, formData.get("cover") as File | null);
-  const payload = buildPayload(formData, coverUrl);
+  const title = emptyToNull(formData.get("title")) ?? "";
+  const slug = await resolveUniqueProjectSlug(
+    supabase,
+    emptyToNull(formData.get("slug")) ?? title
+  );
+  const payload = buildPayload(formData, coverUrl, slug);
 
   const { error } = await supabase.from("projects").insert(payload);
   if (error) {
-    throw new Error(`创建失败：${error.message}`);
+    throw new Error(`Create failed: ${error.message}`);
   }
 
   revalidatePath("/admin/projects");
@@ -105,11 +156,17 @@ export async function updateProjectAction(id: string, formData: FormData) {
   await requireUser(supabase);
 
   const coverUrl = await uploadCover(supabase, formData.get("cover") as File | null);
-  const payload = buildPayload(formData, coverUrl);
+  const title = emptyToNull(formData.get("title")) ?? "";
+  const slug = await resolveUniqueProjectSlug(
+    supabase,
+    emptyToNull(formData.get("slug")) ?? title,
+    id
+  );
+  const payload = buildPayload(formData, coverUrl, slug);
 
   const { error } = await supabase.from("projects").update(payload).eq("id", id);
   if (error) {
-    throw new Error(`更新失败：${error.message}`);
+    throw new Error(`Update failed: ${error.message}`);
   }
 
   revalidatePath("/admin/projects");
@@ -124,7 +181,7 @@ export async function deleteProjectAction(id: string) {
 
   const { error } = await supabase.from("projects").delete().eq("id", id);
   if (error) {
-    throw new Error(`删除失败：${error.message}`);
+    throw new Error(`Delete failed: ${error.message}`);
   }
 
   revalidatePath("/admin/projects");

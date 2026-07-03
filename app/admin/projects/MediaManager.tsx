@@ -14,8 +14,8 @@ export default function MediaManager({ projectId, media }: MediaManagerProps) {
 
   return (
     <section className="mt-10 border-t border-stone-200 pt-8">
-      <h2 className="font-serif text-xl text-stone-900">项目图片 Project Media</h2>
-      <p className="mt-1 text-sm text-stone-500">画廊图片会显示在项目详情页。封面/顶部视频请在上方表单设置。</p>
+      <h2 className="font-serif text-xl text-stone-900">Project Media</h2>
+      <p className="mt-1 text-sm text-stone-500">Gallery images appear on the project detail page. Set the cover and hero video in the form above.</p>
 
       {media.length > 0 ? (
         <ul className="mt-4 flex flex-col gap-3">
@@ -29,11 +29,11 @@ export default function MediaManager({ projectId, media }: MediaManagerProps) {
                 <img src={item.url} alt={item.title ?? ""} className="h-16 w-24 rounded object-cover" />
               ) : null}
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-stone-800">{item.title || "（无标题）"}</p>
+                <p className="text-sm font-medium text-stone-800">{item.title || "Untitled"}</p>
                 {item.caption ? (
                   <p className="mt-1 line-clamp-2 text-xs text-stone-500">{item.caption}</p>
                 ) : null}
-                <p className="mt-1 text-xs text-stone-400">排序 {item.sort_order}</p>
+                <p className="mt-1 text-xs text-stone-400">Sort order {item.sort_order}</p>
               </div>
               <button
                 type="button"
@@ -45,13 +45,13 @@ export default function MediaManager({ projectId, media }: MediaManagerProps) {
                 }
                 className="text-sm text-red-600 hover:text-red-800 disabled:opacity-50"
               >
-                删除
+                Delete
               </button>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="mt-4 text-sm text-stone-500">暂无画廊图片。</p>
+        <p className="mt-4 text-sm text-stone-500">No gallery images yet.</p>
       )}
 
       <form
@@ -62,7 +62,7 @@ export default function MediaManager({ projectId, media }: MediaManagerProps) {
         }
         className="mt-6 flex flex-col gap-3 rounded-lg border border-dashed border-stone-300 bg-stone-50/50 p-4"
       >
-        <p className="text-sm font-medium text-stone-700">新增图片</p>
+        <p className="text-sm font-medium text-stone-700">Add Image</p>
         <input
           name="media"
           type="file"
@@ -72,12 +72,12 @@ export default function MediaManager({ projectId, media }: MediaManagerProps) {
         />
         <input
           name="title"
-          placeholder="图片标题 Title"
+          placeholder="Image title"
           className="rounded-md border border-stone-300 px-3 py-2 text-sm"
         />
         <textarea
           name="caption"
-          placeholder="图注说明 Caption（可选）"
+          placeholder="Caption (optional)"
           rows={2}
           className="rounded-md border border-stone-300 px-3 py-2 text-sm"
         />
@@ -85,7 +85,7 @@ export default function MediaManager({ projectId, media }: MediaManagerProps) {
           name="sort_order"
           type="number"
           defaultValue={media.length}
-          placeholder="排序"
+          placeholder="Sort order"
           className="rounded-md border border-stone-300 px-3 py-2 text-sm"
         />
         <button
@@ -93,7 +93,7 @@ export default function MediaManager({ projectId, media }: MediaManagerProps) {
           disabled={pending}
           className="self-start rounded-md bg-stone-800 px-4 py-2 text-sm text-white hover:bg-stone-700 disabled:opacity-50"
         >
-          {pending ? "上传中…" : "上传图片"}
+          {pending ? "Uploading..." : "Upload Image"}
         </button>
       </form>
     </section>

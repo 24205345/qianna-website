@@ -34,7 +34,7 @@ export async function createCollectionAction(formData: FormData) {
   const payload = buildPayload(formData);
 
   const { error } = await supabase.from("photography_collections").insert(payload);
-  if (error) throw new Error(`创建失败：${error.message}`);
+  if (error) throw new Error(`Create failed: ${error.message}`);
 
   revalidatePath("/admin/photography");
   revalidatePath("/photography");
@@ -46,7 +46,7 @@ export async function updateCollectionAction(id: string, formData: FormData) {
   const payload = buildPayload(formData);
 
   const { error } = await supabase.from("photography_collections").update(payload).eq("id", id);
-  if (error) throw new Error(`更新失败：${error.message}`);
+  if (error) throw new Error(`Update failed: ${error.message}`);
 
   revalidatePath("/admin/photography");
   revalidatePath("/photography");
@@ -57,7 +57,7 @@ export async function deleteCollectionAction(id: string) {
   const supabase = await requireUser();
 
   const { error } = await supabase.from("photography_collections").delete().eq("id", id);
-  if (error) throw new Error(`删除失败：${error.message}`);
+  if (error) throw new Error(`Delete failed: ${error.message}`);
 
   revalidatePath("/admin/photography");
   revalidatePath("/photography");

@@ -169,3 +169,5 @@ npm run dev        # 本地预览
 13. **Projects 汇总页不要重复分类标题**：当项目卡片内已经显示分类标签时，`/projects` 汇总页按时间倒序扁平展示更清爽；只有分类筛选页才需要显示分类标题和说明。
 14. **Hero CTA 轻量化**：强视觉首屏上，CTA 不宜做成高对比胶囊按钮。当前首页使用 `Enter →` 文本链接，箭头与内页 `← Back to Home` 使用同类文本字符；下划线透明度降低，hover 只做斜体，避免抢主标题和图片注意力。
 15. **Windows 安装 Cursor Skill 的坑**：PowerShell 可能因执行策略拦截 `npm.ps1` / `npx.ps1`。此时用 `G:\node-v24.16.0-win-x64\npm.cmd` / `npx.cmd` 可绕过；用户已安装 `ui-ux-pro-max`，适合做大范围 UI/UX 检查，但像素级微调仍应以截图和现有风格为准。
+16. **Home Hero CMS 化**：站点级单例内容用 `site_settings` 单表即可，固定 `singleton_key = 'home'`，比通用 pages 表更轻。首页仍保留 `app/_data/site-settings.ts` 回退，后台 `/admin/site` 只暴露 Hero title/subtitle/CTA/image/alt，避免把首页布局复杂度提前 CMS 化。
+17. **大图上传策略**：Next Server Action 默认 body size 较小，后台上传 Hero 图需在 `next.config.ts` 配置 `serverActions.bodySizeLimit`；更稳妥的方式仍是 `npm run migrate:home` 先用 sharp 压缩上传，再在后台微调文案。

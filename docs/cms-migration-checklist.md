@@ -1,4 +1,4 @@
-# CMS 全站迁移 Checklist（P1–P4）
+# CMS 全站迁移 Checklist（P1–P5）
 
 > 原则：每步小而可验证，完成一步 commit 一步，不要一次性大改。
 
@@ -15,7 +15,9 @@
 | **P2 Photography** | ✅ | 3 系列 46 张、前台读库、后台 CRUD + 迁移脚本 |
 | **P3 Visual Works** | ✅ | 3 分类 22 张、前台读库、后台 CRUD + 迁移脚本 |
 | **P4 Field Notes** | ✅ | 5 旅程、63 图 + 4 视频、动态 [slug]、双模板 |
-| P5 Home/About（可选） | ⬜ | 首页 Hero 仍用 `public/images/hero-image.jpg`，需 `download-home-hero.ps1` |
+| **P5 Home Hero** | ✅ | `site_settings` + `/admin/site`，首页 Hero 可后台编辑；后台 UI 已统一英文 |
+| **P5.5 Site Navigation Copy** | ✅ | 首页入口卡片 + 对应子页面页眉共用 `site_navigation_items` |
+| P6 About（可选） | ⬜ | About 页正文仍待内容 CMS 化 |
 
 ---
 
@@ -189,16 +191,72 @@ field_note_media (id, field_note_id, type, url, title, caption, sort_order)
 
 ---
 
-## P5：Home / About（可选，低优先级）
+## P5：Home Hero CMS ✅
+
+### 已完成内容
+- [x] 建表 `site_settings`（单行 `singleton_key = 'home'`）+ RLS + GRANT
+- [x] 首页 `/` 读取 Supabase，未配置或查询失败时回退 `app/_data/site-settings.ts`
+- [x] 后台 `/admin/site` 可编辑 Hero title / subtitle / CTA / image URL / alt
+- [x] 后台支持可选上传新 Hero 图片到 `portfolio-media/site/`
+- [x] `npm run migrate:home` 可压缩上传本地 `public/images/hero-image.jpg` 并写入 `site_settings`
+
+### 验证方式
+1. 在 Supabase SQL Editor 执行 `supabase/migrations/0005_site_settings.sql`
+2. 若本地缺图，先运行 `scripts/download-home-hero.ps1`
+3. 运行 `npm run migrate:home`
+4. 访问 `/` — Hero 图和文案来自 Supabase
+5. 登录 `/admin/site` — 修改 Hero 文案或上传图片，保存后刷新首页确认
+
+### 涉及文件
+- `supabase/migrations/0005_site_settings.sql`
+- `app/_data/site-settings.ts`
+- `lib/site/queries.ts`
+- `app/page.tsx`
+- `app/admin/site/**`
+- `scripts/migrate-home-hero.mjs`
+
+---
+
+## P5.5：Site Navigation Copy ✅
+
+### 已完成内容
+- [x] 新增 `site_navigation_items` 表，用于管理首页入口卡片与对应子页面页眉
+- [x] 首页 `Projects Preview`、三类 project 卡片、Photography / Visual Works / Field Notes / About 卡片均改读 CMS
+- [x] `/projects?category=...` 分类页标题/描述与首页 project 分类卡片共用同一份文案
+- [x] `/photography`、`/visual-works`、`/field-notes`、`/about` 页眉与首页入口卡片同步
+- [x] `/admin/site` 增加 Homepage Cards & Page Headings 编辑区
+- [x] 未配置 Supabase 或未执行迁移时保留 `app/_data/site-navigation.ts` 静态回退
+
+### 验证方式
+1. `supabase/migrations/0006_site_navigation_items.sql` 已在 Supabase 执行；如需复验，可确认 `site_navigation_items` 表有 8 条默认记录且 RLS 开启
+2. 登录 `/admin/site`
+3. 修改 Photography 卡片 Title 或 Description 后保存
+4. 刷新首页 `/` 和 `/photography`，两处应同步更新
+5. 修改任一 project category 文案后，首页 project 卡片和对应 `/projects?category=...` 页眉应同步
+
+### 涉及文件
+- `supabase/migrations/0006_site_navigation_items.sql`
+- `app/_data/site-navigation.ts`
+- `lib/site/queries.ts`
+- `app/page.tsx`
+- `app/projects/page.tsx`
+- `app/photography/page.tsx`
+- `app/visual-works/page.tsx`
+- `app/field-notes/page.tsx`
+- `app/about/page.tsx`
+- `app/admin/site/**`
+
+---
+
+## P6：About（可选，低优先级）
 
 | 步骤 | 任务 |
 |---|---|
-| P5-1 | `site_settings` 单表存 hero_image_url、hero_title、hero_subtitle |
-| P5-2 | 压缩上传 16MB hero 图到 Storage |
-| P5-3 | 首页 `/` 读 Supabase，About 页同理 |
-| P5-4 | 后台 `/admin/site` 简单表单 |
+| P6-1 | 设计 `about_sections` 或复用 `site_settings` 扩展字段 |
+| P6-2 | About 页 `/about` 改读 Supabase，保留静态回退 |
+| P6-3 | 后台 `/admin/about` 简单表单 |
 
-**本地临时方案**：首页 Hero 仍走 `public/images/hero-image.jpg`，运行 `scripts/download-home-hero.ps1` 下载（~16MB）。
+**当前状态**：About 页标题/描述已随 `site_navigation_items` 同步；正文仍是低优先级占位内容。
 
 **预估**：Agent 2–3h
 
@@ -233,7 +291,7 @@ field_note_media (id, field_note_id, type, url, title, caption, sort_order)
 **P1–P4 已完成。** Codex 请优先阅读 `docs/codex-handoff.md`，然后：
 
 1. **收尾 commit**（用户明确要求时）— 分模块提交 P1–P4
-2. **P5 Home/About** — 首页 Hero CMS 化（见下方 P5 节）
+2. **P6 About** — About 页内容 CMS 化
 3. **Vercel 部署** — 配置环境变量并 push
 
 本地开发、sparse-checkout、下载脚本等详见 **`docs/codex-handoff.md` 第 3–4 节**。

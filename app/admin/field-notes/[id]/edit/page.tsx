@@ -34,9 +34,9 @@ export default async function EditFieldNotePage({ params }: { params: Promise<{ 
   return (
     <div className="min-h-screen bg-stone-50 px-6 py-12 text-stone-700 md:px-10">
       <div className="mx-auto max-w-2xl">
-        <Link href="/admin/field-notes" className="text-sm text-stone-500 hover:text-stone-800">← 返回列表</Link>
-        <h1 className="mt-4 font-serif text-3xl text-stone-900">编辑 Field Note</h1>
-        <FieldNoteForm action={updateAction} defaults={note as FieldNoteFormDefaults} submitLabel="保存修改" />
+        <Link href="/admin/field-notes" className="text-sm text-stone-500 hover:text-stone-800">&lt;- Back to List</Link>
+        <h1 className="mt-4 font-serif text-3xl text-stone-900">Edit Field Note</h1>
+        <FieldNoteForm action={updateAction} defaults={note as FieldNoteFormDefaults} submitLabel="Save Changes" />
         <MediaManager fieldNoteId={id} media={media} />
       </div>
     </div>

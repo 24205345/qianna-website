@@ -2,18 +2,26 @@ import Link from "next/link";
 import PhotoGallery from "./PhotoGallery";
 import { photographySections } from "@/app/_data/photography";
 import { getPhotographyPageData } from "@/lib/photography/queries";
+import {
+  getSiteNavigationItem,
+  getSiteNavigationItems,
+} from "@/lib/site/queries";
 
 export default async function PhotographyPage() {
-  const collections = await getPhotographyPageData(photographySections);
+  const [collections, navigationItems] = await Promise.all([
+    getPhotographyPageData(photographySections),
+    getSiteNavigationItems(),
+  ]);
+  const pageCopy = getSiteNavigationItem(navigationItems, "photography");
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
       <main className="mx-auto w-full max-w-5xl px-6 py-16 md:px-10 md:py-20">
         <div className="mb-12">
-          <p className="text-xs tracking-[0.24em] text-stone-500 uppercase">Photography</p>
-          <h1 className="mt-4 font-serif text-4xl text-stone-900 md:text-5xl">Photography</h1>
+          <p className="text-xs tracking-[0.24em] text-stone-500 uppercase">{pageCopy.label}</p>
+          <h1 className="mt-4 font-serif text-4xl text-stone-900 md:text-5xl">{pageCopy.title}</h1>
           <p className="mt-4 leading-7 text-stone-500">
-            Quiet urban frames — a collection of observations in light, movement, and place.
+            {pageCopy.description}
           </p>
         </div>
 

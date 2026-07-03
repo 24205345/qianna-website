@@ -19,8 +19,8 @@ export default async function AdminFieldNotesPage() {
     return (
       <div className="min-h-screen bg-stone-50 px-6 py-16 text-stone-700">
         <div className="mx-auto max-w-2xl">
-          <h1 className="font-serif text-3xl text-stone-900">Field Notes 管理</h1>
-          <p className="mt-4 rounded-md bg-amber-50 px-4 py-3 text-sm text-amber-700">尚未配置 Supabase 环境变量。</p>
+          <h1 className="font-serif text-3xl text-stone-900">Field Notes</h1>
+          <p className="mt-4 rounded-md bg-amber-50 px-4 py-3 text-sm text-amber-700">Supabase environment variables are not configured.</p>
         </div>
       </div>
     );
@@ -43,33 +43,34 @@ export default async function AdminFieldNotesPage() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-xs tracking-[0.24em] text-stone-500 uppercase">Admin</p>
-            <h1 className="mt-2 font-serif text-3xl text-stone-900">Field Notes 管理</h1>
+            <h1 className="mt-2 font-serif text-3xl text-stone-900">Field Notes</h1>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <Link href="/admin/projects" className="text-sm text-stone-500 hover:text-stone-800">项目管理</Link>
-            <Link href="/admin/photography" className="text-sm text-stone-500 hover:text-stone-800">摄影管理</Link>
-            <Link href="/admin/visual-works" className="text-sm text-stone-500 hover:text-stone-800">视觉作品</Link>
-            <Link href="/admin/field-notes/new" className="rounded-md bg-stone-900 px-4 py-2 text-sm text-white hover:bg-stone-700">+ 新增旅程</Link>
-            <form action={signOutAction}><button type="submit" className="rounded-md border border-stone-300 px-4 py-2 text-sm text-stone-600 hover:bg-stone-100">退出登录</button></form>
+            <Link href="/admin/site" className="text-sm text-stone-500 hover:text-stone-800">Site Settings</Link>
+            <Link href="/admin/projects" className="text-sm text-stone-500 hover:text-stone-800">Projects</Link>
+            <Link href="/admin/photography" className="text-sm text-stone-500 hover:text-stone-800">Photography</Link>
+            <Link href="/admin/visual-works" className="text-sm text-stone-500 hover:text-stone-800">Visual Works</Link>
+            <Link href="/admin/field-notes/new" className="rounded-md bg-stone-900 px-4 py-2 text-sm text-white hover:bg-stone-700">+ New Field Note</Link>
+            <form action={signOutAction}><button type="submit" className="rounded-md border border-stone-300 px-4 py-2 text-sm text-stone-600 hover:bg-stone-100">Sign Out</button></form>
           </div>
         </div>
 
-        {error ? <p className="mt-8 rounded-md bg-red-50 px-4 py-3 text-sm text-red-600">读取失败：{error.message}</p> : null}
+        {error ? <p className="mt-8 rounded-md bg-red-50 px-4 py-3 text-sm text-red-600">Failed to load: {error.message}</p> : null}
 
         <div className="mt-8 overflow-hidden rounded-xl border border-stone-200 bg-white">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-stone-200 bg-stone-50 text-xs uppercase tracking-wide text-stone-500">
               <tr>
-                <th className="px-4 py-3">标题</th>
+                <th className="px-4 py-3">Title</th>
                 <th className="px-4 py-3">Slug</th>
-                <th className="px-4 py-3">日期</th>
-                <th className="px-4 py-3">状态</th>
-                <th className="px-4 py-3 text-right">操作</th>
+                <th className="px-4 py-3">Date</th>
+                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
               {notes.length === 0 ? (
-                <tr><td colSpan={5} className="px-4 py-8 text-center text-stone-400">暂无旅程。运行 migrate:field-notes 或点击新增。</td></tr>
+                <tr><td colSpan={5} className="px-4 py-8 text-center text-stone-400">No field notes yet. Run migrate:field-notes or click New Field Note.</td></tr>
               ) : (
                 notes.map((n) => (
                   <tr key={n.id} className="border-b border-stone-100 last:border-0">
@@ -79,8 +80,8 @@ export default async function AdminFieldNotesPage() {
                     <td className="px-4 py-3"><span className={n.status === "published" ? "rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700" : "rounded-full bg-stone-100 px-2 py-0.5 text-xs text-stone-500"}>{n.status}</span></td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-3">
-                        <Link href={`/admin/field-notes/${n.id}/edit`} className="text-stone-600 hover:underline">编辑</Link>
-                        <form action={deleteFieldNoteAction.bind(null, n.id)}><button type="submit" className="text-red-500 hover:underline">删除</button></form>
+                        <Link href={`/admin/field-notes/${n.id}/edit`} className="text-stone-600 hover:underline">Edit</Link>
+                        <form action={deleteFieldNoteAction.bind(null, n.id)}><button type="submit" className="text-red-500 hover:underline">Delete</button></form>
                       </div>
                     </td>
                   </tr>

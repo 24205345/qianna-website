@@ -24,8 +24,8 @@ export async function addWorkAction(categoryId: string, formData: FormData) {
   const description = String(formData.get("description") ?? "").trim();
   const sortOrder = Number(formData.get("sort_order") ?? 0) || 0;
 
-  if (!file || file.size === 0) throw new Error("请选择图片文件");
-  if (!title) throw new Error("请填写标题");
+  if (!file || file.size === 0) throw new Error("Please choose an image file.");
+  if (!title) throw new Error("Please enter a title.");
 
   const { data: category } = await supabase
     .from("visual_work_categories")
@@ -41,7 +41,7 @@ export async function addWorkAction(categoryId: string, formData: FormData) {
     contentType: file.type || "image/jpeg",
     upsert: false,
   });
-  if (uploadError) throw new Error(`上传失败：${uploadError.message}`);
+  if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`);
 
   const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(path);
 
@@ -53,7 +53,7 @@ export async function addWorkAction(categoryId: string, formData: FormData) {
     description: description || null,
     sort_order: sortOrder,
   });
-  if (error) throw new Error(`保存作品记录失败：${error.message}`);
+  if (error) throw new Error(`Failed to save work record: ${error.message}`);
 
   revalidatePath(`/admin/visual-works/${categoryId}/edit`);
   revalidatePath("/visual-works");
@@ -63,7 +63,7 @@ export async function deleteWorkAction(categoryId: string, workId: string) {
   const supabase = await requireUser();
 
   const { error } = await supabase.from("visual_works").delete().eq("id", workId);
-  if (error) throw new Error(`删除失败：${error.message}`);
+  if (error) throw new Error(`Delete failed: ${error.message}`);
 
   revalidatePath(`/admin/visual-works/${categoryId}/edit`);
   revalidatePath("/visual-works");

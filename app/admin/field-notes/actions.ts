@@ -28,7 +28,7 @@ async function uploadCover(supabase: Awaited<ReturnType<typeof createClient>>, f
     contentType: file.type || "image/jpeg",
     upsert: false,
   });
-  if (error) throw new Error(`封面上传失败：${error.message}`);
+  if (error) throw new Error(`Cover upload failed: ${error.message}`);
   return supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
 }
 
@@ -52,10 +52,10 @@ export async function createFieldNoteAction(formData: FormData) {
   const supabase = await requireUser();
   const coverUrl = await uploadCover(supabase, formData.get("cover") as File | null);
   const payload = buildPayload(formData, coverUrl);
-  if (!payload.cover_image_url) throw new Error("请上传封面图");
+  if (!payload.cover_image_url) throw new Error("Please upload a cover image.");
 
   const { error } = await supabase.from("field_notes").insert(payload);
-  if (error) throw new Error(`创建失败：${error.message}`);
+  if (error) throw new Error(`Create failed: ${error.message}`);
 
   revalidatePath("/admin/field-notes");
   revalidatePath("/field-notes");
@@ -68,7 +68,7 @@ export async function updateFieldNoteAction(id: string, formData: FormData) {
   const payload = buildPayload(formData, coverUrl);
 
   const { error } = await supabase.from("field_notes").update(payload).eq("id", id);
-  if (error) throw new Error(`更新失败：${error.message}`);
+  if (error) throw new Error(`Update failed: ${error.message}`);
 
   revalidatePath("/admin/field-notes");
   revalidatePath("/field-notes");
@@ -79,7 +79,7 @@ export async function updateFieldNoteAction(id: string, formData: FormData) {
 export async function deleteFieldNoteAction(id: string) {
   const supabase = await requireUser();
   const { error } = await supabase.from("field_notes").delete().eq("id", id);
-  if (error) throw new Error(`删除失败：${error.message}`);
+  if (error) throw new Error(`Delete failed: ${error.message}`);
 
   revalidatePath("/admin/field-notes");
   revalidatePath("/field-notes");

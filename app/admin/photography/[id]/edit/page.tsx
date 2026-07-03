@@ -42,10 +42,10 @@ export default async function EditPhotographyCollectionPage({
     <div className="min-h-screen bg-stone-50 px-6 py-12 text-stone-700 md:px-10">
       <div className="mx-auto max-w-2xl">
         <Link href="/admin/photography" className="text-sm text-stone-500 hover:text-stone-800">
-          ← 返回列表
+          &lt;- Back to List
         </Link>
-        <h1 className="mt-4 font-serif text-3xl text-stone-900">编辑摄影系列</h1>
-        <CollectionForm action={updateAction} defaults={defaults} submitLabel="保存修改" />
+        <h1 className="mt-4 font-serif text-3xl text-stone-900">Edit Photography Collection</h1>
+        <CollectionForm action={updateAction} defaults={defaults} submitLabel="Save Changes" />
         <PhotoManager collectionId={id} photos={photos} />
       </div>
     </div>

@@ -72,6 +72,7 @@ npm run start:site           # Windows helper: start dev server and open browser
 npm run lint                 # Run ESLint
 npm run build                # Create a production build
 npm run migrate:media        # Upload project media to Supabase
+npm run migrate:home         # Upload the homepage hero image to Supabase
 npm run migrate:photography  # Upload photography media and records
 npm run migrate:visual-works # Upload visual works media and records
 npm run migrate:field-notes  # Upload field notes media and records
@@ -86,6 +87,7 @@ The schema lives in `supabase/migrations/` and should be applied in order:
 0002_photography.sql
 0003_visual_works.sql
 0004_field_notes.sql
+0005_site_settings.sql
 ```
 
 The public storage bucket used by the site is:

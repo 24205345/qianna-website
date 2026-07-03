@@ -23,7 +23,7 @@ export default function CategoryForm({ action, defaults, submitLabel }: Category
   return (
     <form action={action} className="mt-8 flex flex-col gap-5">
       <div>
-        <label className={labelClass} htmlFor="title">标题 Title *</label>
+        <label className={labelClass} htmlFor="title">Title *</label>
         <input id="title" name="title" required defaultValue={d.title ?? ""} className={inputClass} />
       </div>
       <div>
@@ -31,23 +31,23 @@ export default function CategoryForm({ action, defaults, submitLabel }: Category
         <input id="slug" name="slug" required defaultValue={d.slug ?? ""} className={inputClass} />
       </div>
       <div>
-        <label className={labelClass} htmlFor="subtitle">副标题 Subtitle</label>
+        <label className={labelClass} htmlFor="subtitle">Subtitle</label>
         <input id="subtitle" name="subtitle" defaultValue={d.subtitle ?? ""} className={inputClass} />
       </div>
       <div>
-        <label className={labelClass} htmlFor="description">描述 Description</label>
+        <label className={labelClass} htmlFor="description">Description</label>
         <textarea id="description" name="description" rows={3} defaultValue={d.description ?? ""} className={inputClass} />
       </div>
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label className={labelClass} htmlFor="status">状态</label>
+          <label className={labelClass} htmlFor="status">Status</label>
           <select id="status" name="status" defaultValue={d.status ?? "published"} className={inputClass}>
             <option value="published">published</option>
             <option value="draft">draft</option>
           </select>
         </div>
         <div>
-          <label className={labelClass} htmlFor="sort_order">排序</label>
+          <label className={labelClass} htmlFor="sort_order">Sort order</label>
           <input id="sort_order" name="sort_order" type="number" defaultValue={d.sort_order ?? 0} className={inputClass} />
         </div>
       </div>

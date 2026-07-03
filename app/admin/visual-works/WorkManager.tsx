@@ -14,8 +14,10 @@ export default function WorkManager({ categoryId, works }: WorkManagerProps) {
 
   return (
     <section className="mt-10 border-t border-stone-200 pt-8">
-      <h2 className="font-serif text-xl text-stone-900">分类作品 Works</h2>
-      <p className="mt-1 text-sm text-stone-500">作品会显示在 /visual-works 对应分类区块。</p>
+      <h2 className="font-serif text-xl text-stone-900">Works</h2>
+      <p className="mt-1 text-sm text-stone-500">
+        Works appear in the matching /visual-works category section.
+      </p>
 
       {works.length > 0 ? (
         <ul className="mt-4 flex flex-col gap-3">
@@ -28,7 +30,7 @@ export default function WorkManager({ categoryId, works }: WorkManagerProps) {
                 {item.description ? (
                   <p className="mt-1 line-clamp-2 text-xs text-stone-500">{item.description}</p>
                 ) : null}
-                <p className="mt-1 text-xs text-stone-400">排序 {item.sort_order}</p>
+                <p className="mt-1 text-xs text-stone-400">Sort order {item.sort_order}</p>
               </div>
               <button
                 type="button"
@@ -40,13 +42,13 @@ export default function WorkManager({ categoryId, works }: WorkManagerProps) {
                 }
                 className="text-sm text-red-600 hover:text-red-800 disabled:opacity-50"
               >
-                删除
+                Delete
               </button>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="mt-4 text-sm text-stone-500">暂无作品。可运行 npm run migrate:visual-works 批量导入。</p>
+        <p className="mt-4 text-sm text-stone-500">No works yet. Run npm run migrate:visual-works to bulk import.</p>
       )}
 
       <form
@@ -57,14 +59,14 @@ export default function WorkManager({ categoryId, works }: WorkManagerProps) {
         }
         className="mt-6 flex flex-col gap-3 rounded-lg border border-dashed border-stone-300 bg-stone-50/50 p-4"
       >
-        <p className="text-sm font-medium text-stone-700">新增作品</p>
+        <p className="text-sm font-medium text-stone-700">Add Work</p>
         <input name="work" type="file" accept="image/*" required className="text-sm" />
-        <input name="title" placeholder="标题 *" required className="rounded-md border border-stone-300 px-3 py-2 text-sm" />
-        <input name="date" placeholder="日期（如 2019.9.8）" className="rounded-md border border-stone-300 px-3 py-2 text-sm" />
-        <textarea name="description" placeholder="描述" rows={2} className="rounded-md border border-stone-300 px-3 py-2 text-sm" />
+        <input name="title" placeholder="Title *" required className="rounded-md border border-stone-300 px-3 py-2 text-sm" />
+        <input name="date" placeholder="Date (e.g. 2019.9.8)" className="rounded-md border border-stone-300 px-3 py-2 text-sm" />
+        <textarea name="description" placeholder="Description" rows={2} className="rounded-md border border-stone-300 px-3 py-2 text-sm" />
         <input name="sort_order" type="number" defaultValue={works.length} className="rounded-md border border-stone-300 px-3 py-2 text-sm" />
         <button type="submit" disabled={pending} className="self-start rounded-md bg-stone-800 px-4 py-2 text-sm text-white hover:bg-stone-700 disabled:opacity-50">
-          {pending ? "上传中…" : "上传作品"}
+          {pending ? "Uploading..." : "Upload Work"}
         </button>
       </form>
     </section>

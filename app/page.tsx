@@ -1,14 +1,33 @@
 import Link from "next/link";
 import Image from "next/image";
-import { PROJECT_CATEGORIES } from "@/lib/projects/categories";
+import {
+  getSiteNavigationGroup,
+  getSiteNavigationItem,
+  getSiteNavigationItems,
+  getSiteSettings,
+} from "@/lib/site/queries";
 
-export default function Home() {
+export default async function Home() {
+  const [siteSettings, navigationItems] = await Promise.all([
+    getSiteSettings(),
+    getSiteNavigationItems(),
+  ]);
+  const projectsSection = getSiteNavigationItem(
+    navigationItems,
+    "projects-preview"
+  );
+  const projectCategories = getSiteNavigationGroup(
+    navigationItems,
+    "project_category"
+  );
+  const pageLinks = getSiteNavigationGroup(navigationItems, "page_link");
+
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
       <header className="relative min-h-screen w-full overflow-hidden">
         <Image
-          src="/images/hero-image.jpg"
-          alt="Qianna Wang cover image"
+          src={siteSettings.heroImageUrl}
+          alt={siteSettings.heroImageAlt}
           fill
           priority
           className="object-cover object-center"
@@ -17,16 +36,16 @@ export default function Home() {
         <div className="relative z-10 flex min-h-screen items-end">
           <div className="w-full px-4 pb-12 md:px-8 md:pb-16 lg:px-12 lg:pb-18">
             <h1 className="font-serif text-4xl text-stone-50 md:text-6xl">
-              Qianna Wang
+              {siteSettings.heroTitle}
             </h1>
             <p className="mt-4 ml-1 max-w-2xl text-base leading-7 text-stone-100 md:text-lg">
-              Urban design, visual storytelling, and spatial observation.
+              {siteSettings.heroSubtitle}
             </p>
             <a
               href="#content"
               className="mt-4 ml-1 inline-flex w-fit text-[15px] text-stone-50 underline decoration-stone-50/35 underline-offset-4 transition-[font-style,color,text-decoration-color] hover:italic hover:text-stone-100 hover:decoration-stone-50/55"
             >
-              Enter →
+              {siteSettings.heroCtaLabel} →
             </a>
           </div>
         </div>
@@ -39,20 +58,20 @@ export default function Home() {
         <section className="py-14 md:py-16">
           <div className="flex items-end justify-between gap-4">
             <h2 className="font-serif text-3xl text-stone-900 md:text-4xl">
-              Projects Preview
+              {projectsSection.title}
             </h2>
             <Link
-              href="/projects"
+              href={projectsSection.href}
               className="text-sm text-stone-600 underline decoration-stone-300 underline-offset-4 transition-colors hover:text-stone-900"
             >
-              View all projects
+              {projectsSection.label}
             </Link>
           </div>
           <div className="mt-8 grid gap-5 md:grid-cols-3">
-            {PROJECT_CATEGORIES.map((item) => (
+            {projectCategories.map((item) => (
               <Link
-                key={item.slug}
-                href={`/projects?category=${item.slug}`}
+                key={item.itemKey}
+                href={item.href}
                 className="group rounded-2xl border border-stone-200/80 bg-stone-100/70 p-5 transition-colors hover:border-stone-300 hover:bg-stone-100"
               >
                 <h3 className="font-serif text-2xl text-stone-900 transition-colors group-hover:text-stone-700">
@@ -65,69 +84,23 @@ export default function Home() {
         </section>
 
         <section className="grid gap-5 pb-8 md:grid-cols-2">
-          <Link
-            href="/photography"
-            className="rounded-2xl border border-stone-200/80 bg-stone-100/70 p-6 transition-colors hover:bg-stone-100"
-          >
-            <p className="text-xs tracking-[0.18em] text-stone-500 uppercase">
-              Photography
-            </p>
-            <h3 className="mt-3 font-serif text-3xl text-stone-900">
-              Quiet urban frames
-            </h3>
-            <p className="mt-3 leading-7 text-stone-600">
-              A separate collection of observations in light, movement, and
-              place.
-            </p>
-          </Link>
-
-          <Link
-            href="/visual-works"
-            className="rounded-2xl border border-stone-200/80 bg-stone-100/70 p-6 transition-colors hover:bg-stone-100"
-          >
-            <p className="text-xs tracking-[0.18em] text-stone-500 uppercase">
-              Visual Works
-            </p>
-            <h3 className="mt-3 font-serif text-3xl text-stone-900">
-              Drawings and sketches
-            </h3>
-            <p className="mt-3 leading-7 text-stone-600">
-              Studies in form, rhythm, and atmosphere developed by hand and
-              mixed media.
-            </p>
-          </Link>
-
-          <Link
-            href="/field-notes"
-            className="rounded-2xl border border-stone-200/80 bg-stone-100/70 p-6 transition-colors hover:bg-stone-100"
-          >
-            <p className="text-xs tracking-[0.18em] text-stone-500 uppercase">
-              Field Notes
-            </p>
-            <h3 className="mt-3 font-serif text-3xl text-stone-900">
-              Trails and movement
-            </h3>
-            <p className="mt-3 leading-7 text-stone-600">
-              Hiking journeys, outdoor routes, and movement-based observation of
-              landscapes.
-            </p>
-          </Link>
-
-          <Link
-            href="/about"
-            className="rounded-2xl border border-stone-200/80 bg-stone-100/70 p-6 transition-colors hover:bg-stone-100"
-          >
-            <p className="text-xs tracking-[0.18em] text-stone-500 uppercase">
-              About
-            </p>
-            <h3 className="mt-3 font-serif text-3xl text-stone-900">
-              Background and approach
-            </h3>
-            <p className="mt-3 leading-7 text-stone-600">
-              Architecture training, urban design direction, and how research
-              translates into design decisions.
-            </p>
-          </Link>
+          {pageLinks.map((item) => (
+            <Link
+              key={item.itemKey}
+              href={item.href}
+              className="rounded-2xl border border-stone-200/80 bg-stone-100/70 p-6 transition-colors hover:bg-stone-100"
+            >
+              <p className="text-xs tracking-[0.18em] text-stone-500 uppercase">
+                {item.label}
+              </p>
+              <h3 className="mt-3 font-serif text-3xl text-stone-900">
+                {item.title}
+              </h3>
+              <p className="mt-3 leading-7 text-stone-600">
+                {item.description}
+              </p>
+            </Link>
+          ))}
         </section>
 
       </main>

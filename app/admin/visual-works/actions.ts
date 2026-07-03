@@ -34,7 +34,7 @@ export async function createCategoryAction(formData: FormData) {
   const payload = buildPayload(formData);
 
   const { error } = await supabase.from("visual_work_categories").insert(payload);
-  if (error) throw new Error(`创建失败：${error.message}`);
+  if (error) throw new Error(`Create failed: ${error.message}`);
 
   revalidatePath("/admin/visual-works");
   revalidatePath("/visual-works");
@@ -46,7 +46,7 @@ export async function updateCategoryAction(id: string, formData: FormData) {
   const payload = buildPayload(formData);
 
   const { error } = await supabase.from("visual_work_categories").update(payload).eq("id", id);
-  if (error) throw new Error(`更新失败：${error.message}`);
+  if (error) throw new Error(`Update failed: ${error.message}`);
 
   revalidatePath("/admin/visual-works");
   revalidatePath("/visual-works");
@@ -57,7 +57,7 @@ export async function deleteCategoryAction(id: string) {
   const supabase = await requireUser();
 
   const { error } = await supabase.from("visual_work_categories").delete().eq("id", id);
-  if (error) throw new Error(`删除失败：${error.message}`);
+  if (error) throw new Error(`Delete failed: ${error.message}`);
 
   revalidatePath("/admin/visual-works");
   revalidatePath("/visual-works");

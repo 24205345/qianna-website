@@ -31,7 +31,7 @@ export async function addFieldNoteMediaAction(fieldNoteId: string, formData: For
   const slug = note?.slug ?? fieldNoteId;
 
   if (mediaType === "video_external") {
-    if (!videoUrl) throw new Error("请填写视频 URL");
+    if (!videoUrl) throw new Error("Please enter a video URL.");
     const { error } = await supabase.from("field_note_media").insert({
       field_note_id: fieldNoteId,
       type: "video_external",
@@ -42,7 +42,7 @@ export async function addFieldNoteMediaAction(fieldNoteId: string, formData: For
     if (error) throw new Error(error.message);
   } else {
     const file = formData.get("media") as File | null;
-    if (!file || file.size === 0) throw new Error("请选择图片文件");
+    if (!file || file.size === 0) throw new Error("Please choose an image file.");
 
     const ext = file.name.includes(".") ? file.name.split(".").pop() : "jpg";
     const path = `field-notes/${slug}/images/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
@@ -50,7 +50,7 @@ export async function addFieldNoteMediaAction(fieldNoteId: string, formData: For
       contentType: file.type || "image/jpeg",
       upsert: false,
     });
-    if (uploadError) throw new Error(`上传失败：${uploadError.message}`);
+    if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`);
 
     const publicUrl = supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
     const { error } = await supabase.from("field_note_media").insert({
@@ -74,7 +74,7 @@ export async function addFieldNoteMediaAction(fieldNoteId: string, formData: For
 export async function deleteFieldNoteMediaAction(fieldNoteId: string, mediaId: string) {
   const supabase = await requireUser();
   const { error } = await supabase.from("field_note_media").delete().eq("id", mediaId);
-  if (error) throw new Error(`删除失败：${error.message}`);
+  if (error) throw new Error(`Delete failed: ${error.message}`);
 
   revalidatePath(`/admin/field-notes/${fieldNoteId}/edit`);
   revalidatePath("/field-notes");

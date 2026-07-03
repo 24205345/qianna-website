@@ -3,7 +3,7 @@
 > **给 Codex 的第一份必读文档。** 读完本文即可继续开发，无需翻完整对话历史。
 >
 > 项目路径：`G:\project\qianna-website`  
-> 分支：`feature/supabase-cms`（P1–P4 代码已完成，前台 Projects / Home Hero UX 已微调）  
+> 分支：`main`（P1–P5 代码已完成，Home Hero 已接入轻量 CMS）  
 > 最后更新：2026-07-03
 
 ---
@@ -18,7 +18,7 @@ Next.js 16.2.1 + React 19 + TypeScript + Tailwind v4 个人作品集网站，正
 
 ---
 
-## 2. CMS 进度（截至 2026-06-24）
+## 2. CMS 进度（截至 2026-07-03）
 
 | 模块 | 状态 | 前台 | 后台 | 迁移脚本 |
 |---|---|---|---|---|
@@ -26,8 +26,9 @@ Next.js 16.2.1 + React 19 + TypeScript + Tailwind v4 个人作品集网站，正
 | Photography | ✅ | `/photography` | `/admin/photography` | `npm run migrate:photography` |
 | Visual Works | ✅ | `/visual-works` | `/admin/visual-works` | `npm run migrate:visual-works` |
 | Field Notes | ✅ | `/field-notes`, `/field-notes/[slug]` | `/admin/field-notes` | `npm run migrate:field-notes` |
-| **Home Hero** | ⬜ 仍用 local public | `/` | 无 | `scripts/download-home-hero.ps1` |
-| **About** | ⬜ 占位页 | `/about` | 无 | — |
+| **Home Hero** | ✅ | `/` | `/admin/site` | `npm run migrate:home` |
+| **Site Navigation Copy** | ✅ | `/`, linked page headings | `/admin/site` | SQL migration |
+| **About** | ⬜ 正文占位 | `/about` | `/admin/site` 管理页眉 | — |
 
 Supabase 数据量（已验证）：
 - `photography_photos`: 46
@@ -58,6 +59,29 @@ Supabase 数据量（已验证）：
 - 箭头使用文本字符，和内页 `← Back to Home` 的视觉语言一致，只是方向相反。
 - `Enter` 为 `text-[15px]`，带较浅下划线；hover 时文字变斜体。
 - 副标题和 `Enter` 都加了相同小缩进，且与标题之间的垂直间距保持一致。
+
+### P5 Home Hero CMS
+
+- 新增 `site_settings` 单行表（`singleton_key = 'home'`），用于管理首页 Hero title / subtitle / CTA / image URL / alt。
+- 首页 `app/page.tsx` 通过 `lib/site/queries.ts` 读取 Supabase；未配置或查询失败时回退 `app/_data/site-settings.ts`。
+- 新增 `/admin/site`，可编辑首页 Hero 文案、图片 URL，并可上传新图片到 `portfolio-media/site/`。
+- 新增 `npm run migrate:home`，用于把本地 `public/images/hero-image.jpg` 压缩为 WebP 后上传到 Storage，并写入 `site_settings.hero_image_url`。
+
+### P5.5 Site Navigation Copy CMS
+
+- 新增 `site_navigation_items` 表，对应迁移文件 `supabase/migrations/0006_site_navigation_items.sql`。
+- `0006_site_navigation_items.sql` 已在 Supabase 项目中执行并验证：`site_navigation_items` RLS 已开启，默认 8 条首页/子页面文案已插入。
+- `app/_data/site-navigation.ts` 提供静态回退；未配置 Supabase 或表未创建时，首页和子页面仍使用原始默认文案。
+- `/admin/site` 的 Homepage Cards & Page Headings 区域可编辑首页入口卡片和对应子页面页眉。
+- 首页 project 分类卡片和 `/projects?category=...` 页眉共用同一行数据；Photography / Visual Works / Field Notes / About 入口卡片和对应页面页眉也共用同一行数据。
+- `href` 不开放编辑，避免误改导致导航断链；只开放 `label`、`title`、`description`。
+
+### Admin UI Language
+
+- `/admin/*` 后台可见 UI 文案已统一为英文，包括页面标题、顶部导航、表格表头、表单字段、按钮、空状态和 Server Action 错误消息。
+- 后续新增后台页面时保持英文 UI，避免同一管理界面混用中文/英文；内部文档仍可继续中文记录。
+- `/admin/projects` 的 `Category` 使用固定三类下拉，来源于 `lib/projects/categories.ts`；不要改回自由输入，否则前台 `/projects?category=...` 筛选容易因拼写不一致失效。
+- `/admin/projects` 的项目 URL 由标题自动生成：新增项目时 `slug` 可留空，Server Action 会生成小写短横线 URL，并在重复时自动追加 `-2`、`-3`。编辑旧项目时默认保留已有 URL，避免破坏已经公开的链接。
 
 ### UI/UX Skill
 
@@ -134,7 +158,7 @@ PowerShell **不要用 `&&`** 串联命令，用 `;` 或分行。
 
 | 模块 | 下载脚本 | 迁移命令 |
 |---|---|---|
-| 首页 Hero (~16MB) | `scripts/download-home-hero.ps1` | （尚未 CMS 化，仅本地 public） |
+| Home Hero (~16MB) | `scripts/download-home-hero.ps1` | `npm run migrate:home` |
 | Projects | `scripts/download-project-media.ps1` | `npm run migrate:media` |
 | Photography (46) | `scripts/download-photography-media.ps1` | `npm run migrate:photography` |
 | Visual Works (22) | `scripts/download-visual-works-media.ps1` | `npm run migrate:visual-works` |
@@ -144,6 +168,7 @@ PowerShell **不要用 `&&`** 串联命令，用 `;` 或分行。
 cd G:\project\qianna-website
 .\scripts\download-home-hero.ps1          # 首页封面
 .\scripts\download-photography-media.ps1  # 示例：其他模块同理
+npm run migrate:home
 npm run migrate:photography
 ```
 
@@ -187,6 +212,7 @@ supabase/migrations/0001_init.sql          projects + project_media
 supabase/migrations/0002_photography.sql
 supabase/migrations/0003_visual_works.sql
 supabase/migrations/0004_field_notes.sql
+supabase/migrations/0005_site_settings.sql
 ```
 
 ### 动态路由详情页
@@ -219,6 +245,7 @@ lib/projects/queries.ts
 lib/photography/queries.ts
 lib/visual-works/queries.ts
 lib/field-notes/queries.ts
+lib/site/queries.ts
 ```
 
 ### Admin 入口
@@ -229,6 +256,7 @@ lib/field-notes/queries.ts
 /admin/photography
 /admin/visual-works
 /admin/field-notes
+/admin/site
 ```
 
 ---

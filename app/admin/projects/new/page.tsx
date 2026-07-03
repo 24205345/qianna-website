@@ -21,10 +21,10 @@ export default async function NewProjectPage() {
     <div className="min-h-screen bg-stone-50 px-6 py-12 text-stone-700 md:px-10">
       <div className="mx-auto max-w-2xl">
         <Link href="/admin/projects" className="text-sm text-stone-500 hover:text-stone-800">
-          ← 返回列表
+          &lt;- Back to List
         </Link>
-        <h1 className="mt-4 font-serif text-3xl text-stone-900">新增项目</h1>
-        <ProjectForm action={createProjectAction} submitLabel="创建项目" />
+        <h1 className="mt-4 font-serif text-3xl text-stone-900">New Project</h1>
+        <ProjectForm action={createProjectAction} submitLabel="Create Project" />
       </div>
     </div>
   );

@@ -53,10 +53,10 @@ export default async function EditProjectPage({
     <div className="min-h-screen bg-stone-50 px-6 py-12 text-stone-700 md:px-10">
       <div className="mx-auto max-w-2xl">
         <Link href="/admin/projects" className="text-sm text-stone-500 hover:text-stone-800">
-          ← 返回列表
+          &lt;- Back to List
         </Link>
-        <h1 className="mt-4 font-serif text-3xl text-stone-900">编辑项目</h1>
-        <ProjectForm action={updateAction} defaults={defaults} submitLabel="保存修改" />
+        <h1 className="mt-4 font-serif text-3xl text-stone-900">Edit Project</h1>
+        <ProjectForm action={updateAction} defaults={defaults} submitLabel="Save Changes" />
         <MediaManager projectId={id} media={media} />
       </div>
     </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ProjectDetailItem } from "@/app/_data/project-details";
+import { PROJECT_CATEGORIES } from "@/lib/projects/categories";
 import {
   serializeOverviewParagraphs,
   serializeProjectDetails,
@@ -33,6 +34,18 @@ interface ProjectFormProps {
 const inputClass =
   "mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 outline-none focus:border-stone-500";
 const labelClass = "block text-sm font-medium text-stone-700";
+const helpClass = "mt-1 text-xs leading-5 text-stone-500";
+
+function getCategorySelectValue(category: string | null | undefined): string {
+  if (!category) return PROJECT_CATEGORIES[0]?.title ?? "";
+
+  const normalized = category.trim().toLowerCase();
+  const matchedCategory = PROJECT_CATEGORIES.find((item) =>
+    item.matchLabels.some((label) => label.trim().toLowerCase() === normalized)
+  );
+
+  return matchedCategory?.title ?? category;
+}
 
 export default function ProjectForm({ action, defaults, submitLabel }: ProjectFormProps) {
   const d = defaults ?? {};
@@ -41,28 +54,39 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
     <form action={action} className="mt-8 flex flex-col gap-5">
       <div>
         <label className={labelClass} htmlFor="title">
-          标题 Title *
+          Title *
         </label>
         <input id="title" name="title" required defaultValue={d.title ?? ""} className={inputClass} />
       </div>
 
       <div>
         <label className={labelClass} htmlFor="slug">
-          Slug（URL 标识，唯一）*
+          Project URL
         </label>
-        <input id="slug" name="slug" required defaultValue={d.slug ?? ""} className={inputClass} />
+        <input
+          id="slug"
+          name="slug"
+          readOnly
+          defaultValue={d.slug ?? ""}
+          placeholder="Generated from the title when saved"
+          className={`${inputClass} bg-stone-100 text-stone-500`}
+        />
+        <p className={helpClass}>
+          The URL is generated automatically from the title, for example:
+          /projects/urban-park-study.
+        </p>
       </div>
 
       <div>
         <label className={labelClass} htmlFor="subtitle">
-          副标题 Subtitle
+          Subtitle
         </label>
         <input id="subtitle" name="subtitle" defaultValue={d.subtitle ?? ""} className={inputClass} />
       </div>
 
       <div>
         <label className={labelClass} htmlFor="description">
-          简介 Description
+          Description
         </label>
         <textarea
           id="description"
@@ -75,7 +99,7 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
 
       <div>
         <label className={labelClass} htmlFor="content">
-          正文 Content
+          Content
         </label>
         <textarea
           id="content"
@@ -89,13 +113,27 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label className={labelClass} htmlFor="category">
-            分类 Category
+            Category
           </label>
-          <input id="category" name="category" defaultValue={d.category ?? ""} className={inputClass} />
+          <select
+            id="category"
+            name="category"
+            defaultValue={getCategorySelectValue(d.category)}
+            className={inputClass}
+          >
+            {PROJECT_CATEGORIES.map((category) => (
+              <option key={category.slug} value={category.title}>
+                {category.title}
+              </option>
+            ))}
+          </select>
+          <p className={helpClass}>
+            This controls which filtered Projects page the item appears in.
+          </p>
         </div>
         <div>
           <label className={labelClass} htmlFor="year">
-            年份 Year
+            Year
           </label>
           <input id="year" name="year" defaultValue={d.year ?? ""} className={inputClass} />
         </div>
@@ -103,7 +141,7 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
 
       <div>
         <label className={labelClass} htmlFor="tags">
-          标签 Tags（英文逗号分隔）
+          Tags (comma-separated)
         </label>
         <input
           id="tags"
@@ -117,16 +155,16 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label className={labelClass} htmlFor="status">
-            状态 Status
+            Status
           </label>
           <select id="status" name="status" defaultValue={d.status ?? "draft"} className={inputClass}>
-            <option value="draft">draft（草稿）</option>
-            <option value="published">published（已发布）</option>
+            <option value="draft">draft</option>
+            <option value="published">published</option>
           </select>
         </div>
         <div>
           <label className={labelClass} htmlFor="sort_order">
-            排序 Sort order
+            Sort order
           </label>
           <input
             id="sort_order"
@@ -140,7 +178,7 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
 
       <div>
         <label className={labelClass} htmlFor="layout_template">
-          页面模板 Layout template
+          Layout template
         </label>
         <select
           id="layout_template"
@@ -149,14 +187,14 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
           className={inputClass}
         >
           <option value="default">default</option>
-          <option value="thesis">thesis（顶部视频 + 介绍 iframe）</option>
-          <option value="xicaoshi">xicaoshi（顶部封面图 + 网格画廊）</option>
+          <option value="thesis">thesis (hero video + intro iframe)</option>
+          <option value="xicaoshi">xicaoshi (hero cover + grid gallery)</option>
         </select>
       </div>
 
       <div>
         <label className={labelClass} htmlFor="project_details">
-          项目详情 Project Details（每行：Label|Value）
+          Project details (one row per Label|Value)
         </label>
         <textarea
           id="project_details"
@@ -170,7 +208,7 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
 
       <div>
         <label className={labelClass} htmlFor="overview_paragraphs">
-          概述 Overview（段落之间空一行）
+          Overview (separate paragraphs with a blank line)
         </label>
         <textarea
           id="overview_paragraphs"
@@ -183,7 +221,7 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
 
       <div>
         <label className={labelClass} htmlFor="intro_video_url">
-          介绍视频 Intro video URL（Google Drive preview 等 iframe 地址）
+          Intro video URL (Google Drive preview or iframe URL)
         </label>
         <input
           id="intro_video_url"
@@ -196,10 +234,10 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
 
       <div>
         <label className={labelClass} htmlFor="hero_video_url">
-          顶部视频 Hero video URL（外链或 Storage 地址；留空则不变）
+          Hero video URL (external or Storage URL; leave blank to keep current)
         </label>
         {d.hero_video_url ? (
-          <p className="mt-1 text-xs text-stone-500 break-all">当前：{d.hero_video_url}</p>
+          <p className="mt-1 text-xs text-stone-500 break-all">Current: {d.hero_video_url}</p>
         ) : null}
         <input
           id="hero_video_url"
@@ -212,10 +250,10 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
 
       <div>
         <label className={labelClass} htmlFor="cover">
-          封面图 Cover（上传到 portfolio-media；留空则保持不变）
+          Cover image (uploads to portfolio-media; leave blank to keep current)
         </label>
         {d.cover_image_url ? (
-          <p className="mt-1 text-xs text-stone-500 break-all">当前：{d.cover_image_url}</p>
+          <p className="mt-1 text-xs text-stone-500 break-all">Current: {d.cover_image_url}</p>
         ) : null}
         <input id="cover" name="cover" type="file" accept="image/*" className={`${inputClass} py-1.5`} />
       </div>
@@ -228,7 +266,7 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
           {submitLabel}
         </button>
         <Link href="/admin/projects" className="text-sm text-stone-500 hover:text-stone-800">
-          取消
+          Cancel
         </Link>
       </div>
     </form>
