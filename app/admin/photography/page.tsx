@@ -61,6 +61,9 @@ export default async function AdminPhotographyPage() {
             <Link href="/admin/field-notes" className="text-sm text-stone-500 hover:text-stone-800">
               Field Notes
             </Link>
+            <Link href="/about" className="text-sm text-stone-500 hover:text-stone-800">
+              About
+            </Link>
             <Link href="/admin/photography/new" className="rounded-md bg-stone-900 px-4 py-2 text-sm text-white hover:bg-stone-700">
               + New Collection
             </Link>

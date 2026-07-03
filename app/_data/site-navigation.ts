@@ -84,9 +84,9 @@ export const fallbackSiteNavigationItems: SiteNavigationItem[] = [
     itemKey: "about",
     group: "page_link",
     label: "About",
-    title: "Background and approach",
+    title: "Spatial Thinking, AI Products",
     description:
-      "Architecture training, urban design direction, and how research translates into design decisions.",
+      "A path from architecture and urban research to SaaS systems and AI product work, focused on turning complex workflows into usable digital tools.",
     href: "/about",
     sortOrder: 70,
   },

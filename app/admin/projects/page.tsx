@@ -78,6 +78,12 @@ export default async function AdminProjectsPage() {
               Field Notes
             </Link>
             <Link
+              href="/about"
+              className="text-sm text-stone-500 hover:text-stone-800"
+            >
+              About
+            </Link>
+            <Link
               href="/admin/projects/new"
               className="rounded-md bg-stone-900 px-4 py-2 text-sm text-white transition-colors hover:bg-stone-700"
             >
