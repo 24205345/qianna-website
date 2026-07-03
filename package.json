@@ -4,10 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "start:site": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-dev.ps1",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "migrate:media": "node scripts/migrate-project-media.mjs"
+    "migrate:media": "node scripts/migrate-project-media.mjs",
+    "migrate:photography": "node --experimental-strip-types scripts/migrate-photography.mjs",
+    "migrate:visual-works": "node --experimental-strip-types scripts/migrate-visual-works.mjs",
+    "migrate:field-notes": "node --experimental-strip-types scripts/migrate-field-notes.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",

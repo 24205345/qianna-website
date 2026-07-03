@@ -4,20 +4,24 @@ import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
 
 interface Photo {
-  filename: string;
+  filename?: string;
   title: string;
+  url?: string;
 }
 
 interface PhotoGalleryProps {
   photos: Photo[];
-  basePath: string;
+  basePath?: string;
 }
 
-export default function PhotoGallery({ photos, basePath }: PhotoGalleryProps) {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+function photoSrc(photo: Photo, basePath: string): string {
+  if (photo.url) return photo.url;
+  if (photo.filename && basePath) return `${basePath}/${photo.filename}`;
+  return "";
+}
 
-  const openLightbox = (index: number) => setSelectedIndex(index);
-  const closeLightbox = () => setSelectedIndex(null);
+export default function PhotoGallery({ photos, basePath = "" }: PhotoGalleryProps) {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const goToPrevious = useCallback(() => {
     if (selectedIndex !== null) {
@@ -34,7 +38,7 @@ export default function PhotoGallery({ photos, basePath }: PhotoGalleryProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedIndex === null) return;
-      if (e.key === "Escape") closeLightbox();
+      if (e.key === "Escape") setSelectedIndex(null);
       if (e.key === "ArrowLeft") goToPrevious();
       if (e.key === "ArrowRight") goToNext();
     };
@@ -47,13 +51,13 @@ export default function PhotoGallery({ photos, basePath }: PhotoGalleryProps) {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {photos.map((photo, index) => (
           <div
-            key={photo.filename}
+            key={photo.url ?? photo.filename ?? index}
             className="group cursor-pointer overflow-hidden rounded-xl"
-            onClick={() => openLightbox(index)}
+            onClick={() => setSelectedIndex(index)}
           >
             <div className="relative aspect-[4/3]">
               <Image
-                src={`${basePath}/${photo.filename}`}
+                src={photoSrc(photo, basePath)}
                 alt={photo.title}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -65,41 +69,19 @@ export default function PhotoGallery({ photos, basePath }: PhotoGalleryProps) {
       </div>
 
       {selectedIndex !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95" onClick={closeLightbox}>
-          <button
-            className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2 text-white/80 hover:bg-white/20"
-            onClick={closeLightbox}
-          >
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95" onClick={() => setSelectedIndex(null)}>
+          <button className="absolute right-4 top-4 z-10 rounded-full bg-white/10 p-2 text-white/80 hover:bg-white/20" onClick={() => setSelectedIndex(null)}>
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
-          <button
-            className="absolute left-4 z-10 rounded-full bg-white/10 p-3 text-white/80 hover:bg-white/20"
-            onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
-          >
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
+          <button className="absolute left-4 z-10 rounded-full bg-white/10 p-3 text-white/80 hover:bg-white/20" onClick={(e) => { e.stopPropagation(); goToPrevious(); }}>
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
           </button>
-          <button
-            className="absolute right-4 z-10 rounded-full bg-white/10 p-3 text-white/80 hover:bg-white/20"
-            onClick={(e) => { e.stopPropagation(); goToNext(); }}
-          >
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+          <button className="absolute right-4 z-10 rounded-full bg-white/10 p-3 text-white/80 hover:bg-white/20" onClick={(e) => { e.stopPropagation(); goToNext(); }}>
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
           </button>
           <div className="flex h-[90vh] w-[95vw] max-w-7xl flex-col items-center justify-center" onClick={(e) => e.stopPropagation()}>
             <div className="relative flex-1 w-full max-h-[80vh]">
-              <Image
-                src={`${basePath}/${photos[selectedIndex].filename}`}
-                alt={photos[selectedIndex].title}
-                fill
-                className="object-contain"
-                sizes="95vw"
-                priority
-              />
+              <Image src={photoSrc(photos[selectedIndex], basePath)} alt={photos[selectedIndex].title} fill className="object-contain" sizes="95vw" priority />
             </div>
             <p className="mt-4 text-sm text-white/70">{selectedIndex + 1} / {photos.length}</p>
           </div>

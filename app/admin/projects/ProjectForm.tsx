@@ -1,4 +1,9 @@
 import Link from "next/link";
+import type { ProjectDetailItem } from "@/app/_data/project-details";
+import {
+  serializeOverviewParagraphs,
+  serializeProjectDetails,
+} from "@/lib/projects/parse-form";
 
 export interface ProjectFormDefaults {
   title?: string | null;
@@ -13,6 +18,10 @@ export interface ProjectFormDefaults {
   sort_order?: number | null;
   cover_image_url?: string | null;
   hero_video_url?: string | null;
+  intro_video_url?: string | null;
+  layout_template?: string | null;
+  overview_paragraphs?: string[] | null;
+  project_details?: ProjectDetailItem[] | null;
 }
 
 interface ProjectFormProps {
@@ -127,6 +136,62 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
             className={inputClass}
           />
         </div>
+      </div>
+
+      <div>
+        <label className={labelClass} htmlFor="layout_template">
+          页面模板 Layout template
+        </label>
+        <select
+          id="layout_template"
+          name="layout_template"
+          defaultValue={d.layout_template ?? "default"}
+          className={inputClass}
+        >
+          <option value="default">default</option>
+          <option value="thesis">thesis（顶部视频 + 介绍 iframe）</option>
+          <option value="xicaoshi">xicaoshi（顶部封面图 + 网格画廊）</option>
+        </select>
+      </div>
+
+      <div>
+        <label className={labelClass} htmlFor="project_details">
+          项目详情 Project Details（每行：Label|Value）
+        </label>
+        <textarea
+          id="project_details"
+          name="project_details"
+          rows={4}
+          defaultValue={serializeProjectDetails(d.project_details ?? undefined)}
+          placeholder="Programme|Urban Design MArch"
+          className={inputClass}
+        />
+      </div>
+
+      <div>
+        <label className={labelClass} htmlFor="overview_paragraphs">
+          概述 Overview（段落之间空一行）
+        </label>
+        <textarea
+          id="overview_paragraphs"
+          name="overview_paragraphs"
+          rows={8}
+          defaultValue={serializeOverviewParagraphs(d.overview_paragraphs ?? undefined)}
+          className={inputClass}
+        />
+      </div>
+
+      <div>
+        <label className={labelClass} htmlFor="intro_video_url">
+          介绍视频 Intro video URL（Google Drive preview 等 iframe 地址）
+        </label>
+        <input
+          id="intro_video_url"
+          name="intro_video_url"
+          defaultValue={d.intro_video_url ?? ""}
+          placeholder="https://drive.google.com/file/d/.../preview"
+          className={inputClass}
+        />
       </div>
 
       <div>

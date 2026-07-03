@@ -53,6 +53,24 @@ export default async function AdminProjectsPage() {
           </div>
           <div className="flex items-center gap-3">
             <Link
+              href="/admin/photography"
+              className="text-sm text-stone-500 hover:text-stone-800"
+            >
+              摄影管理
+            </Link>
+            <Link
+              href="/admin/visual-works"
+              className="text-sm text-stone-500 hover:text-stone-800"
+            >
+              视觉作品
+            </Link>
+            <Link
+              href="/admin/field-notes"
+              className="text-sm text-stone-500 hover:text-stone-800"
+            >
+              Field Notes
+            </Link>
+            <Link
               href="/admin/projects/new"
               className="rounded-md bg-stone-900 px-4 py-2 text-sm text-white transition-colors hover:bg-stone-700"
             >

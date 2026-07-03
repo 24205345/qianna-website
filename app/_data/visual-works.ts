@@ -36,3 +36,44 @@ export const watercolorPaintings: VisualWork[] = [
   { id: "05", filename: "watercolor_05.jpg", title: "Watercolor V", date: "2019.10.20", description: "Watercolor painting." },
   { id: "06", filename: "watercolor_06.jpg", title: "Watercolor VI", date: "2019.11.10", description: "Watercolor painting." },
 ];
+
+export interface VisualWorkSection {
+  slug: string;
+  title: string;
+  subtitle: string;
+  description?: string | null;
+  sort_order: number;
+  basePath: string;
+  works: VisualWork[];
+}
+
+export const visualWorkSections: VisualWorkSection[] = [
+  {
+    slug: "pen-drawing",
+    title: "Pen Drawings",
+    subtitle: "6 works · 2019",
+    description: "Pure line work — the precision of ink capturing form and texture.",
+    sort_order: 0,
+    basePath: "/drawings/pen-drawing",
+    works: penDrawings,
+  },
+  {
+    slug: "pen-and-wash",
+    title: "Pen & Wash",
+    subtitle: "10 works · 2019-2020",
+    description:
+      "The marriage of ink and watercolor — structured lines softened by translucent washes.",
+    sort_order: 1,
+    basePath: "/drawings/pen-and-wash",
+    works: penAndWashDrawings,
+  },
+  {
+    slug: "watercolor",
+    title: "Watercolors",
+    subtitle: "6 works · 2019",
+    description: "Fluid pigments dancing on paper — light, transparency, and atmosphere.",
+    sort_order: 2,
+    basePath: "/drawings/watercolor",
+    works: watercolorPaintings,
+  },
+];

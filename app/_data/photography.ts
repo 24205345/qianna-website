@@ -267,3 +267,45 @@ export const portraitsPhotos: Photo[] = [
       "Pure Nordic energy is unleashed as children run across the bubbly skylights of an underground museum.",
   },
 ];
+
+export interface PhotographySection {
+  slug: string;
+  title: string;
+  subtitle: string;
+  description?: string | null;
+  sort_order: number;
+  basePath: string;
+  photos: Photo[];
+}
+
+/** 静态回退：与 page.tsx 原先硬编码的 3 个系列一致 */
+export const photographySections: PhotographySection[] = [
+  {
+    slug: "portraits-human-scale",
+    title: "Portraits & Human Scale",
+    subtitle: "10 photos · 2025",
+    sort_order: 0,
+    basePath: "/photography/portraits-human-scale",
+    photos: portraitsPhotos,
+  },
+  {
+    slug: "architecture-tectonics",
+    title: "Architecture Tectonics",
+    subtitle: "18 photos · 2025",
+    description:
+      "Richard Meier's modernist masterpiece — a symphony of travertine, light, and geometric precision perched above Los Angeles.",
+    sort_order: 1,
+    basePath: "/photography/architecture-tectonics",
+    photos: gettyCenterPhotos,
+  },
+  {
+    slug: "venice-biennale",
+    title: "Venice Architecture Biennale 2025",
+    subtitle: "18 photos · June 2025",
+    description:
+      "The world's most influential architectural exhibition — pavilions, installations, and spatial experiments across Giardini and Arsenale.",
+    sort_order: 2,
+    basePath: "/photography/venice-biennale",
+    photos: veniceBiennalePhotos,
+  },
+];

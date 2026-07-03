@@ -3,6 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import {
+  parseOverviewParagraphs,
+  parseProjectDetails,
+} from "@/lib/projects/parse-form";
 
 const BUCKET = "portfolio-media";
 
@@ -66,6 +70,10 @@ function buildPayload(formData: FormData, coverUrl: string | null) {
     status: emptyToNull(formData.get("status")) ?? "draft",
     sort_order: Number(formData.get("sort_order") ?? 0) || 0,
     hero_video_url: emptyToNull(formData.get("hero_video_url")),
+    intro_video_url: emptyToNull(formData.get("intro_video_url")),
+    layout_template: emptyToNull(formData.get("layout_template")) ?? "default",
+    overview_paragraphs: parseOverviewParagraphs(formData.get("overview_paragraphs")),
+    project_details: parseProjectDetails(formData.get("project_details")),
   };
   // 仅在本次有上传新封面时才更新 cover_image_url，避免覆盖已有值。
   if (coverUrl) {
@@ -88,6 +96,7 @@ export async function createProjectAction(formData: FormData) {
 
   revalidatePath("/admin/projects");
   revalidatePath("/projects");
+  revalidatePath(`/projects/${payload.slug}`);
   redirect("/admin/projects");
 }
 
@@ -105,6 +114,7 @@ export async function updateProjectAction(id: string, formData: FormData) {
 
   revalidatePath("/admin/projects");
   revalidatePath("/projects");
+  revalidatePath(`/projects/${payload.slug}`);
   redirect("/admin/projects");
 }
 

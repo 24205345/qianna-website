@@ -159,3 +159,13 @@ npm run dev        # 本地预览
 3. **「先抽离、后接数据源」是低风险路径**：Phase 1 纯重构保证视觉零变化并先行 commit，后续接 Supabase 时只动数据获取层，回退逻辑（`isSupabaseConfigured()` + 静态兜底）让「未配置也能跑」成为默认安全态。
 4. **Next 16 细节**：`cookies()` 为异步、动态路由 `params` 为 `Promise`，Server Action 用 `.bind(null, id)` 传参，`@supabase/ssr` 的 middleware「getAll/setAll + getUser()」模式是官方推荐写法（鉴权决策用 `getUser()`，不要用 `getSession()`）。
 5. **`.env*` 通配会误伤模板**：`.gitignore` 里 `.env*` 会把 `.env.local.example` 一起忽略，需加 `!.env.local.example` 负向规则。
+6. **P1 详情页动态化**：删除静态 `app/projects/thesis/page.tsx` 等，统一走 `[slug]` + `layout_template` 分支渲染；Overview/Details 用 `text[]` + `jsonb` 存库，后台表单用多行文本 + JSON 编辑；`deleteProjectAction` 删除时勿引用 `payload.slug`（delete 无 form payload）。
+7. **全站迁移路线图**：见 `docs/cms-migration-checklist.md`（P2–P4 均已完成）。
+8. **模块化 CMS 复制模式**：Photography / Visual Works / Field Notes 均按「建表 → queries + _data 回退 → 前台读库 → admin CRUD → migrate + download 脚本」完成；Field Notes 额外用 `layout_template: gallery | narrative` 分支渲染。
+9. **首页 Hero 不在 Supabase**：`app/page.tsx` 仍引用 `public/images/hero-image.jpg`（~16MB）；sparse-checkout 不含 `public/images/`，本地需跑 `scripts/download-home-hero.ps1`，否则首页封面空白。
+10. **本地 dev 易忘**：`npm run dev` 终端不能关；Node 路径 `G:\node-v24.16.0-win-x64` 需手动加 PATH。
+11. **Codex 交接入口**：后续开发请先读 `docs/codex-handoff.md`（含环境、脚本、文件索引、开场 Prompt 模板）。
+12. **Projects Preview 导航模式**：首页分类预览卡片适合整卡可点击进入 `/projects?category=...`，而 `View all projects` 进入 `/projects` 汇总。分类定义集中放在 `lib/projects/categories.ts`，用 `matchLabels` 兼容数据库里单复数或历史文案差异，避免在多个页面手写判断。
+13. **Projects 汇总页不要重复分类标题**：当项目卡片内已经显示分类标签时，`/projects` 汇总页按时间倒序扁平展示更清爽；只有分类筛选页才需要显示分类标题和说明。
+14. **Hero CTA 轻量化**：强视觉首屏上，CTA 不宜做成高对比胶囊按钮。当前首页使用 `Enter →` 文本链接，箭头与内页 `← Back to Home` 使用同类文本字符；下划线透明度降低，hover 只做斜体，避免抢主标题和图片注意力。
+15. **Windows 安装 Cursor Skill 的坑**：PowerShell 可能因执行策略拦截 `npm.ps1` / `npx.ps1`。此时用 `G:\node-v24.16.0-win-x64\npm.cmd` / `npx.cmd` 可绕过；用户已安装 `ui-ux-pro-max`，适合做大范围 UI/UX 检查，但像素级微调仍应以截图和现有风格为准。

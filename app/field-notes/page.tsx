@@ -1,8 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
-import { trips } from "@/app/_data/field-notes";
+import { getFieldNotesTripsFallback } from "@/app/_data/field-note-details";
+import { getFieldNotesList } from "@/lib/field-notes/queries";
 
-export default function FieldNotesPage() {
+export default async function FieldNotesPage() {
+  const fieldTrips = await getFieldNotesList(getFieldNotesTripsFallback());
+
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
       <main className="mx-auto w-full max-w-5xl px-6 py-16 md:px-10 md:py-20">
@@ -13,7 +16,7 @@ export default function FieldNotesPage() {
         </div>
 
         <div className="space-y-10">
-          {trips.map((trip) => (
+          {fieldTrips.map((trip) => (
             <Link key={trip.href} href={trip.href} className="group block">
               <article className="overflow-hidden rounded-2xl bg-white shadow-sm transition-shadow hover:shadow-md">
                 <div className="relative aspect-[16/9] overflow-hidden">
