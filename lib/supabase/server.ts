@@ -1,15 +1,17 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import {
+  hasPublicSupabaseConfig,
+  PUBLIC_SUPABASE_ANON_KEY,
+  PUBLIC_SUPABASE_URL,
+} from "@/lib/supabase/public-env";
 
 /**
- * Returns true only when the Supabase env vars are present.
+ * Returns true when Supabase public credentials are available (env or built-in fallback).
  * Used by pages to decide whether to read from Supabase or fall back to static data.
  */
 export function isSupabaseConfigured(): boolean {
-  return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
+  return hasPublicSupabaseConfig();
 }
 
 /**
@@ -20,8 +22,8 @@ export async function createClient() {
   const cookieStore = await cookies();
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    PUBLIC_SUPABASE_URL,
+    PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {

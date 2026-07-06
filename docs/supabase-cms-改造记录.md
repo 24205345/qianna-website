@@ -127,7 +127,8 @@ npm run dev        # 本地预览
 6. **导入现有 2 个项目（可选）**：在 SQL Editor 运行 `supabase/seed-projects.sql`，即可把 `thesis` 与 `xicaoshi-red-temple` 两个项目写入 `projects`（默认 `published`）。
 7. **迁移封面图 / 媒体（可选）**：现有项目封面图位于被排除的 `public/` 目录；如需在 Supabase 展示，可在后台「编辑项目」时把图片上传到 `portfolio-media`，系统会自动写入 `cover_image_url`。
 8. **本地验证联通**：`npm run dev`，访问 `/admin/login` 登录 → `/admin/projects` 应能看到项目列表并可增删改；`/projects` 前台应显示来自数据库的 `published` 项目。
-9. **Vercel 部署环境变量**：在 Vercel 项目 → Settings → Environment Variables 添加 `NEXT_PUBLIC_SUPABASE_URL` 与 `NEXT_PUBLIC_SUPABASE_ANON_KEY`（Production / Preview 均需），重新部署。
+9. **Vercel 部署环境变量（推荐）**：在 Vercel 项目 → Settings → Environment Variables 添加 `NEXT_PUBLIC_SUPABASE_URL` 与 `NEXT_PUBLIC_SUPABASE_ANON_KEY`（Production / Preview 均需），重新部署。
+   - 若暂未配置，代码会通过 `lib/supabase/public-env.ts` 回退到项目默认 anon 配置，生产环境仍可登录（anon key 本身可公开，安全靠 RLS）。
 10. **配置密码重置 Redirect URLs（必做，否则邮件链接只会跳首页）**：
     - Supabase 控制台 → **Authentication** → **URL Configuration**
     - **Site URL** 保持生产域名，例如 `https://qianna-site.vercel.app`

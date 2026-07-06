@@ -3,6 +3,7 @@
 import { type FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { hasPublicSupabaseConfig } from "@/lib/supabase/public-env";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -19,10 +20,7 @@ export default function AdminLoginPage() {
     setError(null);
     setMessage(null);
 
-    if (
-      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    ) {
+    if (!hasPublicSupabaseConfig()) {
       setError("Supabase environment variables are not configured. Sign-in is unavailable.");
       setLoading(false);
       return;
@@ -53,10 +51,7 @@ export default function AdminLoginPage() {
       return;
     }
 
-    if (
-      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    ) {
+    if (!hasPublicSupabaseConfig()) {
       setError("Supabase environment variables are not configured. Password reset is unavailable.");
       return;
     }

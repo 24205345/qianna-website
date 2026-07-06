@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
+import { PUBLIC_SUPABASE_URL } from "./lib/supabase/public-env";
 
-const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
-  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
+const supabaseHost = PUBLIC_SUPABASE_URL
+  ? new URL(PUBLIC_SUPABASE_URL).hostname
   : undefined;
 
 const nextConfig: NextConfig = {

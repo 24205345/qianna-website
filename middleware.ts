@@ -1,5 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import {
+  hasPublicSupabaseConfig,
+  PUBLIC_SUPABASE_ANON_KEY,
+  PUBLIC_SUPABASE_URL,
+} from "@/lib/supabase/public-env";
 
 /**
  * 保护 /admin/* 路由：无登录会话则重定向到 /admin/login。
@@ -36,16 +41,13 @@ export async function middleware(request: NextRequest) {
     return authRedirect;
   }
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!url || !anonKey) {
+  if (!hasPublicSupabaseConfig()) {
     return NextResponse.next();
   }
 
   let supabaseResponse = NextResponse.next({ request });
 
-  const supabase = createServerClient(url, anonKey, {
+  const supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
