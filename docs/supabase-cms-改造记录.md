@@ -238,4 +238,4 @@ npm run dev        # 本地预览
 16. **Home Hero CMS 化**：站点级单例内容用 `site_settings` 单表即可，固定 `singleton_key = 'home'`，比通用 pages 表更轻。首页仍保留 `app/_data/site-settings.ts` 回退，后台 `/admin/site` 只暴露 Hero title/subtitle/CTA/image/alt，避免把首页布局复杂度提前 CMS 化。
 17. **大图上传策略**：Next Server Action 默认 body size 较小，后台上传 Hero 图需在 `next.config.ts` 配置 `serverActions.bodySizeLimit`；更稳妥的方式仍是 `npm run migrate:home` 先用 sharp 压缩上传，再在后台微调文案。
 18. **Site Navigation Copy CMS**：首页入口卡片与子页页眉共用 `site_navigation_items`；后台 `/admin/site` 的 Homepage Cards 区域编辑。About 页标题/描述走同一表 `about` 项，时间轴正文仍硬编码在 `app/about/page.tsx`（P6 可 CMS 化）。
-19. **Supabase 密码重置必须配 Redirect URLs**：仅有 `/admin/login` 不够；邮件里的 `code` 须经 `/auth/callback`（或 `/auth/confirm`）换 session，再进 `/admin/reset-password`。未配置时链接会落在 Site URL（首页）且无任何 UI。生产域名示例：`https://qianna-site.vercel.app/auth/callback`。首页带 `?code=` 时 middleware 会自动转发到 callback。
+20. **内容可见性（draft / published）**：Projects、Photography 合集、Visual Works 分类、Field Notes 均支持 `draft`（前台隐藏）与 `published`（前台可见）。后台列表页可直接点 **Hide / Publish** 切换；编辑页 **Visibility** 下拉也可设置。前台查询与 Supabase RLS 均只暴露 `published`。

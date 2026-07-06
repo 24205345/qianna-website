@@ -1,3 +1,5 @@
+import StatusSelect from "@/app/admin/_components/StatusSelect";
+
 export interface CategoryFormDefaults {
   title?: string | null;
   slug?: string | null;
@@ -40,11 +42,8 @@ export default function CategoryForm({ action, defaults, submitLabel }: Category
       </div>
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label className={labelClass} htmlFor="status">Status</label>
-          <select id="status" name="status" defaultValue={d.status ?? "published"} className={inputClass}>
-            <option value="published">published</option>
-            <option value="draft">draft</option>
-          </select>
+          <label className={labelClass} htmlFor="status">Visibility</label>
+          <StatusSelect defaultValue={d.status ?? "draft"} className={inputClass} />
         </div>
         <div>
           <label className={labelClass} htmlFor="sort_order">Sort order</label>

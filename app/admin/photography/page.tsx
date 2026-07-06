@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
-import { deleteCollectionAction } from "./actions";
+import { deleteCollectionAction, toggleCollectionStatusAction } from "./actions";
+import ContentStatusBadge from "@/app/admin/_components/ContentStatusBadge";
+import VisibilityToggleForm from "@/app/admin/_components/VisibilityToggleForm";
 import { signOutAction } from "@/app/admin/projects/actions";
 
 interface CollectionRow {
@@ -86,7 +88,7 @@ export default async function AdminPhotographyPage() {
                 <th className="px-4 py-3">Title</th>
                 <th className="px-4 py-3">Slug</th>
                 <th className="px-4 py-3">Subtitle</th>
-                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Visibility</th>
                 <th className="px-4 py-3">Sort order</th>
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
@@ -105,13 +107,16 @@ export default async function AdminPhotographyPage() {
                     <td className="px-4 py-3 text-stone-500">{c.slug}</td>
                     <td className="px-4 py-3 text-stone-500">{c.subtitle}</td>
                     <td className="px-4 py-3">
-                      <span className={c.status === "published" ? "rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700" : "rounded-full bg-stone-100 px-2 py-0.5 text-xs text-stone-500"}>
-                        {c.status}
-                      </span>
+                      <ContentStatusBadge status={c.status} />
                     </td>
                     <td className="px-4 py-3 text-stone-500">{c.sort_order}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-3">
+                        <VisibilityToggleForm
+                          id={c.id}
+                          status={c.status}
+                          action={toggleCollectionStatusAction}
+                        />
                         <Link href={`/admin/photography/${c.id}/edit`} className="text-stone-600 hover:underline">
                           Edit
                         </Link>

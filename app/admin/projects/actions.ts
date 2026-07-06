@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getNextStatus } from "@/lib/admin/content-status";
 import {
   parseOverviewParagraphs,
   parseProjectDetails,
@@ -186,6 +187,34 @@ export async function deleteProjectAction(id: string) {
 
   revalidatePath("/admin/projects");
   revalidatePath("/projects");
+}
+
+export async function toggleProjectStatusAction(id: string) {
+  const supabase = await createClient();
+  await requireUser(supabase);
+
+  const { data, error: fetchError } = await supabase
+    .from("projects")
+    .select("status, slug")
+    .eq("id", id)
+    .single();
+
+  if (fetchError || !data) {
+    throw new Error(`Failed to load project: ${fetchError?.message ?? "Not found"}`);
+  }
+
+  const { error } = await supabase
+    .from("projects")
+    .update({ status: getNextStatus(data.status) })
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(`Visibility update failed: ${error.message}`);
+  }
+
+  revalidatePath("/admin/projects");
+  revalidatePath("/projects");
+  revalidatePath(`/projects/${data.slug}`);
 }
 
 export async function signOutAction() {

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getNextStatus } from "@/lib/admin/content-status";
 
 const BUCKET = "portfolio-media";
 
@@ -83,4 +84,31 @@ export async function deleteFieldNoteAction(id: string) {
 
   revalidatePath("/admin/field-notes");
   revalidatePath("/field-notes");
+}
+
+export async function toggleFieldNoteStatusAction(id: string) {
+  const supabase = await requireUser();
+
+  const { data, error: fetchError } = await supabase
+    .from("field_notes")
+    .select("status, slug")
+    .eq("id", id)
+    .single();
+
+  if (fetchError || !data) {
+    throw new Error(`Failed to load field note: ${fetchError?.message ?? "Not found"}`);
+  }
+
+  const { error } = await supabase
+    .from("field_notes")
+    .update({ status: getNextStatus(data.status) })
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(`Visibility update failed: ${error.message}`);
+  }
+
+  revalidatePath("/admin/field-notes");
+  revalidatePath("/field-notes");
+  revalidatePath(`/field-notes/${data.slug}`);
 }

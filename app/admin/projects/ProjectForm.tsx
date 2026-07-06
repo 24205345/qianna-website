@@ -5,6 +5,7 @@ import {
   serializeOverviewParagraphs,
   serializeProjectDetails,
 } from "@/lib/projects/parse-form";
+import StatusSelect from "@/app/admin/_components/StatusSelect";
 
 export interface ProjectFormDefaults {
   title?: string | null;
@@ -155,12 +156,9 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label className={labelClass} htmlFor="status">
-            Status
+            Visibility
           </label>
-          <select id="status" name="status" defaultValue={d.status ?? "draft"} className={inputClass}>
-            <option value="draft">draft</option>
-            <option value="published">published</option>
-          </select>
+          <StatusSelect defaultValue={d.status ?? "draft"} className={inputClass} />
         </div>
         <div>
           <label className={labelClass} htmlFor="sort_order">

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
-import { deleteProjectAction, signOutAction } from "./actions";
+import { deleteProjectAction, signOutAction, toggleProjectStatusAction } from "./actions";
+import ContentStatusBadge from "@/app/admin/_components/ContentStatusBadge";
+import VisibilityToggleForm from "@/app/admin/_components/VisibilityToggleForm";
 
 interface ProjectRow {
   id: string;
@@ -114,7 +116,7 @@ export default async function AdminProjectsPage() {
                 <th className="px-4 py-3">Slug</th>
                 <th className="px-4 py-3">Category</th>
                 <th className="px-4 py-3">Year</th>
-                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Visibility</th>
                 <th className="px-4 py-3">Sort order</th>
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
@@ -134,19 +136,16 @@ export default async function AdminProjectsPage() {
                     <td className="px-4 py-3 text-stone-500">{p.category}</td>
                     <td className="px-4 py-3 text-stone-500">{p.year}</td>
                     <td className="px-4 py-3">
-                      <span
-                        className={
-                          p.status === "published"
-                            ? "rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700"
-                            : "rounded-full bg-stone-100 px-2 py-0.5 text-xs text-stone-500"
-                        }
-                      >
-                        {p.status}
-                      </span>
+                      <ContentStatusBadge status={p.status} />
                     </td>
                     <td className="px-4 py-3 text-stone-500">{p.sort_order}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-3">
+                        <VisibilityToggleForm
+                          id={p.id}
+                          status={p.status}
+                          action={toggleProjectStatusAction}
+                        />
                         <Link
                           href={`/admin/projects/${p.id}/edit`}
                           className="text-stone-600 underline-offset-2 hover:underline"

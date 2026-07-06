@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
-import { deleteFieldNoteAction } from "./actions";
+import { deleteFieldNoteAction, toggleFieldNoteStatusAction } from "./actions";
+import ContentStatusBadge from "@/app/admin/_components/ContentStatusBadge";
+import VisibilityToggleForm from "@/app/admin/_components/VisibilityToggleForm";
 import { signOutAction } from "@/app/admin/projects/actions";
 
 interface FieldNoteRow {
@@ -65,7 +67,7 @@ export default async function AdminFieldNotesPage() {
                 <th className="px-4 py-3">Title</th>
                 <th className="px-4 py-3">Slug</th>
                 <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Visibility</th>
                 <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
@@ -78,9 +80,14 @@ export default async function AdminFieldNotesPage() {
                     <td className="px-4 py-3 text-stone-800">{n.title}</td>
                     <td className="px-4 py-3 text-stone-500">{n.slug}</td>
                     <td className="px-4 py-3 text-stone-500">{n.date}</td>
-                    <td className="px-4 py-3"><span className={n.status === "published" ? "rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700" : "rounded-full bg-stone-100 px-2 py-0.5 text-xs text-stone-500"}>{n.status}</span></td>
+                    <td className="px-4 py-3"><ContentStatusBadge status={n.status} /></td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-3">
+                        <VisibilityToggleForm
+                          id={n.id}
+                          status={n.status}
+                          action={toggleFieldNoteStatusAction}
+                        />
                         <Link href={`/admin/field-notes/${n.id}/edit`} className="text-stone-600 hover:underline">Edit</Link>
                         <form action={deleteFieldNoteAction.bind(null, n.id)}><button type="submit" className="text-red-500 hover:underline">Delete</button></form>
                       </div>

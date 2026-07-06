@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getNextStatus } from "@/lib/admin/content-status";
 
 function emptyToNull(value: FormDataEntryValue | null): string | null {
   const str = value == null ? "" : String(value).trim();
@@ -61,4 +62,31 @@ export async function deleteCollectionAction(id: string) {
 
   revalidatePath("/admin/photography");
   revalidatePath("/photography");
+}
+
+export async function toggleCollectionStatusAction(id: string) {
+  const supabase = await requireUser();
+
+  const { data, error: fetchError } = await supabase
+    .from("photography_collections")
+    .select("status, slug")
+    .eq("id", id)
+    .single();
+
+  if (fetchError || !data) {
+    throw new Error(`Failed to load collection: ${fetchError?.message ?? "Not found"}`);
+  }
+
+  const { error } = await supabase
+    .from("photography_collections")
+    .update({ status: getNextStatus(data.status) })
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(`Visibility update failed: ${error.message}`);
+  }
+
+  revalidatePath("/admin/photography");
+  revalidatePath("/photography");
+  revalidatePath(`/photography/${data.slug}`);
 }
