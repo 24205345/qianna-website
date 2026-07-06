@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   parseTagLines,
-  parseTimelineRows,
+  parseTimelineEntriesFromFormData,
 } from "@/lib/about/parse-form";
 import { createClient } from "@/lib/supabase/server";
 
@@ -27,7 +27,7 @@ export async function updateAboutPageAction(formData: FormData) {
 
   const pageTitle = requiredText(formData.get("page_title"), "About");
   const pageDescription = requiredText(formData.get("page_description"), "");
-  const timeline = parseTimelineRows(formData.get("timeline_rows"));
+  const timeline = parseTimelineEntriesFromFormData(formData);
   const workingAcross = parseTagLines(formData.get("working_across_tags"));
   const currentFocus = requiredText(
     formData.get("current_focus"),

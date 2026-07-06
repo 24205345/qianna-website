@@ -1,8 +1,6 @@
 import type { AboutPageContent } from "@/app/_data/about-page";
-import {
-  serializeTagLines,
-  serializeTimelineRows,
-} from "@/lib/about/parse-form";
+import { serializeTagLines } from "@/lib/about/parse-form";
+import TimelineEditor from "./TimelineEditor";
 
 interface AboutPageFormProps {
   action: (formData: FormData) => Promise<void>;
@@ -57,23 +55,11 @@ export default function AboutPageForm({ action, defaults }: AboutPageFormProps) 
         <div>
           <h2 className="font-serif text-xl text-stone-900">Timeline</h2>
           <p className={helpClass}>
-            One entry per line. Format: <code>Period | Title | Description</code>
+            Add each experience as a separate entry. Entries are shown top to bottom on the About page.
           </p>
         </div>
 
-        <div>
-          <label className={labelClass} htmlFor="timeline_rows">
-            Timeline entries
-          </label>
-          <textarea
-            id="timeline_rows"
-            name="timeline_rows"
-            rows={10}
-            defaultValue={serializeTimelineRows(defaults.timeline)}
-            className={inputClass}
-            placeholder="2025-Now | AI Product Manager | Working on digital platform development..."
-          />
-        </div>
+        <TimelineEditor initialItems={defaults.timeline} />
       </section>
 
       <section className="flex flex-col gap-5 border-t border-stone-200 pt-6">

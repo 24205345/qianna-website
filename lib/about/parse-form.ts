@@ -1,5 +1,17 @@
 import type { AboutTimelineItem } from "@/app/_data/about-page";
 
+export function parseTimelineEntriesFromFormData(formData: FormData): AboutTimelineItem[] {
+  const count = Number(formData.get("timeline_count") ?? 0) || 0;
+
+  return Array.from({ length: count }, (_, index) => ({
+    period: String(formData.get(`timeline_${index}_period`) ?? "").trim(),
+    title: String(formData.get(`timeline_${index}_title`) ?? "").trim(),
+    description: String(formData.get(`timeline_${index}_description`) ?? "").trim(),
+    sortOrder: index,
+  })).filter((item) => item.period && item.title);
+}
+
+/** @deprecated Use parseTimelineEntriesFromFormData for admin forms. */
 export function parseTimelineRows(value: FormDataEntryValue | null): AboutTimelineItem[] {
   const text = value == null ? "" : String(value).trim();
   if (!text) return [];
