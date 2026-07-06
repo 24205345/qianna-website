@@ -43,7 +43,7 @@ export default async function Home() {
             </p>
             <a
               href="#content"
-              className="mt-4 ml-1 inline-flex w-fit text-[15px] text-stone-50 underline decoration-stone-50/35 underline-offset-4 transition-[font-style,color,text-decoration-color] hover:italic hover:text-stone-100 hover:decoration-stone-50/55"
+              className="mt-4 ml-1 inline-flex w-fit text-[15px] text-stone-50/80 underline decoration-stone-50/80 underline-offset-4 transition-colors hover:text-stone-50 hover:decoration-stone-50"
             >
               {siteSettings.heroCtaLabel} →
             </a>
