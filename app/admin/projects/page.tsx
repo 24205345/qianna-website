@@ -80,7 +80,7 @@ export default async function AdminProjectsPage() {
               Field Notes
             </Link>
             <Link
-              href="/about"
+              href="/admin/about"
               className="text-sm text-stone-500 hover:text-stone-800"
             >
               About

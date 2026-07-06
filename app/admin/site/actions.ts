@@ -132,5 +132,6 @@ export async function updateSiteSettingsAction(formData: FormData) {
   revalidatePath("/field-notes");
   revalidatePath("/about");
   revalidatePath("/admin/site");
+  revalidatePath("/admin/about");
   redirect("/admin/site");
 }

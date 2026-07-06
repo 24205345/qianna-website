@@ -85,7 +85,7 @@ export default async function AdminSitePage() {
             <Link href="/admin/field-notes" className="text-sm text-stone-500 hover:text-stone-800">
               Field Notes
             </Link>
-            <Link href="/about" className="text-sm text-stone-500 hover:text-stone-800">
+            <Link href="/admin/about" className="text-sm text-stone-500 hover:text-stone-800">
               About
             </Link>
             <form action={signOutAction}>
