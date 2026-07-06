@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
   fallbackSiteSettings,
@@ -6,7 +5,7 @@ import {
 } from "@/app/_data/site-settings";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { getSiteNavigationItems } from "@/lib/site/queries";
-import { signOutAction } from "@/app/admin/projects/actions";
+import AdminPageHeader from "@/app/admin/_components/AdminPageHeader";
 import SiteSettingsForm from "./SiteSettingsForm";
 import { updateSiteSettingsAction } from "./actions";
 
@@ -61,43 +60,8 @@ export default async function AdminSitePage() {
 
   return (
     <div className="min-h-screen bg-stone-50 px-6 py-12 text-stone-700 md:px-10">
-      <div className="mx-auto max-w-3xl">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <p className="text-xs tracking-[0.24em] text-stone-500 uppercase">
-              Admin
-            </p>
-            <h1 className="mt-2 font-serif text-3xl text-stone-900">Site Settings</h1>
-            <p className="mt-2 text-sm text-stone-500">
-              Manage homepage Hero copy, entry cards, and linked page headings.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <Link href="/admin/projects" className="text-sm text-stone-500 hover:text-stone-800">
-              Projects
-            </Link>
-            <Link href="/admin/photography" className="text-sm text-stone-500 hover:text-stone-800">
-              Photography
-            </Link>
-            <Link href="/admin/visual-works" className="text-sm text-stone-500 hover:text-stone-800">
-              Visual Works
-            </Link>
-            <Link href="/admin/field-notes" className="text-sm text-stone-500 hover:text-stone-800">
-              Field Notes
-            </Link>
-            <Link href="/admin/about" className="text-sm text-stone-500 hover:text-stone-800">
-              About
-            </Link>
-            <form action={signOutAction}>
-              <button
-                type="submit"
-                className="rounded-md border border-stone-300 px-4 py-2 text-sm text-stone-600 hover:bg-stone-100"
-              >
-                Sign Out
-              </button>
-            </form>
-          </div>
-        </div>
+      <div className="mx-auto max-w-5xl">
+        <AdminPageHeader title="Site Settings" current="site" />
 
         {error ? (
           <p className="mt-8 rounded-md bg-red-50 px-4 py-3 text-sm leading-6 text-red-600">
