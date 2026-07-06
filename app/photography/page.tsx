@@ -1,4 +1,3 @@
-import Link from "next/link";
 import PhotoGallery from "./PhotoGallery";
 import { photographySections } from "@/app/_data/photography";
 import { getPhotographyPageData } from "@/lib/photography/queries";
@@ -52,14 +51,6 @@ export default async function PhotographyPage() {
           </section>
         ))}
 
-        <div className="mt-16 border-t border-stone-200 pt-8">
-          <Link
-            href="/"
-            className="text-sm text-stone-600 underline decoration-stone-300 underline-offset-4 transition-colors hover:text-stone-900"
-          >
-            ← Back to Home
-          </Link>
-        </div>
       </main>
     </div>
   );

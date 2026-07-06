@@ -45,10 +45,6 @@ export default async function FieldNotesPage() {
             </Link>
           ))}
         </div>
-
-        <div className="mt-16 border-t border-stone-200 pt-8">
-          <Link href="/" className="text-sm text-stone-600 underline decoration-stone-300 underline-offset-4 hover:text-stone-900">← Back to Home</Link>
-        </div>
       </main>
     </div>
   );

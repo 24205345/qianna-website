@@ -1,4 +1,3 @@
-import Link from "next/link";
 import PhotoGallery from "../photography/PhotoGallery";
 import { visualWorkSections } from "@/app/_data/visual-works";
 import { getVisualWorksPageData } from "@/lib/visual-works/queries";
@@ -51,14 +50,6 @@ export default async function VisualWorksPage() {
           </section>
         ))}
 
-        <div className="mt-16 border-t border-stone-200 pt-8">
-          <Link
-            href="/"
-            className="text-sm text-stone-600 underline decoration-stone-300 underline-offset-4 transition-colors hover:text-stone-900"
-          >
-            ← Back to Home
-          </Link>
-        </div>
       </main>
     </div>
   );

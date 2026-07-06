@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import type { GalleryImage } from "@/app/_data/project-galleries";
 import { xicaoshiCoverFallback } from "@/app/_data/project-galleries";
@@ -18,12 +17,6 @@ export default function XicaoshiProjectView({ project, galleryImages }: Props) {
       <section className="relative h-screen w-full overflow-hidden">
         <Image src={coverSrc} alt={project.title} fill priority className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
-        <div className="absolute top-6 left-6 z-20 md:top-8 md:left-10">
-          <Link href="/projects" className="flex items-center gap-2 text-sm text-stone-300 transition-colors hover:text-stone-100">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M19 12H5M5 12l7 7M5 12l7-7" /></svg>
-            Projects
-          </Link>
-        </div>
       </section>
 
       <section className="mx-auto w-full max-w-5xl px-6 pt-20 pb-14 md:px-10 md:pt-24 md:pb-16">
@@ -60,14 +53,6 @@ export default function XicaoshiProjectView({ project, galleryImages }: Props) {
       </section>
 
       <XicaoshiGallery images={galleryImages} />
-
-      <div className="border-t border-stone-800">
-        <div className="mx-auto w-full max-w-5xl px-6 py-10 md:px-10">
-          <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-stone-500 underline decoration-stone-700 underline-offset-4 transition-colors hover:text-stone-100">
-            ← Back to Projects
-          </Link>
-        </div>
-      </div>
     </div>
   );
 }

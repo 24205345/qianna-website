@@ -1,18 +1,9 @@
-import Link from "next/link";
 import Image from "next/image";
 import type { FieldNoteFull } from "@/lib/field-notes/queries";
 import type { FieldNoteNarrativeBlock } from "@/app/_data/field-note-details";
 
 interface Props {
   note: FieldNoteFull;
-}
-
-function BackArrow() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M19 12H5M5 12l7 7M5 12l7-7" />
-    </svg>
-  );
 }
 
 function imageSrc(block: FieldNoteNarrativeBlock): string {
@@ -84,12 +75,6 @@ export default function NarrativeFieldNoteView({ note }: Props) {
       <section className="relative h-screen w-full overflow-hidden">
         <Image src={note.cover_image_url} alt={note.title} fill priority className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/60" />
-        <div className="absolute top-6 left-6 z-20 md:top-8 md:left-10">
-          <Link href="/field-notes" className="flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white">
-            <BackArrow />
-            Field Notes
-          </Link>
-        </div>
         <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-16 md:px-10 md:pb-20">
           <div className="mx-auto max-w-5xl">
             <p className="text-[10px] tracking-[0.26em] text-white/60 uppercase">Field Notes</p>
@@ -152,15 +137,6 @@ export default function NarrativeFieldNoteView({ note }: Props) {
           </div>
         </section>
       ) : null}
-
-      <div className="border-t border-stone-200">
-        <div className="mx-auto w-full max-w-5xl px-6 py-10 md:px-10">
-          <Link href="/field-notes" className="inline-flex items-center gap-2 text-sm text-stone-500 underline decoration-stone-300 underline-offset-4 transition-colors hover:text-stone-900">
-            <BackArrow />
-            Back to Field Notes
-          </Link>
-        </div>
-      </div>
     </div>
   );
 }

@@ -120,28 +120,6 @@ export default async function ProjectsPage({
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
-      <div className="mx-auto w-full max-w-5xl px-6 pt-8 md:px-10 md:pt-10">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-sm text-stone-500 transition-colors hover:text-stone-800"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M19 12H5M5 12l7 7M5 12l7-7" />
-          </svg>
-          Back to Home
-        </Link>
-      </div>
-
       <main className="mx-auto w-full max-w-5xl px-6 py-12 md:px-10 md:py-16">
         <p className="text-xs tracking-[0.24em] text-stone-500 uppercase">Projects</p>
 
