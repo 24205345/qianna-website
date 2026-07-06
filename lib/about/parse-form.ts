@@ -7,8 +7,10 @@ export function parseTimelineEntriesFromFormData(formData: FormData): AboutTimel
     period: String(formData.get(`timeline_${index}_period`) ?? "").trim(),
     title: String(formData.get(`timeline_${index}_title`) ?? "").trim(),
     description: String(formData.get(`timeline_${index}_description`) ?? "").trim(),
-    sortOrder: index,
-  })).filter((item) => item.period && item.title);
+    sortOrder: Number(formData.get(`timeline_${index}_sort_order`) ?? index) || 0,
+  }))
+    .filter((item) => item.period && item.title)
+    .sort((a, b) => a.sortOrder - b.sortOrder);
 }
 
 /** @deprecated Use parseTimelineEntriesFromFormData for admin forms. */

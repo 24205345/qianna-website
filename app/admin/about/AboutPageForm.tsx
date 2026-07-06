@@ -55,7 +55,7 @@ export default function AboutPageForm({ action, defaults }: AboutPageFormProps) 
         <div>
           <h2 className="font-serif text-xl text-stone-900">Timeline</h2>
           <p className={helpClass}>
-            Add each experience as a separate entry. Entries are shown top to bottom on the About page.
+            Add each experience as a separate entry. Use Order to control display sequence (smaller numbers appear first).
           </p>
         </div>
 

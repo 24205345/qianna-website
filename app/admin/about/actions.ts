@@ -34,11 +34,11 @@ export async function updateAboutPageAction(formData: FormData) {
     "Today, I am interested in AI products that help people observe, organize, and act on complex information, especially in spatial, industrial, and operational contexts."
   );
 
-  const timelineItems = timeline.map((item, index) => ({
+  const timelineItems = timeline.map((item) => ({
     period: item.period,
     title: item.title,
     description: item.description,
-    sort_order: index,
+    sort_order: item.sortOrder,
   }));
 
   const { error: aboutError } = await supabase.from("about_page_content").upsert(

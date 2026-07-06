@@ -7,6 +7,7 @@ interface TimelineRow {
   period: string;
   title: string;
   description: string;
+  sortOrder: number;
 }
 
 interface TimelineEditorProps {
@@ -19,7 +20,7 @@ const labelClass = "block text-sm font-medium text-stone-700";
 
 function toRows(items: AboutTimelineItem[]): TimelineRow[] {
   if (items.length === 0) {
-    return [{ period: "", title: "", description: "" }];
+    return [{ period: "", title: "", description: "", sortOrder: 0 }];
   }
 
   return items
@@ -29,6 +30,7 @@ function toRows(items: AboutTimelineItem[]): TimelineRow[] {
       period: item.period,
       title: item.title,
       description: item.description,
+      sortOrder: item.sortOrder,
     }));
 }
 
@@ -36,17 +38,30 @@ export default function TimelineEditor({ initialItems }: TimelineEditorProps) {
   const [items, setItems] = useState<TimelineRow[]>(() => toRows(initialItems));
 
   function addItem() {
-    setItems((current) => [...current, { period: "", title: "", description: "" }]);
+    setItems((current) => {
+      const nextOrder =
+        current.reduce((max, item) => Math.max(max, item.sortOrder), -1) + 1;
+      return [
+        ...current,
+        { period: "", title: "", description: "", sortOrder: nextOrder },
+      ];
+    });
   }
 
   function removeItem(index: number) {
     setItems((current) => {
       const next = current.filter((_, itemIndex) => itemIndex !== index);
-      return next.length > 0 ? next : [{ period: "", title: "", description: "" }];
+      return next.length > 0
+        ? next
+        : [{ period: "", title: "", description: "", sortOrder: 0 }];
     });
   }
 
-  function updateItem(index: number, field: keyof TimelineRow, value: string) {
+  function updateItem(
+    index: number,
+    field: keyof TimelineRow,
+    value: string | number
+  ) {
     setItems((current) =>
       current.map((item, itemIndex) =>
         itemIndex === index ? { ...item, [field]: value } : item
@@ -77,7 +92,24 @@ export default function TimelineEditor({ initialItems }: TimelineEditorProps) {
           </div>
 
           <div className="grid gap-4">
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div>
+                <label className={labelClass} htmlFor={`timeline_${index}_sort_order`}>
+                  Order
+                </label>
+                <input
+                  id={`timeline_${index}_sort_order`}
+                  name={`timeline_${index}_sort_order`}
+                  type="number"
+                  min={0}
+                  value={item.sortOrder}
+                  onChange={(event) =>
+                    updateItem(index, "sortOrder", Number(event.target.value) || 0)
+                  }
+                  className={inputClass}
+                />
+              </div>
+
               <div>
                 <label className={labelClass} htmlFor={`timeline_${index}_period`}>
                   Period *
