@@ -48,8 +48,8 @@ export default function FixedBackLink() {
   }
 
   const linkClass = isDarkSurface(pathname)
-    ? "fixed bottom-6 left-6 z-40 text-sm text-stone-50/85 underline decoration-stone-50/85 underline-offset-4 transition-colors hover:text-stone-50 hover:decoration-stone-50"
-    : "fixed bottom-6 left-6 z-40 text-sm text-stone-600 underline decoration-stone-600/70 underline-offset-4 transition-colors hover:text-stone-900 hover:decoration-stone-900";
+    ? "fixed bottom-6 left-6 z-40 text-sm text-stone-50/85 underline decoration-stone-50/40 underline-offset-4 transition-colors hover:text-stone-50/95 hover:decoration-stone-50/55"
+    : "fixed bottom-6 left-6 z-40 text-sm text-stone-600 underline decoration-stone-600/45 underline-offset-4 transition-colors hover:text-stone-900 hover:decoration-stone-900/70";
 
   return (
     <Link
