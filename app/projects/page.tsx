@@ -109,6 +109,7 @@ export default async function ProjectsPage({
     getSiteNavigationItems(),
   ]);
   const sortedProjects = sortProjectsByYearDesc(projects);
+  const pageCopy = getSiteNavigationItem(navigationItems, "projects-preview");
   const activeCategoryCopy = activeCategory
     ? getSiteNavigationItem(navigationItems, activeCategory.slug)
     : null;
@@ -157,9 +158,11 @@ export default async function ProjectsPage({
           </>
         ) : (
           <>
-            <h1 className="mt-4 font-serif text-4xl text-stone-900 md:text-5xl">Projects</h1>
+            <h1 className="mt-4 font-serif text-4xl text-stone-900 md:text-5xl">
+              {pageCopy.title}
+            </h1>
             <p className="mt-4 max-w-2xl leading-7 text-stone-500">
-              Thesis and design research, architecture projects, and digital product work.
+              {pageCopy.description}
             </p>
 
             <div className="mt-14 flex flex-col gap-6">
