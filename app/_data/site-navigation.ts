@@ -15,7 +15,7 @@ export const fallbackSiteNavigationItems: SiteNavigationItem[] = [
     itemKey: "projects-preview",
     group: "section",
     label: "View all projects",
-    title: "Selected Work",
+    title: "Projects Preview",
     description:
       "Thesis and design research, architecture projects, and digital product work.",
     href: "/projects",

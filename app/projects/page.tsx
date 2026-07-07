@@ -10,6 +10,8 @@ import {
   getSiteNavigationItems,
 } from "@/lib/site/queries";
 
+const PROJECTS_LIST_PAGE_TITLE = "Selected Work";
+
 async function getProjects(): Promise<Project[]> {
   if (!isSupabaseConfigured()) {
     return staticProjects;
@@ -159,7 +161,7 @@ export default async function ProjectsPage({
         ) : (
           <>
             <h1 className="mt-4 font-serif text-4xl text-stone-900 md:text-5xl">
-              {pageCopy.title}
+              {PROJECTS_LIST_PAGE_TITLE}
             </h1>
             <p className="mt-4 max-w-2xl leading-7 text-stone-500">
               {pageCopy.description}
