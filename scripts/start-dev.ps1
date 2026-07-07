@@ -109,7 +109,7 @@ Write-Host ""
 Write-Host "已打开浏览器: $Url" -ForegroundColor Green
 Write-Host ""
 Write-Host "常用地址:" -ForegroundColor Cyan
-Write-Host "  首页        $Url"
+Write-Host "  首页封面    $Url （鼠标移动封面区域可见液体扭曲，无需单独启动）"
 Write-Host "  后台登录    $Url/admin/login"
 Write-Host "  项目管理    $Url/admin/projects"
 Write-Host ""

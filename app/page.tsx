@@ -30,7 +30,7 @@ export default async function Home() {
           alt={siteSettings.heroImageAlt}
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/42 via-black/18 to-black/8" />
-        <div className="relative z-10 flex min-h-screen items-end">
+        <div className="pointer-events-none relative z-10 flex min-h-screen items-end">
           <div className="w-full px-4 pb-12 md:px-8 md:pb-16 lg:px-12 lg:pb-18">
             <h1 className="font-serif text-4xl text-stone-50 md:text-6xl">
               {siteSettings.heroTitle}
@@ -40,7 +40,7 @@ export default async function Home() {
             </p>
             <a
               href="#content"
-              className="mt-4 ml-1 inline-flex w-fit text-[15px] text-stone-50/80 underline decoration-stone-50/40 underline-offset-4 transition-colors hover:text-stone-50/90 hover:decoration-stone-50/55"
+              className="pointer-events-auto mt-4 ml-1 inline-flex w-fit text-[15px] text-stone-50/80 underline decoration-stone-50/40 underline-offset-4 transition-colors hover:text-stone-50/90 hover:decoration-stone-50/55"
             >
               {siteSettings.heroCtaLabel} →
             </a>
