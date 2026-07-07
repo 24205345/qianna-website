@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import HeroImageDistortionClient from "@/app/_components/HeroImageDistortionClient";
 import {
   getSiteNavigationGroup,
   getSiteNavigationItem,
@@ -25,14 +25,11 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
       <header className="relative min-h-screen w-full overflow-hidden">
-        <Image
-          src={siteSettings.heroImageUrl}
+        <HeroImageDistortionClient
+          imageUrl={siteSettings.heroImageUrl}
           alt={siteSettings.heroImageAlt}
-          fill
-          priority
-          className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/42 via-black/18 to-black/8" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/42 via-black/18 to-black/8" />
         <div className="relative z-10 flex min-h-screen items-end">
           <div className="w-full px-4 pb-12 md:px-8 md:pb-16 lg:px-12 lg:pb-18">
             <h1 className="font-serif text-4xl text-stone-50 md:text-6xl">
