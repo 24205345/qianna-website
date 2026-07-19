@@ -4,6 +4,7 @@ import { signOutAction } from "@/app/admin/projects/actions";
 
 export type AdminNavKey =
   | "site"
+  | "notes"
   | "projects"
   | "photography"
   | "visual-works"
@@ -12,6 +13,7 @@ export type AdminNavKey =
 
 const NAV_ITEMS: { key: AdminNavKey; label: string; href: string }[] = [
   { key: "site", label: "Site Settings", href: "/admin/site" },
+  { key: "notes", label: "Notes", href: "/admin/notes" },
   { key: "projects", label: "Projects", href: "/admin/projects" },
   { key: "photography", label: "Photography", href: "/admin/photography" },
   { key: "visual-works", label: "Visual Works", href: "/admin/visual-works" },
@@ -43,7 +45,7 @@ export default function AdminPageHeader({
         <h1 className="mt-2 font-serif text-3xl text-stone-900">{title}</h1>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-2">
         {NAV_ITEMS.map((item) => (
           <Link key={item.key} href={item.href} className={navLinkClass(item.key === current)}>
             {item.label}

@@ -17,7 +17,8 @@
 | **P4 Field Notes** | ✅ | 5 旅程、63 图 + 4 视频、动态 [slug]、双模板 |
 | **P5 Home Hero** | ✅ | `site_settings` + `/admin/site`，首页 Hero 可后台编辑；后台 UI 已统一英文 |
 | **P5.5 Site Navigation Copy** | ✅ | 首页入口卡片 + 对应子页面页眉共用 `site_navigation_items` |
-| P6 About（可选） | ⬜ | About 页正文仍待内容 CMS 化 |
+| **P6 About** | ✅ | `/about` + `/admin/about` timeline CMS |
+| **P7 Notes** | ✅ | 独立 Notes 模块：MD + TOC；首页 Notes 区块在 Projects Preview 上方；`/admin/notes` |
 
 ---
 
@@ -248,17 +249,27 @@ field_note_media (id, field_note_id, type, url, title, caption, sort_order)
 
 ---
 
-## P6：About（可选，低优先级）
+## P6：About ✅
 
-| 步骤 | 任务 |
-|---|---|
-| P6-1 | 设计 `about_sections` 或复用 `site_settings` 扩展字段 |
-| P6-2 | About 页 `/about` 改读 Supabase，保留静态回退 |
-| P6-3 | 后台 `/admin/about` 简单表单 |
+- [x] `about_page_content` + `/admin/about` timeline 编辑
+- [x] 前台 `/about` 读 Supabase，静态回退
 
-**当前状态**：About 页标题/描述已随 `site_navigation_items` 同步；正文仍是低优先级占位内容。
+---
 
-**预估**：Agent 2–3h
+## P7：Notes ✅
+
+### 已完成内容
+- [x] 建表 `notes` + RLS + GRANT（`supabase/migrations/0010_notes.sql`）
+- [x] `site_navigation_items` 增加 `notes-preview` section（与 Projects Preview 同级）
+- [x] 首页 Notes 区块在 Projects Preview **上方**，展示最新 3 篇标题 + 短 excerpt
+- [x] `/notes` 列表 + `/notes/[slug]` Markdown 渲染与 TOC
+- [x] `/admin/notes` CRUD（Markdown + 预览、Excerpt 单独字段）
+- [x] Admin Projects 列表按三类分组
+
+### 验证方式
+1. `/admin/notes` 新建一篇，设为 Hidden → 首页与 `/notes` 不可见
+2. Publish → 首页 Notes 区块与 `/notes` 出现
+3. 正文含多个 `##` → 详情页 Contents 可跳转
 
 ---
 
@@ -288,10 +299,10 @@ field_note_media (id, field_note_id, type, url, title, caption, sort_order)
 
 ## 推荐下一步
 
-**P1–P4 已完成。** Codex 请优先阅读 `docs/codex-handoff.md`，然后：
+CMS 主线（含 Notes）已完成。可继续：
 
-1. **收尾 commit**（用户明确要求时）— 分模块提交 P1–P4
-2. **P6 About** — About 页内容 CMS 化
-3. **Vercel 部署** — 配置环境变量并 push
+1. 在 `/admin/notes` 撰写并发布 AI 学习笔记
+2. 需要时再增强 Markdown 编辑器（当前为 textarea + preview）
+3. push 后确认 Vercel 生产环境首页 Notes 区块正常
 
 本地开发、sparse-checkout、下载脚本等详见 **`docs/codex-handoff.md` 第 3–4 节**。

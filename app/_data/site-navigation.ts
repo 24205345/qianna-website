@@ -12,6 +12,16 @@ export interface SiteNavigationItem {
 
 export const fallbackSiteNavigationItems: SiteNavigationItem[] = [
   {
+    itemKey: "notes-preview",
+    group: "section",
+    label: "View all notes",
+    title: "Notes",
+    description:
+      "Short notes on learning AI, building tools, and turning ideas into practice.",
+    href: "/notes",
+    sortOrder: -10,
+  },
+  {
     itemKey: "projects-preview",
     group: "section",
     label: "View all projects",

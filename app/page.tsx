@@ -1,5 +1,6 @@
 import Link from "next/link";
 import HeroImageDistortionClient from "@/app/_components/HeroImageDistortionClient";
+import { getLatestNotes } from "@/lib/notes/queries";
 import {
   getSiteNavigationGroup,
   getSiteNavigationItem,
@@ -8,10 +9,12 @@ import {
 } from "@/lib/site/queries";
 
 export default async function Home() {
-  const [siteSettings, navigationItems] = await Promise.all([
+  const [siteSettings, navigationItems, latestNotes] = await Promise.all([
     getSiteSettings(),
     getSiteNavigationItems(),
+    getLatestNotes(3),
   ]);
+  const notesSection = getSiteNavigationItem(navigationItems, "notes-preview");
   const projectsSection = getSiteNavigationItem(
     navigationItems,
     "projects-preview"
@@ -52,6 +55,51 @@ export default async function Home() {
         id="content"
         className="mx-auto w-full max-w-5xl px-6 py-12 md:px-10 md:py-16"
       >
+        <section className="py-14 md:py-16">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h2 className="font-serif text-3xl text-stone-900 md:text-4xl">
+                {notesSection.title}
+              </h2>
+              {notesSection.description ? (
+                <p className="mt-3 max-w-xl text-sm leading-6 text-stone-500">
+                  {notesSection.description}
+                </p>
+              ) : null}
+            </div>
+            <Link
+              href={notesSection.href}
+              className="shrink-0 text-sm text-stone-600 underline decoration-stone-300 underline-offset-4 transition-colors hover:text-stone-900"
+            >
+              {notesSection.label}
+            </Link>
+          </div>
+          <div className="mt-8 flex flex-col gap-6">
+            {latestNotes.length === 0 ? (
+              <p className="text-sm text-stone-400">
+                New notes will appear here once published.
+              </p>
+            ) : (
+              latestNotes.map((note) => (
+                <Link
+                  key={note.slug}
+                  href={`/notes/${note.slug}`}
+                  className="group border-b border-stone-200/70 pb-6 last:border-0 last:pb-0"
+                >
+                  <h3 className="font-serif text-xl text-stone-900 transition-colors group-hover:text-stone-700 md:text-2xl">
+                    {note.title}
+                  </h3>
+                  {note.excerpt ? (
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">
+                      {note.excerpt}
+                    </p>
+                  ) : null}
+                </Link>
+              ))
+            )}
+          </div>
+        </section>
+
         <section className="py-14 md:py-16">
           <div className="flex items-end justify-between gap-4">
             <h2 className="font-serif text-3xl text-stone-900 md:text-4xl">

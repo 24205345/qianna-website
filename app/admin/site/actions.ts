@@ -126,6 +126,7 @@ export async function updateSiteSettingsAction(formData: FormData) {
   }
 
   revalidatePath("/");
+  revalidatePath("/notes");
   revalidatePath("/projects");
   revalidatePath("/photography");
   revalidatePath("/visual-works");

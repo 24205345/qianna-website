@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const SECTION_LABELS: Record<string, string> = {
   projects: "Projects",
   "field-notes": "Field Notes",
+  notes: "Notes",
 };
 
 function getBackLink(pathname: string): { href: string; label: string } | null {
