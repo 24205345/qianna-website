@@ -8,11 +8,19 @@ import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 interface NoteRow {
   slug: string;
   title: string;
+  title_en: string | null;
   excerpt: string | null;
+  excerpt_en: string | null;
   body_markdown: string | null;
+  body_markdown_en: string | null;
   cover_image_url: string | null;
   tags: string[] | null;
   published_at: string | null;
+}
+
+function pickEnglish(primary: string | null | undefined, fallback: string): string {
+  const value = primary?.trim();
+  return value ? value : fallback;
 }
 
 function toListItem(note: NoteDetail): NoteListItem {
@@ -25,23 +33,33 @@ function toListItem(note: NoteDetail): NoteListItem {
   };
 }
 
-function mapListItem(row: NoteRow): NoteListItem {
+function mapDetail(row: NoteRow): NoteDetail {
+  const titleZh = row.title;
+  const titleEn = pickEnglish(row.title_en, titleZh);
+  const excerptZh = row.excerpt ?? "";
+  const excerptEn = pickEnglish(row.excerpt_en, excerptZh);
+  const bodyZh = row.body_markdown ?? "";
+  const bodyEn = pickEnglish(row.body_markdown_en, bodyZh);
+
   return {
     slug: row.slug,
-    title: row.title,
-    excerpt: row.excerpt ?? "",
+    // List/home always prefer English.
+    title: titleEn,
+    excerpt: excerptEn,
+    titleZh,
+    titleEn,
+    excerptZh,
+    excerptEn,
+    bodyMarkdownZh: bodyZh,
+    bodyMarkdownEn: bodyEn,
+    coverImageUrl: row.cover_image_url,
     publishedAt: row.published_at,
     tags: row.tags ?? [],
   };
 }
 
-function mapDetail(row: NoteRow): NoteDetail {
-  return {
-    ...mapListItem(row),
-    bodyMarkdown: row.body_markdown ?? "",
-    coverImageUrl: row.cover_image_url,
-  };
-}
+const DETAIL_SELECT =
+  "slug, title, title_en, excerpt, excerpt_en, body_markdown, body_markdown_en, cover_image_url, tags, published_at";
 
 export async function getPublishedNotes(): Promise<NoteListItem[]> {
   if (!isSupabaseConfigured()) {
@@ -51,7 +69,7 @@ export async function getPublishedNotes(): Promise<NoteListItem[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("notes")
-    .select("slug, title, excerpt, tags, published_at")
+    .select(DETAIL_SELECT)
     .eq("status", "published")
     .order("published_at", { ascending: false, nullsFirst: false });
 
@@ -59,7 +77,7 @@ export async function getPublishedNotes(): Promise<NoteListItem[]> {
     return fallbackNotes.map(toListItem);
   }
 
-  return (data as NoteRow[]).map(mapListItem);
+  return (data as NoteRow[]).map((row) => toListItem(mapDetail(row)));
 }
 
 export async function getLatestNotes(limit = 3): Promise<NoteListItem[]> {
@@ -70,7 +88,7 @@ export async function getLatestNotes(limit = 3): Promise<NoteListItem[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("notes")
-    .select("slug, title, excerpt, tags, published_at")
+    .select(DETAIL_SELECT)
     .eq("status", "published")
     .order("published_at", { ascending: false, nullsFirst: false })
     .limit(limit);
@@ -79,7 +97,7 @@ export async function getLatestNotes(limit = 3): Promise<NoteListItem[]> {
     return fallbackNotes.slice(0, limit).map(toListItem);
   }
 
-  return (data as NoteRow[]).map(mapListItem);
+  return (data as NoteRow[]).map((row) => toListItem(mapDetail(row)));
 }
 
 export async function getNoteBySlug(slug: string): Promise<NoteDetail | null> {
@@ -92,9 +110,7 @@ export async function getNoteBySlug(slug: string): Promise<NoteDetail | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("notes")
-    .select(
-      "slug, title, excerpt, body_markdown, cover_image_url, tags, published_at"
-    )
+    .select(DETAIL_SELECT)
     .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();

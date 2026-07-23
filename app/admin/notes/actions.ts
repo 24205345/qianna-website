@@ -87,9 +87,12 @@ async function buildPayload(
 
   return {
     title,
+    title_en: emptyToNull(formData.get("title_en")),
     slug,
     excerpt,
+    excerpt_en: truncateExcerpt(emptyToNull(formData.get("excerpt_en")) ?? ""),
     body_markdown: emptyToNull(formData.get("body_markdown")) ?? "",
+    body_markdown_en: emptyToNull(formData.get("body_markdown_en")) ?? "",
     cover_image_url: emptyToNull(formData.get("cover_image_url")),
     tags: parseTags(formData.get("tags")),
     status,

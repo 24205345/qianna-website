@@ -17,9 +17,12 @@ import { uploadNoteAttachmentAction } from "./actions";
 
 export interface NoteFormDefaults {
   title?: string | null;
+  title_en?: string | null;
   slug?: string | null;
   excerpt?: string | null;
+  excerpt_en?: string | null;
   body_markdown?: string | null;
+  body_markdown_en?: string | null;
   cover_image_url?: string | null;
   tags?: string[] | null;
   status?: string | null;
@@ -59,7 +62,11 @@ export default function NoteForm({
   submitLabel,
 }: NoteFormProps) {
   const d = defaults ?? {};
+  const [editorLang, setEditorLang] = useState<"zh" | "en">("zh");
   const [bodyMarkdown, setBodyMarkdown] = useState(d.body_markdown ?? "");
+  const [bodyMarkdownEn, setBodyMarkdownEn] = useState(
+    d.body_markdown_en ?? ""
+  );
   const [attachments, setAttachments] = useState<AttachmentItem[]>(() =>
     d.cover_image_url
       ? [{ url: d.cover_image_url, fileName: "cover" }]
@@ -73,22 +80,26 @@ export default function NoteForm({
   const previewRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const activeBody = editorLang === "en" ? bodyMarkdownEn : bodyMarkdown;
+  const setActiveBody =
+    editorLang === "en" ? setBodyMarkdownEn : setBodyMarkdown;
+
   const toc = useMemo(
-    () => extractTocFromMarkdown(bodyMarkdown),
-    [bodyMarkdown]
+    () => extractTocFromMarkdown(activeBody),
+    [activeBody]
   );
   const sections = useMemo(
-    () => splitMarkdownSections(bodyMarkdown),
-    [bodyMarkdown]
+    () => splitMarkdownSections(activeBody),
+    [activeBody]
   );
 
   const previewMarkdown = useMemo(() => {
-    if (activeSectionId === "all") return bodyMarkdown;
+    if (activeSectionId === "all") return activeBody;
     return (
       sections.find((section) => section.id === activeSectionId)?.markdown ??
-      bodyMarkdown
+      activeBody
     );
-  }, [activeSectionId, bodyMarkdown, sections]);
+  }, [activeSectionId, activeBody, sections]);
 
   const activeIndex =
     activeSectionId === "all"
@@ -98,15 +109,14 @@ export default function NoteForm({
   function insertSnippet(snippet: string) {
     const el = textareaRef.current;
     if (!el) {
-      setBodyMarkdown((prev) => `${prev}${snippet}`);
+      setActiveBody((prev) => `${prev}${snippet}`);
       return;
     }
 
     const start = el.selectionStart;
     const end = el.selectionEnd;
-    const next =
-      bodyMarkdown.slice(0, start) + snippet + bodyMarkdown.slice(end);
-    setBodyMarkdown(next);
+    const next = activeBody.slice(0, start) + snippet + activeBody.slice(end);
+    setActiveBody(next);
 
     requestAnimationFrame(() => {
       el.focus();
@@ -190,13 +200,14 @@ export default function NoteForm({
   return (
     <form action={action} className="mt-8 flex flex-col gap-6">
       <input type="hidden" name="body_markdown" value={bodyMarkdown} />
+      <input type="hidden" name="body_markdown_en" value={bodyMarkdownEn} />
       <input type="hidden" name="cover_image_url" value={coverUrl} />
 
       {/* Meta */}
       <section className="grid gap-5 lg:grid-cols-2">
-        <div className="lg:col-span-2">
+        <div>
           <label className={labelClass} htmlFor="title">
-            Title *
+            Title (中文) *
           </label>
           <input
             id="title"
@@ -204,15 +215,28 @@ export default function NoteForm({
             required
             defaultValue={d.title ?? ""}
             className={inputClass}
-            placeholder="Note title"
+            placeholder="中文标题"
           />
         </div>
 
-        <div className="lg:col-span-2">
+        <div>
+          <label className={labelClass} htmlFor="title_en">
+            Title (English)
+          </label>
+          <input
+            id="title_en"
+            name="title_en"
+            defaultValue={d.title_en ?? ""}
+            className={inputClass}
+            placeholder="English title for list / home"
+          />
+        </div>
+
+        <div>
           <label className={labelClass} htmlFor="excerpt">
-            Summary *{" "}
+            Summary (中文) *{" "}
             <span className="font-normal text-stone-400">
-              (homepage excerpt, max ~160 chars)
+              (max ~160 chars)
             </span>
           </label>
           <textarea
@@ -223,7 +247,25 @@ export default function NoteForm({
             maxLength={160}
             defaultValue={d.excerpt ?? ""}
             className={inputClass}
-            placeholder="One or two concise sentences for the homepage."
+            placeholder="中文摘要"
+          />
+        </div>
+
+        <div>
+          <label className={labelClass} htmlFor="excerpt_en">
+            Summary (English){" "}
+            <span className="font-normal text-stone-400">
+              (homepage / list)
+            </span>
+          </label>
+          <textarea
+            id="excerpt_en"
+            name="excerpt_en"
+            rows={2}
+            maxLength={160}
+            defaultValue={d.excerpt_en ?? ""}
+            className={inputClass}
+            placeholder="English excerpt for homepage and list"
           />
         </div>
 
@@ -347,6 +389,40 @@ export default function NoteForm({
       <section className="overflow-hidden rounded-xl border border-stone-200 bg-white">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 bg-stone-50 px-4 py-3">
           <div className="flex flex-wrap items-center gap-2">
+            <div
+              className="mr-1 inline-flex rounded-md border border-stone-300 bg-white p-0.5 text-xs"
+              role="group"
+              aria-label="Editor language"
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  setEditorLang("zh");
+                  setActiveSectionId("all");
+                }}
+                className={
+                  editorLang === "zh"
+                    ? "rounded px-2.5 py-1 font-medium text-stone-900 bg-stone-100"
+                    : "rounded px-2.5 py-1 text-stone-500 hover:text-stone-800"
+                }
+              >
+                中文正文
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setEditorLang("en");
+                  setActiveSectionId("all");
+                }}
+                className={
+                  editorLang === "en"
+                    ? "rounded px-2.5 py-1 font-medium text-stone-900 bg-stone-100"
+                    : "rounded px-2.5 py-1 text-stone-500 hover:text-stone-800"
+                }
+              >
+                English body
+              </button>
+            </div>
             <button
               type="button"
               className={toolBtnClass}
@@ -523,13 +599,13 @@ export default function NoteForm({
             <div className="flex min-h-[20rem] flex-col">
               <div className="border-b border-stone-100 px-4 py-2">
                 <p className="text-[10px] tracking-[0.18em] text-stone-400 uppercase">
-                  Markdown
+                  Markdown · {editorLang === "en" ? "EN" : "ZH"}
                 </p>
               </div>
               <textarea
                 ref={textareaRef}
-                value={bodyMarkdown}
-                onChange={(event) => setBodyMarkdown(event.target.value)}
+                value={activeBody}
+                onChange={(event) => setActiveBody(event.target.value)}
                 className="min-h-[20rem] flex-1 resize-none border-0 bg-white px-4 py-4 font-mono text-[13px] leading-6 text-stone-800 outline-none focus:ring-0"
                 placeholder={
                   "## Getting started\n\nWrite in Markdown.\n\n```prompt\nYour reusable prompt…\n```\n"

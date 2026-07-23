@@ -7,9 +7,12 @@ import NoteForm from "../../NoteForm";
 interface NoteRow {
   id: string;
   title: string;
+  title_en: string | null;
   slug: string;
   excerpt: string;
+  excerpt_en: string | null;
   body_markdown: string;
+  body_markdown_en: string | null;
   cover_image_url: string | null;
   tags: string[] | null;
   status: string;
@@ -35,7 +38,7 @@ export default async function AdminEditNotePage({
   const { data, error } = await supabase
     .from("notes")
     .select(
-      "id, title, slug, excerpt, body_markdown, cover_image_url, tags, status, sort_order"
+      "id, title, title_en, slug, excerpt, excerpt_en, body_markdown, body_markdown_en, cover_image_url, tags, status, sort_order"
     )
     .eq("id", id)
     .maybeSingle();
@@ -53,9 +56,12 @@ export default async function AdminEditNotePage({
           submitLabel="Save Note"
           defaults={{
             title: note.title,
+            title_en: note.title_en,
             slug: note.slug,
             excerpt: note.excerpt,
+            excerpt_en: note.excerpt_en,
             body_markdown: note.body_markdown,
+            body_markdown_en: note.body_markdown_en,
             cover_image_url: note.cover_image_url,
             tags: note.tags,
             status: note.status,
