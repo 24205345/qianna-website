@@ -83,7 +83,7 @@ export default function NoteDetailView({ note }: NoteDetailViewProps) {
 
         <div className="mt-12 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start">
           <aside className="order-2 lg:order-1">
-            <div className="rounded-xl border border-stone-200 bg-white/80 p-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
+            <div className="note-toc-scroll rounded-xl border border-stone-200 bg-white/80 p-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
               <NoteToc
                 headings={toc}
                 showTitle

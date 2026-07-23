@@ -4,6 +4,7 @@ import { Children, isValidElement } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { headingIdFromText } from "@/lib/notes/markdown";
+import CopyButton from "./CopyButton";
 
 interface NoteMarkdownProps {
   markdown: string;
@@ -20,11 +21,20 @@ function getTextContent(node: unknown): string {
   return "";
 }
 
+function isPromptElement(node: unknown): boolean {
+  return (
+    isValidElement(node) &&
+    node.props != null &&
+    typeof node.props === "object" &&
+    "data-note-prompt" in (node.props as Record<string, unknown>)
+  );
+}
+
 export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
   const usedIds = new Map<string, number>();
 
   return (
-    <div className="note-prose space-y-5 text-base leading-8 text-stone-600">
+    <div className="note-prose w-full space-y-5 text-base leading-8 text-stone-600">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -78,8 +88,9 @@ export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
               return (
                 <aside
                   data-note-prompt=""
-                  className="not-prose my-6 rounded-xl border border-stone-200 bg-stone-100/80 px-5 py-4"
+                  className="not-prose group relative my-6 rounded-xl border border-stone-200 bg-stone-100/80 px-5 py-4 pr-14"
                 >
+                  <CopyButton text={content} tone="light" />
                   <p className="text-[10px] tracking-[0.22em] text-stone-500 uppercase">
                     Prompt
                   </p>
@@ -92,7 +103,7 @@ export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
 
             if (className) {
               return (
-                <code className="block overflow-x-auto rounded-lg bg-stone-900 px-4 py-3 font-mono text-sm text-stone-100">
+                <code className="block overflow-x-auto px-4 py-3.5 font-mono text-sm leading-6 text-stone-100">
                   {children}
                 </code>
               );
@@ -106,22 +117,40 @@ export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
           },
           pre: ({ children }) => {
             const items = Children.toArray(children);
-            const first = items[0];
-            if (
-              isValidElement(first) &&
-              first.props &&
-              typeof first.props === "object" &&
-              "data-note-prompt" in (first.props as Record<string, unknown>)
-            ) {
+            if (items.some(isPromptElement)) {
               return <>{children}</>;
             }
 
+            const text = getTextContent(children);
             return (
-              <pre className="overflow-x-auto rounded-lg bg-stone-900">
-                {children}
-              </pre>
+              <div className="group relative my-6 overflow-hidden rounded-lg bg-stone-900">
+                <CopyButton text={text} tone="dark" />
+                <pre className="overflow-x-auto pr-12">{children}</pre>
+              </div>
             );
           },
+          table: ({ children }) => (
+            <div className="my-6 w-full overflow-x-auto">
+              <table className="note-md-table w-full min-w-full border-collapse text-left text-sm leading-6 text-stone-700">
+                {children}
+              </table>
+            </div>
+          ),
+          thead: ({ children }) => (
+            <thead className="bg-stone-100/90">{children}</thead>
+          ),
+          tbody: ({ children }) => <tbody>{children}</tbody>,
+          tr: ({ children }) => <tr>{children}</tr>,
+          th: ({ children }) => (
+            <th className="border border-stone-200 px-4 py-3 align-top font-medium text-stone-800 whitespace-normal break-words">
+              {children}
+            </th>
+          ),
+          td: ({ children }) => (
+            <td className="border border-stone-200 px-4 py-3 align-top whitespace-normal break-words">
+              {children}
+            </td>
+          ),
           blockquote: ({ children }) => (
             <blockquote className="border-l-2 border-stone-300 pl-4 text-stone-500 italic">
               {children}
