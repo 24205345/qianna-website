@@ -1,6 +1,6 @@
 "use client";
 
-import { Children, isValidElement } from "react";
+import { Children, isValidElement, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { headingIdFromText } from "@/lib/notes/markdown";
@@ -21,13 +21,16 @@ function getTextContent(node: unknown): string {
   return "";
 }
 
-function isPromptElement(node: unknown): boolean {
-  return (
-    isValidElement(node) &&
-    node.props != null &&
-    typeof node.props === "object" &&
-    "data-note-prompt" in (node.props as Record<string, unknown>)
-  );
+function getFencedLanguage(children: ReactNode): string | null {
+  const first = Children.toArray(children).find(isValidElement);
+  if (!first) return null;
+  const className =
+    first.props &&
+    typeof first.props === "object" &&
+    "className" in first.props
+      ? String((first.props as { className?: string }).className ?? "")
+      : "";
+  return /language-(\w+)/.exec(className)?.[1] ?? null;
 }
 
 export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
@@ -80,33 +83,10 @@ export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
               {children}
             </a>
           ),
+          // Inline code only. Fenced blocks are owned by `pre` to avoid double wrappers.
           code: ({ className, children }) => {
-            const language = /language-(\w+)/.exec(className ?? "")?.[1];
-            const content = String(children).replace(/\n$/, "");
-
-            if (language === "prompt") {
-              return (
-                <aside
-                  data-note-prompt=""
-                  className="not-prose group relative my-6 rounded-xl border border-stone-200 bg-stone-100/80 px-5 py-4 pr-14"
-                >
-                  <CopyButton text={content} tone="light" />
-                  <p className="text-[10px] tracking-[0.22em] text-stone-500 uppercase">
-                    Prompt
-                  </p>
-                  <pre className="mt-3 whitespace-pre-wrap font-sans text-sm leading-7 text-stone-700">
-                    {content}
-                  </pre>
-                </aside>
-              );
-            }
-
             if (className) {
-              return (
-                <code className="block overflow-x-auto px-4 py-3.5 font-mono text-sm leading-6 text-stone-100">
-                  {children}
-                </code>
-              );
+              return <code className={className}>{children}</code>;
             }
 
             return (
@@ -116,16 +96,29 @@ export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
             );
           },
           pre: ({ children }) => {
-            const items = Children.toArray(children);
-            if (items.some(isPromptElement)) {
-              return <>{children}</>;
+            const language = getFencedLanguage(children);
+            const text = getTextContent(children).replace(/\n$/, "");
+
+            if (language === "prompt") {
+              return (
+                <aside className="not-prose group relative my-6 rounded-xl border border-stone-200 bg-stone-100/80 px-5 py-4 pr-14">
+                  <CopyButton text={text} tone="light" />
+                  <p className="text-[10px] tracking-[0.22em] text-stone-500 uppercase">
+                    Prompt
+                  </p>
+                  <pre className="mt-3 whitespace-pre-wrap font-sans text-sm leading-7 text-stone-700">
+                    {text}
+                  </pre>
+                </aside>
+              );
             }
 
-            const text = getTextContent(children);
             return (
               <div className="group relative my-6 overflow-hidden rounded-lg bg-stone-900">
                 <CopyButton text={text} tone="dark" />
-                <pre className="overflow-x-auto pr-12">{children}</pre>
+                <pre className="overflow-x-auto px-4 py-3.5 pr-12 font-mono text-sm leading-6 text-stone-100">
+                  {children}
+                </pre>
               </div>
             );
           },

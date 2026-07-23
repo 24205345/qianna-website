@@ -12,5 +12,5 @@
 
 ## 注意
 
-- `react-markdown` 的 fenced code 会同时走 `pre` 与 `code`；`prompt` 在 `code` 里渲染整块 `aside`，`pre` 需识别后直接透传，避免双重外壳。
+- `react-markdown` 的 fenced code 会同时走 `pre` 与 `code`；**外壳只放在 `pre`**：`code` 仅保留 `language-*` class，由 `pre` 识别 `prompt` / 普通代码并各渲染一层 + 一个复制按钮。切勿在 `code` 里再包一层卡片，否则会出现双层嵌套与两个复制图标。
 - Admin 预览共用 `NoteMarkdown`，表格与复制按钮会一并生效，通常是期望行为。
