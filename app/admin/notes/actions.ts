@@ -192,3 +192,35 @@ export async function toggleNoteStatusAction(id: string) {
 
   revalidateNotePaths(data.slug);
 }
+
+const BUCKET = "portfolio-media";
+
+/** Upload an image/file for Notes editor; returns public URL for Markdown insert. */
+export async function uploadNoteAttachmentAction(
+  formData: FormData
+): Promise<{ url: string; fileName: string }> {
+  const supabase = await requireUser();
+  const file = formData.get("file") as File | null;
+
+  if (!file || file.size === 0) {
+    throw new Error("Please choose a file to upload.");
+  }
+
+  const ext = file.name.includes(".") ? file.name.split(".").pop() : "bin";
+  const safeName = file.name.replace(/[^\w.\-]+/g, "-").slice(0, 80);
+  const path = `notes/attachments/${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2)}-${safeName || `file.${ext}`}`;
+
+  const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+    contentType: file.type || undefined,
+    upsert: false,
+  });
+
+  if (error) {
+    throw new Error(`Upload failed: ${error.message}`);
+  }
+
+  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+  return { url: data.publicUrl, fileName: file.name };
+}

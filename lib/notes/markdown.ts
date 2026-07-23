@@ -55,3 +55,62 @@ export function headingIdFromText(
   }
   return id;
 }
+
+export interface MarkdownSection {
+  id: string;
+  title: string;
+  markdown: string;
+}
+
+/** Split markdown into pages by ## headings for editor pagination. */
+export function splitMarkdownSections(markdown: string): MarkdownSection[] {
+  const lines = markdown.split(/\r?\n/);
+  const usedIds = new Map<string, number>();
+  const sections: MarkdownSection[] = [];
+
+  let currentTitle = "Introduction";
+  let currentId = headingIdFromText(currentTitle, usedIds);
+  let buffer: string[] = [];
+
+  const pushCurrent = () => {
+    const body = buffer.join("\n").trim();
+    if (!body && sections.length === 0 && currentTitle === "Introduction") {
+      buffer = [];
+      return;
+    }
+    sections.push({
+      id: currentId,
+      title: currentTitle,
+      markdown:
+        currentTitle === "Introduction" && !body.startsWith("#")
+          ? body
+          : `## ${currentTitle}\n\n${body}`.trim(),
+    });
+    buffer = [];
+  };
+
+  for (const line of lines) {
+    const match = /^##\s+(.+)$/.exec(line.trim());
+    if (match) {
+      pushCurrent();
+      currentTitle = match[1].replace(/#+\s*$/, "").trim() || "Section";
+      currentId = headingIdFromText(currentTitle, usedIds);
+      continue;
+    }
+    buffer.push(line);
+  }
+
+  pushCurrent();
+
+  if (sections.length === 0) {
+    return [
+      {
+        id: "introduction",
+        title: "Introduction",
+        markdown: markdown.trim() || "",
+      },
+    ];
+  }
+
+  return sections;
+}

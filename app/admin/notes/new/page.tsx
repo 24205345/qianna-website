@@ -17,7 +17,7 @@ export default async function AdminNewNotePage() {
 
   return (
     <div className="min-h-screen bg-stone-50 px-6 py-12 text-stone-700 md:px-10">
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-7xl">
         <AdminPageHeader title="New Note" current="notes" />
         <NoteForm action={createNoteAction} submitLabel="Create Note" />
       </div>
