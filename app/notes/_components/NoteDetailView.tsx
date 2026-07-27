@@ -81,18 +81,20 @@ export default function NoteDetailView({ note }: NoteDetailViewProps) {
           </p>
         ) : null}
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start">
-          <aside className="order-2 lg:order-1">
-            <div className="note-toc-scroll rounded-xl border border-stone-200 bg-white/80 p-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
-              <NoteToc
-                headings={toc}
-                showTitle
-                emptyLabel={
-                  lang === "zh"
-                    ? "添加二级标题后将显示目录"
-                    : "Add ## headings to build the table of contents"
-                }
-              />
+        <div className="mt-12 grid gap-8 lg:grid-cols-[14rem_minmax(0,1fr)] lg:items-start">
+          <aside className="order-2 lg:order-1 lg:sticky lg:top-0 lg:h-svh lg:self-start">
+            <div className="note-toc-rail flex h-full flex-col py-1 lg:py-7">
+              <div className="note-toc-scroll min-h-0 flex-1 overflow-y-auto px-0.5 max-lg:overflow-visible">
+                <NoteToc
+                  headings={toc}
+                  showTitle
+                  emptyLabel={
+                    lang === "zh"
+                      ? "添加二级标题后将显示目录"
+                      : "Add ## headings to build the table of contents"
+                  }
+                />
+              </div>
             </div>
           </aside>
 
