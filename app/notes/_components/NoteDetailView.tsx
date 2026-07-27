@@ -82,9 +82,9 @@ export default function NoteDetailView({ note }: NoteDetailViewProps) {
         ) : null}
 
         <div className="mt-12 grid gap-8 lg:grid-cols-[14rem_minmax(0,1fr)] lg:items-start">
-          <aside className="order-2 lg:order-1 lg:sticky lg:top-0 lg:h-svh lg:self-start">
-            <div className="note-toc-rail flex h-full flex-col py-1 lg:py-7">
-              <div className="note-toc-scroll min-h-0 flex-1 overflow-y-auto px-0.5 max-lg:overflow-visible">
+          <aside className="order-2 lg:order-1 lg:sticky lg:top-0 lg:flex lg:h-svh lg:items-center lg:self-start">
+            <div className="note-toc-rail flex w-full max-lg:block lg:h-[50svh] lg:max-h-[50svh]">
+              <div className="note-toc-scroll min-h-0 min-w-0 flex-1 overflow-y-auto px-0.5 max-lg:overflow-visible">
                 <NoteToc
                   headings={toc}
                   showTitle
@@ -95,6 +95,10 @@ export default function NoteDetailView({ note }: NoteDetailViewProps) {
                   }
                 />
               </div>
+              <div
+                className="note-toc-spine ml-1.5 hidden w-px shrink-0 self-stretch bg-stone-600/75 lg:block"
+                aria-hidden
+              />
             </div>
           </aside>
 

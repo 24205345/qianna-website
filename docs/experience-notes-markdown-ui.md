@@ -6,7 +6,7 @@
 
 ## 做法
 
-1. **TOC 轨（方案 A）**：桌面端 `sticky + h-svh`，上下 `py-7` 留白；去掉白底/边框；`mask-image` 上下渐隐；`justify-content: safe center` 短目录垂直居中，长目录可滚；滚动条 **2px**、轨道拉满列高。
+1. **TOC 轨（方案 A）**：桌面端 sticky 全高定位，**可视区约 `50svh` 垂直居中**；去掉白底/边框；`mask-image` 上下渐隐；短目录 `safe center`，长目录在半高窗内滚。滚动条：**1px 浅灰 thumb** 紧挨右侧 **1px 深灰通高脊线**（`note-toc-spine`）。
 2. **表格**：在 `NoteMarkdown` 自定义 `table/th/td`，`w-full` + `border border-stone-200` + `px-4 py-3`，单元格 `min-width` 避免列挤在一起；外层 `overflow-x-auto` 适配窄屏。
 3. **复制**：抽出 `CopyButton`，挂在 `pre`（代码）与 ` ```prompt ` 卡片右上角；`navigator.clipboard` 失败时降级 `textarea` + `execCommand`。
 
