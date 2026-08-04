@@ -1,4 +1,8 @@
-export type SiteNavigationGroup = "section" | "project_category" | "page_link";
+export type SiteNavigationGroup =
+  | "section"
+  | "project_category"
+  | "traces_category"
+  | "page_link";
 
 export interface SiteNavigationItem {
   itemKey: string;
@@ -25,7 +29,7 @@ export const fallbackSiteNavigationItems: SiteNavigationItem[] = [
     itemKey: "projects-preview",
     group: "section",
     label: "View all projects",
-    title: "Projects Preview",
+    title: "Projects",
     description:
       "Thesis and design research, architecture projects, and digital product work.",
     href: "/projects",
@@ -62,39 +66,48 @@ export const fallbackSiteNavigationItems: SiteNavigationItem[] = [
     sortOrder: 30,
   },
   {
+    itemKey: "traces-preview",
+    group: "section",
+    label: "View all traces",
+    title: "Traces",
+    description:
+      "Photography, drawing, and field observation — quiet records of light, form, and movement.",
+    href: "/traces",
+    sortOrder: 35,
+  },
+  {
     itemKey: "photography",
-    group: "page_link",
+    group: "traces_category",
     label: "Photography",
     title: "Quiet urban frames",
     description:
       "A separate collection of observations in light, movement, and place.",
-    href: "/photography",
+    href: "/traces?tab=photography",
     sortOrder: 40,
   },
   {
     itemKey: "visual-works",
-    group: "page_link",
-    label: "Visual Works",
+    group: "traces_category",
+    label: "Drawings",
     title: "Drawings and sketches",
     description:
       "Studies in form, rhythm, and atmosphere developed by hand and mixed media.",
-    href: "/visual-works",
+    href: "/traces?tab=drawings",
     sortOrder: 50,
   },
   {
     itemKey: "field-notes",
-    group: "page_link",
+    group: "traces_category",
     label: "Field Notes",
     title: "Trails and movement",
-    description:
-      "Hiking journeys, outdoor routes, and movement-based observation of landscapes.",
-    href: "/field-notes",
+    description: "Trails, slopes, and open landscapes.",
+    href: "/traces?tab=field-notes",
     sortOrder: 60,
   },
   {
     itemKey: "about",
-    group: "page_link",
-    label: "About",
+    group: "section",
+    label: "View all",
     title: "Spatial Thinking, AI Products",
     description:
       "A path from architecture and urban research to SaaS systems and AI product work, focused on turning complex workflows into usable digital tools.",
@@ -107,4 +120,13 @@ export function getFallbackNavigationItem(
   itemKey: string
 ): SiteNavigationItem | undefined {
   return fallbackSiteNavigationItems.find((item) => item.itemKey === itemKey);
+}
+
+export type TracesTab = "photography" | "drawings" | "field-notes";
+
+export function normalizeTracesTab(tab: string | undefined): TracesTab {
+  if (tab === "drawings" || tab === "field-notes") {
+    return tab;
+  }
+  return "photography";
 }

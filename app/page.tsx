@@ -1,5 +1,8 @@
 import Link from "next/link";
 import HeroImageDistortionClient from "@/app/_components/HeroImageDistortionClient";
+import GuestbookSection from "@/app/_components/guestbook/GuestbookSection";
+import { getAboutPageContent } from "@/lib/about/queries";
+import { getApprovedGuestbookMessages } from "@/lib/guestbook/queries";
 import { getLatestNotes } from "@/lib/notes/queries";
 import {
   getSiteNavigationGroup,
@@ -9,21 +12,29 @@ import {
 } from "@/lib/site/queries";
 
 export default async function Home() {
-  const [siteSettings, navigationItems, latestNotes] = await Promise.all([
-    getSiteSettings(),
-    getSiteNavigationItems(),
-    getLatestNotes(3),
-  ]);
+  const [siteSettings, navigationItems, latestNotes, aboutContent, guestbookMessages] =
+    await Promise.all([
+      getSiteSettings(),
+      getSiteNavigationItems(),
+      getLatestNotes(3),
+      getAboutPageContent(),
+      getApprovedGuestbookMessages(),
+    ]);
   const notesSection = getSiteNavigationItem(navigationItems, "notes-preview");
   const projectsSection = getSiteNavigationItem(
     navigationItems,
     "projects-preview"
   );
+  const tracesSection = getSiteNavigationItem(navigationItems, "traces-preview");
+  const aboutSection = getSiteNavigationItem(navigationItems, "about");
   const projectCategories = getSiteNavigationGroup(
     navigationItems,
     "project_category"
   );
-  const pageLinks = getSiteNavigationGroup(navigationItems, "page_link");
+  const traceCategories = getSiteNavigationGroup(
+    navigationItems,
+    "traces_category"
+  );
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
@@ -57,16 +68,9 @@ export default async function Home() {
       >
         <section className="py-14 md:py-16">
           <div className="flex items-end justify-between gap-4">
-            <div>
-              <h2 className="font-serif text-3xl text-stone-900 md:text-4xl">
-                {notesSection.title}
-              </h2>
-              {notesSection.description ? (
-                <p className="mt-3 max-w-xl text-sm leading-6 text-stone-500">
-                  {notesSection.description}
-                </p>
-              ) : null}
-            </div>
+            <h2 className="font-serif text-3xl text-stone-900 md:text-4xl">
+              {notesSection.title}
+            </h2>
             <Link
               href={notesSection.href}
               className="shrink-0 text-sm text-stone-600 underline decoration-stone-300 underline-offset-4 transition-colors hover:text-stone-900"
@@ -128,26 +132,56 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="grid gap-5 pb-8 md:grid-cols-2">
-          {pageLinks.map((item) => (
+        <section className="py-14 md:py-16">
+          <div className="flex items-end justify-between gap-4">
+            <h2 className="font-serif text-3xl text-stone-900 md:text-4xl">
+              {tracesSection.title}
+            </h2>
             <Link
-              key={item.itemKey}
-              href={item.href}
-              className="rounded-2xl border border-stone-200/80 bg-stone-100/70 p-6 transition-colors hover:bg-stone-100"
+              href={tracesSection.href}
+              className="shrink-0 text-sm text-stone-600 underline decoration-stone-300 underline-offset-4 transition-colors hover:text-stone-900"
             >
-              <p className="text-xs tracking-[0.18em] text-stone-500 uppercase">
-                {item.label}
-              </p>
-              <h3 className="mt-3 font-serif text-3xl text-stone-900">
-                {item.title}
-              </h3>
-              <p className="mt-3 leading-7 text-stone-600">
-                {item.description}
-              </p>
+              {tracesSection.label}
             </Link>
-          ))}
+          </div>
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            {traceCategories.map((item) => (
+              <Link
+                key={item.itemKey}
+                href={item.href}
+                className="group rounded-2xl border border-stone-200/80 bg-stone-100/70 p-5 transition-colors hover:border-stone-300 hover:bg-stone-100"
+              >
+                <p className="text-xs tracking-[0.18em] text-stone-500 uppercase">
+                  {item.label}
+                </p>
+                <h3 className="mt-3 font-serif text-2xl text-stone-900 transition-colors group-hover:text-stone-700">
+                  {item.title}
+                </h3>
+                <p className="mt-3 leading-7 text-stone-600">{item.description}</p>
+              </Link>
+            ))}
+          </div>
         </section>
 
+        <section className="py-14 md:py-16">
+          <h2 className="font-serif text-3xl text-stone-900 md:text-4xl">
+            About Me
+          </h2>
+          <div className="mt-8 flex flex-col gap-6">
+            <Link
+              href={aboutSection.href}
+              className="group border-b border-stone-200/70 pb-6 last:border-0 last:pb-0"
+            >
+              <h3 className="font-serif text-xl text-stone-900 transition-colors group-hover:text-stone-700 md:text-2xl">
+                {aboutContent.pageTitle}
+              </h3>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">
+                {aboutContent.pageDescription}
+              </p>
+            </Link>
+          </div>
+          <GuestbookSection initialMessages={guestbookMessages} />
+        </section>
       </main>
 
       <footer className="border-t border-stone-300/70 bg-stone-300/35">

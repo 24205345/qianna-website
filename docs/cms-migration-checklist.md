@@ -19,6 +19,8 @@
 | **P5.5 Site Navigation Copy** | ✅ | 首页入口卡片 + 对应子页面页眉共用 `site_navigation_items` |
 | **P6 About** | ✅ | `/about` + `/admin/about` timeline CMS |
 | **P7 Notes** | ✅ | 独立 Notes 模块：MD + TOC；首页 Notes 区块在 Projects Preview 上方；`/admin/notes` |
+| **P8 Traces Hub** | ✅ | 首页四板块；`/traces` 三 Tab；`0012_traces_navigation.sql` |
+| **P9 Guestbook** | ✅ | 首页 Say hello 留言；先审后发；`/admin/guestbook`；`0013`/`0014` 迁移 |
 
 ---
 

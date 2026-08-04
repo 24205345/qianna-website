@@ -7,6 +7,13 @@ const SECTION_LABELS: Record<string, string> = {
   projects: "Projects",
   "field-notes": "Field Notes",
   notes: "Notes",
+  traces: "Traces",
+};
+
+const TRACES_LEGACY_ROUTES: Record<string, string> = {
+  photography: "/traces?tab=photography",
+  "visual-works": "/traces?tab=drawings",
+  "field-notes": "/traces?tab=field-notes",
 };
 
 function getBackLink(pathname: string): { href: string; label: string } | null {
@@ -19,6 +26,13 @@ function getBackLink(pathname: string): { href: string; label: string } | null {
   }
 
   const segments = pathname.split("/").filter(Boolean);
+
+  if (segments.length === 1 && TRACES_LEGACY_ROUTES[segments[0]]) {
+    return {
+      href: TRACES_LEGACY_ROUTES[segments[0]],
+      label: "← Back to Traces",
+    };
+  }
 
   if (segments.length >= 2) {
     const section = segments[0];

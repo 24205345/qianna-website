@@ -1,10 +1,10 @@
-import PhotoGallery from "../photography/PhotoGallery";
+import DrawingsSections from "@/app/_components/traces/DrawingsSections";
 import { visualWorkSections } from "@/app/_data/visual-works";
-import { getVisualWorksPageData } from "@/lib/visual-works/queries";
 import {
   getSiteNavigationItem,
   getSiteNavigationItems,
 } from "@/lib/site/queries";
+import { getVisualWorksPageData } from "@/lib/visual-works/queries";
 
 export default async function VisualWorksPage() {
   const [categories, navigationItems] = await Promise.all([
@@ -24,32 +24,7 @@ export default async function VisualWorksPage() {
           </p>
         </div>
 
-        {categories.map((category) => (
-          <section key={category.slug} className="mb-16">
-            <div className="mb-8 flex items-end justify-between gap-4">
-              <div>
-                <h2 className="font-serif text-2xl text-stone-900 md:text-3xl">{category.title}</h2>
-                {category.subtitle ? (
-                  <p className="mt-2 text-sm text-stone-500">{category.subtitle}</p>
-                ) : null}
-                {category.description ? (
-                  <p className="mt-3 text-sm leading-6 text-stone-600">{category.description}</p>
-                ) : null}
-              </div>
-            </div>
-
-            <PhotoGallery
-              photos={category.works.map((work) => ({
-                id: work.id,
-                url: work.url,
-                title: work.title,
-                date: work.date,
-                description: work.description,
-              }))}
-            />
-          </section>
-        ))}
-
+        <DrawingsSections categories={categories} />
       </main>
     </div>
   );

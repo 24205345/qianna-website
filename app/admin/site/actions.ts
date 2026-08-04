@@ -22,6 +22,7 @@ function parseNavigationGroup(value: FormDataEntryValue | null): SiteNavigationG
   if (
     value === "section" ||
     value === "project_category" ||
+    value === "traces_category" ||
     value === "page_link"
   ) {
     return value;
@@ -128,6 +129,7 @@ export async function updateSiteSettingsAction(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/notes");
   revalidatePath("/projects");
+  revalidatePath("/traces");
   revalidatePath("/photography");
   revalidatePath("/visual-works");
   revalidatePath("/field-notes");

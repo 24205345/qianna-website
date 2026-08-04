@@ -9,7 +9,8 @@ export type AdminNavKey =
   | "photography"
   | "visual-works"
   | "field-notes"
-  | "about";
+  | "about"
+  | "guestbook";
 
 const NAV_ITEMS: { key: AdminNavKey; label: string; href: string }[] = [
   { key: "site", label: "Site Settings", href: "/admin/site" },
@@ -19,6 +20,7 @@ const NAV_ITEMS: { key: AdminNavKey; label: string; href: string }[] = [
   { key: "visual-works", label: "Visual Works", href: "/admin/visual-works" },
   { key: "field-notes", label: "Field Notes", href: "/admin/field-notes" },
   { key: "about", label: "About", href: "/admin/about" },
+  { key: "guestbook", label: "Guestbook", href: "/admin/guestbook" },
 ];
 
 function navLinkClass(isActive: boolean): string {
