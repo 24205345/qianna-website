@@ -10,7 +10,7 @@ interface TracesTabNavProps {
 export default function TracesTabNav({ tabs, activeTab }: TracesTabNavProps) {
   return (
     <nav
-      className="mt-8 flex flex-wrap gap-2 border-b border-stone-200/80 pb-4"
+      className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-b border-stone-200/80"
       aria-label="Traces categories"
     >
       {tabs.map((tab) => {
@@ -25,10 +25,10 @@ export default function TracesTabNav({ tabs, activeTab }: TracesTabNavProps) {
           <Link
             key={tab.itemKey}
             href={tab.href}
-            className={`rounded-full px-4 py-2 text-sm transition-colors ${
+            className={`pb-3 text-sm transition-colors ${
               isActive
-                ? "bg-stone-900 text-stone-50"
-                : "bg-stone-100/80 text-stone-600 hover:bg-stone-200/80 hover:text-stone-900"
+                ? "-mb-px border-b-2 border-stone-900 font-medium text-stone-900"
+                : "text-stone-500 hover:text-stone-800"
             }`}
             aria-current={isActive ? "page" : undefined}
           >

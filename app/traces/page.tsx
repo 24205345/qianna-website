@@ -68,8 +68,8 @@ export default async function TracesPage({
 
         <TracesTabNav tabs={traceTabs} activeTab={activeTab} />
 
-        <div className="mt-10">
-          <p className="mb-8 text-sm leading-6 text-stone-500">
+        <div className="mt-4">
+          <p className="mb-6 text-sm leading-6 text-stone-500">
             {activeCopy.description}
           </p>
 
