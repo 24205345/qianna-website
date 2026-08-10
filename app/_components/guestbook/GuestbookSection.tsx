@@ -6,25 +6,19 @@ import {
   submitGuestbookMessage,
   type SubmitGuestbookState,
 } from "@/app/guestbook/actions";
+import { GuestbookMessagesPreview } from "./GuestbookMessageList";
 
 const INITIAL_STATE: SubmitGuestbookState | null = null;
-
-function formatGuestbookDate(value: string): string {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
+const PREVIEW_LIMIT = 3;
 
 interface GuestbookSectionProps {
-  initialMessages: GuestbookMessage[];
+  previewMessages: GuestbookMessage[];
+  totalApprovedCount: number;
 }
 
 export default function GuestbookSection({
-  initialMessages,
+  previewMessages,
+  totalApprovedCount,
 }: GuestbookSectionProps) {
   const [state, formAction, isPending] = useActionState(
     submitGuestbookMessage,
@@ -131,26 +125,11 @@ export default function GuestbookSection({
         </div>
       </form>
 
-      {initialMessages.length > 0 ? (
-        <ul className="mt-10 space-y-6">
-          {initialMessages.map((entry) => (
-            <li
-              key={entry.id}
-              className="border-b border-stone-200/70 pb-6 last:border-0 last:pb-0"
-            >
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <p className="font-medium text-stone-800">{entry.authorName}</p>
-                <p className="text-xs text-stone-400">
-                  {formatGuestbookDate(entry.createdAt)}
-                </p>
-              </div>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600">
-                {entry.message}
-              </p>
-            </li>
-          ))}
-        </ul>
-      ) : null}
+      <GuestbookMessagesPreview
+        messages={previewMessages}
+        totalCount={totalApprovedCount}
+        previewLimit={PREVIEW_LIMIT}
+      />
     </div>
   );
 }

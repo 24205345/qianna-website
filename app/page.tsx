@@ -2,7 +2,10 @@ import Link from "next/link";
 import HeroImageDistortionClient from "@/app/_components/HeroImageDistortionClient";
 import GuestbookSection from "@/app/_components/guestbook/GuestbookSection";
 import { getAboutPageContent } from "@/lib/about/queries";
-import { getApprovedGuestbookMessages } from "@/lib/guestbook/queries";
+import {
+  getApprovedGuestbookMessageCount,
+  getApprovedGuestbookMessages,
+} from "@/lib/guestbook/queries";
 import { getLatestNotes } from "@/lib/notes/queries";
 import {
   getSiteNavigationGroup,
@@ -12,13 +15,14 @@ import {
 } from "@/lib/site/queries";
 
 export default async function Home() {
-  const [siteSettings, navigationItems, latestNotes, aboutContent, guestbookMessages] =
+  const [siteSettings, navigationItems, latestNotes, aboutContent, guestbookPreview, guestbookTotal] =
     await Promise.all([
       getSiteSettings(),
       getSiteNavigationItems(),
       getLatestNotes(3),
       getAboutPageContent(),
-      getApprovedGuestbookMessages(),
+      getApprovedGuestbookMessages(3),
+      getApprovedGuestbookMessageCount(),
     ]);
   const notesSection = getSiteNavigationItem(navigationItems, "notes-preview");
   const projectsSection = getSiteNavigationItem(
@@ -163,7 +167,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="py-14 md:py-16">
+        <section id="about-me" className="py-14 md:py-16">
           <h2 className="font-serif text-3xl text-stone-900 md:text-4xl">
             About Me
           </h2>
@@ -180,7 +184,10 @@ export default async function Home() {
               </p>
             </Link>
           </div>
-          <GuestbookSection initialMessages={guestbookMessages} />
+          <GuestbookSection
+            previewMessages={guestbookPreview}
+            totalApprovedCount={guestbookTotal}
+          />
         </section>
       </main>
 

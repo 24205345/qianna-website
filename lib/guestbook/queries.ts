@@ -24,17 +24,22 @@ function mapGuestbookRow(row: GuestbookRow): GuestbookMessage {
 }
 
 export async function getApprovedGuestbookMessages(
-  limit = 20
+  limit?: number
 ): Promise<GuestbookMessage[]> {
   if (!isSupabaseConfigured()) return [];
 
   const supabase = await createClient();
-  const { data, error } = await supabase
+  let query = supabase
     .from("guestbook_messages")
     .select("id, author_name, message, created_at")
     .eq("status", "approved")
-    .order("created_at", { ascending: false })
-    .limit(limit);
+    .order("created_at", { ascending: false });
+
+  if (typeof limit === "number") {
+    query = query.limit(limit);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error("Failed to load guestbook messages:", error.message);
@@ -42,4 +47,21 @@ export async function getApprovedGuestbookMessages(
   }
 
   return (data ?? []).map((row) => mapGuestbookRow(row as GuestbookRow));
+}
+
+export async function getApprovedGuestbookMessageCount(): Promise<number> {
+  if (!isSupabaseConfigured()) return 0;
+
+  const supabase = await createClient();
+  const { count, error } = await supabase
+    .from("guestbook_messages")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "approved");
+
+  if (error) {
+    console.error("Failed to count guestbook messages:", error.message);
+    return 0;
+  }
+
+  return count ?? 0;
 }

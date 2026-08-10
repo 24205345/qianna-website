@@ -15,6 +15,7 @@ async function requireUser() {
 
 function revalidateGuestbookPaths() {
   revalidatePath("/");
+  revalidatePath("/guestbook");
   revalidatePath("/admin/guestbook");
 }
 

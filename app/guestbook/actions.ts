@@ -84,6 +84,7 @@ export async function submitGuestbookMessage(
   }
 
   revalidatePath("/");
+  revalidatePath("/guestbook");
   return {
     ok: true,
     message: "Thanks — your note will appear after review.",
