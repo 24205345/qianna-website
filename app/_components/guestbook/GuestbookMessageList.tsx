@@ -27,14 +27,16 @@ export default function GuestbookMessageList({
           key={entry.id}
           className="border-b border-stone-200/70 pb-6 last:border-0 last:pb-0"
         >
-          <p className="text-xs text-stone-400">
-            {entry.authorName}
-            <span aria-hidden="true"> · </span>
-            <time dateTime={entry.createdAt}>
+          <div className="flex items-baseline justify-between gap-4">
+            <p className="min-w-0 text-xs text-stone-400">{entry.authorName}</p>
+            <time
+              className="shrink-0 text-xs text-stone-400"
+              dateTime={entry.createdAt}
+            >
               {formatGuestbookDate(entry.createdAt)}
             </time>
-          </p>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600">
+          </div>
+          <p className="mt-2 text-sm leading-6 text-stone-600">
             {entry.message}
           </p>
         </li>
