@@ -10,6 +10,12 @@ import { fileURLToPath } from "url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const MARKDOWN_PATH = join(ROOT, "docs", "notes", "aliyun-ecs-docker-deploy.md");
+const MARKDOWN_EN_PATH = join(
+  ROOT,
+  "docs",
+  "notes",
+  "aliyun-ecs-docker-deploy.en.md"
+);
 
 const NOTE = {
   slug: "aliyun-ecs-docker-deploy",
@@ -62,7 +68,9 @@ async function main() {
   }
 
   const raw = readFileSync(MARKDOWN_PATH, "utf8");
+  const rawEn = readFileSync(MARKDOWN_EN_PATH, "utf8");
   const body_markdown = prepareBodyMarkdown(raw);
+  const body_markdown_en = prepareBodyMarkdown(rawEn);
 
   const supabase = createClient(url, anonKey);
   const { error: authError } = await supabase.auth.signInWithPassword({
@@ -86,7 +94,7 @@ async function main() {
     excerpt: NOTE.excerpt,
     excerpt_en: NOTE.excerpt_en,
     body_markdown,
-    body_markdown_en: "",
+    body_markdown_en,
     cover_image_url: null,
     tags: NOTE.tags,
     status: "published",
