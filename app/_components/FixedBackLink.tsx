@@ -27,6 +27,10 @@ function getBackLink(pathname: string): { href: string; label: string } | null {
 
   const segments = pathname.split("/").filter(Boolean);
 
+  if (segments.length === 1 && segments[0] === "guestbook") {
+    return { href: "/#about-me", label: "← Back to Home" };
+  }
+
   if (segments.length === 1 && TRACES_LEGACY_ROUTES[segments[0]]) {
     return {
       href: TRACES_LEGACY_ROUTES[segments[0]],

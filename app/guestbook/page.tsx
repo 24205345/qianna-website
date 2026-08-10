@@ -1,4 +1,3 @@
-import Link from "next/link";
 import GuestbookMessageList from "@/app/_components/guestbook/GuestbookMessageList";
 import {
   getApprovedGuestbookMessageCount,
@@ -14,14 +13,7 @@ export default async function GuestbookPage() {
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
       <main className="mx-auto w-full max-w-5xl px-6 py-16 md:px-10 md:py-20">
-        <Link
-          href="/#about-me"
-          className="text-sm text-stone-600 underline decoration-stone-300 underline-offset-4 transition-colors hover:text-stone-900"
-        >
-          ← Back to home
-        </Link>
-
-        <p className="mt-8 text-xs tracking-[0.24em] text-stone-500 uppercase">
+        <p className="text-xs tracking-[0.24em] text-stone-500 uppercase">
           About Me
         </p>
         <h1 className="mt-4 font-serif text-4xl text-stone-900 md:text-5xl">
