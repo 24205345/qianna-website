@@ -4,7 +4,7 @@
 >
 > 项目路径：`G:\project\qianna-website`  
 > 分支：`main`（P1–P5 代码已完成，Home Hero 已接入轻量 CMS）  
-> 最后更新：2026-07-03
+> 最后更新：2026-08-11
 
 ---
 
@@ -28,7 +28,12 @@ Next.js 16.2.1 + React 19 + TypeScript + Tailwind v4 个人作品集网站，正
 | Field Notes | ✅ | `/field-notes`, `/field-notes/[slug]` | `/admin/field-notes` | `npm run migrate:field-notes` |
 | **Home Hero** | ✅ | `/` | `/admin/site` | `npm run migrate:home` |
 | **Site Navigation Copy** | ✅ | `/`, linked page headings | `/admin/site` | SQL migration |
-| **About** | ⬜ 正文占位 | `/about` | `/admin/site` 管理页眉 | — |
+| **About** | ✅ | `/about`（含 16:9 个人照片） | `/admin/about` | `0016_about_profile_image.sql` |
+| **Notes** | ✅ | `/notes`, `/notes/[slug]` | `/admin/notes` | `0010_notes.sql` |
+| **Guestbook** | ✅ | 首页 About Me 下预览 | `/admin/guestbook` | `0013_guestbook.sql` |
+| **Analytics** | ✅ | 前台埋点 | `/admin/analytics` | `0015_page_views.sql` |
+
+Admin 导航（2026-08-11）：顶栏改为 **左侧边栏** + Projects/Traces 二级嵌套，详见 `docs/exec-admin-about-analytics-2026-08-11.md`。
 
 Supabase 数据量（已验证）：
 - `photography_photos`: 46
@@ -78,10 +83,12 @@ Supabase 数据量（已验证）：
 
 ### Admin UI Language
 
-- `/admin/*` 后台可见 UI 文案已统一为英文，包括页面标题、顶部导航、表格表头、表单字段、按钮、空状态和 Server Action 错误消息。
-- 后续新增后台页面时保持英文 UI，避免同一管理界面混用中文/英文；内部文档仍可继续中文记录。
+- `/admin/*` 后台可见 UI 文案已统一为英文，包括页面标题、表单字段、按钮、空状态和 Server Action 错误消息。
+- **导航（2026-08-11）**：`AdminSidebar` 左侧固定边栏；`AdminPageHeader` 仅 title + actions；Sign Out 在侧栏底部。Login / reset-password 无侧栏。
+- Projects 子分类仅在进入 Projects 时展开；**无 All 项**，点 **Projects** 即查看全部。
 - `/admin/projects` 的 `Category` 使用固定三类下拉，来源于 `lib/projects/categories.ts`；不要改回自由输入，否则前台 `/projects?category=...` 筛选容易因拼写不一致失效。
 - `/admin/projects` 的项目 URL 由标题自动生成：新增项目时 `slug` 可留空，Server Action 会生成小写短横线 URL，并在重复时自动追加 `-2`、`-3`。编辑旧项目时默认保留已有 URL，避免破坏已经公开的链接。
+- About 个人照片：`/admin/about` 上传 + **16:9 裁切**（`react-easy-crop`），存 `about_page_content.profile_image_*`；**仅 `/about` 展示**，首页 About 卡片不显示照片。
 
 ### UI/UX Skill
 
@@ -346,9 +353,12 @@ P5 可选：建 `site_settings` 表 + 压缩上传 Supabase + `/admin/site`。
 |---|---|
 | `docs/codex-handoff.md` | **本文 — Codex 入口** |
 | `docs/cms-migration-checklist.md` | P1–P5 分阶段 checklist |
+| `docs/exec-admin-about-analytics-2026-08-11.md` | Admin 侧栏、About 头像裁切、Analytics |
+| `docs/experience-admin-sidebar-profile-crop.md` | 侧栏 + 单图裁切上传可复用模式 |
+| `docs/exec-site-ia-guestbook-2026-08-04.md` | 首页 IA + Guestbook |
+| `docs/experience-guestbook.md` | Guestbook 审核与过滤经验 |
 | `docs/supabase-cms-改造记录.md` | 早期 Phase 0–3 改造记录 + 经验 |
-| `DIRECTORY.md` | 页面路由与 public 目录结构 |
-| `AGENTS.md` | Next.js 16 特殊约定（读 node_modules/next/dist/docs/） |
+| `README.md` | 对外说明（访客 + 开发者入口） |
 
 ---
 

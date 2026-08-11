@@ -50,7 +50,7 @@ guestbook_messages (
 | Reject | 不展示，记录保留 |
 | Delete | 永久删除 |
 
-入口：`/admin/guestbook`（Admin 顶栏 Guestbook）
+入口：`/admin/guestbook`（Admin 侧栏 Guestbook）
 
 ---
 
