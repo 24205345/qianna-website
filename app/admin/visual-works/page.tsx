@@ -47,7 +47,6 @@ export default async function AdminVisualWorksPage() {
       <div className="mx-auto max-w-5xl">
         <AdminPageHeader
           title="Visual Works"
-          current="visual-works"
           actions={
             <Link
               href="/admin/visual-works/new"

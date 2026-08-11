@@ -1,5 +1,6 @@
 import { getAboutPageContent } from "@/lib/about/queries";
 import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
+import AboutProfilePhoto from "@/app/_components/about/AboutProfilePhoto";
 
 export default async function AboutPage() {
   const content = await getAboutPageContent();
@@ -15,6 +16,14 @@ export default async function AboutPage() {
         <p className="mt-6 max-w-3xl text-lg leading-8 text-stone-600">
           {content.pageDescription}
         </p>
+
+        <div className="mt-10 max-w-4xl">
+          <AboutProfilePhoto
+            imageUrl={content.profileImageUrl}
+            alt={content.profileImageAlt}
+            priority
+          />
+        </div>
 
         <section className="mt-16">
           <p className="text-xs tracking-[0.22em] text-stone-500 uppercase">Timeline</p>

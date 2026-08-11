@@ -10,6 +10,8 @@ interface AboutPageContentRow {
   current_focus: string | null;
   working_across: string[] | null;
   timeline_items: AboutTimelineItem[] | null;
+  profile_image_url: string | null;
+  profile_image_alt: string | null;
 }
 
 function mapTimelineItems(raw: unknown): AboutTimelineItem[] {
@@ -48,6 +50,8 @@ function mapAboutPageContent(
   return {
     pageTitle,
     pageDescription,
+    profileImageUrl: row?.profile_image_url ?? fallbackAboutPageContent.profileImageUrl,
+    profileImageAlt: row?.profile_image_alt ?? fallbackAboutPageContent.profileImageAlt,
     timeline: mapTimelineItems(row?.timeline_items),
     workingAcross:
       row?.working_across && row.working_across.length > 0
@@ -72,7 +76,7 @@ export async function getAboutPageContent(): Promise<AboutPageContent> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("about_page_content")
-    .select("current_focus, working_across, timeline_items")
+    .select("current_focus, working_across, timeline_items, profile_image_url, profile_image_alt")
     .eq("singleton_key", "about")
     .maybeSingle();
 

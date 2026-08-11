@@ -61,7 +61,7 @@ export default async function AdminSitePage() {
   return (
     <div className="min-h-screen bg-stone-50 px-6 py-12 text-stone-700 md:px-10">
       <div className="mx-auto max-w-5xl">
-        <AdminPageHeader title="Site Settings" current="site" />
+        <AdminPageHeader title="Site Settings" />
 
         {error ? (
           <p className="mt-8 rounded-md bg-red-50 px-4 py-3 text-sm leading-6 text-red-600">

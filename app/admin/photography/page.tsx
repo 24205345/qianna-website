@@ -47,7 +47,6 @@ export default async function AdminPhotographyPage() {
       <div className="mx-auto max-w-5xl">
         <AdminPageHeader
           title="Photography"
-          current="photography"
           actions={
             <Link
               href="/admin/photography/new"

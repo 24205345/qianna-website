@@ -44,7 +44,6 @@ export default async function AdminFieldNotesPage() {
       <div className="mx-auto max-w-5xl">
         <AdminPageHeader
           title="Field Notes"
-          current="field-notes"
           actions={
             <Link
               href="/admin/field-notes/new"

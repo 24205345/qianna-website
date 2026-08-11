@@ -73,6 +73,16 @@ if (Test-PortInUse -TargetPort ([int]$Port)) {
     exit 1
 }
 
+$lockFile = Join-Path $ProjectRoot "package-lock.json"
+$nmMarker = Join-Path $ProjectRoot "node_modules\.package-lock.json"
+if (-not (Test-Path $nmMarker)) {
+    Write-Host "首次运行或依赖缺失，正在 npm install ..." -ForegroundColor Yellow
+    npm install
+} elseif ((Get-Item $lockFile).LastWriteTime -gt (Get-Item $nmMarker).LastWriteTime) {
+    Write-Host "package-lock.json 已更新，正在 npm install ..." -ForegroundColor Yellow
+    npm install
+}
+
 Write-Host "正在新窗口启动 npm run dev ..." -ForegroundColor Green
 
 $devCommand = @"

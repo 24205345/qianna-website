@@ -64,7 +64,7 @@ export default async function AdminGuestbookPage() {
   return (
     <div className="min-h-screen bg-stone-50 px-6 py-12 text-stone-700 md:px-10">
       <div className="mx-auto max-w-5xl">
-        <AdminPageHeader title="Guestbook" current="guestbook" />
+        <AdminPageHeader title="Guestbook" />
 
         <p className="mt-6 max-w-3xl text-sm leading-6 text-stone-500">
           Review public notes left on the homepage About section. Only approved

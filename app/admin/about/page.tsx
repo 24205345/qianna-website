@@ -30,7 +30,7 @@ export default async function AdminAboutPage() {
   return (
     <div className="min-h-screen bg-stone-50 px-6 py-12 text-stone-700 md:px-10">
       <div className="mx-auto max-w-5xl">
-        <AdminPageHeader title="About" current="about" />
+        <AdminPageHeader title="About" />
 
         <div className="mt-8 rounded-xl border border-stone-200 bg-white p-6">
           <AboutPageForm action={updateAboutPageAction} defaults={defaults} />

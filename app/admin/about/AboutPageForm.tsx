@@ -1,5 +1,6 @@
 import type { AboutPageContent } from "@/app/_data/about-page";
 import { serializeTagLines } from "@/lib/about/parse-form";
+import ProfilePhotoCropField from "./ProfilePhotoCropField";
 import TimelineEditor from "./TimelineEditor";
 
 interface AboutPageFormProps {
@@ -49,6 +50,48 @@ export default function AboutPageForm({ action, defaults }: AboutPageFormProps) 
             className={inputClass}
           />
         </div>
+      </section>
+
+      <section className="flex flex-col gap-5 border-t border-stone-200 pt-6">
+        <div>
+          <h2 className="font-serif text-xl text-stone-900">Profile photo</h2>
+          <p className={helpClass}>
+            Shown on the About page below the page header and before Timeline. Leave empty to show a placeholder until you upload a photo.
+          </p>
+        </div>
+
+        <div>
+          <label className={labelClass} htmlFor="profile_image_url">
+            Profile image URL
+          </label>
+          <input
+            id="profile_image_url"
+            name="profile_image_url"
+            defaultValue={defaults.profileImageUrl}
+            className={inputClass}
+          />
+          <p className={helpClass}>
+            Enter a public Supabase Storage URL, or upload and crop a photo below. Uploading replaces this field.
+          </p>
+        </div>
+
+        <div>
+          <label className={labelClass} htmlFor="profile_image_alt">
+            Image alt text *
+          </label>
+          <input
+            id="profile_image_alt"
+            name="profile_image_alt"
+            required
+            defaultValue={defaults.profileImageAlt}
+            className={inputClass}
+          />
+        </div>
+
+        <ProfilePhotoCropField
+          currentImageUrl={defaults.profileImageUrl}
+          currentImageAlt={defaults.profileImageAlt}
+        />
       </section>
 
       <section className="flex flex-col gap-5 border-t border-stone-200 pt-6">

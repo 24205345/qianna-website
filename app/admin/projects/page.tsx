@@ -5,6 +5,7 @@ import ContentStatusBadge from "@/app/admin/_components/ContentStatusBadge";
 import VisibilityToggleForm from "@/app/admin/_components/VisibilityToggleForm";
 import {
   PROJECT_CATEGORIES,
+  getCategoryBySlug,
   projectBelongsToCategory,
 } from "@/lib/projects/categories";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
@@ -79,7 +80,11 @@ function ProjectTable({ projects }: { projects: ProjectRow[] }) {
   );
 }
 
-export default async function AdminProjectsPage() {
+export default async function AdminProjectsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>;
+}) {
   if (!isSupabaseConfigured()) {
     return (
       <div className="min-h-screen bg-stone-50 px-6 py-16 text-stone-700">
@@ -103,6 +108,9 @@ export default async function AdminProjectsPage() {
     redirect("/admin/login");
   }
 
+  const { category: categorySlug } = await searchParams;
+  const activeCategory = getCategoryBySlug(categorySlug);
+
   const { data, error } = await supabase
     .from("projects")
     .select("id, title, slug, category, year, status, sort_order")
@@ -117,19 +125,24 @@ export default async function AdminProjectsPage() {
         project.category != null &&
         projectBelongsToCategory(project.category, category)
     ),
-  }));
+  })).filter(({ category }) =>
+    activeCategory ? category.slug === activeCategory.slug : true
+  );
+
+  const pageTitle = activeCategory ? activeCategory.title : "Projects";
 
   const groupedIds = new Set(
     grouped.flatMap((group) => group.projects.map((project) => project.id))
   );
-  const uncategorized = projects.filter((project) => !groupedIds.has(project.id));
+  const uncategorized = activeCategory
+    ? []
+    : projects.filter((project) => !groupedIds.has(project.id));
 
   return (
     <div className="min-h-screen bg-stone-50 px-6 py-12 text-stone-700 md:px-10">
       <div className="mx-auto max-w-5xl">
         <AdminPageHeader
-          title="Projects"
-          current="projects"
+          title={pageTitle}
           actions={
             <Link
               href="/admin/projects/new"

@@ -8,6 +8,8 @@ export interface AboutTimelineItem {
 export interface AboutPageContent {
   pageTitle: string;
   pageDescription: string;
+  profileImageUrl: string;
+  profileImageAlt: string;
   timeline: AboutTimelineItem[];
   workingAcross: string[];
   currentFocus: string;
@@ -17,6 +19,8 @@ export const fallbackAboutPageContent: AboutPageContent = {
   pageTitle: "Spatial Thinking, AI Products",
   pageDescription:
     "A path from architecture and urban research to SaaS systems and AI product work, focused on turning complex workflows into usable digital tools.",
+  profileImageUrl: "",
+  profileImageAlt: "Qianna Wang profile photo",
   timeline: [
     {
       period: "2025-Now",

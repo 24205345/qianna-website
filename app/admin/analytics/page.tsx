@@ -31,7 +31,7 @@ export default async function AdminAnalyticsPage({
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700">
       <div className="mx-auto max-w-6xl px-6 py-10 md:px-10">
-        <AdminPageHeader title="Analytics" current="analytics" />
+        <AdminPageHeader title="Analytics" />
         <div className="mt-8">
           <AnalyticsRangeNav current={range} />
         </div>

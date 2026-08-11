@@ -58,7 +58,6 @@ export default async function AdminNotesPage() {
       <div className="mx-auto max-w-5xl">
         <AdminPageHeader
           title="Notes"
-          current="notes"
           actions={
             <Link
               href="/admin/notes/new"
