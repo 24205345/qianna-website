@@ -8,16 +8,12 @@ export const ANALYTICS_CONTENT_TYPES = [
 export type AnalyticsContentType = (typeof ANALYTICS_CONTENT_TYPES)[number];
 
 export interface AnalyticsSummary {
-  todayPv: number;
-  weekPv: number;
-  monthPv: number;
-  todayUv: number;
-  weekUv: number;
-  monthUv: number;
+  pv: number;
+  uv: number;
 }
 
-export interface AnalyticsDailyPoint {
-  date: string;
+export interface AnalyticsTrendPoint {
+  label: string;
   pv: number;
   uv: number;
 }

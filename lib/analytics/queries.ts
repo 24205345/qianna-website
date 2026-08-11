@@ -1,9 +1,13 @@
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  getAnalyticsRangeDays,
+  type AnalyticsRange,
+} from "@/lib/analytics/ranges";
 import type {
   AnalyticsContentType,
-  AnalyticsDailyPoint,
   AnalyticsSummary,
   AnalyticsTopItem,
+  AnalyticsTrendPoint,
 } from "@/lib/analytics/types";
 
 interface PageViewRow {
@@ -30,10 +34,28 @@ function formatDayKey(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
-function countPvUv(rows: PageViewRow[], since: Date) {
-  const filtered = rows.filter((row) => new Date(row.viewed_at) >= since);
-  const uv = new Set(filtered.map((row) => row.visitor_hash)).size;
-  return { pv: filtered.length, uv };
+function formatMonthKey(date: Date): string {
+  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}`;
+}
+
+function getRangeStart(range: AnalyticsRange): Date | null {
+  switch (range) {
+    case "today":
+      return startOfUtcDay(new Date());
+    case "7d":
+      return daysAgo(6);
+    case "30d":
+      return daysAgo(29);
+    case "365d":
+      return daysAgo(364);
+    case "all":
+      return null;
+  }
+}
+
+function countPvUv(rows: PageViewRow[]) {
+  const uv = new Set(rows.map((row) => row.visitor_hash)).size;
+  return { pv: rows.length, uv };
 }
 
 function averageDuration(rows: PageViewRow[]): number | null {
@@ -110,17 +132,23 @@ async function resolveTitles(
   return titles;
 }
 
-async function fetchRecentViews(days: number): Promise<PageViewRow[]> {
+async function fetchPageViews(range: AnalyticsRange): Promise<PageViewRow[]> {
   if (!isSupabaseConfigured()) return [];
 
   const supabase = await createClient();
-  const since = daysAgo(days).toISOString();
-  const { data, error } = await supabase
+  const rangeStart = getRangeStart(range);
+
+  let query = supabase
     .from("page_views")
     .select("content_type, content_slug, visitor_hash, viewed_at, duration_seconds")
-    .gte("viewed_at", since)
-    .order("viewed_at", { ascending: false })
-    .limit(10000);
+    .order("viewed_at", { ascending: false });
+
+  if (rangeStart) {
+    query = query.gte("viewed_at", rangeStart.toISOString());
+  }
+
+  const limit = range === "all" ? 50000 : 10000;
+  const { data, error } = await query.limit(limit);
 
   if (error) {
     console.error("Failed to load page views:", error.message);
@@ -130,46 +158,66 @@ async function fetchRecentViews(days: number): Promise<PageViewRow[]> {
   return (data ?? []) as PageViewRow[];
 }
 
-export async function getAnalyticsDashboardData(days = 30): Promise<{
-  summary: AnalyticsSummary;
-  daily: AnalyticsDailyPoint[];
-  topNotes: AnalyticsTopItem[];
-  topProjects: AnalyticsTopItem[];
-  topPhotography: AnalyticsTopItem[];
-  topPages: AnalyticsTopItem[];
-}> {
-  const emptySummary: AnalyticsSummary = {
-    todayPv: 0,
-    weekPv: 0,
-    monthPv: 0,
-    todayUv: 0,
-    weekUv: 0,
-    monthUv: 0,
-  };
+function buildTrend(rows: PageViewRow[], range: AnalyticsRange): AnalyticsTrendPoint[] {
+  if (rows.length === 0) return [];
 
-  const rows = await fetchRecentViews(days);
-  if (rows.length === 0) {
-    return {
-      summary: emptySummary,
-      daily: [],
-      topNotes: [],
-      topProjects: [],
-      topPhotography: [],
-      topPages: [],
-    };
+  if (range === "today") {
+    const buckets = new Map<string, { pv: number; visitors: Set<string> }>();
+    for (let hour = 0; hour < 24; hour += 1) {
+      buckets.set(String(hour).padStart(2, "0"), { pv: 0, visitors: new Set() });
+    }
+
+    for (const row of rows) {
+      const hour = String(new Date(row.viewed_at).getUTCHours()).padStart(2, "0");
+      const bucket = buckets.get(hour);
+      if (!bucket) continue;
+      bucket.pv += 1;
+      bucket.visitors.add(row.visitor_hash);
+    }
+
+    return Array.from(buckets.entries()).map(([label, bucket]) => ({
+      label: `${label}:00`,
+      pv: bucket.pv,
+      uv: bucket.visitors.size,
+    }));
   }
 
-  const now = new Date();
-  const todayStart = startOfUtcDay(now);
-  const weekStart = daysAgo(6);
-  const monthStart = daysAgo(days - 1);
+  const spanDays =
+    range === "all"
+      ? Math.max(
+          1,
+          Math.ceil(
+            (Date.now() - new Date(rows[rows.length - 1].viewed_at).getTime()) /
+              (1000 * 60 * 60 * 24)
+          )
+        )
+      : getAnalyticsRangeDays(range) ?? 30;
 
-  const today = countPvUv(rows, todayStart);
-  const week = countPvUv(rows, weekStart);
-  const month = countPvUv(rows, monthStart);
+  const bucketMonthly = range === "365d" || (range === "all" && spanDays > 120);
 
+  if (bucketMonthly) {
+    const buckets = new Map<string, { pv: number; visitors: Set<string> }>();
+    for (const row of rows) {
+      const key = formatMonthKey(new Date(row.viewed_at));
+      const bucket = buckets.get(key) ?? { pv: 0, visitors: new Set() };
+      bucket.pv += 1;
+      bucket.visitors.add(row.visitor_hash);
+      buckets.set(key, bucket);
+    }
+
+    return Array.from(buckets.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([label, bucket]) => ({
+        label,
+        pv: bucket.pv,
+        uv: bucket.visitors.size,
+      }));
+  }
+
+  const dayCount = range === "all" ? Math.min(spanDays, 90) : spanDays;
   const dailyMap = new Map<string, { pv: number; visitors: Set<string> }>();
-  for (let offset = days - 1; offset >= 0; offset -= 1) {
+
+  for (let offset = dayCount - 1; offset >= 0; offset -= 1) {
     const day = daysAgo(offset);
     dailyMap.set(formatDayKey(day), { pv: 0, visitors: new Set() });
   }
@@ -182,13 +230,39 @@ export async function getAnalyticsDashboardData(days = 30): Promise<{
     bucket.visitors.add(row.visitor_hash);
   }
 
-  const daily: AnalyticsDailyPoint[] = Array.from(dailyMap.entries()).map(
-    ([date, bucket]) => ({
-      date,
-      pv: bucket.pv,
-      uv: bucket.visitors.size,
-    })
-  );
+  return Array.from(dailyMap.entries()).map(([label, bucket]) => ({
+    label: label.slice(5),
+    pv: bucket.pv,
+    uv: bucket.visitors.size,
+  }));
+}
+
+export async function getAnalyticsDashboardData(range: AnalyticsRange = "30d"): Promise<{
+  range: AnalyticsRange;
+  summary: AnalyticsSummary;
+  trend: AnalyticsTrendPoint[];
+  topNotes: AnalyticsTopItem[];
+  topProjects: AnalyticsTopItem[];
+  topPhotography: AnalyticsTopItem[];
+  topPages: AnalyticsTopItem[];
+}> {
+  const emptySummary: AnalyticsSummary = { pv: 0, uv: 0 };
+  const rows = await fetchPageViews(range);
+
+  if (rows.length === 0) {
+    return {
+      range,
+      summary: emptySummary,
+      trend: [],
+      topNotes: [],
+      topProjects: [],
+      topPhotography: [],
+      topPages: [],
+    };
+  }
+
+  const summary = countPvUv(rows);
+  const trend = buildTrend(rows, range);
 
   async function buildTopItems(
     contentType: AnalyticsContentType,
@@ -234,15 +308,9 @@ export async function getAnalyticsDashboardData(days = 30): Promise<{
   ]);
 
   return {
-    summary: {
-      todayPv: today.pv,
-      weekPv: week.pv,
-      monthPv: month.pv,
-      todayUv: today.uv,
-      weekUv: week.uv,
-      monthUv: month.uv,
-    },
-    daily,
+    range,
+    summary,
+    trend,
     topNotes,
     topProjects,
     topPhotography,
