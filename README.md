@@ -2,7 +2,8 @@
 
 Welcome. This is my personal portfolio website — a quiet space to share selected work and a bit of background on how I think about spatial research, visual storytelling, and digital products.
 
-**Live site:** [https://qianna-site.vercel.app](https://qianna-site.vercel.app)
+**Live site:** [https://www.qiannawang.com](https://www.qiannawang.com)  
+*(Also reachable at [qiannawang.com](https://qiannawang.com) — redirects to www.)*
 
 ---
 
@@ -81,6 +82,7 @@ Implementation notes and handoff docs live in [`docs/`](docs/):
 | [`docs/exec-admin-about-analytics-2026-08-11.md`](docs/exec-admin-about-analytics-2026-08-11.md) | Admin sidebar, About profile photo, analytics |
 | [`docs/experience-admin-sidebar-profile-crop.md`](docs/experience-admin-sidebar-profile-crop.md) | Reusable patterns for admin nav and image crop upload |
 | [`docs/exec-site-ia-guestbook-2026-08-04.md`](docs/exec-site-ia-guestbook-2026-08-04.md) | Homepage structure and guestbook |
+| [`docs/exec-vercel-domain-2026-08-11.md`](docs/exec-vercel-domain-2026-08-11.md) | Custom domain setup on Vercel (`qiannawang.com`) |
 | [`docs/cms-migration-checklist.md`](docs/cms-migration-checklist.md) | Supabase CMS migration checklist |
 
 Admin password reset: `/admin/login` → *Forgot password?* — configure Supabase redirect URLs as described in `docs/supabase-cms-改造记录.md`.

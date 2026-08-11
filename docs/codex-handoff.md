@@ -4,7 +4,8 @@
 >
 > 项目路径：`G:\project\qianna-website`  
 > 分支：`main`（P1–P5 代码已完成，Home Hero 已接入轻量 CMS）  
-> 最后更新：2026-08-11
+> 最后更新：2026-08-11  
+> 生产域名：**https://www.qiannawang.com**（Vercel；`qianna-site.vercel.app` 仍可用）
 
 ---
 
@@ -357,6 +358,7 @@ P5 可选：建 `site_settings` 表 + 压缩上传 Supabase + `/admin/site`。
 | `docs/experience-admin-sidebar-profile-crop.md` | 侧栏 + 单图裁切上传可复用模式 |
 | `docs/exec-site-ia-guestbook-2026-08-04.md` | 首页 IA + Guestbook |
 | `docs/experience-guestbook.md` | Guestbook 审核与过滤经验 |
+| `docs/exec-vercel-domain-2026-08-11.md` | Vercel 自定义域名（qiannawang.com） |
 | `docs/supabase-cms-改造记录.md` | 早期 Phase 0–3 改造记录 + 经验 |
 | `README.md` | 对外说明（访客 + 开发者入口） |
 
