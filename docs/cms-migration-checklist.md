@@ -293,7 +293,8 @@ field_note_media (id, field_note_id, type, url, title, caption, sort_order)
 
 ## 给 Coding Agent 的执行约定
 
-1. **一次只做一个 P 阶段**，P2 完成并验证后再开 P3
+0. 先读根目录 **`AGENTS.md`** 与 **`docs/codex-handoff.md`**；按任务查 **`docs/README.md`**
+1. **一次只做一个阶段/功能**，验证后再开下一项
 2. 每步结束：`npm run lint` → `npm run build` → `git commit`
 3. 密钥只放 `.env.local`，不提交 GitHub
 4. 媒体迁移用管理员账号登录脚本，不用 service_role

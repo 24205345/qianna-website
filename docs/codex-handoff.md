@@ -1,11 +1,11 @@
-# Codex 交接文档（qianna-website Supabase CMS）
+# 开发交接文档（qianna-website）
 
-> **给 Codex 的第一份必读文档。** 读完本文即可继续开发，无需翻完整对话历史。
+> **Agent / 开发者第一份必读。** 常驻规则见根目录 [`AGENTS.md`](../AGENTS.md)；文档索引见 [`docs/README.md`](README.md)。
 >
 > 项目路径：`G:\project\qianna-website`  
-> 分支：`main`（CMS 主线 P1–P9 + Analytics + Admin 侧栏已完成）  
+> 分支：`main`（CMS P1–P11 已完成）  
 > 最后更新：2026-08-11  
-> 生产域名：**https://www.qiannawang.com**（Vercel；`qianna-site.vercel.app` 仍可用）
+> 生产域名：**https://www.qiannawang.com**
 
 ---
 
@@ -59,56 +59,19 @@ Supabase 数据量（已验证）：
 
 ---
 
-## 2.1 2026-07-03 前台 UX / 导航调整
+## 2.1 前台 UX 要点（摘要）
 
-### 首页 Projects Preview
+完整 IA 见 `docs/exec-site-ia-guestbook-2026-08-04.md`。关键约定：
 
-- `app/page.tsx` 的三个 Projects Preview 卡片已改成整卡可点击，分别进入 `/projects?category=thesis-design-research`、`/projects?category=architecture-projects`、`/projects?category=digital-product-work`。
-- `View all projects` 保持进入 `/projects`，用于查看所有分类项目。
-- 分类元数据集中在 `lib/projects/categories.ts`，其中 `matchLabels` 用于兼容 Supabase / 静态数据里的分类文本差异，例如 `Architecture Project` 与 `Architecture Projects`。
+- 首页顺序：**Notes → Projects → Traces → About Me**（Guestbook 预览 3 条）
+- Projects 分类：`lib/projects/categories.ts`（`matchLabels` 兼容历史文案）
+- 首页 project 卡片 → `/projects?category=...`；View all → `/projects`（按 year 扁平排序）
+- Hero CTA：轻量 `Enter →` 文字链，非胶囊按钮
+- About 照片 **只在 `/about`**，首页 About 卡片仅文字摘要
+- Admin：**左侧边栏**；Projects 子菜单无 All；About 照片 16:9 裁切（`react-easy-crop`）
+- 站点气质：安静、编辑感、stone 暖灰；大改 UI 前可参考 `ui-ux-pro-max` skill，但以截图与现有风格为准
 
-### Projects 汇总页
-
-- `/projects?category=...`：显示某个分类下的项目，标题区保留分类名称和说明。
-- `/projects`：不再按分类标题块分组，直接按 `year` 从近到远扁平排列；分类信息保留在每张项目卡片顶部的小标签里。
-- 排序函数会从 `year` 字符串里提取四位年份，兼容 `2025`、`2020-2021` 一类文本。
-
-### 首页 Hero Enter
-
-- Hero CTA 从白色胶囊按钮改成轻量文字链接 `Enter →`。
-- 箭头使用文本字符，和内页 `← Back to Home` 的视觉语言一致，只是方向相反。
-- `Enter` 为 `text-[15px]`，带较浅下划线；hover 时文字变斜体。
-- 副标题和 `Enter` 都加了相同小缩进，且与标题之间的垂直间距保持一致。
-
-### P5 Home Hero CMS
-
-- 新增 `site_settings` 单行表（`singleton_key = 'home'`），用于管理首页 Hero title / subtitle / CTA / image URL / alt。
-- 首页 `app/page.tsx` 通过 `lib/site/queries.ts` 读取 Supabase；未配置或查询失败时回退 `app/_data/site-settings.ts`。
-- 新增 `/admin/site`，可编辑首页 Hero 文案、图片 URL，并可上传新图片到 `portfolio-media/site/`。
-- 新增 `npm run migrate:home`，用于把本地 `public/images/hero-image.jpg` 压缩为 WebP 后上传到 Storage，并写入 `site_settings.hero_image_url`。
-
-### P5.5 Site Navigation Copy CMS
-
-- 新增 `site_navigation_items` 表，对应迁移文件 `supabase/migrations/0006_site_navigation_items.sql`。
-- `0006_site_navigation_items.sql` 已在 Supabase 项目中执行并验证：`site_navigation_items` RLS 已开启，默认 8 条首页/子页面文案已插入。
-- `app/_data/site-navigation.ts` 提供静态回退；未配置 Supabase 或表未创建时，首页和子页面仍使用原始默认文案。
-- `/admin/site` 的 Homepage Cards & Page Headings 区域可编辑首页入口卡片和对应子页面页眉。
-- 首页 project 分类卡片和 `/projects?category=...` 页眉共用同一行数据；Photography / Visual Works / Field Notes / About 入口卡片和对应页面页眉也共用同一行数据。
-- `href` 不开放编辑，避免误改导致导航断链；只开放 `label`、`title`、`description`。
-
-### Admin UI Language
-
-- `/admin/*` 后台可见 UI 文案已统一为英文，包括页面标题、表单字段、按钮、空状态和 Server Action 错误消息。
-- **导航（2026-08-11）**：`AdminSidebar` 左侧固定边栏；`AdminPageHeader` 仅 title + actions；Sign Out 在侧栏底部。Login / reset-password 无侧栏。
-- Projects 子分类仅在进入 Projects 时展开；**无 All 项**，点 **Projects** 即查看全部。
-- `/admin/projects` 的 `Category` 使用固定三类下拉，来源于 `lib/projects/categories.ts`；不要改回自由输入，否则前台 `/projects?category=...` 筛选容易因拼写不一致失效。
-- `/admin/projects` 的项目 URL 由标题自动生成：新增项目时 `slug` 可留空，Server Action 会生成小写短横线 URL，并在重复时自动追加 `-2`、`-3`。编辑旧项目时默认保留已有 URL，避免破坏已经公开的链接。
-- About 个人照片：`/admin/about` 上传 + **16:9 裁切**（`react-easy-crop`），存 `about_page_content.profile_image_*`；**仅 `/about` 展示**，首页 About 卡片不显示照片。
-
-### UI/UX Skill
-
-- 用户已全局安装 `ui-ux-pro-max` 到 `C:\Users\U0016735\.cursor\skills\ui-ux-pro-max\SKILL.md`。
-- 重启 Cursor 后可作为 UI 检查辅助；它更适合大范围设计系统/落地页评审。当前网站的细节调整仍应以用户截图、现有作品集气质和轻量克制风格为准。
+历史逐条变更见各 `docs/exec-*.md`，此处不再堆叠。
 
 ---
 
@@ -198,7 +161,7 @@ GitHub raw 下载偶发 EOF（尤其 gliding 大图），**失败文件单独重
 
 ---
 
-## 5. 架构模式（复制此模式做 P5 / 新模块）
+## 5. 架构模式（新模块）
 
 每个 CMS 模块统一四层：
 
@@ -227,15 +190,20 @@ scripts/download-*-media.ps1       → 从 GitHub raw 拉 public 文件
 
 ## 6. 关键文件索引
 
-### 数据库迁移（按顺序）
+### 数据库迁移（0001–0016 摘要）
 
 ```
-supabase/migrations/0001_init.sql          projects + project_media
-supabase/migrations/0002_photography.sql
-supabase/migrations/0003_visual_works.sql
-supabase/migrations/0004_field_notes.sql
-supabase/migrations/0005_site_settings.sql
+0001 init (projects)     0009 projects preview copy
+0002 photography         0010 notes
+0003 visual_works        0011 notes i18n
+0004 field_notes         0012 traces navigation
+0005 site_settings       0013 guestbook
+0006 site_navigation     0014 guestbook email
+0007 about_page_content  0015 page_views (analytics)
+0008 projects preview    0016 about profile_image
 ```
+
+完整文件见 `supabase/migrations/`。
 
 ### 动态路由详情页
 
@@ -268,18 +236,23 @@ lib/photography/queries.ts
 lib/visual-works/queries.ts
 lib/field-notes/queries.ts
 lib/site/queries.ts
+lib/about/queries.ts
+lib/notes/queries.ts
+lib/guestbook/queries.ts
+lib/analytics/queries.ts
 ```
 
-### Admin 入口
+### Admin 入口（侧栏）
 
 ```
-/admin/login
-/admin/projects
-/admin/photography
-/admin/visual-works
-/admin/field-notes
-/admin/site
+/admin/login          /admin/notes
+/admin/site           /admin/projects
+/admin/about          /admin/photography  (Traces)
+/admin/guestbook      /admin/visual-works (Traces)
+/admin/analytics      /admin/field-notes  (Traces)
 ```
+
+布局：`app/admin/layout.tsx` → `AdminDashboardLayout` + `AdminSidebar`
 
 ---
 
@@ -341,35 +314,31 @@ CMS 与前台主线已完成。常见后续：
 
 ## 11. 相关文档
 
+完整索引见 **[`docs/README.md`](README.md)**。核心文件：
+
 | 文档 | 用途 |
 |---|---|
-| `docs/codex-handoff.md` | **本文 — Codex 入口** |
-| `docs/cms-migration-checklist.md` | P1–P5 分阶段 checklist |
-| `docs/exec-admin-about-analytics-2026-08-11.md` | Admin 侧栏、About 头像裁切、Analytics |
-| `docs/experience-admin-sidebar-profile-crop.md` | 侧栏 + 单图裁切上传可复用模式 |
-| `docs/exec-site-ia-guestbook-2026-08-04.md` | 首页 IA + Guestbook |
-| `docs/experience-guestbook.md` | Guestbook 审核与过滤经验 |
-| `docs/exec-vercel-domain-2026-08-11.md` | Vercel 自定义域名（qiannawang.com） |
-| `docs/supabase-cms-改造记录.md` | 早期 Phase 0–3 改造记录 + 经验 |
-| `README.md` | 对外作品集说明（访客向；开发细节见本文） |
+| [`AGENTS.md`](../AGENTS.md) | Agent 常驻规则（Cursor 自动读取） |
+| [`docs/README.md`](README.md) | 文档索引 + 维护约定 |
+| `docs/codex-handoff.md` | **本文** |
+| `docs/cms-migration-checklist.md` | 模块 checklist |
+| `docs/exec-*.md` | 单次功能执行记录 |
+| `docs/experience-*.md` | 可复用模式 |
+| `README.md` | 对外访客说明（保持简短） |
+
+**文档方案：** 轻量 `docs/` 体系（方案 B），不引入 Trellis。
 
 ---
 
-## 12. 给 Codex 的开场 Prompt 模板
-
-复制以下内容作为新会话第一条消息：
+## 12. 新会话开场 Prompt 模板
 
 ```
-请阅读 G:\project\qianna-website\docs\codex-handoff.md，然后继续 qianna-website 开发。
+请先读 AGENTS.md 和 docs/codex-handoff.md，然后继续 qianna-website 开发。
 
-当前状态：main 分支，CMS P1–P9 + Analytics + Admin 侧栏已完成；生产域名为 https://www.qiannawang.com
+生产站：https://www.qiannawang.com
+分支：main（CMS 已完成）
 
-请先：
-1. 读 docs/codex-handoff.md 和 docs/cms-migration-checklist.md
-2. 跑 npm run lint 和 npm run build 确认通过
-3. 告诉我 git status 里有哪些未提交改动
-
-然后执行：[在此填写你的目标]
+请先：lint/build（如需要）→ git status → 再执行我的目标。
 ```
 
 ---
