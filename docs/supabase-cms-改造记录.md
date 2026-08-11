@@ -131,9 +131,13 @@ npm run dev        # 本地预览
    - 若暂未配置，代码会通过 `lib/supabase/public-env.ts` 回退到项目默认 anon 配置，生产环境仍可登录（anon key 本身可公开，安全靠 RLS）。
 10. **配置密码重置 Redirect URLs（必做，否则邮件链接只会跳首页）**：
     - Supabase 控制台 → **Authentication** → **URL Configuration**
-    - **Site URL** 保持生产域名，例如 `https://qianna-site.vercel.app`
+    - **Site URL**：`https://www.qiannawang.com`（主域名；`qianna-site.vercel.app` 可保留作备用）
     - **Redirect URLs** 追加（每行一条）：
       ```
+      https://www.qiannawang.com/auth/callback
+      https://www.qiannawang.com/auth/confirm
+      https://qiannawang.com/auth/callback
+      https://qiannawang.com/auth/confirm
       https://qianna-site.vercel.app/auth/callback
       https://qianna-site.vercel.app/auth/confirm
       http://localhost:3000/auth/callback
@@ -228,7 +232,7 @@ npm run dev        # 本地预览
 6. **P1 详情页动态化**：删除静态 `app/projects/thesis/page.tsx` 等，统一走 `[slug]` + `layout_template` 分支渲染；Overview/Details 用 `text[]` + `jsonb` 存库，后台表单用多行文本 + JSON 编辑；`deleteProjectAction` 删除时勿引用 `payload.slug`（delete 无 form payload）。
 7. **全站迁移路线图**：见 `docs/cms-migration-checklist.md`（P2–P4 均已完成）。
 8. **模块化 CMS 复制模式**：Photography / Visual Works / Field Notes 均按「建表 → queries + _data 回退 → 前台读库 → admin CRUD → migrate + download 脚本」完成；Field Notes 额外用 `layout_template: gallery | narrative` 分支渲染。
-9. **首页 Hero 不在 Supabase**：`app/page.tsx` 仍引用 `public/images/hero-image.jpg`（~16MB）；sparse-checkout 不含 `public/images/`，本地需跑 `scripts/download-home-hero.ps1`，否则首页封面空白。
+9. **首页 Hero 已 CMS 化**：读 `site_settings` + `/admin/site`；本地 sparse-checkout 缺图时跑 `download-home-hero.ps1` + `migrate:home`。
 10. **本地 dev 易忘**：`npm run dev` 终端不能关；Node 路径 `G:\node-v24.16.0-win-x64` 需手动加 PATH。
 11. **Codex 交接入口**：后续开发请先读 `docs/codex-handoff.md`（含环境、脚本、文件索引、开场 Prompt 模板）。
 12. **Projects Preview 导航模式**：首页分类预览卡片适合整卡可点击进入 `/projects?category=...`，而 `View all projects` 进入 `/projects` 汇总。分类定义集中放在 `lib/projects/categories.ts`，用 `matchLabels` 兼容数据库里单复数或历史文案差异，避免在多个页面手写判断。
@@ -237,6 +241,7 @@ npm run dev        # 本地预览
 15. **Windows 安装 Cursor Skill 的坑**：PowerShell 可能因执行策略拦截 `npm.ps1` / `npx.ps1`。此时用 `G:\node-v24.16.0-win-x64\npm.cmd` / `npx.cmd` 可绕过；用户已安装 `ui-ux-pro-max`，适合做大范围 UI/UX 检查，但像素级微调仍应以截图和现有风格为准。
 16. **Home Hero CMS 化**：站点级单例内容用 `site_settings` 单表即可，固定 `singleton_key = 'home'`，比通用 pages 表更轻。首页仍保留 `app/_data/site-settings.ts` 回退，后台 `/admin/site` 只暴露 Hero title/subtitle/CTA/image/alt，避免把首页布局复杂度提前 CMS 化。
 17. **大图上传策略**：Next Server Action 默认 body size 较小，后台上传 Hero 图需在 `next.config.ts` 配置 `serverActions.bodySizeLimit`；更稳妥的方式仍是 `npm run migrate:home` 先用 sharp 压缩上传，再在后台微调文案。
-18. **Site Navigation Copy CMS**：首页入口卡片与子页页眉共用 `site_navigation_items`；后台 `/admin/site` 的 Homepage Cards 区域编辑。About 页标题/描述走同一表 `about` 项，时间轴正文仍硬编码在 `app/about/page.tsx`（P6 可 CMS 化）。
-20. **内容可见性（draft / published）**：Projects、Photography 合集、Visual Works 分类、Field Notes 均支持 `draft`（前台隐藏）与 `published`（前台可见）。后台列表页可直接点 **Hide / Publish** 切换；编辑页 **Visibility** 下拉也可设置。前台查询与 Supabase RLS 均只暴露 `published`。
-21. **About 页 CMS**：`/admin/about` 编辑页头（同步 `site_navigation_items.about`）、Timeline（`Period | Title | Description` 每行一条）、Working Across 标签、Current Focus。正文存 `about_page_content` 单表；迁移 `0007_about_page_content.sql`。后台导航 **About** 指向 `/admin/about`，**Preview** 打开前台 `/about`。
+18. **Site Navigation Copy CMS**：首页入口卡片与子页页眉共用 `site_navigation_items`；About 页 title/description 走 `about` 项；正文（Timeline、照片等）在 `about_page_content` + `/admin/about`。
+19. **内容可见性（draft / published）**：Projects、Photography 合集、Visual Works 分类、Field Notes 均支持 `draft`（前台隐藏）与 `published`（前台可见）。后台列表页可直接点 **Hide / Publish** 切换；编辑页 **Visibility** 下拉也可设置。前台查询与 Supabase RLS 均只暴露 `published`。
+20. **About 页 CMS**：`/admin/about` 编辑页头、Timeline、Working Across、Current Focus、**16:9 个人照片**（裁切上传）。Admin **左侧边栏** → About。
+21. **生产域名**：`https://www.qiannawang.com`；Supabase Auth Redirect URLs 需同时包含 www、apex 与 vercel.app 备用域（见 `docs/exec-vercel-domain-2026-08-11.md`）。

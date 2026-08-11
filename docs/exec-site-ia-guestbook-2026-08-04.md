@@ -16,7 +16,7 @@
 | Notes | CMS 驱动，首页列表预览 |
 | Projects | 三分类卡片 |
 | Traces | Photography / Drawings / Field Notes，Hub 页三 Tab |
-| About Me | 摘要卡 + Say hello 留言 |
+| About Me | 摘要卡 + Guestbook 预览（最新 3 条，View all → `/guestbook`） |
 
 ### 路由
 

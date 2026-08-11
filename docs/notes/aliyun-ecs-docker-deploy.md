@@ -2,7 +2,7 @@
 
 > **适用类型**：Docker Compose 单容器 Web 应用 · 国内 ECS 常见问题版 · 含 GitHub Actions 自动部署（可选）
 >
-> **说明**：本文为通用部署指南，示例中的项目名、目录、仓库均为占位符。本站 [qianna-site](https://qianna-site.vercel.app) 使用 Vercel + Supabase 部署，与此文 ECS 方案不同；若你部署的是其他 Docker 化项目，可按本文操作。
+> **说明**：本文为通用部署指南，示例中的项目名、目录、仓库均为占位符。本站 [qiannawang.com](https://www.qiannawang.com) 使用 Vercel + Supabase 部署，与此文 ECS 方案不同；若你部署的是其他 Docker 化项目，可按本文操作。
 
 ---
 

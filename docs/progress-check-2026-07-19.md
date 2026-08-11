@@ -1,5 +1,8 @@
 # 进度检查记录（2026-07-19）
 
+> **历史快照**：记录当时拉代码后的状态，**不代表当前进度**。  
+> 最新状态请以 `docs/codex-handoff.md` 与 `docs/cms-migration-checklist.md` 为准（截至 2026-08-11 已含 Notes / Traces / Guestbook / Analytics / Admin 侧栏 / 自定义域名等）。
+
 > 本机路径：`D:\projects\personal_website`  
 > 远程：`https://github.com/24205345/qianna-website.git`  
 > 分支：`main` @ `64e0bb7`（已与 `origin/main` 同步）
@@ -14,7 +17,7 @@
 
 ---
 
-## 2. 当前进度（以代码为准，文档略滞后）
+## 2. 当时进度（2026-07-19 快照）
 
 | 模块 | 状态 | 说明 |
 |---|---|---|
@@ -25,12 +28,10 @@
 | Field Notes | ✅ | `/field-notes/[slug]` + 双模板 |
 | Home Hero CMS | ✅ | `/admin/site` |
 | Site Navigation Copy | ✅ | `site_navigation_items` |
-| About CMS（原 P6） | ✅ | `/about` + `/admin/about` timeline 编辑（checklist 仍标 ⬜，需更新文档） |
-| 前台 UX | ✅ | FixedBackLink、Hero Enter、Selected Work 等 |
-| Hero WebGL 液态扭曲 | ✅ | 最新两笔 commit |
-| 线上部署 | ✅ | [qianna-site.vercel.app](https://qianna-site.vercel.app) |
+| About CMS（原 P6） | ✅ | 当时已完成 timeline；后续已加个人照片裁切（2026-08） |
+| 线上部署 | ✅ | 现为 [www.qiannawang.com](https://www.qiannawang.com) |
 
-**结论：CMS 主线（P1–P6）与前台体验收尾已基本完成；下一阶段重心是「内容补全」与「本机联调」。**
+**结论（历史）**：截至 2026-07-19，CMS P1–P6 与前台体验收尾已基本完成。此后又完成 Notes、Traces Hub、Guestbook、Analytics、Admin 侧栏、About 照片、自定义域名等，见较新 exec 文档。
 
 ---
 
@@ -38,7 +39,7 @@
 
 1. **数字产品项目「筑建 ERP」未进远程**：静态数据与 seed 仅有 `thesis`、`xicaoshi-red-temple`；详情页 `SLUG_CONFIG` 也只注册这两套模板。
 2. **本机未配 Supabase 环境变量**，无法直接验证 `/admin` 与线上一致的数据流。
-3. **`docs/cms-migration-checklist.md` / `codex-handoff.md` 未反映 About 已完成**，易误导后续协作。
+3. ~~**`docs/cms-migration-checklist.md` / `codex-handoff.md` 未反映 About 已完成**~~ → 已于 2026-08-11 同步更新。
 
 ---
 

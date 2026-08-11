@@ -2,7 +2,7 @@
 
 > **Applies to**: Docker Compose single-container web apps · domestic ECS troubleshooting edition · optional GitHub Actions auto-deploy
 >
-> **Note**: This is a generic deployment guide. Project names, directories, and repos in examples are placeholders. This site, [qianna-site](https://qianna-site.vercel.app), is deployed on Vercel + Supabase—not the ECS approach in this article. If you are deploying another Dockerized project, follow the steps below.
+> **Note**: This is a generic deployment guide. Project names, directories, and repos in examples are placeholders. This site, [qiannawang.com](https://www.qiannawang.com), is deployed on Vercel + Supabase—not the ECS approach in this article. If you are deploying another Dockerized project, follow the steps below.
 
 ---
 

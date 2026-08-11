@@ -1,4 +1,4 @@
-# CMS 全站迁移 Checklist（P1–P5）
+# CMS 全站迁移 Checklist（P1–P9 + 后续）
 
 > 原则：每步小而可验证，完成一步 commit 一步，不要一次性大改。
 
@@ -17,10 +17,12 @@
 | **P4 Field Notes** | ✅ | 5 旅程、63 图 + 4 视频、动态 [slug]、双模板 |
 | **P5 Home Hero** | ✅ | `site_settings` + `/admin/site`，首页 Hero 可后台编辑；后台 UI 已统一英文 |
 | **P5.5 Site Navigation Copy** | ✅ | 首页入口卡片 + 对应子页面页眉共用 `site_navigation_items` |
-| **P6 About** | ✅ | `/about` + `/admin/about` timeline CMS |
+| **P6 About** | ✅ | `/about` + `/admin/about`；Timeline + 16:9 个人照片裁切上传 |
 | **P7 Notes** | ✅ | 独立 Notes 模块：MD + TOC；首页 Notes 区块在 Projects Preview 上方；`/admin/notes` |
 | **P8 Traces Hub** | ✅ | 首页四板块；`/traces` 三 Tab；`0012_traces_navigation.sql` |
-| **P9 Guestbook** | ✅ | 首页 Say hello 留言；先审后发；`/admin/guestbook`；`0013`/`0014` 迁移 |
+| **P9 Guestbook** | ✅ | 首页 About Me 下预览 3 条；先审后发；`/admin/guestbook`；`0013`/`0014` |
+| **P10 Analytics** | ✅ | PV/UV/停留时长；`/admin/analytics`；Vercel Speed Insights |
+| **P11 Admin UX** | ✅ | 左侧边栏导航；About 照片 `react-easy-crop` 裁切 |
 
 ---
 
@@ -253,8 +255,9 @@ field_note_media (id, field_note_id, type, url, title, caption, sort_order)
 
 ## P6：About ✅
 
-- [x] `about_page_content` + `/admin/about` timeline 编辑
-- [x] 前台 `/about` 读 Supabase，静态回退
+- [x] `about_page_content` + `/admin/about`（Timeline、Working Across、Current Focus）
+- [x] 页头 title/description 同步 `site_navigation_items.about`
+- [x] `/about` 16:9 个人照片（`0016_about_profile_image.sql`）；后台裁切上传；**首页 About 卡片不显示照片**
 
 ---
 
@@ -301,10 +304,11 @@ field_note_media (id, field_note_id, type, url, title, caption, sort_order)
 
 ## 推荐下一步
 
-CMS 主线（含 Notes）已完成。可继续：
+CMS 与 Analytics 主线已完成。可继续：
 
-1. 在 `/admin/notes` 撰写并发布 AI 学习笔记
-2. 需要时再增强 Markdown 编辑器（当前为 textarea + preview）
-3. push 后确认 Vercel 生产环境首页 Notes 区块正常
+1. **内容运营**：Notes 发文、About 照片、各模块 Publish
+2. **生产域名**：`https://www.qiannawang.com` — 见 `docs/exec-vercel-domain-2026-08-11.md`
+3. **Supabase Auth Redirect URLs** 与自定义域名对齐
+4. 可选：Markdown 编辑器增强、更多项目 slug 模板
 
 本地开发、sparse-checkout、下载脚本等详见 **`docs/codex-handoff.md` 第 3–4 节**。

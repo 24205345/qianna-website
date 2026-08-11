@@ -9,7 +9,7 @@
 1. **独立表 `notes`**，不要硬塞进 `projects.content_type`。
 2. 首页用 **`site_navigation_items` 的 `section` 项**（`notes-preview`），与 `projects-preview` **并列**，渲染在上方；不要做成第四张 project category 卡。
 3. 首页只展示 **title + 短 excerpt**；详情页再用 Markdown + h2/h3 TOC。
-4. Admin 顶栏单独 **Notes**；Projects 列表按 `PROJECT_CATEGORIES` 分段。
+4. Admin **左侧栏** 单独 **Notes**；Projects 分类在侧栏 Projects 子菜单筛选。
 
 ## 注意
 

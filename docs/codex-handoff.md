@@ -3,7 +3,7 @@
 > **给 Codex 的第一份必读文档。** 读完本文即可继续开发，无需翻完整对话历史。
 >
 > 项目路径：`G:\project\qianna-website`  
-> 分支：`main`（P1–P5 代码已完成，Home Hero 已接入轻量 CMS）  
+> 分支：`main`（CMS 主线 P1–P9 + Analytics + Admin 侧栏已完成）  
 > 最后更新：2026-08-11  
 > 生产域名：**https://www.qiannawang.com**（Vercel；`qianna-site.vercel.app` 仍可用）
 
@@ -11,7 +11,7 @@
 
 ## 1. 项目是什么
 
-Next.js 16.2.1 + React 19 + TypeScript + Tailwind v4 个人作品集网站，正在从**硬编码 + public 静态资源**升级为 **Supabase 轻量 CMS**（网页端 `/admin/*` 管理内容）。
+Next.js 16.2.1 + React 19 + TypeScript + Tailwind v4 **个人作品集网站**（对外分享作品与背景；内容通过私有 `/admin` 管理）。
 
 - GitHub：`24205345/qianna-website`
 - Supabase Project ID：`aqsdwfocoocnzyxopvvg`
@@ -19,22 +19,23 @@ Next.js 16.2.1 + React 19 + TypeScript + Tailwind v4 个人作品集网站，正
 
 ---
 
-## 2. CMS 进度（截至 2026-07-03）
+## 2. CMS 进度（截至 2026-08-11）
 
-| 模块 | 状态 | 前台 | 后台 | 迁移脚本 |
+| 模块 | 状态 | 前台 | 后台 | 迁移 / 备注 |
 |---|---|---|---|---|
 | Projects 列表+媒体+详情 | ✅ | `/projects`, `/projects/[slug]` | `/admin/projects` | `npm run migrate:media` |
 | Photography | ✅ | `/photography` | `/admin/photography` | `npm run migrate:photography` |
 | Visual Works | ✅ | `/visual-works` | `/admin/visual-works` | `npm run migrate:visual-works` |
 | Field Notes | ✅ | `/field-notes`, `/field-notes/[slug]` | `/admin/field-notes` | `npm run migrate:field-notes` |
+| **Traces Hub** | ✅ | `/traces`（Tab）+ 旧路径 | 侧栏 Traces 子项 | `0012_traces_navigation.sql` |
 | **Home Hero** | ✅ | `/` | `/admin/site` | `npm run migrate:home` |
-| **Site Navigation Copy** | ✅ | `/`, linked page headings | `/admin/site` | SQL migration |
-| **About** | ✅ | `/about`（含 16:9 个人照片） | `/admin/about` | `0016_about_profile_image.sql` |
+| **Site Navigation Copy** | ✅ | `/`, linked page headings | `/admin/site` | `0006_site_navigation_items.sql` |
+| **About** | ✅ | `/about`（16:9 个人照片 + Timeline） | `/admin/about` | `0007` + `0016_about_profile_image.sql` |
 | **Notes** | ✅ | `/notes`, `/notes/[slug]` | `/admin/notes` | `0010_notes.sql` |
-| **Guestbook** | ✅ | 首页 About Me 下预览 | `/admin/guestbook` | `0013_guestbook.sql` |
-| **Analytics** | ✅ | 前台埋点 | `/admin/analytics` | `0015_page_views.sql` |
+| **Guestbook** | ✅ | 首页 About Me 下预览 3 条 | `/admin/guestbook` | `0013` / `0014` |
+| **Analytics** | ✅ | 全站 `PageViewTracker` | `/admin/analytics` | `0015_page_views.sql` |
 
-Admin 导航（2026-08-11）：顶栏改为 **左侧边栏** + Projects/Traces 二级嵌套，详见 `docs/exec-admin-about-analytics-2026-08-11.md`。
+Admin 导航（2026-08-11）：**左侧边栏** + Projects / Traces 二级嵌套，详见 `docs/exec-admin-about-analytics-2026-08-11.md`。
 
 Supabase 数据量（已验证）：
 - `photography_photos`: 46
@@ -42,6 +43,19 @@ Supabase 数据量（已验证）：
 - `field_notes`: 5；`field_note_media`: 62 图 + 4 视频
 
 详细 checklist：`docs/cms-migration-checklist.md`
+
+### 前台路由速查
+
+| 路径 | 说明 |
+|------|------|
+| `/` | 首页（Notes → Projects → Traces → About Me + Guestbook 预览） |
+| `/notes`, `/notes/[slug]` | 笔记列表与详情 |
+| `/projects`, `/projects/[slug]` | 项目汇总与详情 |
+| `/traces` | Traces Hub（Photography / Drawings / Field Notes Tab） |
+| `/photography`, `/visual-works`, `/field-notes/[slug]` | 旧路径保留 |
+| `/about` | About 页（标题、描述、16:9 照片、Timeline） |
+| `/guestbook` | 留言簿完整列表 |
+| `/admin/*` | 私有 CMS（login / reset-password 无侧栏） |
 
 ---
 
@@ -119,7 +133,7 @@ cd G:\project\qianna-website
 npm run start:site
 ```
 
-脚本会：新开窗口跑 `npm run dev` → 等待就绪 → 自动打开 **http://localhost:3000**。  
+脚本会：检测 `package-lock.json` 变更时自动 `npm install` → 新开窗口跑 `npm run dev` → 等待就绪 → 自动打开 **http://localhost:3000**。  
 若服务器已在运行，则只打开浏览器。
 
 手动启动：
@@ -287,15 +301,14 @@ snowboard 的 `spring_chute` 区块：`caption` 存 footer 文案（见 `queries
 
 ---
 
-## 8. 首页 Hero（当前未 CMS 化）
+## 8. 首页 Hero（已 CMS 化）
 
-```tsx
-// app/page.tsx
-src="/images/hero-image.jpg"   → public/images/hero-image.jpg (~16MB)
-```
+- 数据表：`site_settings`（`singleton_key = 'home'`）
+- 前台：`lib/site/queries.ts` → `app/page.tsx`；失败时回退 `app/_data/site-settings.ts`
+- 后台：`/admin/site` 编辑文案 + 上传 Hero 图到 `portfolio-media/site/`
+- 首次迁移：`scripts/download-home-hero.ps1` → `npm run migrate:home`（sharp 压缩 WebP）
 
-本地必须有该文件，否则首页只有文字没有封面。  
-P5 可选：建 `site_settings` 表 + 压缩上传 Supabase + `/admin/site`。
+本地 sparse-checkout 若无 `public/images/hero-image.jpg`，跑 download 脚本后再 migrate；否则 migrate 会报错。
 
 ---
 
@@ -307,7 +320,7 @@ P5 可选：建 `site_settings` 表 + 压缩上传 Supabase + `/admin/site`。
 | 首页封面空白 | 缺 hero-image.jpg | `.\scripts\download-home-hero.ps1` + 强刷 Ctrl+Shift+R |
 | permission denied for table | 缺 GRANT | migration 里补 GRANT（见 0001 注释） |
 | migrate 登录失败 | 密码错 / 末尾漏字符 | 检查 `.env.local` SUPABASE_ADMIN_PASSWORD |
-| 重置密码邮件跳首页 | 缺 callback 路由或未配 Redirect URLs | 部署 `app/auth/callback` 等；Supabase → URL Configuration 加 `/auth/callback` 与 `/auth/confirm`；见 `docs/supabase-cms-改造记录.md` §4.5 |
+| 重置密码邮件跳首页 | 缺 callback 路由或未配 Redirect URLs | 主域名 `https://www.qiannawang.com` 的 callback 需写入 Supabase；见 `docs/exec-vercel-domain-2026-08-11.md` 与 `docs/supabase-cms-改造记录.md` §4.5 |
 | 忘记管理员密码 | Supabase Auth 无明文可查 | `/admin/login` → Forgot password；或 Supabase Users 直接改密 |
 | build 失败 use server re-export | photography actions 曾 re-export signOutAction | 从 `@/app/admin/projects/actions` 直接 import |
 | Next 16 params | 动态路由 params 是 Promise | `const { slug } = await params` |
@@ -315,36 +328,14 @@ P5 可选：建 `site_settings` 表 + 压缩上传 Supabase + `/admin/site`。
 
 ---
 
-## 10. Codex 推荐下一步
+## 10. 推荐下一步（2026-08-11 现状）
 
-### 优先级 A：收尾与提交
+CMS 与前台主线已完成。常见后续：
 
-1. `git status` 确认 P1–P4 全部改动
-2. `npm run lint` + `npm run build`
-3. 本地目视：首页、`/projects/thesis`、`/photography`、`/field-notes/snowboard`
-4. **分模块 commit**（用户明确要求再 commit）：
-   - `feat(projects): dynamic slug detail pages and CMS fields`
-   - `feat(photography): Supabase CMS module`
-   - `feat(visual-works): Supabase CMS module`
-   - `feat(field-notes): Supabase CMS with gallery/narrative templates`
-
-### 优先级 B：P5 Home / About（可选）
-
-1. `site_settings` 单表（hero_image_url, hero_title, hero_subtitle, about 字段）
-2. 压缩上传 hero → Storage
-3. `app/page.tsx` 读 Supabase + fallback
-4. `/admin/site` 简单表单
-
-### 优先级 C：部署
-
-1. Vercel 环境变量：`NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-2. `next.config.ts` 已配置 Supabase Storage `remotePatterns`
-3. push 分支 → Vercel 部署
-
-### 优先级 D：安全
-
-- 迁移完成后在 Supabase 重置管理员密码（曾在对话中暴露）
-- 确认 Sign Up 已关闭，仅手动创建管理员
+1. **内容**：在 `/admin/notes` 发笔记；`/admin/about` 上传并裁切个人照片；各模块 Publish 内容
+2. **域名 / Auth**：确认 Supabase **Site URL** 为 `https://www.qiannawang.com`，Redirect URLs 含 www 与 apex（见 `docs/exec-vercel-domain-2026-08-11.md`）
+3. **验证**：`npm run lint` + `npm run build`；目视 `/`、`/about`、`/admin/analytics`
+4. **可选增强**：Hero / 其他模块复用 `ProfilePhotoCropField` 裁切模式；Markdown 编辑器升级
 
 ---
 
@@ -360,7 +351,7 @@ P5 可选：建 `site_settings` 表 + 压缩上传 Supabase + `/admin/site`。
 | `docs/experience-guestbook.md` | Guestbook 审核与过滤经验 |
 | `docs/exec-vercel-domain-2026-08-11.md` | Vercel 自定义域名（qiannawang.com） |
 | `docs/supabase-cms-改造记录.md` | 早期 Phase 0–3 改造记录 + 经验 |
-| `README.md` | 对外说明（访客 + 开发者入口） |
+| `README.md` | 对外作品集说明（访客向；开发细节见本文） |
 
 ---
 
@@ -369,16 +360,16 @@ P5 可选：建 `site_settings` 表 + 压缩上传 Supabase + `/admin/site`。
 复制以下内容作为新会话第一条消息：
 
 ```
-请阅读 G:\project\qianna-website\docs\codex-handoff.md，然后继续 qianna-website Supabase CMS 工作。
+请阅读 G:\project\qianna-website\docs\codex-handoff.md，然后继续 qianna-website 开发。
 
-当前状态：P1–P4 已完成（Projects / Photography / Visual Works / Field Notes），本地 dev 在 feature/supabase-cms 分支。
+当前状态：main 分支，CMS P1–P9 + Analytics + Admin 侧栏已完成；生产域名为 https://www.qiannawang.com
 
 请先：
 1. 读 docs/codex-handoff.md 和 docs/cms-migration-checklist.md
 2. 跑 npm run lint 和 npm run build 确认通过
 3. 告诉我 git status 里有哪些未提交改动
 
-然后执行：[在此填写你的目标，例如 P5 Home CMS / commit / 部署 Vercel]
+然后执行：[在此填写你的目标]
 ```
 
 ---
@@ -389,8 +380,10 @@ P5 可选：建 `site_settings` 表 + 压缩上传 Supabase + `/admin/site`。
 "dev": "next dev",
 "start:site": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-dev.ps1",
 "build": "next build",
+"start": "next start",
 "lint": "eslint",
 "migrate:media": "node scripts/migrate-project-media.mjs",
+"migrate:home": "node scripts/migrate-home-hero.mjs",
 "migrate:photography": "node --experimental-strip-types scripts/migrate-photography.mjs",
 "migrate:visual-works": "node --experimental-strip-types scripts/migrate-visual-works.mjs",
 "migrate:field-notes": "node --experimental-strip-types scripts/migrate-field-notes.mjs"
