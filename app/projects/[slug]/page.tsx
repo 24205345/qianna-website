@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
 import {
   thesisGalleryFallback,
   xicaoshiGalleryFallback,
@@ -56,11 +57,21 @@ export default async function ProjectDetailPage({
   ]);
 
   if (project.layout_template === "thesis") {
-    return <ThesisProjectView project={project} galleryImages={galleryImages} />;
+    return (
+      <>
+        <PageViewTracker contentType="project" contentSlug={slug} />
+        <ThesisProjectView project={project} galleryImages={galleryImages} />
+      </>
+    );
   }
 
   if (project.layout_template === "xicaoshi") {
-    return <XicaoshiProjectView project={project} galleryImages={galleryImages} />;
+    return (
+      <>
+        <PageViewTracker contentType="project" contentSlug={slug} />
+        <XicaoshiProjectView project={project} galleryImages={galleryImages} />
+      </>
+    );
   }
 
   notFound();

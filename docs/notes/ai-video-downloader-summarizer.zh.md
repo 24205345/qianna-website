@@ -12,7 +12,7 @@
 2. **新开对话**扩展 AI 总结（视为新任务，但必须先阅读已有文档与代码）  
 3. **优化前端体验**（同屏信息密度、自动触发总结）  
 4. **接入支付**（出海优先 Stripe；国内可换支付宝 / 微信支付）  
-5. **部署上线**（本章仍待补充）
+5. **部署上线**（ECS + Docker Compose，详见第六章）
 
 工具类产品的常见策略是：**先抓住核心功能，再谈扩展**。对本项目而言，核心是稳定、可靠地完成视频下载。
 
@@ -297,7 +297,14 @@ Webhook 用于在支付完成后主动通知服务端更新会员状态。本地
 
 ## 六、部署上线
 
-待更新。后续建议补充：构建产物、环境变量清单、域名与 HTTPS、Stripe 生产 Webhook、监控与回滚。
+线上采用 **阿里云 ECS + Docker Compose** 方式部署：
+
+1. 在 Linux ECS 上安装 Docker，用项目根目录的 `compose.yaml` 一键启动应用容器  
+2. 通过 `.env.docker` / `.env` 注入 API 密钥、数据库与 Stripe 等配置  
+3. （可选）用宝塔或 Nginx 反向代理到容器端口，绑定域名并开启 HTTPS  
+4. （可选）配置 GitHub Actions，在 `git push` 后自动同步代码并 `docker compose up` 更新服务器  
+
+更完整的步骤（镜像加速、防火墙、健康检查、Stripe 生产 Webhook 等）见另一篇笔记：**[阿里云 ECS 部署教程：Docker Compose 单容器应用](/notes/aliyun-ecs-docker-deploy)**。
 
 ---
 

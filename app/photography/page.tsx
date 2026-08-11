@@ -1,4 +1,5 @@
 import PhotographySections from "@/app/_components/traces/PhotographySections";
+import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
 import { photographySections } from "@/app/_data/photography";
 import { getPhotographyPageData } from "@/lib/photography/queries";
 import {
@@ -15,6 +16,7 @@ export default async function PhotographyPage() {
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
+      <PageViewTracker contentType="page" contentSlug="photography" />
       <main className="mx-auto w-full max-w-5xl px-6 py-16 md:px-10 md:py-20">
         <div className="mb-12">
           <p className="text-xs tracking-[0.24em] text-stone-500 uppercase">{pageCopy.label}</p>

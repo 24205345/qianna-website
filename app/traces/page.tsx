@@ -1,6 +1,7 @@
 import DrawingsSections from "@/app/_components/traces/DrawingsSections";
 import FieldNotesList from "@/app/_components/traces/FieldNotesList";
 import PhotographySections from "@/app/_components/traces/PhotographySections";
+import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
 import { getFieldNotesTripsFallback } from "@/app/_data/field-note-details";
 import { photographySections } from "@/app/_data/photography";
 import {
@@ -53,6 +54,7 @@ export default async function TracesPage({
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
+      <PageViewTracker contentType="page" contentSlug="traces" />
       <main className="mx-auto w-full max-w-5xl px-6 py-16 md:px-10 md:py-20">
         <div className="mb-4">
           <p className="text-xs tracking-[0.24em] text-stone-500 uppercase">

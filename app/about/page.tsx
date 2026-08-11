@@ -1,10 +1,12 @@
 import { getAboutPageContent } from "@/lib/about/queries";
+import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
 
 export default async function AboutPage() {
   const content = await getAboutPageContent();
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
+      <PageViewTracker contentType="page" contentSlug="about" />
       <main className="mx-auto w-full max-w-5xl px-6 py-16 md:px-10 md:py-20">
         <p className="text-xs tracking-[0.24em] text-stone-500 uppercase">About Me</p>
         <h1 className="mt-4 font-serif text-4xl text-stone-900 md:text-5xl">

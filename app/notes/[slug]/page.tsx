@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
 import { getNoteBySlug } from "@/lib/notes/queries";
 import NoteDetailView from "../_components/NoteDetailView";
 
@@ -11,5 +12,10 @@ export default async function NoteDetailPage({
   const note = await getNoteBySlug(slug);
   if (!note) notFound();
 
-  return <NoteDetailView note={note} />;
+  return (
+    <>
+      <PageViewTracker contentType="note" contentSlug={slug} />
+      <NoteDetailView note={note} />
+    </>
+  );
 }

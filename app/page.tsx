@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
 import HeroImageDistortionClient from "@/app/_components/HeroImageDistortionClient";
 import GuestbookSection from "@/app/_components/guestbook/GuestbookSection";
 import { getAboutPageContent } from "@/lib/about/queries";
@@ -42,6 +43,7 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
+      <PageViewTracker contentType="page" contentSlug="home" />
       <header className="relative min-h-screen w-full overflow-hidden">
         <HeroImageDistortionClient
           imageUrl={siteSettings.heroImageUrl}

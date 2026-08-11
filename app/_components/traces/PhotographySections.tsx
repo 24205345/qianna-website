@@ -1,4 +1,5 @@
 import PhotoGallery from "@/app/photography/PhotoGallery";
+import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
 import type { PhotographyCollection } from "@/lib/photography/queries";
 
 interface PhotographySectionsProps {
@@ -11,7 +12,12 @@ export default function PhotographySections({
   return (
     <>
       {collections.map((collection) => (
-        <section key={collection.slug} className="mb-16 last:mb-0">
+        <section key={collection.slug} className="relative mb-16 last:mb-0">
+          <PageViewTracker
+            contentType="photography"
+            contentSlug={collection.slug}
+            trackWhenVisible
+          />
           <div className="mb-8">
             <h2 className="font-serif text-2xl text-stone-900 md:text-3xl">
               {collection.title}
