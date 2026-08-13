@@ -59,11 +59,9 @@ function copyBlockLabel(language: string | null): string | null {
 function LightCopyBlock({
   text,
   label,
-  children,
 }: {
   text: string;
   label: string | null;
-  children: ReactNode;
 }) {
   return (
     <aside className="not-prose group relative my-6 rounded-xl border border-stone-200 bg-stone-50 px-5 py-4 pr-14">
@@ -80,7 +78,7 @@ function LightCopyBlock({
             : "overflow-x-auto whitespace-pre-wrap font-mono text-sm leading-6 text-stone-700"
         }
       >
-        {children}
+        {text}
       </pre>
     </aside>
   );
@@ -136,8 +134,11 @@ export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
               {children}
             </a>
           ),
-          code: ({ inline, className, children }) => {
-            if (!inline) {
+          code: ({ className, children }) => {
+            const text = String(children);
+            const isBlock = Boolean(className) || text.includes("\n");
+
+            if (isBlock) {
               return <code className={className}>{children}</code>;
             }
 
@@ -170,18 +171,14 @@ export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
                 <div className="group relative my-6 overflow-hidden rounded-lg bg-stone-900">
                   <CopyButton text={text} tone="dark" />
                   <pre className="overflow-x-auto px-4 py-3.5 pr-12 font-mono text-sm leading-6 text-stone-100">
-                    {children}
+                    {text}
                   </pre>
                 </div>
               );
             }
 
             return (
-              <LightCopyBlock
-                text={text}
-                label={copyBlockLabel(language)}
-                children={children}
-              />
+              <LightCopyBlock text={text} label={copyBlockLabel(language)} />
             );
           },
           table: ({ children }) => (
