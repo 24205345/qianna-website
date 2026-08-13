@@ -27,6 +27,10 @@ $files = @(
   "public/projects/xicaoshi-red-temple/images/13_exploded_axonometric.jpg"
 )
 
+for ($page = 1; $page -le 15; $page++) {
+  $files += ("public/projects/undergraduate-portfolio/pages/{0:D2}.jpg" -f $page)
+}
+
 foreach ($rel in $files) {
   $dest = Join-Path $root $rel
   $dir = Split-Path $dest -Parent

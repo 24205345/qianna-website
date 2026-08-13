@@ -2,11 +2,17 @@ import { notFound } from "next/navigation";
 import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
 import {
   thesisGalleryFallback,
+  undergraduatePortfolioGalleryFallback,
   xicaoshiGalleryFallback,
 } from "@/app/_data/project-galleries";
-import { thesisDetailFallback, xicaoshiDetailFallback } from "@/app/_data/project-details";
+import {
+  thesisDetailFallback,
+  undergraduatePortfolioDetailFallback,
+  xicaoshiDetailFallback,
+} from "@/app/_data/project-details";
 import type { ProjectFullFallback } from "@/lib/projects/queries";
-import { getProjectFullBySlug, getProjectGallery } from "@/lib/projects/queries";
+import { getProjectFullBySlug, getProjectGallery, isProjectPublished } from "@/lib/projects/queries";
+import PortfolioProjectView from "../_components/PortfolioProjectView";
 import ThesisProjectView from "../_components/ThesisProjectView";
 import XicaoshiProjectView from "../_components/XicaoshiProjectView";
 
@@ -37,6 +43,19 @@ const SLUG_CONFIG: Record<
     },
     galleryFallback: xicaoshiGalleryFallback,
   },
+  "undergraduate-portfolio": {
+    fallback: {
+      title: "Selected Works",
+      subtitle: "2019–2023 · Beijing Jiaotong University",
+      category: "Architecture Project",
+      cover_image_url: "/projects/undergraduate-portfolio/pages/01.jpg",
+      overviewParagraphs: undergraduatePortfolioDetailFallback.overviewParagraphs,
+      projectDetails: undergraduatePortfolioDetailFallback.projectDetails,
+      layoutTemplate: "portfolio",
+      intro_video_url: undergraduatePortfolioDetailFallback.introVideoUrl,
+    },
+    galleryFallback: undergraduatePortfolioGalleryFallback,
+  },
 };
 
 export default async function ProjectDetailPage({
@@ -48,6 +67,11 @@ export default async function ProjectDetailPage({
   const config = SLUG_CONFIG[slug];
 
   if (!config) {
+    notFound();
+  }
+
+  const published = await isProjectPublished(slug);
+  if (published === false) {
     notFound();
   }
 
@@ -70,6 +94,15 @@ export default async function ProjectDetailPage({
       <>
         <PageViewTracker contentType="project" contentSlug={slug} />
         <XicaoshiProjectView project={project} galleryImages={galleryImages} />
+      </>
+    );
+  }
+
+  if (project.layout_template === "portfolio") {
+    return (
+      <>
+        <PageViewTracker contentType="project" contentSlug={slug} />
+        <PortfolioProjectView project={project} galleryImages={galleryImages} />
       </>
     );
   }

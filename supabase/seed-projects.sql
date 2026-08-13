@@ -27,8 +27,18 @@ values
     'Architecture Project',
     array['Urban Acupuncture', 'Heritage Preservation', 'Micro-renewal'],
     '2023',
-    'published',
+    'draft',
     1
+  ),
+  (
+    'Selected Works',
+    'undergraduate-portfolio',
+    'Undergraduate architectural portfolio from Beijing Jiaotong University (2019–2023), featuring four studio projects presented as full-page spreads.',
+    'Architecture Project',
+    array['BJTU', 'Architecture Design', 'Portfolio'],
+    '2019–2023',
+    'published',
+    2
   )
 on conflict (slug) do update set
   title       = excluded.title,

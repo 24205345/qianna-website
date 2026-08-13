@@ -74,3 +74,18 @@ export const xicaoshiGalleryFallback: GalleryImage[] = [
 
 export const thesisHeroVideoFallback = "/projects/thesis/video/01_hero_video.mp4";
 export const xicaoshiCoverFallback = "/projects/xicaoshi-red-temple/images/00_landscape_cover.jpg";
+export const undergraduatePortfolioCoverFallback =
+  "/projects/undergraduate-portfolio/pages/01.jpg";
+
+const undergraduatePortfolioPageCount = 15;
+
+export const undergraduatePortfolioGalleryFallback: GalleryImage[] = Array.from(
+  { length: undergraduatePortfolioPageCount },
+  (_, index) => {
+    const page = String(index + 1).padStart(2, "0");
+    return {
+      url: `/projects/undergraduate-portfolio/pages/${page}.jpg`,
+      title: `Spread ${page}`,
+    };
+  }
+);

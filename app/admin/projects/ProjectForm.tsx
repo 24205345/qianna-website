@@ -187,6 +187,7 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
           <option value="default">default</option>
           <option value="thesis">thesis (hero video + intro iframe)</option>
           <option value="xicaoshi">xicaoshi (hero cover + grid gallery)</option>
+          <option value="portfolio">portfolio (Issuu-style vertical spreads)</option>
         </select>
       </div>
 

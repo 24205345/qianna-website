@@ -27,7 +27,7 @@ export default function ThesisProjectView({ project, galleryImages }: Props) {
 
       <section className="mx-auto w-full max-w-5xl px-6 pt-20 pb-14 md:px-10 md:pt-24 md:pb-16">
         <p className="text-[10px] tracking-[0.26em] text-stone-500 uppercase">{project.category}</p>
-        <h1 className="mt-5 font-serif text-5xl leading-tight text-stone-50 md:text-7xl">{project.title}</h1>
+        <h1 className="mt-5 font-serif text-5xl leading-tight text-stone-100 md:text-7xl">{project.title}</h1>
       </section>
 
       <section className="border-t border-stone-800">
