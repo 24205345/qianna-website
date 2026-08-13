@@ -10,17 +10,6 @@ interface NoteMarkdownProps {
   markdown: string;
 }
 
-const TERMINAL_LANGUAGES = new Set([
-  "bash",
-  "sh",
-  "shell",
-  "zsh",
-  "powershell",
-  "ps1",
-  "docker",
-  "dockerfile",
-]);
-
 function getTextContent(node: unknown): string {
   if (node == null || typeof node === "boolean") return "";
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -44,43 +33,14 @@ function getFencedLanguage(children: ReactNode): string | null {
   return /language-(\w+)/.exec(className)?.[1] ?? null;
 }
 
-function isTerminalLanguage(language: string | null): boolean {
-  return language != null && TERMINAL_LANGUAGES.has(language);
-}
-
-function copyBlockLabel(language: string | null): string | null {
-  if (language === "env") return "Environment";
-  if (language === "json") return "JSON";
-  if (language === "yaml" || language === "yml") return "YAML";
-  if (language === "text") return "Text";
-  return null;
-}
-
-function LightCopyBlock({
-  text,
-  label,
-}: {
-  text: string;
-  label: string | null;
-}) {
+function DarkCodeBlock({ text }: { text: string }) {
   return (
-    <aside className="not-prose group relative my-6 rounded-xl border border-stone-200 bg-stone-50 px-5 py-4 pr-14">
-      <CopyButton text={text} tone="light" />
-      {label ? (
-        <p className="text-[10px] tracking-[0.22em] text-stone-400 uppercase">
-          {label}
-        </p>
-      ) : null}
-      <pre
-        className={
-          label
-            ? "mt-3 overflow-x-auto whitespace-pre-wrap font-mono text-sm leading-6 text-stone-700"
-            : "overflow-x-auto whitespace-pre-wrap font-mono text-sm leading-6 text-stone-700"
-        }
-      >
+    <div className="group relative my-6 overflow-hidden rounded-lg bg-stone-900">
+      <CopyButton text={text} tone="dark" />
+      <pre className="overflow-x-auto whitespace-pre-wrap px-4 py-3.5 pr-12 font-mono text-sm leading-6 text-stone-100">
         {text}
       </pre>
-    </aside>
+    </div>
   );
 }
 
@@ -166,20 +126,7 @@ export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
               );
             }
 
-            if (isTerminalLanguage(language)) {
-              return (
-                <div className="group relative my-6 overflow-hidden rounded-lg bg-stone-900">
-                  <CopyButton text={text} tone="dark" />
-                  <pre className="overflow-x-auto px-4 py-3.5 pr-12 font-mono text-sm leading-6 text-stone-100">
-                    {text}
-                  </pre>
-                </div>
-              );
-            }
-
-            return (
-              <LightCopyBlock text={text} label={copyBlockLabel(language)} />
-            );
+            return <DarkCodeBlock text={text} />;
           },
           table: ({ children }) => (
             <div className="my-6 w-full overflow-x-auto">

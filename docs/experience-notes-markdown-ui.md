@@ -9,7 +9,7 @@
 1. **TOC 轨（方案 A）**：桌面端 `sticky + h-svh`，上下 `py-7` 留白；去掉白底/边框；`mask-image` 上下渐隐；`justify-content: safe center` 短目录垂直居中，长目录可滚；滚动条 **2px**、轨道拉满列高。
 2. **表格**：在 `NoteMarkdown` 自定义 `table/th/td`，`w-full` + `border border-stone-200` + `px-4 py-3`，单元格 `min-width` 避免列挤在一起；外层 `overflow-x-auto` 适配窄屏。
 3. **复制**：抽出 `CopyButton`，挂在 `pre`（代码）与 ` ```prompt ` 卡片右上角；`navigator.clipboard` 失败时降级 `textarea` + `execCommand`。
-4. **代码块分层**（2026-08）：`react-markdown` v10 已无 `inline` 字段；用 `className` 或内容含换行判断块级 code，避免行内灰底样式套进围栏块。展示规则：`prompt` → 浅灰 Prompt 卡；`bash/sh/...` → 深色终端；无语言 / `text` / `env` / `json` 等 → 浅色可复制块。
+4. **代码块分层**（2026-08）：全站统一——**仅 ` ```prompt ` 用浅色 Prompt 卡**；其余围栏块（`bash`、无语言 ```、`json`、`env`、URL 列表等）一律**深色可复制块**。行内 `` `code` `` 仍用灰底。围栏块用 `className` 或换行判断块级，避免行内样式叠进 pre。
 
 ## 注意
 
