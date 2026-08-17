@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { isTurnstileEnabled, verifyTurnstileToken } from "@/lib/guestbook/turnstile";
 import { validateGuestbookInput } from "@/lib/guestbook/validation";
 
 export type SubmitGuestbookState =
@@ -52,6 +53,22 @@ export async function submitGuestbookMessage(
   const authorName = String(formData.get("authorName") ?? "");
   const authorEmail = String(formData.get("authorEmail") ?? "");
   const message = String(formData.get("message") ?? "");
+
+  if (isTurnstileEnabled()) {
+    const token = String(formData.get("turnstileToken") ?? "").trim();
+    if (!token) {
+      return { ok: false, error: "Please complete the verification check." };
+    }
+    const ip = await getClientIp();
+    const verified = await verifyTurnstileToken(token, ip);
+    if (!verified) {
+      return {
+        ok: false,
+        error: "Verification failed. Please refresh and try again.",
+      };
+    }
+  }
+
   const validation = validateGuestbookInput(authorName, authorEmail, message);
   if (!validation.ok) {
     return validation;

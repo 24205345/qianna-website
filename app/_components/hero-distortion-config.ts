@@ -1,3 +1,6 @@
+/** Set to true to re-enable WebGL ripple on the homepage hero (dev tuning still available). */
+export const HERO_DISTORTION_ENABLED = false;
+
 export interface HeroDistortionConfig {
   waveNumber: number;
   omega: number;

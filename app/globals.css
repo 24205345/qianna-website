@@ -79,3 +79,80 @@ body {
 .note-md-table td {
   min-width: 7.5rem;
 }
+
+/* Homepage hero + scroll reveal animations */
+@keyframes hero-photo-enter {
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-text-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes reveal-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-photo-enter {
+  animation: hero-photo-enter 1.2s ease-out both;
+}
+
+.hero-text-enter {
+  animation: hero-text-enter 0.7s ease-out both;
+}
+
+.hero-text-enter-delay-1 {
+  animation-delay: 0.1s;
+}
+
+.hero-text-enter-delay-2 {
+  animation-delay: 0.2s;
+}
+
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.reveal-visible {
+  animation: reveal-fade-up 0.65s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-photo-enter,
+  .hero-text-enter,
+  .reveal-visible {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .reveal-hidden {
+    opacity: 1;
+    transform: none;
+  }
+}

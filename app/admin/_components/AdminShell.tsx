@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { Suspense, createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import AdminSidebar from "./AdminSidebar";
 
@@ -30,20 +30,22 @@ interface AdminShellProps {
 
 export default function AdminShell({ children }: AdminShellProps) {
   const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
-
-  useEffect(() => {
-    try {
-      setCollapsed(window.localStorage.getItem(STORAGE_KEY) === "1");
-    } catch {
-      // ignore
-    }
-  }, []);
-
-  useEffect(() => {
-    setMobileOpen(false);
+  const [mobileState, setMobileState] = useState({ path: pathname, open: false });
+  const mobileOpen =
+    mobileState.path === pathname ? mobileState.open : false;
+  const setMobileOpen = useCallback((open: boolean) => {
+    setMobileState({ path: pathname, open });
   }, [pathname]);
+  const [collapsed, setCollapsed] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+    try {
+      return window.localStorage.getItem(STORAGE_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
 
   const contextValue = useMemo<AdminLayoutContextValue>(
     () => ({
@@ -62,7 +64,7 @@ export default function AdminShell({ children }: AdminShellProps) {
         });
       },
     }),
-    [mobileOpen, collapsed]
+    [mobileOpen, collapsed, setMobileOpen]
   );
 
   const isPublicPage = PUBLIC_ADMIN_PATHS.some((path) => pathname.startsWith(path));

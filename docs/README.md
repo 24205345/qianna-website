@@ -23,6 +23,7 @@
 | 文档 | 何时读 |
 |------|--------|
 | [`exec-site-ia-guestbook-2026-08-04.md`](exec-site-ia-guestbook-2026-08-04.md) | 首页四板块、Traces Hub、Guestbook |
+| [`exec-homepage-motion-2026-08-17.md`](exec-homepage-motion-2026-08-17.md) | 首页 Hero 动效、涟漪关闭、Reveal 组件 |
 | [`exec-admin-about-analytics-2026-08-11.md`](exec-admin-about-analytics-2026-08-11.md) | Admin 侧栏、About 照片、Analytics |
 | [`exec-vercel-domain-2026-08-11.md`](exec-vercel-domain-2026-08-11.md) | 自定义域名、Supabase Auth Redirect |
 
@@ -31,7 +32,8 @@
 | 文档 | 场景 |
 |------|------|
 | [`experience-admin-sidebar-profile-crop.md`](experience-admin-sidebar-profile-crop.md) | Admin 侧栏、单图 16:9 裁切上传 |
-| [`experience-guestbook.md`](experience-guestbook.md) | 留言审核、过滤、RLS |
+| [`experience-guestbook.md`](experience-guestbook.md) | 留言审核、过滤、RLS、Turnstile |
+| [`experience-homepage-motion.md`](experience-homepage-motion.md) | 首页 Hero / Reveal 滚入、grid 卡片动效 |
 | [`experience-notes-cms.md`](experience-notes-cms.md) | 独立 Notes 模块 |
 | [`experience-notes-editor.md`](experience-notes-editor.md) | Notes 编辑器 |
 | [`experience-notes-markdown-ui.md`](experience-notes-markdown-ui.md) | Notes Markdown / TOC 前台 |

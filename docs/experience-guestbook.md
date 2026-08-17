@@ -35,8 +35,9 @@ guestbook_messages (
 
 1. **服务端校验**：长度、邮箱格式、敏感词、URL/邮箱禁止出现在正文
 2. **蜜罐字段**：`website` 隐藏域，填写则静默成功（迷惑机器人）
-3. **IP 频率限制**：`guestbook_is_rate_limited` RPC（security definer）
-4. **人工 Approve**：最终把关
+3. **Cloudflare Turnstile**（可选）：配置 `NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` 后，提交前需完成真人验证；未配置时本地 dev 行为与旧版一致
+4. **IP 频率限制**：`guestbook_is_rate_limited` RPC（security definer）
+5. **人工 Approve**：最终把关
 
 > 不要指望纯自动过滤；个人站建议始终保留审核步骤。
 
@@ -51,6 +52,19 @@ guestbook_messages (
 | Delete | 永久删除 |
 
 入口：`/admin/guestbook`（Admin 侧栏 Guestbook）
+
+---
+
+## Turnstile（可选）
+
+| 文件 | 职责 |
+|------|------|
+| `lib/guestbook/turnstile.ts` | `getTurnstileSiteKey`、`verifyTurnstileToken`、`isTurnstileEnabled` |
+| `app/_components/guestbook/GuestbookTurnstile.tsx` | 加载 Cloudflare script + widget |
+| `app/guestbook/actions.ts` | 启用时校验 `turnstileToken` |
+| `.env.local.example` | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY` |
+
+首页 `GuestbookSection` 通过 `getTurnstileSiteKey()` 传入 site key；两键均配置才启用，否则无 widget、服务端不校验。
 
 ---
 

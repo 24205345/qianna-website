@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import HeroDistortionTuner from "./HeroDistortionTuner";
 import {
   DEFAULT_HERO_DISTORTION_CONFIG,
+  HERO_DISTORTION_ENABLED,
   loadHeroDistortionConfig,
   MAX_RIPPLE_DROPS,
   createRippleDrop,
@@ -182,6 +183,10 @@ void main() {
 `;
 
 function shouldUseDistortion(): boolean {
+  if (!HERO_DISTORTION_ENABLED) {
+    return false;
+  }
+
   if (typeof window === "undefined") {
     return false;
   }

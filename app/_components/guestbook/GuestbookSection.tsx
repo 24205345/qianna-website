@@ -1,11 +1,12 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useCallback, useState } from "react";
 import type { GuestbookMessage } from "@/lib/guestbook/queries";
 import {
   submitGuestbookMessage,
   type SubmitGuestbookState,
 } from "@/app/guestbook/actions";
+import GuestbookTurnstile from "./GuestbookTurnstile";
 import { GuestbookMessagesPreview } from "./GuestbookMessageList";
 
 const INITIAL_STATE: SubmitGuestbookState | null = null;
@@ -14,16 +15,44 @@ const PREVIEW_LIMIT = 3;
 interface GuestbookSectionProps {
   previewMessages: GuestbookMessage[];
   totalApprovedCount: number;
+  turnstileSiteKey?: string | null;
 }
 
 export default function GuestbookSection({
   previewMessages,
   totalApprovedCount,
+  turnstileSiteKey = null,
 }: GuestbookSectionProps) {
+  const turnstileEnabled = Boolean(turnstileSiteKey);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileKey, setTurnstileKey] = useState(0);
+
+  const submitWithTurnstileReset = useCallback(
+    async (
+      prevState: SubmitGuestbookState | null,
+      formData: FormData
+    ): Promise<SubmitGuestbookState> => {
+      const result = await submitGuestbookMessage(prevState, formData);
+      if (result.ok) {
+        setTurnstileToken("");
+        setTurnstileKey((key) => key + 1);
+      }
+      return result;
+    },
+    []
+  );
+
   const [state, formAction, isPending] = useActionState(
-    submitGuestbookMessage,
+    submitWithTurnstileReset,
     INITIAL_STATE
   );
+
+  const handleTokenChange = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
+
+  const submitDisabled =
+    isPending || (turnstileEnabled && turnstileToken.length === 0);
 
   return (
     <div className="mt-10 border-t border-stone-200/70 pt-10">
@@ -46,6 +75,17 @@ export default function GuestbookSection({
             autoComplete="off"
           />
         </div>
+
+        {turnstileEnabled ? (
+          <>
+            <input type="hidden" name="turnstileToken" value={turnstileToken} />
+            <GuestbookTurnstile
+              key={turnstileKey}
+              siteKey={turnstileSiteKey!}
+              onTokenChange={handleTokenChange}
+            />
+          </>
+        ) : null}
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
@@ -116,7 +156,7 @@ export default function GuestbookSection({
           <div className="flex justify-end">
             <button
               type="submit"
-              disabled={isPending}
+              disabled={submitDisabled}
               className="rounded-md bg-stone-900 px-4 py-2 text-sm text-white transition-colors hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isPending ? "Sending..." : "Send note"}
