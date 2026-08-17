@@ -11,7 +11,7 @@ export interface ProjectMediaRow {
   sort_order: number;
 }
 
-export type LayoutTemplate = "default" | "thesis" | "xicaoshi";
+export type LayoutTemplate = "default" | "thesis" | "xicaoshi" | "portfolio";
 
 export interface ProjectFull {
   id: string;
@@ -123,4 +123,20 @@ export async function getProjectGallery(
     title: row.title ?? "",
     caption: row.caption ?? undefined,
   }));
+}
+
+/** Returns false when Supabase has the slug but status is not published. Null if Supabase is off. */
+export async function isProjectPublished(slug: string): Promise<boolean | null> {
+  if (!isSupabaseConfigured()) return null;
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("projects")
+    .select("id")
+    .eq("slug", slug)
+    .eq("status", "published")
+    .maybeSingle();
+
+  if (error) return null;
+  return Boolean(data);
 }

@@ -38,3 +38,19 @@ export const xicaoshiDetailFallback = {
   introVideoUrl: null as string | null,
   layoutTemplate: "xicaoshi" as const,
 };
+
+/** undergraduate portfolio 详情页静态回退 */
+export const undergraduatePortfolioDetailFallback = {
+  projectDetails: [
+    { label: "Institution", value: "Beijing Jiaotong University (BJTU)" },
+    { label: "Programme", value: "Architecture Design" },
+    { label: "Period", value: "2019–2023" },
+  ] as ProjectDetailItem[],
+  overviewParagraphs: [
+    "Selected undergraduate studio work from Beijing Jiaotong University, compiled as a four-project architectural portfolio for graduate applications.",
+    "The booklet moves from community-scale housing near campus, to a speculative floating high-rise, a historic block renewal study on Beijing's central axis, and an urban insertion project along Xiangchang Road.",
+    "Pages are presented as a flipbook: open from the cover and turn pages with drag, click, or arrow keys — similar to Issuu, but with a book-like page-turn interaction instead of vertical scrolling.",
+  ],
+  introVideoUrl: null as string | null,
+  layoutTemplate: "portfolio" as const,
+};

@@ -20,10 +20,12 @@
     "@vercel/analytics": "^1.6.1",
     "@vercel/speed-insights": "^1.2.0",
     "next": "16.2.1",
+    "page-flip": "^2.0.7",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-easy-crop": "^6.2.3",
     "react-markdown": "^10.1.0",
+    "react-pageflip": "^2.0.3",
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {

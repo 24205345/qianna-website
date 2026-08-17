@@ -35,6 +35,11 @@ yarn-error.log*
 # 允许提交占位模板（不含真实密钥）
 !.env.local.example
 
+# Local dev launcher (machine-specific paths; do not commit)
+scripts/start-dev.local.ps1
+start.bat
+scripts/start-dev.ps1
+
 # vercel
 .vercel
 

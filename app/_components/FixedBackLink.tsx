@@ -25,6 +25,13 @@ function getBackLink(pathname: string): { href: string; label: string } | null {
     return null;
   }
 
+  if (pathname === "/projects/undergraduate-portfolio") {
+    return {
+      href: "/projects?category=architecture-projects",
+      label: "← Back to Projects",
+    };
+  }
+
   const segments = pathname.split("/").filter(Boolean);
 
   if (segments.length === 1 && segments[0] === "guestbook") {
@@ -58,6 +65,10 @@ function isDarkSurface(pathname: string): boolean {
   return segments[0] === "projects" && segments.length >= 2;
 }
 
+function isPortfolioViewer(pathname: string): boolean {
+  return pathname === "/projects/undergraduate-portfolio";
+}
+
 export default function FixedBackLink() {
   const pathname = usePathname();
   const backLink = getBackLink(pathname);
@@ -66,9 +77,11 @@ export default function FixedBackLink() {
     return null;
   }
 
-  const linkClass = isDarkSurface(pathname)
-    ? "fixed bottom-6 left-6 z-40 text-sm text-stone-50/85 underline decoration-stone-50/40 underline-offset-4 transition-colors hover:text-stone-50/95 hover:decoration-stone-50/55"
-    : "fixed bottom-6 left-6 z-40 text-sm text-stone-600 underline decoration-stone-600/45 underline-offset-4 transition-colors hover:text-stone-900 hover:decoration-stone-900/70";
+  const linkClass = isPortfolioViewer(pathname)
+    ? "fixed bottom-6 left-6 z-40 text-sm text-stone-500 underline decoration-stone-700/40 underline-offset-4 transition-colors hover:text-stone-400 hover:decoration-stone-600/50"
+    : isDarkSurface(pathname)
+      ? "fixed bottom-6 left-6 z-40 text-sm text-stone-50/85 underline decoration-stone-50/40 underline-offset-4 transition-colors hover:text-stone-50/95 hover:decoration-stone-50/55"
+      : "fixed bottom-6 left-6 z-40 text-sm text-stone-600 underline decoration-stone-600/45 underline-offset-4 transition-colors hover:text-stone-900 hover:decoration-stone-900/70";
 
   return (
     <Link

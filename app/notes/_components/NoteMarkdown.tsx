@@ -33,6 +33,17 @@ function getFencedLanguage(children: ReactNode): string | null {
   return /language-(\w+)/.exec(className)?.[1] ?? null;
 }
 
+function DarkCodeBlock({ text }: { text: string }) {
+  return (
+    <div className="group relative my-6 overflow-hidden rounded-lg bg-stone-900">
+      <CopyButton text={text} tone="dark" />
+      <pre className="overflow-x-auto whitespace-pre-wrap px-4 py-3.5 pr-12 font-mono text-sm leading-6 text-stone-100">
+        {text}
+      </pre>
+    </div>
+  );
+}
+
 export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
   const usedIds = new Map<string, number>();
 
@@ -83,9 +94,11 @@ export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
               {children}
             </a>
           ),
-          // Inline code only. Fenced blocks are owned by `pre` to avoid double wrappers.
           code: ({ className, children }) => {
-            if (className) {
+            const text = String(children);
+            const isBlock = Boolean(className) || text.includes("\n");
+
+            if (isBlock) {
               return <code className={className}>{children}</code>;
             }
 
@@ -113,14 +126,7 @@ export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
               );
             }
 
-            return (
-              <div className="group relative my-6 overflow-hidden rounded-lg bg-stone-900">
-                <CopyButton text={text} tone="dark" />
-                <pre className="overflow-x-auto px-4 py-3.5 pr-12 font-mono text-sm leading-6 text-stone-100">
-                  {children}
-                </pre>
-              </div>
-            );
+            return <DarkCodeBlock text={text} />;
           },
           table: ({ children }) => (
             <div className="my-6 w-full overflow-x-auto">

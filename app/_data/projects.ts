@@ -18,12 +18,12 @@ export const projects: Project[] = [
     year: "2025",
   },
   {
-    slug: "xicaoshi-red-temple",
+    slug: "undergraduate-portfolio",
     category: "Architecture Project",
-    title: "Landscape Description",
+    title: "Selected Works",
     description:
-      "Block preservation and renewal design for Xicaoshi Red Temple block on Beijing's central axis, using urban acupuncture strategy for sustainable micro-renewal of historic urban areas.",
-    tags: ["Urban Acupuncture", "Heritage Preservation", "Micro-renewal"],
-    year: "2023",
+      "Undergraduate architectural portfolio from Beijing Jiaotong University (2019–2023), featuring four studio projects presented as full-page spreads.",
+    tags: ["BJTU", "Architecture Design", "Portfolio"],
+    year: "2019–2023",
   },
 ];
