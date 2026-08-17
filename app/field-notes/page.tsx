@@ -1,10 +1,23 @@
 import FieldNotesList from "@/app/_components/traces/FieldNotesList";
+import type { Metadata } from "next";
 import { getFieldNotesTripsFallback } from "@/app/_data/field-note-details";
 import { getFieldNotesList } from "@/lib/field-notes/queries";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
   getSiteNavigationItem,
   getSiteNavigationItems,
 } from "@/lib/site/queries";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const navigationItems = await getSiteNavigationItems();
+  const section = getSiteNavigationItem(navigationItems, "field-notes");
+
+  return buildPageMetadata({
+    title: section.title,
+    description: section.description,
+    path: "/field-notes",
+  });
+}
 
 export default async function FieldNotesPage() {
   const [fieldTrips, navigationItems] = await Promise.all([

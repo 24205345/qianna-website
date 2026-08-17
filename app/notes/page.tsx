@@ -1,6 +1,19 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { getSiteNavigationItem, getSiteNavigationItems } from "@/lib/site/queries";
 import { getPublishedNotes } from "@/lib/notes/queries";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const navigationItems = await getSiteNavigationItems();
+  const section = getSiteNavigationItem(navigationItems, "notes-preview");
+
+  return buildPageMetadata({
+    title: section.title,
+    description: section.description,
+    path: "/notes",
+  });
+}
 
 function formatDate(value: string | null): string | null {
   if (!value) return null;

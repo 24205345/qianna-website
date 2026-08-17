@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
 import {
   thesisGalleryFallback,
@@ -7,6 +8,7 @@ import {
 import { thesisDetailFallback, xicaoshiDetailFallback } from "@/app/_data/project-details";
 import type { ProjectFullFallback } from "@/lib/projects/queries";
 import { getProjectFullBySlug, getProjectGallery } from "@/lib/projects/queries";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 import ThesisProjectView from "../_components/ThesisProjectView";
 import XicaoshiProjectView from "../_components/XicaoshiProjectView";
 
@@ -38,6 +40,35 @@ const SLUG_CONFIG: Record<
     galleryFallback: xicaoshiGalleryFallback,
   },
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const config = SLUG_CONFIG[slug];
+  if (!config) {
+    return buildPageMetadata({
+      title: "Project",
+      description: "Project detail on Qianna Wang's portfolio.",
+      path: `/projects/${slug}`,
+    });
+  }
+
+  const project = await getProjectFullBySlug(slug, config.fallback);
+  const description =
+    project.overview_paragraphs?.[0] ??
+    project.subtitle ??
+    `${project.title} — project by Qianna Wang.`;
+
+  return buildPageMetadata({
+    title: project.title,
+    description,
+    path: `/projects/${slug}`,
+    image: project.cover_image_url,
+  });
+}
 
 export default async function ProjectDetailPage({
   params,

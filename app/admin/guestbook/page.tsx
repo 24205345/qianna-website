@@ -1,11 +1,20 @@
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import AdminPageHeader from "@/app/admin/_components/AdminPageHeader";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
   approveGuestbookMessageAction,
   deleteGuestbookMessageAction,
-  rejectGuestbookMessageAction,
+  hideGuestbookMessageAction,
 } from "./actions";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Guestbook",
+  description: "Review and moderate visitor guestbook messages.",
+  path: "/admin/guestbook",
+  noIndex: true,
+});
 
 interface GuestbookAdminRow {
   id: string;
@@ -26,6 +35,13 @@ function formatDate(value: string): string {
     hour: "2-digit",
     minute: "2-digit",
   });
+}
+
+function formatStatusLabel(status: string): string {
+  if (status === "approved") return "Approved";
+  if (status === "rejected") return "Hidden";
+  if (status === "pending") return "Pending";
+  return status;
 }
 
 function statusClass(status: string): string {
@@ -106,9 +122,9 @@ export default async function AdminGuestbookPage() {
                     </p>
                   </div>
                   <span
-                    className={`rounded-full px-2.5 py-1 text-xs font-medium capitalize ${statusClass(entry.status)}`}
+                    className={`rounded-full px-2.5 py-1 text-xs font-medium ${statusClass(entry.status)}`}
                   >
-                    {entry.status}
+                    {formatStatusLabel(entry.status)}
                   </span>
                 </div>
 
@@ -129,13 +145,13 @@ export default async function AdminGuestbookPage() {
                     </form>
                   ) : null}
                   {entry.status !== "rejected" ? (
-                    <form action={rejectGuestbookMessageAction}>
+                    <form action={hideGuestbookMessageAction}>
                       <input type="hidden" name="id" value={entry.id} />
                       <button
                         type="submit"
                         className="rounded-md border border-stone-300 px-3 py-1.5 text-xs text-stone-600 transition-colors hover:bg-stone-50"
                       >
-                        Reject
+                        Hide
                       </button>
                     </form>
                   ) : null}

@@ -1,10 +1,23 @@
 import DrawingsSections from "@/app/_components/traces/DrawingsSections";
+import type { Metadata } from "next";
 import { visualWorkSections } from "@/app/_data/visual-works";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
   getSiteNavigationItem,
   getSiteNavigationItems,
 } from "@/lib/site/queries";
 import { getVisualWorksPageData } from "@/lib/visual-works/queries";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const navigationItems = await getSiteNavigationItems();
+  const section = getSiteNavigationItem(navigationItems, "visual-works");
+
+  return buildPageMetadata({
+    title: section.title,
+    description: section.description,
+    path: "/visual-works",
+  });
+}
 
 export default async function VisualWorksPage() {
   const [categories, navigationItems] = await Promise.all([

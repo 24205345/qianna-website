@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
 import HeroImageDistortionClient from "@/app/_components/HeroImageDistortionClient";
 import GuestbookSection from "@/app/_components/guestbook/GuestbookSection";
@@ -9,11 +10,25 @@ import {
 } from "@/lib/guestbook/queries";
 import { getLatestNotes } from "@/lib/notes/queries";
 import {
+  DEFAULT_SITE_DESCRIPTION,
+  DEFAULT_SITE_TITLE,
+} from "@/lib/seo/constants";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import {
   getSiteNavigationGroup,
   getSiteNavigationItem,
   getSiteNavigationItems,
   getSiteSettings,
 } from "@/lib/site/queries";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  return buildPageMetadata({
+    title: settings.heroTitle || DEFAULT_SITE_TITLE,
+    description: settings.heroSubtitle || DEFAULT_SITE_DESCRIPTION,
+    path: "/",
+  });
+}
 
 export default async function Home() {
   const [siteSettings, navigationItems, latestNotes, aboutContent, guestbookPreview, guestbookTotal] =

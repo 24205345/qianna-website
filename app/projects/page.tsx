@@ -1,16 +1,29 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { projects as staticProjects, type Project } from "@/app/_data/projects";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import {
   filterProjectsByCategory,
   getCategoryBySlug,
 } from "@/lib/projects/categories";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
   getSiteNavigationItem,
   getSiteNavigationItems,
 } from "@/lib/site/queries";
 
 const PROJECTS_LIST_PAGE_TITLE = "Selected Work";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const navigationItems = await getSiteNavigationItems();
+  const section = getSiteNavigationItem(navigationItems, "projects-preview");
+
+  return buildPageMetadata({
+    title: PROJECTS_LIST_PAGE_TITLE,
+    description: section.description,
+    path: "/projects",
+  });
+}
 
 async function getProjects(): Promise<Project[]> {
   if (!isSupabaseConfigured()) {

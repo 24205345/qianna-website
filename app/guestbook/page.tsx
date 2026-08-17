@@ -1,9 +1,18 @@
 import GuestbookMessageList from "@/app/_components/guestbook/GuestbookMessageList";
 import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
+import type { Metadata } from "next";
 import {
   getApprovedGuestbookMessageCount,
   getApprovedGuestbookMessages,
 } from "@/lib/guestbook/queries";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Guestbook",
+  description:
+    "Leave a message on Qianna Wang's portfolio guestbook. Approved notes from visitors.",
+  path: "/guestbook",
+});
 
 export default async function GuestbookPage() {
   const [messages, totalCount] = await Promise.all([

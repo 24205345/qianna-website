@@ -1,0 +1,23 @@
+# Qianna Wang — Personal Portfolio
+
+> Spatial research, urban design, visual storytelling, and AI product work.
+
+## About
+
+- Name: Qianna Wang
+- Website: https://www.qiannawang.com
+- Focus: architecture, urban design, spatial data, enterprise SaaS, AI products
+
+## Main sections
+
+- Home: https://www.qiannawang.com/
+- About: https://www.qiannawang.com/about — background, timeline, current focus
+- Projects: https://www.qiannawang.com/projects — thesis research, architecture, digital product work
+- Notes: https://www.qiannawang.com/notes — essays and technical notes
+- Traces: https://www.qiannawang.com/traces — photography, drawings, field notes
+- Guestbook: https://www.qiannawang.com/guestbook — visitor messages (moderated)
+
+## Content policy
+
+Creative work on this site belongs to Qianna Wang unless otherwise noted.
+Please cite https://www.qiannawang.com when referencing this portfolio.

@@ -2,6 +2,7 @@ import DrawingsSections from "@/app/_components/traces/DrawingsSections";
 import FieldNotesList from "@/app/_components/traces/FieldNotesList";
 import PhotographySections from "@/app/_components/traces/PhotographySections";
 import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
+import type { Metadata } from "next";
 import { getFieldNotesTripsFallback } from "@/app/_data/field-note-details";
 import { photographySections } from "@/app/_data/photography";
 import {
@@ -11,6 +12,7 @@ import {
 import { visualWorkSections } from "@/app/_data/visual-works";
 import { getFieldNotesList } from "@/lib/field-notes/queries";
 import { getPhotographyPageData } from "@/lib/photography/queries";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
   getSiteNavigationGroup,
   getSiteNavigationItem,
@@ -24,6 +26,17 @@ const TAB_COPY: Record<TracesTab, string> = {
   drawings: "visual-works",
   "field-notes": "field-notes",
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const navigationItems = await getSiteNavigationItems();
+  const section = getSiteNavigationItem(navigationItems, "traces-hub");
+
+  return buildPageMetadata({
+    title: section.title,
+    description: section.description,
+    path: "/traces",
+  });
+}
 
 export default async function TracesPage({
   searchParams,

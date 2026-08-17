@@ -1,11 +1,24 @@
 import PhotographySections from "@/app/_components/traces/PhotographySections";
 import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
+import type { Metadata } from "next";
 import { photographySections } from "@/app/_data/photography";
 import { getPhotographyPageData } from "@/lib/photography/queries";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
   getSiteNavigationItem,
   getSiteNavigationItems,
 } from "@/lib/site/queries";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const navigationItems = await getSiteNavigationItems();
+  const section = getSiteNavigationItem(navigationItems, "photography");
+
+  return buildPageMetadata({
+    title: section.title,
+    description: section.description,
+    path: "/photography",
+  });
+}
 
 export default async function PhotographyPage() {
   const [collections, navigationItems] = await Promise.all([

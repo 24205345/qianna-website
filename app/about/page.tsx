@@ -1,12 +1,38 @@
 import { getAboutPageContent } from "@/lib/about/queries";
+import type { Metadata } from "next";
 import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
 import AboutProfilePhoto from "@/app/_components/about/AboutProfilePhoto";
+import JsonLd from "@/app/_components/seo/JsonLd";
+import { getSiteUrl } from "@/lib/seo/constants";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getAboutPageContent();
+  return buildPageMetadata({
+    title: content.pageTitle,
+    description: content.pageDescription,
+    path: "/about",
+    image: content.profileImageUrl,
+  });
+}
 
 export default async function AboutPage() {
   const content = await getAboutPageContent();
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Qianna Wang",
+          url: getSiteUrl(),
+          description: content.pageDescription,
+          image: content.profileImageUrl || undefined,
+          jobTitle: content.timeline[0]?.title,
+          knowsAbout: content.workingAcross,
+        }}
+      />
       <PageViewTracker contentType="page" contentSlug="about" />
       <main className="mx-auto w-full max-w-5xl px-6 py-16 md:px-10 md:py-20">
         <p className="text-xs tracking-[0.24em] text-stone-500 uppercase">About Me</p>

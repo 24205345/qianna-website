@@ -36,7 +36,7 @@ export async function approveGuestbookMessageAction(formData: FormData) {
   revalidateGuestbookPaths();
 }
 
-export async function rejectGuestbookMessageAction(formData: FormData) {
+export async function hideGuestbookMessageAction(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
 
@@ -47,7 +47,7 @@ export async function rejectGuestbookMessageAction(formData: FormData) {
     .eq("id", id);
 
   if (error) {
-    throw new Error(`Failed to reject message: ${error.message}`);
+    throw new Error(`Failed to hide message: ${error.message}`);
   }
 
   revalidateGuestbookPaths();
