@@ -8,6 +8,7 @@ import {
   DEFAULT_SITE_DESCRIPTION,
   DEFAULT_SITE_TITLE,
   SITE_NAME,
+  buildCanonicalUrl,
   getSiteUrl,
 } from "@/lib/seo/constants";
 import "./globals.css";
@@ -29,12 +30,16 @@ export const metadata: Metadata = {
     template: `%s · ${SITE_NAME}`,
   },
   description: DEFAULT_SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_NAME, url: buildCanonicalUrl("/") }],
+  creator: SITE_NAME,
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: SITE_NAME,
     title: DEFAULT_SITE_TITLE,
     description: DEFAULT_SITE_DESCRIPTION,
+    url: buildCanonicalUrl("/"),
   },
   twitter: {
     card: "summary_large_image",
@@ -59,13 +64,24 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <JsonLd
-          data={{
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            name: SITE_NAME,
-            url: getSiteUrl(),
-            description: DEFAULT_SITE_DESCRIPTION,
-          }}
+          data={[
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: SITE_NAME,
+              url: buildCanonicalUrl("/"),
+              description: DEFAULT_SITE_DESCRIPTION,
+              inLanguage: "en",
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: SITE_NAME,
+              url: buildCanonicalUrl("/"),
+              jobTitle: "Urban designer and spatial researcher",
+              description: DEFAULT_SITE_DESCRIPTION,
+            },
+          ]}
         />
         {children}
         <FixedBackLink />

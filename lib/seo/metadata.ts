@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE_NAME } from "./constants";
+import { buildCanonicalUrl, SITE_NAME } from "./constants";
 
 const MAX_DESCRIPTION = 160;
 
@@ -17,6 +17,8 @@ interface PageMetadataInput {
   image?: string | null;
   type?: "website" | "article";
   noIndex?: boolean;
+  /** Use for homepage — skip root layout title template suffix. */
+  absoluteTitle?: boolean;
 }
 
 export function buildPageMetadata({
@@ -26,24 +28,27 @@ export function buildPageMetadata({
   image,
   type = "website",
   noIndex = false,
+  absoluteTitle = false,
 }: PageMetadataInput): Metadata {
   const desc = truncateDescription(description);
+  const canonical = buildCanonicalUrl(path);
   const openGraphImages = image
     ? [{ url: image, alt: title }]
     : undefined;
 
   return {
-    title,
+    title: absoluteTitle ? { absolute: title } : title,
     description: desc || undefined,
     alternates: {
-      canonical: path,
+      canonical,
     },
     openGraph: {
       title,
       description: desc || undefined,
-      url: path,
+      url: canonical,
       siteName: SITE_NAME,
       type,
+      locale: "en_US",
       ...(openGraphImages ? { images: openGraphImages } : {}),
     },
     twitter: {

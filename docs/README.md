@@ -34,6 +34,7 @@
 | [`experience-admin-sidebar-profile-crop.md`](experience-admin-sidebar-profile-crop.md) | Admin 侧栏、单图 16:9 裁切上传 |
 | [`experience-guestbook.md`](experience-guestbook.md) | 留言审核、过滤、RLS、Turnstile |
 | [`experience-homepage-motion.md`](experience-homepage-motion.md) | 首页 Hero / Reveal 滚入、grid 卡片动效 |
+| [`experience-seo-metadata.md`](experience-seo-metadata.md) | 搜索 title/description、canonical 域名 |
 | [`experience-notes-cms.md`](experience-notes-cms.md) | 独立 Notes 模块 |
 | [`experience-notes-editor.md`](experience-notes-editor.md) | Notes 编辑器 |
 | [`experience-notes-markdown-ui.md`](experience-notes-markdown-ui.md) | Notes Markdown / TOC 前台 |
@@ -57,8 +58,10 @@
 | 文档 | 说明 |
 |------|------|
 | [`notes/ai-video-downloader-summarizer.zh.md`](notes/ai-video-downloader-summarizer.zh.md) | AI 视频笔记 |
-| [`notes/aliyun-ecs-docker-deploy.md`](notes/aliyun-ecs-docker-deploy.md) | ECS 部署指南（中文） |
+| [`notes/aliyun-ecs-docker-deploy.md`](notes/aliyun-ecs-docker-deploy.md) | ECS 部署指南 · Workbench 路径（中文） |
 | [`notes/aliyun-ecs-docker-deploy.en.md`](notes/aliyun-ecs-docker-deploy.en.md) | 同上（英文） |
+| [`notes/aliyun-ecs-baota-docker-deploy.md`](notes/aliyun-ecs-baota-docker-deploy.md) | ECS 部署指南 · 宝塔路径（中文） |
+| [`notes/aliyun-ecs-baota-docker-deploy.en.md`](notes/aliyun-ecs-baota-docker-deploy.en.md) | 同上（英文） |
 
 ---
 
