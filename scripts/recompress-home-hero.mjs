@@ -1,12 +1,7 @@
 /**
- * 一次性迁移：首页 Hero 图压缩上传到 Supabase Storage，
- * 并写入 site_settings.hero_image_url。
- *
- * 前置：
- * 1. 已执行 supabase/migrations/0005_site_settings.sql
- * 2. 如本地缺图，先运行 scripts/download-home-hero.ps1
- *
- * 用法：npm run migrate:home
+ * 从当前 Storage URL 或本地源图重新压缩并覆盖 home-hero.webp
+ * 用法：npm run recompress:home
+ * 可选环境变量 HERO_SOURCE_URL（默认拉取线上 home-hero.webp）
  */
 
 import { createClient } from "@supabase/supabase-js";
@@ -18,10 +13,11 @@ import { fileURLToPath } from "url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SOURCE = join(ROOT, "public", "images", "hero-image.jpg");
 const BUCKET = "portfolio-media";
-/** Keep in sync with lib/media/hero-image.ts */
 const STORAGE_PATH = "site/home-hero.webp";
 const HERO_IMAGE_MAX_WIDTH = 1920;
 const HERO_IMAGE_WEBP_QUALITY = 75;
+const DEFAULT_SOURCE_URL =
+  "https://aqsdwfocoocnzyxopvvg.supabase.co/storage/v1/object/public/portfolio-media/site/home-hero.webp";
 
 function loadEnvLocal() {
   const envPath = join(ROOT, ".env.local");
@@ -38,14 +34,23 @@ function loadEnvLocal() {
   return env;
 }
 
-async function compressHero() {
-  if (!existsSync(SOURCE)) {
-    throw new Error(
-      `缺少文件: ${SOURCE}。请先运行 scripts/download-home-hero.ps1`
-    );
+async function loadSourceBuffer() {
+  if (existsSync(SOURCE)) {
+    console.log(`使用本地源图: ${SOURCE}`);
+    return readFileSync(SOURCE);
   }
 
-  return sharp(readFileSync(SOURCE))
+  const url = process.env.HERO_SOURCE_URL?.trim() || DEFAULT_SOURCE_URL;
+  console.log(`下载当前 Hero: ${url}`);
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`下载失败: ${response.status} ${response.statusText}`);
+  }
+  return Buffer.from(await response.arrayBuffer());
+}
+
+async function compressHero(input) {
+  return sharp(input)
     .rotate()
     .resize({ width: HERO_IMAGE_MAX_WIDTH, withoutEnlargement: true })
     .webp({ quality: HERO_IMAGE_WEBP_QUALITY })
@@ -72,8 +77,12 @@ async function main() {
   });
   if (authError) throw new Error(`登录失败: ${authError.message}`);
 
+  const source = await loadSourceBuffer();
+  console.log(`源图大小: ${(source.length / 1024).toFixed(0)} KB`);
+
   console.log("压缩 Hero 图片…");
-  const buffer = await compressHero();
+  const buffer = await compressHero(source);
+  console.log(`压缩后: ${(buffer.length / 1024).toFixed(0)} KB`);
 
   console.log(`上传到 Storage: ${STORAGE_PATH}`);
   const { error: uploadError } = await supabase.storage
@@ -89,18 +98,15 @@ async function main() {
   const { error: upsertError } = await supabase.from("site_settings").upsert(
     {
       singleton_key: "home",
-      hero_title: "Qianna Wang",
-      hero_subtitle:
-        "Urban design, visual storytelling, and spatial observation.",
-      hero_cta_label: "Enter",
       hero_image_url: data.publicUrl,
-      hero_image_alt: "Qianna Wang cover image",
     },
     { onConflict: "singleton_key" }
   );
-  if (upsertError) throw new Error(`写入 site_settings 失败: ${upsertError.message}`);
+  if (upsertError) {
+    throw new Error(`更新 site_settings 失败: ${upsertError.message}`);
+  }
 
-  console.log(`\n✅ Home Hero 迁移完成: ${(buffer.length / 1024).toFixed(0)} KB`);
+  console.log(`\n✅ Hero 已重新压缩并上传`);
   console.log(data.publicUrl);
 }
 

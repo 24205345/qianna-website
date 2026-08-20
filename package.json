@@ -10,6 +10,7 @@
     "lint": "eslint",
     "migrate:media": "node scripts/migrate-project-media.mjs",
     "migrate:home": "node scripts/migrate-home-hero.mjs",
+    "recompress:home": "node scripts/recompress-home-hero.mjs",
     "migrate:photography": "node --experimental-strip-types scripts/migrate-photography.mjs",
     "migrate:visual-works": "node --experimental-strip-types scripts/migrate-visual-works.mjs",
     "migrate:field-notes": "node --experimental-strip-types scripts/migrate-field-notes.mjs"

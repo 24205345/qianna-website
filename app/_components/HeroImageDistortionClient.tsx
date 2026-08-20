@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { HERO_DISTORTION_ENABLED } from "./hero-distortion-config";
 
 const HeroImageDistortion = dynamic(() => import("./HeroImageDistortion"), {
@@ -24,13 +25,14 @@ function HeroStaticImage({
 }: HeroImageDistortionClientProps) {
   return (
     <div className="absolute inset-0 overflow-hidden">
-      {/* Plain img keeps LCP simple while ripple is disabled. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={imageUrl}
         alt={alt}
-        className="hero-photo-enter absolute inset-0 h-full w-full object-cover object-center"
-        fetchPriority="high"
+        fill
+        priority
+        sizes="100vw"
+        quality={75}
+        className="hero-photo-enter object-cover object-center"
       />
     </div>
   );

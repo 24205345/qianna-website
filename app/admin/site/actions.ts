@@ -3,6 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { SiteNavigationGroup } from "@/app/_data/site-navigation";
+import {
+  HERO_IMAGE_STORAGE_PATH,
+} from "@/lib/media/hero-image";
+import { compressHeroImage } from "@/lib/media/compress-hero-image";
 import { createClient } from "@/lib/supabase/server";
 
 const BUCKET = "portfolio-media";
@@ -67,18 +71,22 @@ async function uploadHeroImage(
 ): Promise<string | null> {
   if (!file || file.size === 0) return null;
 
-  const ext = file.name.includes(".") ? file.name.split(".").pop() : "bin";
-  const path = `site/home-hero-${Date.now()}.${ext}`;
+  const raw = Buffer.from(await file.arrayBuffer());
+  const compressed = await compressHeroImage(raw);
 
-  const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
-    upsert: false,
-    contentType: file.type || undefined,
-  });
+  const { error } = await supabase.storage.from(BUCKET).upload(
+    HERO_IMAGE_STORAGE_PATH,
+    compressed,
+    {
+      upsert: true,
+      contentType: "image/webp",
+    }
+  );
   if (error) {
     throw new Error(`Hero image upload failed: ${error.message}`);
   }
 
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+  const { data } = supabase.storage.from(BUCKET).getPublicUrl(HERO_IMAGE_STORAGE_PATH);
   return data.publicUrl;
 }
 

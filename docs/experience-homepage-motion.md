@@ -87,3 +87,17 @@ export const HERO_DISTORTION_ENABLED = false;
 - **不要在 Admin** 加 Reveal（操作效率优先）
 - 其他列表页若要复用，直接 import `Reveal`；列表项 stagger 用 `delay={80 + index * 70}` 一类公式
 - 动效时长保持克制（0.6–1.2s），ease-out，与 stone 色系站型一致
+
+---
+
+## Hero 封面图加载
+
+| 层级 | 做法 |
+|------|------|
+| 前台 | `next/image` + `fill` + `priority` + `sizes="100vw"` — Vercel 按视口宽度输出 WebP/AVIF |
+| 后台上传 | `compressHeroImage` → WebP 1920px / q75 → `site/home-hero.webp` |
+| 重新迁移 | `npm run migrate:home`（需本地 `public/images/hero-image.jpg`） |
+
+勿用裸 `<img src={supabaseUrl}>` 加载全尺寸 Storage 文件（LCP 慢）。
+
+常量：`lib/media/hero-image.ts` · 压缩：`lib/media/compress-hero-image.ts`
