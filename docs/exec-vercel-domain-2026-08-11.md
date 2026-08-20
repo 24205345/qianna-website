@@ -98,6 +98,16 @@ https://qianna-site.vercel.app/auth/confirm
 
 README、名片、作品集链接统一用：**https://www.qiannawang.com**
 
+### SEO / Search Console（2026-08-20 补充）
+
+| 项 | 说明 |
+|----|------|
+| 环境变量 | `NEXT_PUBLIC_SITE_URL=https://www.qiannawang.com`（Project → Settings → Environment Variables） |
+| DNS TXT | vercel.com/domains → qiannawang.com → DNS Records（GSC 域名验证） |
+| 站点地图 | GSC 提交 `https://www.qiannawang.com/sitemap.xml` |
+
+详见 [`exec-search-console-2026-08-20.md`](exec-search-console-2026-08-20.md)。
+
 ---
 
 ## 六、常见位置速查

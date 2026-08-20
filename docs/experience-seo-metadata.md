@@ -50,14 +50,40 @@ if (process.env.VERCEL_ENV === "production") {
 NEXT_PUBLIC_SITE_URL=https://www.qiannawang.com
 ```
 
-Production + Preview 均配置，避免 preview 部署 sitemap/robots 指错域。
+Production + Preview 均配置，避免 preview 部署 sitemap/robots 指错域。配置后需 **Redeploy** 才生效。
+
+路径：**Project → Settings → Environment Variables**（不是 Environments 页面）。
+
+---
+
+## Google Search Console 操作要点
+
+完整步骤见 [`exec-search-console-2026-08-20.md`](exec-search-console-2026-08-20.md)。
+
+### DNS TXT 验证域名
+
+- 入口：**vercel.com/domains** → `qiannawang.com` → DNS Records（不是 Project Domains 里点域名链接）
+- 添加 `TXT` / Name `@` / Value 为 Google 提供的整串
+- **勿删** TXT，否则失去已验证状态
+
+### 站点地图
+
+- 路径：Search Console → 编制索引 → 站点地图
+- 域名资源请提交完整 URL：`https://www.qiannawang.com/sitemap.xml`
+- 仅填 `sitemap.xml` 可能报「站点地图地址无效」
+
+### 请求编入索引
+
+- 在 **顶部网址检查** 输入 `https://www.qiannawang.com/`
+- 若已显示「网址已收录到 Google」，无需再点请求编入索引
+- 左侧「网页」报表约 1 天后才有数据
 
 ---
 
 ## 部署后让 Google 更新
 
 1. 确认线上 `<title>` / `canonical` 正确（View Source 或 Rich Results Test）
-2. [Google Search Console](https://search.google.com/search-console) → URL 检查 → 输入 `https://www.qiannawang.com/` → **请求编入索引**
+2. [Google Search Console](https://search.google.com/search-console) 完成域名验证并提交站点地图（见 exec 文档）
 3. 旧摘要（如 `Create Next App`）可能缓存数天～数周，canonical 正确后会逐步替换
 
 ---

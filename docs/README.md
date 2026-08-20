@@ -26,6 +26,7 @@
 | [`exec-homepage-motion-2026-08-17.md`](exec-homepage-motion-2026-08-17.md) | 首页 Hero 动效、涟漪关闭、Reveal 组件 |
 | [`exec-admin-about-analytics-2026-08-11.md`](exec-admin-about-analytics-2026-08-11.md) | Admin 侧栏、About 照片、Analytics |
 | [`exec-vercel-domain-2026-08-11.md`](exec-vercel-domain-2026-08-11.md) | 自定义域名、Supabase Auth Redirect |
+| [`exec-search-console-2026-08-20.md`](exec-search-console-2026-08-20.md) | Search Console 验证、站点地图、Vercel 环境变量 |
 
 ### 可复用模式（experience）
 
