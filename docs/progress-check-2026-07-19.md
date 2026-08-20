@@ -1,7 +1,7 @@
 # 进度检查记录（2026-07-19）
 
 > **历史快照**：记录当时拉代码后的状态，**不代表当前进度**。  
-> 最新状态请以 `docs/codex-handoff.md` 与 `docs/cms-migration-checklist.md` 为准（截至 2026-08-11 已含 Notes / Traces / Guestbook / Analytics / Admin 侧栏 / 自定义域名等）。
+> 最新状态请以 `docs/developer-guide.md` 与 `docs/cms-migration-checklist.md` 为准（截至 2026-08-11 已含 Notes / Traces / Guestbook / Analytics / Admin 侧栏 / 自定义域名等）。
 
 > 本机路径：`D:\projects\personal_website`  
 > 远程：`https://github.com/24205345/qianna-website.git`  
@@ -39,7 +39,7 @@
 
 1. **数字产品项目「筑建 ERP」未进远程**：静态数据与 seed 仅有 `thesis`、`xicaoshi-red-temple`；详情页 `SLUG_CONFIG` 也只注册这两套模板。
 2. **本机未配 Supabase 环境变量**，无法直接验证 `/admin` 与线上一致的数据流。
-3. ~~**`docs/cms-migration-checklist.md` / `codex-handoff.md` 未反映 About 已完成**~~ → 已于 2026-08-11 同步更新。
+3. ~~**`docs/cms-migration-checklist.md` / `developer-guide.md` 未反映 About 已完成**~~ → 已于 2026-08-11 同步更新。
 
 ---
 

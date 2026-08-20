@@ -1,10 +1,10 @@
-# 开发交接文档（qianna-website）
+# 开发者指南（qianna-website）
 
-> **Agent / 开发者第一份必读。** 常驻规则见根目录 [`AGENTS.md`](../AGENTS.md)；文档索引见 [`docs/README.md`](README.md)。
+> **Agent / 开发者第一份必读。** 常驻规则见根目录 [`AGENTS.md`](../AGENTS.md)；**系统架构**见 [`architecture.md`](architecture.md)；文档索引见 [`docs/README.md`](README.md)。
 >
 > 项目路径：`G:\project\qianna-website`  
 > 分支：`main`（CMS P1–P11 已完成）  
-> 最后更新：2026-08-11  
+> 最后更新：2026-08-20  
 > 生产域名：**https://www.qiannawang.com**
 
 ---
@@ -19,23 +19,25 @@ Next.js 16.2.1 + React 19 + TypeScript + Tailwind v4 **个人作品集网站**�
 
 ---
 
-## 2. CMS 进度（截至 2026-08-11）
+## 2. CMS 进度（截至 2026-08-20）
 
 | 模块 | 状态 | 前台 | 后台 | 迁移 / 备注 |
 |---|---|---|---|---|
-| Projects 列表+媒体+详情 | ✅ | `/projects`, `/projects/[slug]` | `/admin/projects` | `npm run migrate:media` |
+| Projects 列表+媒体+详情 | ✅ | `/projects`, `/projects/[slug]` | `/admin/projects` | `npm run migrate:media`；0017 portfolio flipbook |
 | Photography | ✅ | `/photography` | `/admin/photography` | `npm run migrate:photography` |
 | Visual Works | ✅ | `/visual-works` | `/admin/visual-works` | `npm run migrate:visual-works` |
 | Field Notes | ✅ | `/field-notes`, `/field-notes/[slug]` | `/admin/field-notes` | `npm run migrate:field-notes` |
 | **Traces Hub** | ✅ | `/traces`（Tab）+ 旧路径 | 侧栏 Traces 子项 | `0012_traces_navigation.sql` |
-| **Home Hero** | ✅ | `/` | `/admin/site` | `npm run migrate:home` |
+| **Home Hero** | ✅ | `/` | `/admin/site` | `migrate:home` / `recompress:home`；`next/image` |
 | **Site Navigation Copy** | ✅ | `/`, linked page headings | `/admin/site` | `0006_site_navigation_items.sql` |
 | **About** | ✅ | `/about`（16:9 个人照片 + Timeline） | `/admin/about` | `0007` + `0016_about_profile_image.sql` |
 | **Notes** | ✅ | `/notes`, `/notes/[slug]` | `/admin/notes` | `0010_notes.sql` |
-| **Guestbook** | ✅ | 首页 About Me 下预览 3 条 | `/admin/guestbook` | `0013` / `0014` |
+| **Guestbook** | ✅ | 首页 About Me 下预览 3 条 | `/admin/guestbook` | Turnstile；`0013` / `0014` |
 | **Analytics** | ✅ | 全站 `PageViewTracker` | `/admin/analytics` | `0015_page_views.sql` |
+| **首页动效** | ✅ | Hero Ken Burns + Reveal 滚入 | — | 涟漪默认关闭；见 `experience-homepage-motion.md` |
+| **SEO** | ✅ | canonical / JSON-LD / sitemap | — | GSC 已验证；见 `experience-seo-metadata.md` |
 
-Admin 导航（2026-08-11）：**左侧边栏** + Projects / Traces 二级嵌套，详见 `docs/exec-admin-about-analytics-2026-08-11.md`。
+Admin 导航：**左侧边栏** + Projects / Traces 二级嵌套，详见 `docs/exec-admin-about-analytics-2026-08-11.md`。
 
 Supabase 数据量（已验证）：
 - `photography_photos`: 46
@@ -161,36 +163,19 @@ GitHub raw 下载偶发 EOF（尤其 gliding 大图），**失败文件单独重
 
 ---
 
-## 5. 架构模式（新模块）
+## 5. 架构说明
 
-每个 CMS 模块统一四层：
+CMS 四层模式、数据流、Auth / SEO / Analytics / 媒体管线等**稳定架构**已独立成文：
 
-```
-supabase/migrations/000X_*.sql     → 建表 + RLS + GRANT（MCP apply_migration 或 SQL Editor）
-app/_data/*.ts                     → 静态回退数据（build 无 Supabase 也能过）
-lib/<module>/queries.ts            → isSupabaseConfigured() + 查库 + fallback
-app/<module>/page.tsx              → Server Component 调 queries
-app/admin/<module>/**              → CRUD + MediaManager + Server Actions
-scripts/migrate-<module>.mjs       → sharp 压缩 → Storage → 写 DB
-scripts/download-*-media.ps1       → 从 GitHub raw 拉 public 文件
-```
+→ **[`docs/architecture.md`](architecture.md)**
 
-### 前台回退约定
-
-`isSupabaseConfigured()` 为 false，或查询失败/空结果 → 使用 `app/_data` 静态数据，**页面视觉不变**。
-
-### 后台约定
-
-- `middleware.ts` 保护 `/admin/*`
-- 封面/图片上传 → `portfolio-media` bucket → `getPublicUrl`
-- Server Actions 末尾 `revalidatePath`
-- **`"use server"` 文件不能 re-export 其他 server action**（会 build 失败）
+新模块开发前先读 §6「CMS 模块模式」；改完架构级能力时同步更新该文件。
 
 ---
 
 ## 6. 关键文件索引
 
-### 数据库迁移（0001–0016 摘要）
+### 数据库迁移（0001–0018 摘要）
 
 ```
 0001 init (projects)     0009 projects preview copy
@@ -201,6 +186,8 @@ scripts/download-*-media.ps1       → 从 GitHub raw 拉 public 文件
 0006 site_navigation     0014 guestbook email
 0007 about_page_content  0015 page_views (analytics)
 0008 projects preview    0016 about profile_image
+                         0017 undergraduate_portfolio
+                         0018 hide_xicaoshi_project
 ```
 
 完整文件见 `supabase/migrations/`。
@@ -208,7 +195,7 @@ scripts/download-*-media.ps1       → 从 GitHub raw 拉 public 文件
 ### 动态路由详情页
 
 ```
-app/projects/[slug]/page.tsx               layout: thesis | xicaoshi
+app/projects/[slug]/page.tsx               layout: thesis | xicaoshi | portfolio
 app/field-notes/[slug]/page.tsx            layout: gallery | narrative
 ```
 
@@ -277,9 +264,10 @@ snowboard 的 `spring_chute` 区块：`caption` 存 footer 文案（见 `queries
 ## 8. 首页 Hero（已 CMS 化）
 
 - 数据表：`site_settings`（`singleton_key = 'home'`）
-- 前台：`lib/site/queries.ts` → `app/page.tsx`；失败时回退 `app/_data/site-settings.ts`
-- 后台：`/admin/site` 编辑文案 + 上传 Hero 图到 `portfolio-media/site/`
-- 首次迁移：`scripts/download-home-hero.ps1` → `npm run migrate:home`（sharp 压缩 WebP）
+- 前台：`lib/site/queries.ts` → `HeroImageDistortionClient`（`next/image`，`priority`）
+- 压缩：`lib/media/compress-hero-image.ts`（1920px WebP q75）；Storage 约 **399KB**
+- 后台：`/admin/site` 上传时自动压缩；存量重压：`npm run recompress:home`
+- 首次迁移：`scripts/download-home-hero.ps1` → `npm run migrate:home`
 
 本地 sparse-checkout 若无 `public/images/hero-image.jpg`，跑 download 脚本后再 migrate；否则 migrate 会报错。
 
@@ -293,22 +281,23 @@ snowboard 的 `spring_chute` 区块：`caption` 存 footer 文案（见 `queries
 | 首页封面空白 | 缺 hero-image.jpg | `.\scripts\download-home-hero.ps1` + 强刷 Ctrl+Shift+R |
 | permission denied for table | 缺 GRANT | migration 里补 GRANT（见 0001 注释） |
 | migrate 登录失败 | 密码错 / 末尾漏字符 | 检查 `.env.local` SUPABASE_ADMIN_PASSWORD |
-| 重置密码邮件跳首页 | 缺 callback 路由或未配 Redirect URLs | 主域名 `https://www.qiannawang.com` 的 callback 需写入 Supabase；见 `docs/exec-vercel-domain-2026-08-11.md` 与 `docs/supabase-cms-改造记录.md` §4.5 |
+| 重置密码邮件跳首页 | 缺 callback 路由或未配 Redirect URLs | 主域名 `https://www.qiannawang.com` 的 callback 需写入 Supabase；见 `docs/exec-vercel-domain-2026-08-11.md` |
 | 忘记管理员密码 | Supabase Auth 无明文可查 | `/admin/login` → Forgot password；或 Supabase Users 直接改密 |
 | build 失败 use server re-export | photography actions 曾 re-export signOutAction | 从 `@/app/admin/projects/actions` 直接 import |
 | Next 16 params | 动态路由 params 是 Promise | `const { slug } = await params` |
 | 公司网络 git clone 失败 | 大 binary | sparse-checkout + raw 下载脚本 |
+| Google 摘要仍显示 Create Next App | 缺生产 SEO metadata / GSC 未更新 | 见 `experience-seo-metadata.md`、`exec-search-console-2026-08-20.md` |
 
 ---
 
-## 10. 推荐下一步（2026-08-11 现状）
+## 10. 推荐下一步（2026-08-20 现状）
 
 CMS 与前台主线已完成。常见后续：
 
-1. **内容**：在 `/admin/notes` 发笔记；`/admin/about` 上传并裁切个人照片；各模块 Publish 内容
-2. **域名 / Auth**：确认 Supabase **Site URL** 为 `https://www.qiannawang.com`，Redirect URLs 含 www 与 apex（见 `docs/exec-vercel-domain-2026-08-11.md`）
-3. **验证**：`npm run lint` + `npm run build`；目视 `/`、`/about`、`/admin/analytics`
-4. **可选增强**：Hero / 其他模块复用 `ProfilePhotoCropField` 裁切模式；Markdown 编辑器升级
+1. **内容**：在 `/admin/notes` 发笔记；各模块 Publish 内容
+2. **监控**：GSC 观察收录与摘要；`/admin/analytics` 看访问
+3. **验证**：`npm run lint` + `npm run build`；目视 `/`、`/about`
+4. **可选增强**：Hero 裁切 UI 复用 About 的 `ProfilePhotoCropField`；Markdown 编辑器升级
 
 ---
 
@@ -319,21 +308,19 @@ CMS 与前台主线已完成。常见后续：
 | 文档 | 用途 |
 |---|---|
 | [`AGENTS.md`](../AGENTS.md) | Agent 常驻规则（Cursor 自动读取） |
-| [`docs/README.md`](README.md) | 文档索引 + 维护约定 |
-| `docs/codex-handoff.md` | **本文** |
-| `docs/cms-migration-checklist.md` | 模块 checklist |
+| [`docs/architecture.md`](architecture.md) | 系统架构、分层、横切能力 |
+| [`docs/developer-guide.md`](developer-guide.md) | **本文**（进度、环境、索引） |
+| [`docs/cms-migration-checklist.md`](cms-migration-checklist.md) | 模块 checklist |
 | `docs/exec-*.md` | 单次功能执行记录 |
 | `docs/experience-*.md` | 可复用模式 |
-| `README.md` | 对外访客说明（保持简短） |
-
-**文档方案：** 轻量 `docs/` 体系（方案 B），不引入 Trellis。
+| [`README.md`](../README.md) | 对外访客说明（保持简短） |
 
 ---
 
 ## 12. 新会话开场 Prompt 模板
 
 ```
-请先读 AGENTS.md 和 docs/codex-handoff.md，然后继续 qianna-website 开发。
+请先读 AGENTS.md、docs/developer-guide.md 和 docs/architecture.md，然后继续 qianna-website 开发。
 
 生产站：https://www.qiannawang.com
 分支：main（CMS 已完成）
@@ -353,6 +340,7 @@ CMS 与前台主线已完成。常见后续：
 "lint": "eslint",
 "migrate:media": "node scripts/migrate-project-media.mjs",
 "migrate:home": "node scripts/migrate-home-hero.mjs",
+"recompress:home": "node scripts/recompress-home-hero.mjs",
 "migrate:photography": "node --experimental-strip-types scripts/migrate-photography.mjs",
 "migrate:visual-works": "node --experimental-strip-types scripts/migrate-visual-works.mjs",
 "migrate:field-notes": "node --experimental-strip-types scripts/migrate-field-notes.mjs"

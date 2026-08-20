@@ -2,7 +2,7 @@
 
 个人作品集 · [www.qiannawang.com](https://www.qiannawang.com) · Supabase CMS + Next.js 16
 
-**项目细节一律查 [`docs/codex-handoff.md`](docs/codex-handoff.md)**；文档索引见 [`docs/README.md`](docs/README.md)。
+**项目细节查 [`docs/developer-guide.md`](docs/developer-guide.md)**；**架构见 [`docs/architecture.md`](docs/architecture.md)**；文档索引见 [`docs/README.md`](docs/README.md)。
 
 ---
 

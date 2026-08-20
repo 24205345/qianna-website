@@ -293,7 +293,7 @@ field_note_media (id, field_note_id, type, url, title, caption, sort_order)
 
 ## 给 Coding Agent 的执行约定
 
-0. 先读根目录 **`AGENTS.md`** 与 **`docs/codex-handoff.md`**；按任务查 **`docs/README.md`**
+0. 先读根目录 **`AGENTS.md`**、**`docs/developer-guide.md`** 与 **`docs/architecture.md`**；按任务查 **`docs/README.md`**
 1. **一次只做一个阶段/功能**，验证后再开下一项
 2. 每步结束：`npm run lint` → `npm run build` → `git commit`
 3. 密钥只放 `.env.local`，不提交 GitHub
@@ -312,4 +312,4 @@ CMS 与 Analytics 主线已完成。可继续：
 3. **Supabase Auth Redirect URLs** 与自定义域名对齐
 4. 可选：Markdown 编辑器增强、更多项目 slug 模板
 
-本地开发、sparse-checkout、下载脚本等详见 **`docs/codex-handoff.md` 第 3–4 节**。
+本地开发、sparse-checkout、下载脚本等详见 **`docs/developer-guide.md` 第 3–4 节**。

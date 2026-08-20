@@ -234,7 +234,7 @@ npm run dev        # 本地预览
 8. **模块化 CMS 复制模式**：Photography / Visual Works / Field Notes 均按「建表 → queries + _data 回退 → 前台读库 → admin CRUD → migrate + download 脚本」完成；Field Notes 额外用 `layout_template: gallery | narrative` 分支渲染。
 9. **首页 Hero 已 CMS 化**：读 `site_settings` + `/admin/site`；本地 sparse-checkout 缺图时跑 `download-home-hero.ps1` + `migrate:home`。
 10. **本地 dev 易忘**：`npm run dev` 终端不能关；Node 路径 `G:\node-v24.16.0-win-x64` 需手动加 PATH。
-11. **Codex / Agent 交接入口**：先读 [`AGENTS.md`](../AGENTS.md) 与 [`docs/codex-handoff.md`](codex-handoff.md)；文档索引见 [`docs/README.md`](README.md)。
+11. **Agent 开发入口**：先读 [`AGENTS.md`](../AGENTS.md)、[`docs/developer-guide.md`](developer-guide.md) 与 [`docs/architecture.md`](architecture.md)；文档索引见 [`docs/README.md`](README.md)。
 12. **Projects Preview 导航模式**：首页分类预览卡片适合整卡可点击进入 `/projects?category=...`，而 `View all projects` 进入 `/projects` 汇总。分类定义集中放在 `lib/projects/categories.ts`，用 `matchLabels` 兼容数据库里单复数或历史文案差异，避免在多个页面手写判断。
 13. **Projects 汇总页不要重复分类标题**：当项目卡片内已经显示分类标签时，`/projects` 汇总页按时间倒序扁平展示更清爽；只有分类筛选页才需要显示分类标题和说明。
 14. **Hero CTA 轻量化**：强视觉首屏上，CTA 不宜做成高对比胶囊按钮。当前首页使用 `Enter →` 文本链接，箭头与内页 `← Back to Home` 使用同类文本字符；下划线透明度降低，hover 只做斜体，避免抢主标题和图片注意力。

@@ -2,7 +2,7 @@
 
 > 自用文档，不面向站点访客。对外说明见根目录 [`README.md`](../README.md)。
 
-**Agent 入口：** [`AGENTS.md`](../AGENTS.md) → [`codex-handoff.md`](codex-handoff.md)
+**Agent 入口：** [`AGENTS.md`](../AGENTS.md) → [`developer-guide.md`](developer-guide.md) · [`architecture.md`](architecture.md)
 
 ---
 
@@ -11,7 +11,8 @@
 | 文档 | 用途 |
 |------|------|
 | [`../AGENTS.md`](../AGENTS.md) | Cursor / Agent 常驻规则与约束 |
-| [`codex-handoff.md`](codex-handoff.md) | 项目全貌、进度、架构、本地环境、文件索引 |
+| [`developer-guide.md`](developer-guide.md) | 项目进度、本地环境、路由速查、文件索引 |
+| [`architecture.md`](architecture.md) | 系统架构、分层、数据流、横切能力 |
 | [`cms-migration-checklist.md`](cms-migration-checklist.md) | 各 CMS 模块完成度与验证步骤 |
 
 ---
@@ -52,7 +53,7 @@
 
 | 文档 | 说明 |
 |------|------|
-| [`progress-check-2026-07-19.md`](progress-check-2026-07-19.md) | 2026-07-19 拉代码时的快照；现状以 codex-handoff 为准 |
+| [`progress-check-2026-07-19.md`](progress-check-2026-07-19.md) | 2026-07-19 拉代码时的快照；现状以 developer-guide 为准 |
 
 ### Notes 正文（发布到 `/notes` 的草稿，非工程文档）
 
@@ -70,13 +71,13 @@
 
 | 改了什么 | 写哪里 |
 |----------|--------|
-| 新模块 / 大改架构 | 更新 `codex-handoff.md` §2 + `cms-migration-checklist.md` |
+| 新模块 / 大改架构 | 更新 `architecture.md` + `developer-guide.md` §2 + `cms-migration-checklist.md` |
 | 一次性功能交付 | 新增 `exec-<主题>-<日期>.md` |
 | 会反复碰到的坑或模式 | 新增或追加 `experience-<主题>.md` |
 | Agent 行为 / 项目级约束 | 更新 `AGENTS.md` |
 | 对外站点说明 | 仅更新根目录 `README.md`（访客向，保持简短） |
 
-**不要**再维护已删除的 `DIRECTORY.md`；路由以 `codex-handoff.md` §2 速查表为准。
+**不要**再维护已删除的 `DIRECTORY.md`；路由以 `developer-guide.md` §2 速查表为准。
 
 ---
 
@@ -90,4 +91,4 @@ cd G:\project\qianna-website
 
 验证：`npm run lint` · `npm run build`
 
-细节见 [`codex-handoff.md`](codex-handoff.md) §3–§4。
+细节见 [`developer-guide.md`](developer-guide.md) §3–§4。

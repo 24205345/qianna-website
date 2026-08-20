@@ -126,4 +126,4 @@ README、名片、作品集链接统一用：**https://www.qiannawang.com**
 |------|------|
 | `README.md` | 对外 Live site 链接 |
 | `docs/supabase-cms-改造记录.md` §4.5 | Auth Redirect URLs 详细说明 |
-| `docs/codex-handoff.md` | 开发者交接入口 |
+| `docs/developer-guide.md` | 开发者指南入口 |
