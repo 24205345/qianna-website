@@ -59,6 +59,7 @@ flowchart LR
 | UI | React **19** + TypeScript |
 | 样式 | Tailwind CSS **v4**（`app/globals.css`） |
 | 后端即服务 | Supabase（`@supabase/ssr` + `@supabase/supabase-js`） |
+| 富文本引擎 | **Tiptap v3**（`@tiptap/react` + `@tiptap/markdown` + 表格/图片扩展） |
 | 图片处理 | `sharp`（迁移 / Admin 上传压缩） |
 | 前台图片 | `next/image`（Hero 等，`fill` + `priority`） |
 | 分析 | 自研 `page_views` 表 + Vercel Analytics / Speed Insights |
@@ -107,9 +108,12 @@ middleware.ts                   # /admin 鉴权；首页 Auth 参数转发
 
 ### 4.2 Admin
 
-1. `middleware.ts` 校验 Supabase session；未登录 → `/admin/login`
-2. 未配置 Supabase 环境变量时 middleware **放行**（本地 / CI build 友好）
-3. 表单提交 → **Server Actions** → Postgres / Storage → `revalidatePath`
+1. `middleware.ts` 校验 Supabase session；未登录 → `/admin/login`；已登录透传 `x-user-id` / `x-user-email` 请求头
+2. 页面端通过 `getAdminAuthSession()` 读取请求头（0ms 零延迟），消除重复的远程 Auth 网络调用瀑布
+3. 全局 `app/admin/loading.tsx` 骨架屏：路由切换时 <50ms 即时渲染过渡骨架，配合 `prefetch={true}` 实现秒开体验
+4. 页面读操作与关联资源采用 `Promise.all` 并发查询；富文本等重型组件使用 `next/dynamic`（`ssr: false`）按需加载
+5. 未配置 Supabase 环境变量时 middleware **放行**（本地 / CI build 友好）
+6. 表单提交 → **Server Actions** → Postgres / Storage → `revalidatePath`
 
 ### 4.3 Next.js 16 注意点
 

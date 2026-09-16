@@ -1,0 +1,285 @@
+/* Tiptap 所见即所得编辑区样式：温暖石色（Warm Stone）设计规范 */
+
+.tiptap-editor-shell {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  min-height: 0;
+  width: 100%;
+}
+
+.tiptap-editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  min-height: 46px;
+  padding: 6px 12px;
+  border-bottom: 1px solid #e7e5e4; /* stone-200 */
+  background: #fafaf9; /* stone-50 */
+  position: sticky;
+  top: 46px;
+  z-index: 20;
+}
+
+.tiptap-editor-toolbar .sep {
+  width: 1px;
+  height: 18px;
+  background: #e7e5e4; /* stone-200 */
+  margin: 0 5px;
+}
+
+.tiptap-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 6px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #57534e; /* stone-600 */
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.tiptap-toolbar-btn:hover:not(:disabled) {
+  background: #f5f5f4; /* stone-100 */
+  color: #1c1917; /* stone-900 */
+}
+
+.tiptap-toolbar-btn.is-active {
+  background: #e7e5e4; /* stone-200 */
+  color: #1c1917; /* stone-900 */
+  font-weight: 500;
+}
+
+.tiptap-toolbar-btn.is-danger {
+  color: #e11d48;
+}
+
+.tiptap-toolbar-btn.is-danger:hover:not(:disabled) {
+  background: #ffe4e6;
+  color: #be123c;
+}
+
+.tiptap-toolbar-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.tiptap-table-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: #78716c; /* stone-500 */
+  padding: 0 4px;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.tiptap-editor-body {
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+}
+
+.tiptap-editor-body .ProseMirror {
+  min-height: 28rem;
+  padding: 1.5rem 2rem 4rem;
+  outline: none;
+  caret-color: #1c1917;
+  color: #44403c; /* stone-700 */
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.8;
+}
+
+.tiptap-editor-body .ProseMirror > *:first-child {
+  margin-top: 0;
+}
+
+.tiptap-editor-body .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #a8a29e; /* stone-400 */
+  pointer-events: none;
+  height: 0;
+}
+
+/* 标题样式：采用系统衬线体，与前台 /notes/[slug] 保持一致 */
+.tiptap-editor-body .ProseMirror h2 {
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  font-size: 1.75rem; /* 28px */
+  color: #1c1917;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-weight: 400;
+  line-height: 1.35;
+  scroll-margin-top: 104px;
+}
+
+.tiptap-editor-body .ProseMirror h3 {
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  font-size: 1.375rem; /* 22px */
+  color: #1c1917;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+  line-height: 1.4;
+  scroll-margin-top: 104px;
+}
+
+.tiptap-editor-body .ProseMirror p {
+  margin-bottom: 1rem;
+}
+
+.tiptap-editor-body .ProseMirror strong {
+  font-weight: 600;
+  color: #1c1917;
+}
+
+.tiptap-editor-body .ProseMirror em {
+  font-style: italic;
+}
+
+.tiptap-editor-body .ProseMirror ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.tiptap-editor-body .ProseMirror ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.tiptap-editor-body .ProseMirror li {
+  margin-bottom: 0.35rem;
+}
+
+.tiptap-editor-body .ProseMirror blockquote {
+  border-left: 3px solid #d6d3d1; /* stone-300 */
+  padding-left: 1rem;
+  margin: 1.25rem 0;
+  font-style: italic;
+  color: #57534e; /* stone-600 */
+}
+
+.tiptap-editor-body .ProseMirror a {
+  color: #1c1917;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: #d6d3d1;
+  transition: color 0.15s;
+}
+
+.tiptap-editor-body .ProseMirror a:hover {
+  color: #0c0a09;
+}
+
+.tiptap-editor-body .ProseMirror code {
+  background: #f5f5f4; /* stone-100 */
+  color: #1c1917;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  font-family: var(--font-geist-mono, monospace);
+  font-size: 0.85em;
+}
+
+.tiptap-editor-body .ProseMirror pre {
+  background: #1c1917; /* stone-900 */
+  color: #f5f5f4;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+}
+
+.tiptap-editor-body .ProseMirror pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.tiptap-editor-body .ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.25rem 0;
+  border: 1px solid #e7e5e4;
+}
+
+/* 表格系统 */
+.tiptap-editor-body .ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+}
+
+.tiptap-editor-body .ProseMirror th,
+.tiptap-editor-body .ProseMirror td {
+  border: 1px solid #e7e5e4; /* stone-200 */
+  padding: 8px 12px;
+  vertical-align: top;
+  position: relative;
+}
+
+.tiptap-editor-body .ProseMirror th {
+  background: #f5f5f4; /* stone-100 */
+  font-weight: 600;
+  color: #1c1917;
+}
+
+.tiptap-editor-body .ProseMirror .selectedCell {
+  background: #e7e5e4;
+}
+
+/* Markdown 纯源码切换视图 */
+.tiptap-md-source {
+  width: 100%;
+  min-height: 28rem;
+  padding: 1.5rem;
+  border: 0;
+  outline: none;
+  font-family: var(--font-geist-mono, monospace);
+  font-size: 13px;
+  line-height: 1.7;
+  color: #1c1917;
+  background: #fafaf9;
+  resize: vertical;
+}
+
+/* 目录极窄优雅滑动条 */
+.toc-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #d6d3d1 transparent;
+  scroll-behavior: smooth;
+}
+
+.toc-scrollbar::-webkit-scrollbar {
+  width: 3.5px;
+}
+
+.toc-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toc-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e7e5e4; /* stone-200 */
+  border-radius: 9999px;
+  transition: background-color 0.2s;
+}
+
+.toc-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: #d6d3d1; /* stone-300 */
+}
+
+.toc-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #78716c; /* stone-500 */
+}

@@ -8,6 +8,7 @@ import {
   type SiteNavigationGroup,
   type SiteNavigationItem,
 } from "@/app/_data/site-navigation";
+export type { SiteNavigationGroup, SiteNavigationItem };
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 
 interface SiteSettingsRow {

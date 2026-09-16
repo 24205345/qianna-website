@@ -3,7 +3,11 @@ import { redirect } from "next/navigation";
 import AdminPageHeader from "@/app/admin/_components/AdminPageHeader";
 import ContentStatusBadge from "@/app/admin/_components/ContentStatusBadge";
 import VisibilityToggleForm from "@/app/admin/_components/VisibilityToggleForm";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  createClient,
+  getAdminAuthSession,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import { deleteNoteAction, toggleNoteStatusAction } from "./actions";
 
 interface NoteRow {
@@ -40,11 +44,10 @@ export default async function AdminNotesPage() {
     );
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAdminAuthSession();
   if (!user) redirect("/admin/login");
+
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("notes")

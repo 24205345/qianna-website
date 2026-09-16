@@ -2,6 +2,8 @@
 
 > **Applies to**: Docker Compose single-container web apps · domestic ECS troubleshooting edition · optional GitHub Actions auto-deploy
 >
+> **Path note**: This article centers on **Workbench + installing Docker from the CLI**. If you prefer **Baota Panel** for day-to-day ops (edit `.env`, reverse proxy, HTTPS), see the sibling guide: [Aliyun ECS · Baota Panel Deploy](/notes/aliyun-ecs-baota-docker-deploy.en).
+>
 > **Note**: This is a generic deployment guide. Project names, directories, and repos in examples are placeholders. This site, [qiannawang.com](https://www.qiannawang.com), is deployed on Vercel + Supabase—not the ECS approach in this article. If you are deploying another Dockerized project, follow the steps below.
 
 ---

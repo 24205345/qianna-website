@@ -86,34 +86,29 @@ async function resolveTitles(
     .filter((item) => item.contentType === "photography")
     .map((item) => item.contentSlug);
 
-  if (noteSlugs.length > 0) {
-    const { data } = await supabase
-      .from("notes")
-      .select("slug, title")
-      .in("slug", noteSlugs);
-    for (const row of data ?? []) {
-      titles.set(`note:${row.slug}`, row.title);
-    }
-  }
+  const [notesRes, projectsRes, photosRes] = await Promise.all([
+    noteSlugs.length > 0
+      ? supabase.from("notes").select("slug, title").in("slug", noteSlugs)
+      : Promise.resolve({ data: [] }),
+    projectSlugs.length > 0
+      ? supabase.from("projects").select("slug, title").in("slug", projectSlugs)
+      : Promise.resolve({ data: [] }),
+    photographySlugs.length > 0
+      ? supabase
+          .from("photography_collections")
+          .select("slug, title")
+          .in("slug", photographySlugs)
+      : Promise.resolve({ data: [] }),
+  ]);
 
-  if (projectSlugs.length > 0) {
-    const { data } = await supabase
-      .from("projects")
-      .select("slug, title")
-      .in("slug", projectSlugs);
-    for (const row of data ?? []) {
-      titles.set(`project:${row.slug}`, row.title);
-    }
+  for (const row of (notesRes.data ?? []) as { slug: string; title: string }[]) {
+    titles.set(`note:${row.slug}`, row.title);
   }
-
-  if (photographySlugs.length > 0) {
-    const { data } = await supabase
-      .from("photography_collections")
-      .select("slug, title")
-      .in("slug", photographySlugs);
-    for (const row of data ?? []) {
-      titles.set(`photography:${row.slug}`, row.title);
-    }
+  for (const row of (projectsRes.data ?? []) as { slug: string; title: string }[]) {
+    titles.set(`project:${row.slug}`, row.title);
+  }
+  for (const row of (photosRes.data ?? []) as { slug: string; title: string }[]) {
+    titles.set(`photography:${row.slug}`, row.title);
   }
 
   const pageLabels: Record<string, string> = {
@@ -147,7 +142,7 @@ async function fetchPageViews(range: AnalyticsRange): Promise<PageViewRow[]> {
     query = query.gte("viewed_at", rangeStart.toISOString());
   }
 
-  const limit = range === "all" ? 50000 : 10000;
+  const limit = range === "all" ? 10000 : 5000;
   const { data, error } = await query.limit(limit);
 
   if (error) {

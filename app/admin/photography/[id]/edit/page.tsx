@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  createClient,
+  getAdminAuthSession,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import CollectionForm, { type CollectionFormDefaults } from "../../CollectionForm";
 import PhotoManager from "../../PhotoManager";
 import { updateCollectionAction } from "../../actions";
@@ -14,27 +18,27 @@ export default async function EditPhotographyCollectionPage({
   if (!isSupabaseConfigured()) redirect("/admin/photography");
 
   const { id } = await params;
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAdminAuthSession();
   if (!user) redirect("/admin/login");
 
-  const { data: collection, error } = await supabase
-    .from("photography_collections")
-    .select("id, title, slug, subtitle, description, status, sort_order")
-    .eq("id", id)
-    .single();
+  const supabase = await createClient();
+  const [collectionResult, photosResult] = await Promise.all([
+    supabase
+      .from("photography_collections")
+      .select("id, title, slug, subtitle, description, status, sort_order")
+      .eq("id", id)
+      .single(),
+    supabase
+      .from("photography_photos")
+      .select("id, url, title, date, location, description, sort_order")
+      .eq("collection_id", id)
+      .order("sort_order", { ascending: true }),
+  ]);
 
+  const { data: collection, error } = collectionResult;
   if (error || !collection) notFound();
 
-  const { data: photoRows } = await supabase
-    .from("photography_photos")
-    .select("id, url, title, date, location, description, sort_order")
-    .eq("collection_id", id)
-    .order("sort_order", { ascending: true });
-
-  const photos = (photoRows ?? []) as PhotographyPhotoRow[];
+  const photos = (photosResult.data ?? []) as PhotographyPhotoRow[];
   const defaults = collection as CollectionFormDefaults;
   const updateAction = updateCollectionAction.bind(null, id);
 

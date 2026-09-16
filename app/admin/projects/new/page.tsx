@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  getAdminAuthSession,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import ProjectForm from "../ProjectForm";
 import { createProjectAction } from "../actions";
 
@@ -9,10 +12,7 @@ export default async function NewProjectPage() {
     redirect("/admin/projects");
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAdminAuthSession();
   if (!user) {
     redirect("/admin/login");
   }

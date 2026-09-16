@@ -39,6 +39,8 @@ yarn-error.log*
 scripts/start-dev.local.ps1
 start.bat
 scripts/start-dev.ps1
+.next-dev*.log
+.cursor/
 
 # vercel
 .vercel

@@ -8,7 +8,11 @@ import {
   getCategoryBySlug,
   projectBelongsToCategory,
 } from "@/lib/projects/categories";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  createClient,
+  getAdminAuthSession,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import { deleteProjectAction, toggleProjectStatusAction } from "./actions";
 
 interface ProjectRow {
@@ -100,13 +104,12 @@ export default async function AdminProjectsPage({
     );
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAdminAuthSession();
   if (!user) {
     redirect("/admin/login");
   }
+
+  const supabase = await createClient();
 
   const { category: categorySlug } = await searchParams;
   const activeCategory = getCategoryBySlug(categorySlug);

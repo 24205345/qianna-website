@@ -2,6 +2,8 @@
 
 > **适用类型**：Docker Compose 单容器 Web 应用 · 国内 ECS 常见问题版 · 含 GitHub Actions 自动部署（可选）
 >
+> **路径说明**：本文以 **Workbench + 命令行安装 Docker** 为主。若你更想用 **宝塔面板** 做日常运维（改 `.env`、反代、HTTPS），请改看同系列新文：[阿里云 ECS · 宝塔面板部署教程](/notes/aliyun-ecs-baota-docker-deploy)。
+>
 > **说明**：本文为通用部署指南，示例中的项目名、目录、仓库均为占位符。本站 [qiannawang.com](https://www.qiannawang.com) 使用 Vercel + Supabase 部署，与此文 ECS 方案不同；若你部署的是其他 Docker 化项目，可按本文操作。
 
 ---

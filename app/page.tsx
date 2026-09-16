@@ -4,6 +4,9 @@ import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
 import HeroImageDistortionClient from "@/app/_components/HeroImageDistortionClient";
 import Reveal from "@/app/_components/Reveal";
 import GuestbookSection from "@/app/_components/guestbook/GuestbookSection";
+import FeaturedProjectsSection from "@/app/_components/home/FeaturedProjectsSection";
+import VisualFootprintsSection from "@/app/_components/home/VisualFootprintsSection";
+import EditorialNotesSection from "@/app/_components/home/EditorialNotesSection";
 import { getAboutPageContent } from "@/lib/about/queries";
 import {
   getApprovedGuestbookMessageCount,
@@ -11,6 +14,8 @@ import {
 } from "@/lib/guestbook/queries";
 import { getTurnstileSiteKey } from "@/lib/guestbook/turnstile";
 import { getLatestNotes } from "@/lib/notes/queries";
+import { getFeaturedProjects } from "@/lib/projects/queries";
+import { getFeaturedTraces } from "@/lib/traces/queries";
 import {
   DEFAULT_SITE_DESCRIPTION,
   DEFAULT_SITE_TITLE,
@@ -35,15 +40,26 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const [siteSettings, navigationItems, latestNotes, aboutContent, guestbookPreview, guestbookTotal] =
-    await Promise.all([
-      getSiteSettings(),
-      getSiteNavigationItems(),
-      getLatestNotes(3),
-      getAboutPageContent(),
-      getApprovedGuestbookMessages(3),
-      getApprovedGuestbookMessageCount(),
-    ]);
+  const [
+    siteSettings,
+    navigationItems,
+    latestNotes,
+    aboutContent,
+    guestbookPreview,
+    guestbookTotal,
+    featuredProjects,
+    featuredTraces,
+  ] = await Promise.all([
+    getSiteSettings(),
+    getSiteNavigationItems(),
+    getLatestNotes(3),
+    getAboutPageContent(),
+    getApprovedGuestbookMessages(3),
+    getApprovedGuestbookMessageCount(),
+    getFeaturedProjects(),
+    getFeaturedTraces(),
+  ]);
+
   const notesSection = getSiteNavigationItem(navigationItems, "notes-preview");
   const projectsSection = getSiteNavigationItem(
     navigationItems,
@@ -63,6 +79,8 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
       <PageViewTracker contentType="page" contentSlug="home" />
+
+      {/* Hero Header */}
       <header className="relative min-h-screen w-full overflow-hidden">
         <HeroImageDistortionClient
           imageUrl={siteSettings.heroImageUrl}
@@ -79,147 +97,86 @@ export default async function Home() {
             </p>
             <a
               href="#content"
-              className="hero-text-enter hero-text-enter-delay-2 pointer-events-auto mt-4 ml-1 inline-flex w-fit text-[15px] text-stone-50/80 underline decoration-stone-50/40 underline-offset-4 transition-colors hover:text-stone-50/90 hover:decoration-stone-50/55"
+              className="hero-text-enter hero-text-enter-delay-2 pointer-events-auto mt-4 ml-1 inline-flex w-fit items-center gap-1.5 text-[15px] text-stone-50/80 transition-colors hover:text-stone-50/90"
             >
-              {siteSettings.heroCtaLabel} →
+              <span className="underline decoration-stone-50/40 underline-offset-4 hover:decoration-stone-50/55">
+                {siteSettings.heroCtaLabel}
+              </span>
+              <span className="inline-block no-underline transition-transform duration-200 group-hover:translate-x-0.5">
+                →
+              </span>
             </a>
           </div>
         </div>
       </header>
 
+      {/* Main Curated Content */}
       <main
         id="content"
         className="mx-auto w-full max-w-5xl px-6 py-12 md:px-10 md:py-16"
       >
-        <section className="py-14 md:py-16">
-          <Reveal>
-            <div className="flex items-end justify-between gap-4">
-              <h2 className="font-serif text-3xl text-stone-900 md:text-4xl">
-                {notesSection.title}
-              </h2>
-              <Link
-                href={notesSection.href}
-                className="shrink-0 text-sm text-stone-600 underline decoration-stone-300 underline-offset-4 transition-colors hover:text-stone-900"
-              >
-                {notesSection.label}
-              </Link>
-            </div>
-          </Reveal>
-          <div className="mt-8 flex flex-col gap-6">
-            {latestNotes.length === 0 ? (
-              <Reveal delay={80}>
-                <p className="text-sm text-stone-400">
-                  New notes will appear here once published.
-                </p>
-              </Reveal>
-            ) : (
-              latestNotes.map((note, index) => (
-                <Reveal key={note.slug} delay={80 + index * 70}>
-                  <Link
-                    href={`/notes/${note.slug}`}
-                    className="group block border-b border-stone-200/70 pb-6 last:border-0 last:pb-0"
-                  >
-                    <h3 className="font-serif text-xl text-stone-900 transition-colors group-hover:text-stone-700 md:text-2xl">
-                      {note.title}
-                    </h3>
-                    {note.excerpt ? (
-                      <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">
-                        {note.excerpt}
-                      </p>
-                    ) : null}
-                  </Link>
-                </Reveal>
-              ))
-            )}
-          </div>
-        </section>
+        {/* 1. Selected Works (Featured Projects with Asymmetric Media Cards) */}
+        <FeaturedProjectsSection
+          projects={featuredProjects}
+          navigationSection={projectsSection}
+          categories={projectCategories}
+        />
 
-        <section className="py-14 md:py-16">
-          <Reveal>
-            <div className="flex items-end justify-between gap-4">
-              <h2 className="font-serif text-3xl text-stone-900 md:text-4xl">
-                {projectsSection.title}
-              </h2>
-              <Link
-                href={projectsSection.href}
-                className="text-sm text-stone-600 underline decoration-stone-300 underline-offset-4 transition-colors hover:text-stone-900"
-              >
-                {projectsSection.label}
-              </Link>
-            </div>
-          </Reveal>
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
-            {projectCategories.map((item, index) => (
-              <Reveal key={item.itemKey} className="h-full" delay={80 + index * 70}>
-                <Link
-                  href={item.href}
-                  className="group block h-full rounded-2xl border border-stone-200/80 bg-stone-100/70 p-5 transition-colors hover:border-stone-300 hover:bg-stone-100"
-                >
-                  <h3 className="font-serif text-2xl text-stone-900 transition-colors group-hover:text-stone-700">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 leading-7 text-stone-600">{item.description}</p>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </section>
+        {/* 2. Visual Footprints (Curated Photography & Field Notes Filmstrip) */}
+        <VisualFootprintsSection
+          traces={featuredTraces}
+          navigationSection={tracesSection}
+          categories={traceCategories}
+        />
 
-        <section className="py-14 md:py-16">
-          <Reveal>
-            <div className="flex items-end justify-between gap-4">
-              <h2 className="font-serif text-3xl text-stone-900 md:text-4xl">
-                {tracesSection.title}
-              </h2>
-              <Link
-                href={tracesSection.href}
-                className="shrink-0 text-sm text-stone-600 underline decoration-stone-300 underline-offset-4 transition-colors hover:text-stone-900"
-              >
-                {tracesSection.label}
-              </Link>
-            </div>
-          </Reveal>
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
-            {traceCategories.map((item, index) => (
-              <Reveal key={item.itemKey} className="h-full" delay={80 + index * 70}>
-                <Link
-                  href={item.href}
-                  className="group block h-full rounded-2xl border border-stone-200/80 bg-stone-100/70 p-5 transition-colors hover:border-stone-300 hover:bg-stone-100"
-                >
-                  <p className="text-xs tracking-[0.18em] text-stone-500 uppercase">
-                    {item.label}
-                  </p>
-                  <h3 className="mt-3 font-serif text-2xl text-stone-900 transition-colors group-hover:text-stone-700">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 leading-7 text-stone-600">{item.description}</p>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </section>
+        {/* 3. Essays & Working Notes */}
+        <EditorialNotesSection
+          notes={latestNotes}
+          navigationSection={notesSection}
+        />
 
-        <section id="about-me" className="py-14 md:py-16">
+        {/* 4. About Me & Guestbook */}
+        <section id="about-me" className="py-16 md:py-20">
           <Reveal>
             <h2 className="font-serif text-3xl text-stone-900 md:text-4xl">
               About Me
             </h2>
           </Reveal>
-          <div className="mt-8 flex flex-col gap-6">
+
+          <div className="mt-8">
             <Reveal delay={80}>
               <Link
                 href={aboutSection.href}
-                className="group block border-b border-stone-200/70 pb-6 last:border-0 last:pb-0"
+                className="group grid gap-6 transition-colors md:grid-cols-12 md:items-start"
               >
-                <h3 className="font-serif text-xl text-stone-900 transition-colors group-hover:text-stone-700 md:text-2xl">
-                  {aboutContent.pageTitle}
-                </h3>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">
-                  {aboutContent.pageDescription}
-                </p>
+                <div className="md:col-span-7">
+                  <h3 className="font-serif text-xl text-stone-900 transition-colors group-hover:text-stone-700 md:text-2xl">
+                    {aboutContent.pageTitle}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-stone-600">
+                    {aboutContent.pageDescription}
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-2 md:col-span-5 md:border-l md:border-stone-200/80 md:pl-8">
+                  <span className="text-xs tracking-[0.22em] text-stone-500 uppercase">
+                    Working Across
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {aboutContent.workingAcross.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-md bg-stone-100 px-2.5 py-1 text-xs text-stone-600 transition-colors group-hover:bg-stone-200/70"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </Link>
             </Reveal>
           </div>
+
           <Reveal delay={160}>
             <GuestbookSection
               previewMessages={guestbookPreview}
@@ -230,6 +187,7 @@ export default async function Home() {
         </section>
       </main>
 
+      {/* Footer */}
       <footer className="border-t border-stone-300/70 bg-stone-300/35">
         <div className="mx-auto max-w-5xl px-6 pt-12 pb-6 md:px-10 md:pt-14">
           <div className="grid items-center gap-10 md:grid-cols-[1fr_1fr] md:gap-14">
@@ -242,7 +200,7 @@ export default async function Home() {
 
             <div className="grid gap-4 text-xs leading-6 text-stone-600">
               <div>
-                <p className="text-[10px] tracking-[0.18em] uppercase text-stone-500/80">
+                <p className="text-xs tracking-[0.2em] uppercase text-stone-500">
                   Email
                 </p>
                 <a
@@ -253,13 +211,13 @@ export default async function Home() {
                 </a>
               </div>
               <div>
-                <p className="text-[10px] tracking-[0.18em] uppercase text-stone-500/80">
+                <p className="text-xs tracking-[0.2em] uppercase text-stone-500">
                   Location
                 </p>
                 <p className="text-sm text-stone-700">Shenzhen, China</p>
               </div>
               <div>
-                <p className="text-[10px] tracking-[0.18em] uppercase text-stone-500/80">
+                <p className="text-xs tracking-[0.2em] uppercase text-stone-500">
                   Availability
                 </p>
                 <p className="text-sm text-stone-700">
@@ -268,7 +226,7 @@ export default async function Home() {
               </div>
             </div>
           </div>
-          <p className="mt-10 text-center text-[10px] tracking-[0.08em] text-stone-500/75">
+          <p className="mt-10 text-center text-xs tracking-wide text-stone-500">
             &copy; 2026 Qianna Wang
           </p>
         </div>
@@ -276,4 +234,3 @@ export default async function Home() {
     </div>
   );
 }
-

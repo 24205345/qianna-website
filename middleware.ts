@@ -85,7 +85,26 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  return supabaseResponse;
+  // 优化：将已校验的 user 信息通过 request headers 传递给 Server Components，
+  // 避免所有 /admin/* 页面组件重复向 Supabase Auth 服务发起阻塞性网络请求 (减少 300ms~800ms 延迟)
+  const requestHeaders = new Headers(request.headers);
+  if (user) {
+    requestHeaders.set("x-user-id", user.id);
+    requestHeaders.set("x-user-email", user.email ?? "");
+  }
+
+  const finalResponse = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
+
+  // 同步保留 setAll 更新的所有 cookies
+  supabaseResponse.cookies.getAll().forEach((cookie) => {
+    finalResponse.cookies.set(cookie);
+  });
+
+  return finalResponse;
 }
 
 export const config = {

@@ -1,7 +1,11 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import AdminPageHeader from "@/app/admin/_components/AdminPageHeader";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  createClient,
+  getAdminAuthSession,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
   approveGuestbookMessageAction,
@@ -64,11 +68,10 @@ export default async function AdminGuestbookPage() {
     );
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAdminAuthSession();
   if (!user) redirect("/admin/login");
+
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("guestbook_messages")

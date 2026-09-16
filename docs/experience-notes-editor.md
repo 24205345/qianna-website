@@ -1,33 +1,32 @@
-# 执行记录：Notes Admin Markdown 分栏编辑器
+# 执行记录：Notes 所见即所得富文本编辑器升级（参考 AI-Learning-Hub）
 
-日期：2026-07-23
+最后更新：2026-09-16（原 2026-07-23 方案 A 演进升级）
 
-## 方案选择
+## 演进背景
 
-| 方案 | 内容 | 权重 |
-|---|---|---|
-| A. 增强现有 MD 编辑器 | 分栏预览、工具栏、附件上传、TOC/章节分页、` ```prompt ` 提示词块 | **88** |
-| B. TipTap / Milkdown WYSIWYG | 所见即所得，依赖重、风格难对齐前台 | 45 |
+原“左侧预览 + 右侧裸 `<textarea>`”在处理长篇技术笔记和表格时排版复杂度高、上下文跳转割裂。现基于现代 Headless 引擎 **Tiptap v3** 完成了现代化所见即所得重构，同时保持底层纯 Markdown 存储与零数据破坏。
 
-**已执行：A**
+## 核心架构与特性
 
-## 改动摘要
+1. **所见即所得与 Markdown 双向零破坏转换**：
+   - 依赖：`@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/markdown`, `@tiptap/extension-table*`, `@tiptap/extension-image`, `@tiptap/extension-link`；
+   - 载入时以 Markdown 形式喂入，编辑中实时渲染排版；提交与保存时通过 `editor.storage.markdown.getMarkdown()` 导出纯净 Markdown；
+   - 完美兼容现有数据库、前台 `/notes/[slug]` 渲染与静态回退数据；
+   - 保留“Markdown 源码”双向切换开关，可随时切回代码模式微调。
 
-- [`app/admin/notes/NoteForm.tsx`](../app/admin/notes/NoteForm.tsx)：上方标题/摘要/附件；下方左预览、右 Markdown；左侧 Contents 章节分页；工具栏插入 Heading / Prompt / Image / Link / Code
-- [`app/admin/notes/actions.ts`](../app/admin/notes/actions.ts)：`uploadNoteAttachmentAction` 上传到 `portfolio-media/notes/attachments/`
-- [`app/notes/_components/NoteMarkdown.tsx`](../app/notes/_components/NoteMarkdown.tsx)：` ```prompt ` 渲染为 stone 风格提示词卡片（前台详情页一致）
-- New/Edit 页宽改为 `max-w-7xl`
+2. **向下滚动固定布局与独立长文目录（TOC）**：
+   - **双层吸顶布局**：
+     - 顶层（`top: 0`）：中英多语言切换器、语言切换提示与实时字数/章节统计；
+     - 次层（`top: 46px`）：左侧对齐 `Contents [章节数]`，右侧平齐对齐富文本工具栏；
+   - **TOC 侧栏独立滚动**：高度固定为 `h-[calc(100vh-46px)]`，内置 `3.5px` 超细暖石色滑动条，长文目录浏览自如；
+   - **视口高亮与精准直达**：`IntersectionObserver` 监听当前所在章节自动高亮；点击章节自动平滑滚动直达（`scroll-margin-top: 104px` 防止被工具栏遮挡）。
 
-## 用法
+3. **可视化表格支持**：
+   - 工具栏一键插入 3×3 结构化表格；
+   - 光标处于表格内时，工具栏浮现专属增删行/增删列/删表控制按钮，告别手写 Markdown 管道符。
 
-1. 工具栏插入内容块，或右侧直接写 Markdown
-2. `##` 标题自动进入 Contents，可按章节预览（Section ← / →）
-3. 提示词：
+4. **极速图片插入与截图粘贴（Ctrl+V）**：
+   - 原生监听粘贴事件与拖拽事件，剪切板截图直接 `Ctrl+V` 即可上传至 Supabase Storage（`portfolio-media/notes/attachments/`）并在光标处插入渲染。
 
-````markdown
-```prompt
-你的提示词内容
-```
-````
-
-4. 附件上传后自动插入图片 Markdown，可设为 Cover
+5. **性能优化**：
+   - `NoteForm.tsx` 采用 `next/dynamic(..., { ssr: false })` 对编辑器进行异步懒加载，避免重型依赖拖慢初始渲染。

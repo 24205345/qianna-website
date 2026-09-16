@@ -139,6 +139,7 @@ export default function AdminSidebar() {
                 <div key={item.href}>
                   <Link
                     href={item.href}
+                    prefetch={true}
                     onClick={handleNavClick}
                     className={primaryClass(isActive, collapsed)}
                     title={collapsed ? item.label : undefined}
@@ -152,6 +153,7 @@ export default function AdminSidebar() {
                         <Link
                           key={category.slug}
                           href={`/admin/projects?category=${category.slug}`}
+                          prefetch={true}
                           onClick={handleNavClick}
                           className={subClass(projectCategory === category.slug)}
                           aria-current={
@@ -170,6 +172,7 @@ export default function AdminSidebar() {
                         <Link
                           key={trace.href}
                           href={trace.href}
+                          prefetch={true}
                           onClick={handleNavClick}
                           className={subClass(pathname.startsWith(trace.prefix))}
                           aria-current={

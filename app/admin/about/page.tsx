@@ -1,7 +1,10 @@
 import { redirect } from "next/navigation";
 import AdminPageHeader from "@/app/admin/_components/AdminPageHeader";
 import { getAboutPageContent } from "@/lib/about/queries";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  getAdminAuthSession,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import AboutPageForm from "./AboutPageForm";
 import { updateAboutPageAction } from "./actions";
 
@@ -19,10 +22,7 @@ export default async function AdminAboutPage() {
     );
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAdminAuthSession();
   if (!user) redirect("/admin/login");
 
   const defaults = await getAboutPageContent();

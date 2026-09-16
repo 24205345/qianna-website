@@ -3,8 +3,8 @@
 > **Agent / 开发者第一份必读。** 常驻规则见根目录 [`AGENTS.md`](../AGENTS.md)；**系统架构**见 [`architecture.md`](architecture.md)；文档索引见 [`docs/README.md`](README.md)。
 >
 > 项目路径：`G:\project\qianna-website`  
-> 分支：`main`（CMS P1–P11 已完成）  
-> 最后更新：2026-08-20  
+> 分支：`main`（CMS P1–P11 已完成；2026-09 首页策展风改版、Notes 富文本升级与后台极速渲染重构已完成）  
+> 最后更新：2026-09-16  
 > 生产域名：**https://www.qiannawang.com**
 
 ---
@@ -19,25 +19,26 @@ Next.js 16.2.1 + React 19 + TypeScript + Tailwind v4 **个人作品集网站**�
 
 ---
 
-## 2. CMS 进度（截至 2026-08-20）
+## 2. CMS 进度（截至 2026-09-16）
 
 | 模块 | 状态 | 前台 | 后台 | 迁移 / 备注 |
 |---|---|---|---|---|
-| Projects 列表+媒体+详情 | ✅ | `/projects`, `/projects/[slug]` | `/admin/projects` | `npm run migrate:media`；0017 portfolio flipbook |
-| Photography | ✅ | `/photography` | `/admin/photography` | `npm run migrate:photography` |
-| Visual Works | ✅ | `/visual-works` | `/admin/visual-works` | `npm run migrate:visual-works` |
-| Field Notes | ✅ | `/field-notes`, `/field-notes/[slug]` | `/admin/field-notes` | `npm run migrate:field-notes` |
+| Projects 列表+媒体+详情 | ✅ | `/projects`, `/projects/[slug]` | `/admin/projects` | `npm run migrate:media`；0017 portfolio flipbook；编辑页 Promise.all 并发 |
+| Photography | ✅ | `/photography` | `/admin/photography` | `npm run migrate:photography`；编辑页 Promise.all 并发 |
+| Visual Works | ✅ | `/visual-works` | `/admin/visual-works` | `npm run migrate:visual-works`；编辑页 Promise.all 并发 |
+| Field Notes | ✅ | `/field-notes`, `/field-notes/[slug]` | `/admin/field-notes` | `npm run migrate:field-notes`；编辑页 Promise.all 并发 |
 | **Traces Hub** | ✅ | `/traces`（Tab）+ 旧路径 | 侧栏 Traces 子项 | `0012_traces_navigation.sql` |
-| **Home Hero** | ✅ | `/` | `/admin/site` | `migrate:home` / `recompress:home`；`next/image` |
-| **Site Navigation Copy** | ✅ | `/`, linked page headings | `/admin/site` | `0006_site_navigation_items.sql` |
-| **About** | ✅ | `/about`（16:9 个人照片 + Timeline） | `/admin/about` | `0007` + `0016_about_profile_image.sql` |
-| **Notes** | ✅ | `/notes`, `/notes/[slug]` | `/admin/notes` | `0010_notes.sql` |
+| **Home Hero** | ✅ | `/` | `/admin/site` | `migrate:home` / `recompress:home`；1:1 双端实景模拟器 |
+| **Site Navigation Copy** | ✅ | `/`, linked page headings | `/admin/site` | 4 大板块实景图文工作台；废弃生硬 9 项配置表单 |
+| **About** | ✅ | `/about`（16:9 个人照片 + Timeline） | `/admin/about` | `0007` + `0016_about_profile_image.sql`；并发查询 |
+| **Notes** | ✅ | `/notes`, `/notes/[slug]` | `/admin/notes` | Tiptap v3 富文本所见即所得 + Markdown 零损同步 + 固定目录 |
 | **Guestbook** | ✅ | 首页 About Me 下预览 3 条 | `/admin/guestbook` | Turnstile；`0013` / `0014` |
-| **Analytics** | ✅ | 全站 `PageViewTracker` | `/admin/analytics` | `0015_page_views.sql` |
-| **首页动效** | ✅ | Hero Ken Burns + Reveal 滚入 | — | 涟漪默认关闭；见 `experience-homepage-motion.md` |
+| **Analytics** | ✅ | 全站 `PageViewTracker` | `/admin/analytics` | `0015_page_views.sql`；标题并发解析与大拉取优化 |
+| **首页策展改版** | ✅ | 双字体 Serif/Sans、Sub-rail 细线与悬浮指示、无下划线 | — | 见 `exec-homepage-editorial-admin-overhaul-2026-09-16.md` |
+| **后台极速渲染** | ✅ | — | `/admin/*` | 全局 `loading.tsx` 骨架屏 + Header 鉴权透传 + 路由 prefetch |
 | **SEO** | ✅ | canonical / JSON-LD / sitemap | — | GSC 已验证；见 `experience-seo-metadata.md` |
 
-Admin 导航：**左侧边栏** + Projects / Traces 二级嵌套，详见 `docs/exec-admin-about-analytics-2026-08-11.md`。
+Admin 导航：**左侧边栏** + Projects / Traces 二级嵌套 + 全局预载与秒级骨架屏，详见 `docs/exec-homepage-editorial-admin-overhaul-2026-09-16.md`。
 
 Supabase 数据量（已验证）：
 - `photography_photos`: 46

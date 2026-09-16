@@ -62,10 +62,9 @@ function mapAboutPageContent(
 }
 
 export async function getAboutPageContent(): Promise<AboutPageContent> {
-  const navigationItems = await getSiteNavigationItems();
-  const aboutNav = getSiteNavigationItem(navigationItems, "about");
-
   if (!isSupabaseConfigured()) {
+    const navigationItems = await getSiteNavigationItems();
+    const aboutNav = getSiteNavigationItem(navigationItems, "about");
     return {
       ...fallbackAboutPageContent,
       pageTitle: aboutNav.title,
@@ -74,11 +73,17 @@ export async function getAboutPageContent(): Promise<AboutPageContent> {
   }
 
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("about_page_content")
-    .select("current_focus, working_across, timeline_items, profile_image_url, profile_image_alt")
-    .eq("singleton_key", "about")
-    .maybeSingle();
+  const [navigationItems, contentResult] = await Promise.all([
+    getSiteNavigationItems(),
+    supabase
+      .from("about_page_content")
+      .select("current_focus, working_across, timeline_items, profile_image_url, profile_image_alt")
+      .eq("singleton_key", "about")
+      .maybeSingle(),
+  ]);
+
+  const aboutNav = getSiteNavigationItem(navigationItems, "about");
+  const { data, error } = contentResult;
 
   if (error) {
     return {

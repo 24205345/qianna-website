@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  createClient,
+  getAdminAuthSession,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import { deleteCollectionAction, toggleCollectionStatusAction } from "./actions";
 import AdminPageHeader from "@/app/admin/_components/AdminPageHeader";
 import ContentStatusBadge from "@/app/admin/_components/ContentStatusBadge";
@@ -29,11 +33,10 @@ export default async function AdminPhotographyPage() {
     );
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAdminAuthSession();
   if (!user) redirect("/admin/login");
+
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("photography_collections")

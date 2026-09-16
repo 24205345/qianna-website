@@ -3,8 +3,16 @@ import {
   fallbackSiteSettings,
   type SiteSettings,
 } from "@/app/_data/site-settings";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  createClient,
+  getAdminAuthSession,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import { getSiteNavigationItems } from "@/lib/site/queries";
+import { getFeaturedProjects } from "@/lib/projects/queries";
+import { getFeaturedTraces } from "@/lib/traces/queries";
+import { getLatestNotes } from "@/lib/notes/queries";
+import { getAboutPageContent } from "@/lib/about/queries";
 import AdminPageHeader from "@/app/admin/_components/AdminPageHeader";
 import SiteSettingsForm from "./SiteSettingsForm";
 import { updateSiteSettingsAction } from "./actions";
@@ -41,26 +49,39 @@ export default async function AdminSitePage() {
     );
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAdminAuthSession();
   if (!user) redirect("/admin/login");
 
-  const { data, error } = await supabase
-    .from("site_settings")
-    .select(
-      "hero_title, hero_subtitle, hero_cta_label, hero_image_url, hero_image_alt"
-    )
-    .eq("singleton_key", "home")
-    .maybeSingle();
+  const supabase = await createClient();
 
+  const [
+    settingsResult,
+    navigationItems,
+    featuredProjects,
+    featuredTraces,
+    latestNotes,
+    aboutContent,
+  ] = await Promise.all([
+    supabase
+      .from("site_settings")
+      .select(
+        "hero_title, hero_subtitle, hero_cta_label, hero_image_url, hero_image_alt"
+      )
+      .eq("singleton_key", "home")
+      .maybeSingle(),
+    getSiteNavigationItems(),
+    getFeaturedProjects(),
+    getFeaturedTraces(),
+    getLatestNotes(3),
+    getAboutPageContent(),
+  ]);
+
+  const { data, error } = settingsResult;
   const defaults = mapDefaults(data as SiteSettingsRow | null);
-  const navigationItems = await getSiteNavigationItems();
 
   return (
     <div className="min-h-screen bg-stone-50 px-6 py-12 text-stone-700 md:px-10">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-7xl">
         <AdminPageHeader title="Site Settings" />
 
         {error ? (
@@ -74,11 +95,15 @@ export default async function AdminSitePage() {
           </p>
         ) : null}
 
-        <div className="mt-8 rounded-xl border border-stone-200 bg-white p-6">
+        <div className="mt-8">
           <SiteSettingsForm
             action={updateSiteSettingsAction}
             defaults={defaults}
-              navigationItems={navigationItems}
+            navigationItems={navigationItems}
+            featuredProjects={featuredProjects}
+            featuredTraces={featuredTraces}
+            latestNotes={latestNotes}
+            aboutContent={aboutContent}
           />
         </div>
       </div>

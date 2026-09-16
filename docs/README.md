@@ -23,6 +23,7 @@
 
 | 文档 | 何时读 |
 |------|--------|
+| [`exec-homepage-editorial-admin-overhaul-2026-09-16.md`](exec-homepage-editorial-admin-overhaul-2026-09-16.md) | 首页策展改版、Notes 富文本升级、Site Settings 实景视口、后台极速渲染优化 |
 | [`exec-site-ia-guestbook-2026-08-04.md`](exec-site-ia-guestbook-2026-08-04.md) | 首页四板块、Traces Hub、Guestbook |
 | [`exec-homepage-motion-2026-08-17.md`](exec-homepage-motion-2026-08-17.md) | 首页 Hero 动效、涟漪关闭、Reveal 组件 |
 | [`exec-admin-about-analytics-2026-08-11.md`](exec-admin-about-analytics-2026-08-11.md) | Admin 侧栏、About 照片、Analytics |

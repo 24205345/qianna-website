@@ -1,6 +1,10 @@
 import { notFound, redirect } from "next/navigation";
 import AdminPageHeader from "@/app/admin/_components/AdminPageHeader";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  createClient,
+  getAdminAuthSession,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import { updateNoteAction } from "../../actions";
 import NoteForm from "../../NoteForm";
 
@@ -29,11 +33,10 @@ export default async function AdminEditNotePage({
   }
 
   const { id } = await params;
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAdminAuthSession();
   if (!user) redirect("/admin/login");
+
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("notes")

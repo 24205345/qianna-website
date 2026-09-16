@@ -4,7 +4,10 @@ import AnalyticsDashboard from "@/app/admin/analytics/_components/AnalyticsDashb
 import AnalyticsRangeNav from "@/app/admin/analytics/_components/AnalyticsRangeNav";
 import { parseAnalyticsRange } from "@/lib/analytics/ranges";
 import { getAnalyticsDashboardData } from "@/lib/analytics/queries";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  getAdminAuthSession,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 
 export default async function AdminAnalyticsPage({
   searchParams,
@@ -15,11 +18,7 @@ export default async function AdminAnalyticsPage({
     redirect("/admin/login");
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const user = await getAdminAuthSession();
   if (!user) {
     redirect("/admin/login");
   }

@@ -140,3 +140,82 @@ export async function isProjectPublished(slug: string): Promise<boolean | null> 
   if (error) return null;
   return Boolean(data);
 }
+
+export interface FeaturedProject {
+  slug: string;
+  title: string;
+  subtitle: string | null;
+  category: string;
+  description: string;
+  coverImageUrl: string;
+  tags: string[];
+  year: string;
+  isLead?: boolean;
+}
+
+const FALLBACK_FEATURED_PROJECTS: FeaturedProject[] = [
+  {
+    slug: "thesis",
+    title: "Between Destinations",
+    subtitle: "Urban Design MArch · UCL Bartlett",
+    category: "Thesis & Spatial Research",
+    description:
+      "Investigates the emotional costs of London's public transport system using geospatial analysis and wearable sensors, proposing a parasitic architectural network and mobile app to transform commuting into care.",
+    coverImageUrl: "/projects/thesis/images/08_Rendering and Possibility.jpg",
+    tags: ["Geospatial Analysis", "Parasitic Architecture", "Urban Care"],
+    year: "2025",
+    isLead: true,
+  },
+  {
+    slug: "undergraduate-portfolio",
+    title: "Selected Works",
+    subtitle: "BJTU Architectural Studies (2019–2023)",
+    category: "Architecture & Speculation",
+    description:
+      "A 4-project curated architectural monograph presented as an interactive flipbook — tracing community housing, speculative floating towers, and central-axis urban interventions.",
+    coverImageUrl: "/projects/undergraduate-portfolio/pages/01.jpg",
+    tags: ["Monograph", "Interactive Flipbook", "Urban Interventions"],
+    year: "2019–2023",
+    isLead: false,
+  },
+];
+
+export async function getFeaturedProjects(): Promise<FeaturedProject[]> {
+  if (!isSupabaseConfigured()) {
+    return FALLBACK_FEATURED_PROJECTS;
+  }
+
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("projects")
+      .select("slug, title, subtitle, category, description, cover_image_url, tags, year")
+      .eq("status", "published")
+      .order("sort_order", { ascending: true });
+
+    if (error || !data?.length) {
+      return FALLBACK_FEATURED_PROJECTS;
+    }
+
+    return data.map((row, idx) => {
+      const fallbackItem = FALLBACK_FEATURED_PROJECTS.find((f) => f.slug === row.slug);
+      return {
+        slug: row.slug,
+        title: row.title,
+        subtitle: row.subtitle ?? fallbackItem?.subtitle ?? null,
+        category: row.category ?? fallbackItem?.category ?? "Design Project",
+        description: row.description ?? fallbackItem?.description ?? "",
+        coverImageUrl:
+          row.cover_image_url ||
+          fallbackItem?.coverImageUrl ||
+          "/projects/undergraduate-portfolio/pages/01.jpg",
+        tags: row.tags?.length ? row.tags : (fallbackItem?.tags ?? []),
+        year: row.year ?? fallbackItem?.year ?? "",
+        isLead: idx === 0,
+      };
+    });
+  } catch {
+    return FALLBACK_FEATURED_PROJECTS;
+  }
+}
+

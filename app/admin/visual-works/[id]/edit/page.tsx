@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  createClient,
+  getAdminAuthSession,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import CategoryForm, { type CategoryFormDefaults } from "../../CategoryForm";
 import WorkManager from "../../WorkManager";
 import { updateCategoryAction } from "../../actions";
@@ -14,27 +18,27 @@ export default async function EditVisualWorkCategoryPage({
   if (!isSupabaseConfigured()) redirect("/admin/visual-works");
 
   const { id } = await params;
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAdminAuthSession();
   if (!user) redirect("/admin/login");
 
-  const { data: category, error } = await supabase
-    .from("visual_work_categories")
-    .select("id, title, slug, subtitle, description, status, sort_order")
-    .eq("id", id)
-    .single();
+  const supabase = await createClient();
+  const [categoryResult, worksResult] = await Promise.all([
+    supabase
+      .from("visual_work_categories")
+      .select("id, title, slug, subtitle, description, status, sort_order")
+      .eq("id", id)
+      .single(),
+    supabase
+      .from("visual_works")
+      .select("id, url, title, date, description, sort_order")
+      .eq("category_id", id)
+      .order("sort_order", { ascending: true }),
+  ]);
 
+  const { data: category, error } = categoryResult;
   if (error || !category) notFound();
 
-  const { data: workRows } = await supabase
-    .from("visual_works")
-    .select("id, url, title, date, description, sort_order")
-    .eq("category_id", id)
-    .order("sort_order", { ascending: true });
-
-  const works = (workRows ?? []) as VisualWorkRow[];
+  const works = (worksResult.data ?? []) as VisualWorkRow[];
   const defaults = category as CategoryFormDefaults;
   const updateAction = updateCategoryAction.bind(null, id);
 

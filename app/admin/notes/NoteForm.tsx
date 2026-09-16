@@ -1,19 +1,29 @@
 "use client";
 
 import {
+  useEffect,
   useMemo,
   useRef,
   useState,
   useTransition,
   type ChangeEvent,
 } from "react";
+import dynamic from "next/dynamic";
 import StatusSelect from "@/app/admin/_components/StatusSelect";
-import NoteMarkdown from "@/app/notes/_components/NoteMarkdown";
-import {
-  extractTocFromMarkdown,
-  splitMarkdownSections,
-} from "@/lib/notes/markdown";
+import { extractTocFromMarkdown } from "@/lib/notes/markdown";
 import { uploadNoteAttachmentAction } from "./actions";
+
+const NoteWysiwygEditor = dynamic(
+  () => import("./_components/NoteWysiwygEditor"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-96 w-full animate-pulse items-center justify-center rounded-xl border border-stone-200 bg-white/60 p-6 text-xs text-stone-400">
+        正在加载富文本排版引擎...
+      </div>
+    ),
+  }
+);
 
 export interface NoteFormDefaults {
   title?: string | null;
@@ -47,15 +57,6 @@ const helpClass = "mt-1 text-xs leading-5 text-stone-500";
 const toolBtnClass =
   "rounded-md border border-stone-300 bg-white px-2.5 py-1.5 text-xs text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-900";
 
-const SNIPPETS = {
-  heading: "## Section title\n\n",
-  prompt: "```prompt\nPaste your prompt here…\n```\n\n",
-  link: "[link text](https://)\n",
-  code: "```ts\n// code\n```\n\n",
-  image: "![description](https://)\n\n",
-  quote: "> Note\n\n",
-} as const;
-
 export default function NoteForm({
   action,
   defaults,
@@ -73,11 +74,8 @@ export default function NoteForm({
       : []
   );
   const [coverUrl, setCoverUrl] = useState(d.cover_image_url ?? "");
-  const [activeSectionId, setActiveSectionId] = useState<string | "all">("all");
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, startUpload] = useTransition();
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const previewRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const activeBody = editorLang === "en" ? bodyMarkdownEn : bodyMarkdown;
@@ -88,46 +86,78 @@ export default function NoteForm({
     () => extractTocFromMarkdown(activeBody),
     [activeBody]
   );
-  const sections = useMemo(
-    () => splitMarkdownSections(activeBody),
-    [activeBody]
-  );
 
-  const previewMarkdown = useMemo(() => {
-    if (activeSectionId === "all") return activeBody;
-    return (
-      sections.find((section) => section.id === activeSectionId)?.markdown ??
-      activeBody
-    );
-  }, [activeSectionId, activeBody, sections]);
-
-  const activeIndex =
-    activeSectionId === "all"
-      ? -1
-      : sections.findIndex((section) => section.id === activeSectionId);
-
-  function insertSnippet(snippet: string) {
-    const el = textareaRef.current;
-    if (!el) {
-      setActiveBody((prev) => `${prev}${snippet}`);
-      return;
-    }
-
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
-    const next = activeBody.slice(0, start) + snippet + activeBody.slice(end);
-    setActiveBody(next);
-
-    requestAnimationFrame(() => {
-      el.focus();
-      const caret = start + snippet.length;
-      el.setSelectionRange(caret, caret);
-    });
-  }
+  const [activeHeadingIdx, setActiveHeadingIdx] = useState<number | null>(null);
 
   function insertImageMarkdown(url: string, fileName: string) {
     const alt = fileName.replace(/\.[^.]+$/, "") || "image";
-    insertSnippet(`![${alt}](${url})\n\n`);
+    setActiveBody((prev) => `${prev ? prev + "\n\n" : ""}![${alt}](${url})\n\n`);
+  }
+
+  function scrollToHeading(text: string, index?: number) {
+    if (typeof index === "number") {
+      setActiveHeadingIdx(index);
+    }
+    const headings = document.querySelectorAll(".tiptap h2, .tiptap h3");
+    if (
+      typeof index === "number" &&
+      headings[index] &&
+      headings[index].textContent?.trim() === text.trim()
+    ) {
+      headings[index].scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    for (const h of headings) {
+      if (h.textContent?.trim() === text.trim()) {
+        h.scrollIntoView({ behavior: "smooth", block: "center" });
+        break;
+      }
+    }
+  }
+
+  useEffect(() => {
+    const headings = Array.from(
+      document.querySelectorAll<HTMLElement>(".tiptap h2, .tiptap h3")
+    );
+    if (headings.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          const topVisible = visible.reduce((prev, curr) =>
+            prev.boundingClientRect.top < curr.boundingClientRect.top
+              ? prev
+              : curr
+          );
+          const idx = headings.indexOf(topVisible.target as HTMLElement);
+          if (idx !== -1) {
+            setActiveHeadingIdx(idx);
+          }
+        }
+      },
+      {
+        rootMargin: "-92px 0px -70% 0px",
+        threshold: [0, 1],
+      }
+    );
+
+    headings.forEach((h) => observer.observe(h));
+    return () => observer.disconnect();
+  }, [activeBody]);
+
+  async function handleUploadImage(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.set("file", file);
+    const result = await uploadNoteAttachmentAction(formData);
+    setAttachments((prev) => {
+      if (prev.some((item) => item.url === result.url)) return prev;
+      return [...prev, result];
+    });
+    if (!coverUrl) {
+      setCoverUrl(result.url);
+    }
+    return result.url;
   }
 
   function handleUpload(event: ChangeEvent<HTMLInputElement>) {
@@ -136,65 +166,15 @@ export default function NoteForm({
     if (!file) return;
 
     setUploadError(null);
-    const formData = new FormData();
-    formData.set("file", file);
-
     startUpload(async () => {
       try {
-        const result = await uploadNoteAttachmentAction(formData);
-        setAttachments((prev) => {
-          if (prev.some((item) => item.url === result.url)) return prev;
-          return [...prev, result];
-        });
-        if (!coverUrl) {
-          setCoverUrl(result.url);
-        }
-        insertImageMarkdown(result.url, result.fileName);
+        await handleUploadImage(file);
       } catch (error) {
         setUploadError(
           error instanceof Error ? error.message : "Upload failed."
         );
       }
     });
-  }
-
-  function goToSection(sectionId: string | "all") {
-    setActiveSectionId(sectionId);
-    if (sectionId === "all") {
-      previewRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-    requestAnimationFrame(() => {
-      const target = previewRef.current?.querySelector(`#${CSS.escape(sectionId)}`);
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      } else {
-        previewRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    });
-  }
-
-  function goPrevSection() {
-    if (sections.length === 0) return;
-    if (activeSectionId === "all") {
-      goToSection(sections[0].id);
-      return;
-    }
-    if (activeIndex <= 0) {
-      goToSection("all");
-      return;
-    }
-    goToSection(sections[activeIndex - 1].id);
-  }
-
-  function goNextSection() {
-    if (sections.length === 0) return;
-    if (activeSectionId === "all") {
-      goToSection(sections[0].id);
-      return;
-    }
-    if (activeIndex >= sections.length - 1) return;
-    goToSection(sections[activeIndex + 1].id);
   }
 
   return (
@@ -386,243 +366,110 @@ export default function NoteForm({
       </section>
 
       {/* Editor */}
-      <section className="overflow-hidden rounded-xl border border-stone-200 bg-white">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 bg-stone-50 px-4 py-3">
-          <div className="flex flex-wrap items-center gap-2">
+      <section className="rounded-xl border border-stone-200 bg-white shadow-xs">
+        <div className="lg:sticky lg:top-0 z-30 flex min-h-[46px] flex-wrap items-center justify-between gap-3 border-b border-stone-200 bg-stone-50/95 px-4 py-2 backdrop-blur-sm rounded-t-xl">
+          <div className="flex flex-wrap items-center gap-3">
             <div
-              className="mr-1 inline-flex rounded-md border border-stone-300 bg-white p-0.5 text-xs"
+              className="inline-flex rounded-md border border-stone-300 bg-white p-0.5 text-xs shadow-xs"
               role="group"
               aria-label="Editor language"
             >
               <button
                 type="button"
-                onClick={() => {
-                  setEditorLang("zh");
-                  setActiveSectionId("all");
-                }}
+                onClick={() => setEditorLang("zh")}
                 className={
                   editorLang === "zh"
-                    ? "rounded px-2.5 py-1 font-medium text-stone-900 bg-stone-100"
-                    : "rounded px-2.5 py-1 text-stone-500 hover:text-stone-800"
+                    ? "rounded px-3 py-1 font-medium text-stone-900 bg-stone-100 shadow-xs"
+                    : "rounded px-3 py-1 text-stone-500 hover:text-stone-800 transition-colors"
                 }
               >
                 中文正文
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setEditorLang("en");
-                  setActiveSectionId("all");
-                }}
+                onClick={() => setEditorLang("en")}
                 className={
                   editorLang === "en"
-                    ? "rounded px-2.5 py-1 font-medium text-stone-900 bg-stone-100"
-                    : "rounded px-2.5 py-1 text-stone-500 hover:text-stone-800"
+                    ? "rounded px-3 py-1 font-medium text-stone-900 bg-stone-100 shadow-xs"
+                    : "rounded px-3 py-1 text-stone-500 hover:text-stone-800 transition-colors"
                 }
               >
                 English body
               </button>
             </div>
-            <button
-              type="button"
-              className={toolBtnClass}
-              onClick={() => insertSnippet(SNIPPETS.heading)}
-            >
-              Heading
-            </button>
-            <button
-              type="button"
-              className={toolBtnClass}
-              onClick={() => insertSnippet(SNIPPETS.prompt)}
-            >
-              Prompt
-            </button>
-            <button
-              type="button"
-              className={toolBtnClass}
-              onClick={() => insertSnippet(SNIPPETS.image)}
-            >
-              Image
-            </button>
-            <button
-              type="button"
-              className={toolBtnClass}
-              onClick={() => insertSnippet(SNIPPETS.link)}
-            >
-              Link
-            </button>
-            <button
-              type="button"
-              className={toolBtnClass}
-              onClick={() => insertSnippet(SNIPPETS.code)}
-            >
-              Code
-            </button>
-            <button
-              type="button"
-              className={toolBtnClass}
-              onClick={() => insertSnippet(SNIPPETS.quote)}
-            >
-              Quote
-            </button>
+            <span className="text-xs text-stone-400">
+              {editorLang === "zh"
+                ? "当前正在编辑中文版本"
+                : "Currently editing English version"}
+            </span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <button type="button" className={toolBtnClass} onClick={goPrevSection}>
-              ← Section
-            </button>
-            <button type="button" className={toolBtnClass} onClick={goNextSection}>
-              Section →
-            </button>
-            <button
-              type="button"
-              className={toolBtnClass}
-              onClick={() => goToSection("all")}
-            >
-              All
-            </button>
+          <div className="flex items-center gap-3 text-xs text-stone-500">
+            <span>{activeBody.length} 字符</span>
+            <span>·</span>
+            <span>{toc.length} 个章节</span>
           </div>
         </div>
 
-        <div className="grid border-b border-stone-200 lg:grid-cols-[13rem_minmax(0,1fr)]">
-          {/* TOC / pages */}
-          <aside className="border-b border-stone-200 bg-stone-50/80 p-4 lg:border-b-0 lg:border-r">
-            <p className="text-[10px] tracking-[0.22em] text-stone-500 uppercase">
-              Contents
-            </p>
-            <ul className="mt-3 space-y-1.5 text-sm">
-              <li>
-                <button
-                  type="button"
-                  onClick={() => goToSection("all")}
-                  className={
-                    activeSectionId === "all"
-                      ? "text-left font-medium text-stone-900"
-                      : "text-left text-stone-500 transition-colors hover:text-stone-800"
-                  }
-                >
-                  Full document
-                </button>
-              </li>
-              {sections.length === 0 ? (
-                <li className="text-xs text-stone-400">
-                  Add ## headings to build pages.
-                </li>
-              ) : (
-                sections.map((section) => (
-                  <li key={section.id}>
-                    <button
-                      type="button"
-                      onClick={() => goToSection(section.id)}
-                      className={
-                        activeSectionId === section.id
-                          ? "text-left font-medium text-stone-900"
-                          : "text-left text-stone-500 transition-colors hover:text-stone-800"
-                      }
-                    >
-                      {section.title}
-                    </button>
-                  </li>
-                ))
-              )}
-            </ul>
-            {toc.some((heading) => heading.level === 3) ? (
-              <div className="mt-5 border-t border-stone-200 pt-4">
-                <p className="text-[10px] tracking-[0.22em] text-stone-400 uppercase">
-                  Subheadings
-                </p>
-                <ul className="mt-2 space-y-1.5 text-xs">
-                  {toc
-                    .filter((heading) => heading.level === 3)
-                    .map((heading) => (
-                      <li key={heading.id}>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setActiveSectionId("all");
-                            requestAnimationFrame(() => {
-                              previewRef.current
-                                ?.querySelector(`#${CSS.escape(heading.id)}`)
-                                ?.scrollIntoView({
-                                  behavior: "smooth",
-                                  block: "start",
-                                });
-                            });
-                          }}
-                          className="text-left text-stone-500 transition-colors hover:text-stone-800"
-                        >
-                          {heading.text}
-                        </button>
-                      </li>
-                    ))}
-                </ul>
-              </div>
-            ) : null}
-            {sections.length > 0 ? (
-              <p className="mt-4 text-[11px] text-stone-400">
-                Page{" "}
-                {activeSectionId === "all"
-                  ? "—"
-                  : `${Math.max(activeIndex, 0) + 1} / ${sections.length}`}
+        <div className="grid lg:grid-cols-[15rem_minmax(0,1fr)] items-start">
+          {/* TOC / outline */}
+          <aside className="border-b border-stone-200 bg-stone-50/40 lg:border-b-0 lg:border-r lg:sticky lg:top-[46px] lg:self-start lg:h-[calc(100vh-46px)] lg:flex lg:flex-col">
+            <div className="flex shrink-0 h-[46px] items-center justify-between border-b border-stone-200 bg-stone-50/90 px-4">
+              <p className="text-[10px] tracking-[0.2em] font-semibold text-stone-500 uppercase">
+                Contents
               </p>
-            ) : null}
+              <span className="text-[11px] text-stone-400 font-mono">
+                {toc.length}
+              </span>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-3 toc-scrollbar">
+              {toc.length === 0 ? (
+                <p className="p-2 text-xs leading-5 text-stone-400">
+                  在正文中使用 ## 或 ### 自动生成目录导航
+                </p>
+              ) : (
+                <ul className="space-y-1 text-xs">
+                  {toc.map((heading, idx) => (
+                    <li key={`${heading.id}-${idx}`}>
+                      <button
+                        type="button"
+                        onClick={() => scrollToHeading(heading.text, idx)}
+                        className={`w-full text-left truncate rounded py-1 px-2 transition-colors ${
+                          activeHeadingIdx === idx
+                            ? "bg-stone-200/90 font-medium text-stone-900 shadow-2xs"
+                            : heading.level === 3
+                            ? "pl-3.5 text-stone-500 text-[11px] hover:bg-stone-200/50"
+                            : "font-medium text-stone-700 hover:bg-stone-200/50"
+                        }`}
+                        title={heading.text}
+                      >
+                        {heading.level === 3 ? "↳ " : "• "}
+                        {heading.text}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </aside>
 
-          {/* Split: preview | input */}
-          <div className="grid min-h-[32rem] lg:grid-cols-2">
-            <div className="flex min-h-[20rem] flex-col border-b border-stone-200 lg:border-b-0 lg:border-r">
-              <div className="border-b border-stone-100 px-4 py-2">
-                <p className="text-[10px] tracking-[0.18em] text-stone-400 uppercase">
-                  Preview
-                  {activeSectionId !== "all"
-                    ? ` · ${
-                        sections.find((s) => s.id === activeSectionId)?.title ??
-                        ""
-                      }`
-                    : ""}
-                </p>
-              </div>
-              <div
-                ref={previewRef}
-                className="min-h-0 flex-1 overflow-y-auto bg-stone-50/40 px-5 py-5"
-              >
-                {previewMarkdown.trim() ? (
-                  <NoteMarkdown markdown={previewMarkdown} />
-                ) : (
-                  <p className="text-sm text-stone-400">
-                    Preview updates as you write on the right.
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="flex min-h-[20rem] flex-col">
-              <div className="border-b border-stone-100 px-4 py-2">
-                <p className="text-[10px] tracking-[0.18em] text-stone-400 uppercase">
-                  Markdown · {editorLang === "en" ? "EN" : "ZH"}
-                </p>
-              </div>
-              <textarea
-                ref={textareaRef}
-                value={activeBody}
-                onChange={(event) => setActiveBody(event.target.value)}
-                className="min-h-[20rem] flex-1 resize-none border-0 bg-white px-4 py-4 font-mono text-[13px] leading-6 text-stone-800 outline-none focus:ring-0"
-                placeholder={
-                  "## Getting started\n\nWrite in Markdown.\n\n```prompt\nYour reusable prompt…\n```\n"
-                }
-                spellCheck={false}
-              />
-            </div>
+          {/* Wysiwyg Editor */}
+          <div className="min-w-0 min-h-[36rem] flex flex-col">
+            <NoteWysiwygEditor
+              value={activeBody}
+              onChange={setActiveBody}
+              onUploadImage={handleUploadImage}
+              placeholder="直接在此书写笔记正文，排版所见即所得。支持加粗、标题、列表、表格与截图直接粘贴…"
+            />
           </div>
         </div>
 
-        <p className="px-4 py-3 text-xs leading-5 text-stone-500">
-          Tip: use{" "}
-          <code className="rounded bg-stone-100 px-1">##</code> for sections /
-          TOC pages. Prompt blocks use{" "}
-          <code className="rounded bg-stone-100 px-1">```prompt</code> fences —
-          they render in the same stone style on the public note page.
-        </p>
+        <div className="border-t border-stone-100 bg-stone-50/50 px-4 py-2.5 text-xs leading-5 text-stone-500 flex flex-wrap items-center justify-between gap-2 rounded-b-xl">
+          <span>
+            💡 提示：支持直接从剪切板粘贴截图（Ctrl+V）；工具栏支持一键插入表格并增删行列；点击右上角「Markdown 源码」可随时切换查看原生格式。
+          </span>
+        </div>
       </section>
 
       <button

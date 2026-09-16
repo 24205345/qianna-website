@@ -25,10 +25,10 @@ export default function TracesTabNav({ tabs, activeTab }: TracesTabNavProps) {
           <Link
             key={tab.itemKey}
             href={tab.href}
-            className={`pb-3 text-sm transition-colors ${
+            className={`pb-3 text-sm transition-all ${
               isActive
                 ? "-mb-px border-b-2 border-stone-900 font-medium text-stone-900"
-                : "text-stone-500 hover:text-stone-800"
+                : "-mb-px border-b-2 border-transparent text-stone-500 hover:border-stone-900 hover:font-medium hover:text-stone-900"
             }`}
             aria-current={isActive ? "page" : undefined}
           >

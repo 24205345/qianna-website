@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  createClient,
+  getAdminAuthSession,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import FieldNoteForm, { type FieldNoteFormDefaults } from "../../FieldNoteForm";
 import MediaManager from "../../MediaManager";
 import { updateFieldNoteAction } from "../../actions";
@@ -10,25 +14,27 @@ export default async function EditFieldNotePage({ params }: { params: Promise<{ 
   if (!isSupabaseConfigured()) redirect("/admin/field-notes");
 
   const { id } = await params;
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getAdminAuthSession();
   if (!user) redirect("/admin/login");
 
-  const { data: note, error } = await supabase
-    .from("field_notes")
-    .select("id, title, slug, date, location, description, activity, layout_template, status, sort_order, cover_image_url")
-    .eq("id", id)
-    .single();
+  const supabase = await createClient();
+  const [noteResult, mediaResult] = await Promise.all([
+    supabase
+      .from("field_notes")
+      .select("id, title, slug, date, location, description, activity, layout_template, status, sort_order, cover_image_url")
+      .eq("id", id)
+      .single(),
+    supabase
+      .from("field_note_media")
+      .select("id, type, url, title, caption, section_key, layout, aspect_ratio, sort_order")
+      .eq("field_note_id", id)
+      .order("sort_order", { ascending: true }),
+  ]);
 
+  const { data: note, error } = noteResult;
   if (error || !note) notFound();
 
-  const { data: mediaRows } = await supabase
-    .from("field_note_media")
-    .select("id, type, url, title, caption, section_key, layout, aspect_ratio, sort_order")
-    .eq("field_note_id", id)
-    .order("sort_order", { ascending: true });
-
-  const media = (mediaRows ?? []) as FieldNoteMediaRow[];
+  const media = (mediaResult.data ?? []) as FieldNoteMediaRow[];
   const updateAction = updateFieldNoteAction.bind(null, id);
 
   return (

@@ -1,5 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import {
   hasPublicSupabaseConfig,
   PUBLIC_SUPABASE_ANON_KEY,
@@ -42,4 +42,35 @@ export async function createClient() {
       },
     }
   );
+}
+
+export interface AdminAuthSession {
+  id: string;
+  email: string | null;
+}
+
+/**
+ * Fast admin authentication reader for Server Components.
+ * Reads the verified session header injected by middleware.ts (0ms latency).
+ * If the header is absent, safely falls back to calling supabase.auth.getUser().
+ */
+export async function getAdminAuthSession(): Promise<AdminAuthSession | null> {
+  const headerStore = await headers();
+  const userId = headerStore.get("x-user-id");
+  const userEmail = headerStore.get("x-user-email");
+
+  if (userId) {
+    return { id: userId, email: userEmail || null };
+  }
+
+  if (!isSupabaseConfigured()) {
+    return null;
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  return user ? { id: user.id, email: user.email ?? null } : null;
 }
