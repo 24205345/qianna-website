@@ -7,6 +7,7 @@ import GuestbookSection from "@/app/_components/guestbook/GuestbookSection";
 import FeaturedProjectsSection from "@/app/_components/home/FeaturedProjectsSection";
 import VisualFootprintsSection from "@/app/_components/home/VisualFootprintsSection";
 import EditorialNotesSection from "@/app/_components/home/EditorialNotesSection";
+import WorkbenchSection from "@/app/_components/home/WorkbenchSection";
 import { getAboutPageContent } from "@/lib/about/queries";
 import {
   getApprovedGuestbookMessageCount,
@@ -16,6 +17,7 @@ import { getTurnstileSiteKey } from "@/lib/guestbook/turnstile";
 import { getLatestNotes } from "@/lib/notes/queries";
 import { getFeaturedProjects } from "@/lib/projects/queries";
 import { getFeaturedTraces } from "@/lib/traces/queries";
+import { getWorkbenchPipelines } from "@/lib/workbench/queries";
 import {
   DEFAULT_SITE_DESCRIPTION,
   DEFAULT_SITE_TITLE,
@@ -49,6 +51,7 @@ export default async function Home() {
     guestbookTotal,
     featuredProjects,
     featuredTraces,
+    workbenchPipelines,
   ] = await Promise.all([
     getSiteSettings(),
     getSiteNavigationItems(),
@@ -58,6 +61,7 @@ export default async function Home() {
     getApprovedGuestbookMessageCount(),
     getFeaturedProjects(),
     getFeaturedTraces(),
+    getWorkbenchPipelines(),
   ]);
 
   const notesSection = getSiteNavigationItem(navigationItems, "notes-preview");
@@ -135,7 +139,10 @@ export default async function Home() {
           navigationSection={notesSection}
         />
 
-        {/* 4. About Me & Guestbook */}
+        {/* 4. Creative Pipelines & Vault (Workbench) */}
+        <WorkbenchSection pipelines={workbenchPipelines} />
+
+        {/* 5. About Me & Guestbook */}
         <section id="about-me" className="py-16 md:py-20">
           <Reveal>
             <h2 className="font-serif text-3xl text-stone-900 md:text-4xl">

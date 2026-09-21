@@ -8,6 +8,7 @@ const SECTION_LABELS: Record<string, string> = {
   "field-notes": "Field Notes",
   notes: "Notes",
   traces: "Traces",
+  workbench: "Workbench",
 };
 
 const TRACES_LEGACY_ROUTES: Record<string, string> = {

@@ -62,17 +62,29 @@ Supabase 数据量（已验证）：
 
 ---
 
-## 2.1 前台 UX 要点（摘要）
+## 2.1 前台 UX 要点与视觉呈现规范（核心准则）
 
-完整 IA 见 `docs/exec-site-ia-guestbook-2026-08-04.md`。关键约定：
+完整 IA 见 `docs/exec-site-ia-guestbook-2026-08-04.md`；视觉策展改版详见 `docs/exec-homepage-editorial-admin-overhaul-2026-09-16.md`。关键约定：
 
-- 首页顺序：**Notes → Projects → Traces → About Me**（Guestbook 预览 3 条）
-- Projects 分类：`lib/projects/categories.ts`（`matchLabels` 兼容历史文案）
-- 首页 project 卡片 → `/projects?category=...`；View all → `/projects`（按 year 扁平排序）
-- Hero CTA：轻量 `Enter →` 文字链，非胶囊按钮
-- About 照片 **只在 `/about`**，首页 About 卡片仅文字摘要
-- Admin：**左侧边栏**；Projects 子菜单无 All；About 照片 16:9 裁切（`react-easy-crop`）
-- 站点气质：安静、编辑感、stone 暖灰；大改 UI 前可参考 `ui-ux-pro-max` skill，但以截图与现有风格为准
+- **核心原则：新增模块或者做修改的时候要参考网站的既有风格和呈现模式**，严禁脱离全站既有设计语言自行臆想设计；
+- **首页策展叙事动线**：
+  - `01` **Selected Works (Projects)** → `02` **Traces** → `03` **Notes** → `04` **Workbench** → **About Me**（含 Guestbook 预览）；
+- **极简双字体与去噪规范**：
+  - **首页 100% 严禁出现 `font-mono`**（拔除等宽代码字体的视觉杂波）；大标题统一使用精致衬线体 `font-serif`，正文、标签、小角标统一使用无衬线体 `font-sans`；
+- **板块头部与 Sub-rail 导航横轨统一**：
+  - 眉标格式统一：`Category / Theme · 0X`（`text-xs tracking-[0.22em] text-stone-500 uppercase`）；
+  - 主标题格式统一：`mt-1 font-serif text-3xl md:text-4xl text-stone-900`；
+  - 分类横轨统一采用 **Sub-rail 细分割线模式**（`border-b border-stone-200/80`）：左侧分类项为 `-mb-px border-b-2 pb-3 text-sm`（激活项为深黑实线 `border-stone-900 font-medium text-stone-900`，非激活项为浅灰且 hover 悬停加黑指示），右侧对齐 `View all ... →`（**严禁默认下划线**，hover 仅平滑右移 `translate-x-0.5`）；
+- **卡片容器与控件约束**：
+  - 卡片统一采用 `rounded-2xl border border-stone-200/80 bg-stone-100/50 p-4~p-6`，hover 统一过渡到 `border-stone-300 bg-stone-100/90`；
+  - 标签统一采用 `rounded-md bg-stone-200/60 px-2 py-0.5 text-xs text-stone-600`（或 `rounded-md bg-stone-100 px-2.5 py-1 text-xs text-stone-600`）；
+  - **严禁私自引入深色药丸胶囊按钮（如黑底圆角按钮）、emoji 图标装饰与多层内嵌复杂容器**；
+- Projects 分类：`lib/projects/categories.ts`（`matchLabels` 兼容历史文案）；
+- 首页 project 卡片 → `/projects?category=...`；View all → `/projects`（按 year 扁平排序）；
+- Hero CTA：轻量 `Enter →` 文字链，非胶囊按钮；
+- About 照片 **只在 `/about`**，首页 About 卡片仅文字摘要；
+- Admin：**左侧边栏**；Projects 子菜单无 All；About 照片 16:9 裁切（`react-easy-crop`）；
+- 站点气质：安静、编辑感、stone 暖灰；大改 UI 前可参考 `ui-ux-pro-max` skill，但以截图与现有风格为准。
 
 历史逐条变更见各 `docs/exec-*.md`，此处不再堆叠。
 

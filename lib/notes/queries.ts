@@ -77,7 +77,13 @@ export async function getPublishedNotes(): Promise<NoteListItem[]> {
     return fallbackNotes.map(toListItem);
   }
 
-  return (data as NoteRow[]).map((row) => toListItem(mapDetail(row)));
+  const supabaseNotes = (data as NoteRow[]).map((row) => toListItem(mapDetail(row)));
+  const existingSlugs = new Set(supabaseNotes.map((n) => n.slug));
+  const additionalFallbacks = fallbackNotes
+    .filter((n) => !existingSlugs.has(n.slug))
+    .map(toListItem);
+
+  return [...supabaseNotes, ...additionalFallbacks];
 }
 
 export async function getLatestNotes(limit = 3): Promise<NoteListItem[]> {
@@ -97,7 +103,13 @@ export async function getLatestNotes(limit = 3): Promise<NoteListItem[]> {
     return fallbackNotes.slice(0, limit).map(toListItem);
   }
 
-  return (data as NoteRow[]).map((row) => toListItem(mapDetail(row)));
+  const supabaseNotes = (data as NoteRow[]).map((row) => toListItem(mapDetail(row)));
+  const existingSlugs = new Set(supabaseNotes.map((n) => n.slug));
+  const additionalFallbacks = fallbackNotes
+    .filter((n) => !existingSlugs.has(n.slug))
+    .map(toListItem);
+
+  return [...supabaseNotes, ...additionalFallbacks].slice(0, limit);
 }
 
 export async function getNoteBySlug(slug: string): Promise<NoteDetail | null> {

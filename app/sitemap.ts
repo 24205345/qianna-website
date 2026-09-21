@@ -16,6 +16,7 @@ const STATIC_PATHS = [
   "/visual-works",
   "/field-notes",
   "/guestbook",
+  "/workbench",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

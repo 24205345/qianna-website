@@ -17,6 +17,13 @@ function slugifyHeading(text: string): string {
   return slug || "section";
 }
 
+function cleanHeadingText(text: string): string {
+  return text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/[`*_~]/g, "")
+    .trim();
+}
+
 /** Extract h2/h3 headings from markdown for TOC navigation. */
 export function extractTocFromMarkdown(markdown: string): TocHeading[] {
   const headings: TocHeading[] = [];
@@ -27,7 +34,8 @@ export function extractTocFromMarkdown(markdown: string): TocHeading[] {
     if (!match) continue;
 
     const level = match[1].length as 2 | 3;
-    const text = match[2].replace(/#+\s*$/, "").trim();
+    const rawText = match[2].replace(/#+\s*$/, "").trim();
+    const text = cleanHeadingText(rawText);
     if (!text) continue;
 
     let id = slugifyHeading(text);
