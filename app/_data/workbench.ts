@@ -6,7 +6,7 @@ export const WORKBENCH_PIPELINES: WorkflowPipeline[] = [
     title: "AI Product & Solo Dev",
     englishTitle: "AI Product & Solo Indie Development",
     badge: "AI Engineering & Indie Hacker",
-    icon: "⚡",
+    icon: "",
     summary:
       "An agile, deliverable-first engineering loop: from agent guardrails and core path validation to split-screen UX ergonomics and containerized production deployment.",
     coreStack: [
@@ -434,7 +434,7 @@ Security mandate: Store secret keys exclusively in backend env; verify all incom
     title: "Computational Architecture",
     englishTitle: "Computational Architecture & Spatial Design",
     badge: "Spatial Research & Parametric Design",
-    icon: "🏛️",
+    icon: "",
     summary:
       "An end-to-end design research pipeline: from multi-source geospatial data harvesting and parametric form generation to analytical drawings and portfolio publication.",
     coreStack: [

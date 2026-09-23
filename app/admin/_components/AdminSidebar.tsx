@@ -13,8 +13,6 @@ const TRACES_ITEMS = [
 ] as const;
 
 const TOP_LEVEL = [
-  { label: "Site Settings", href: "/admin/site", match: (path: string) => path === "/admin/site" },
-  { label: "Notes", href: "/admin/notes", match: (path: string) => path.startsWith("/admin/notes") },
   {
     label: "Projects",
     href: "/admin/projects",
@@ -30,12 +28,19 @@ const TOP_LEVEL = [
       path.startsWith("/admin/field-notes"),
     children: "traces" as const,
   },
+  { label: "Notes", href: "/admin/notes", match: (path: string) => path.startsWith("/admin/notes") },
+  {
+    label: "Workbench",
+    href: "/admin/workbench",
+    match: (path: string) => path.startsWith("/admin/workbench"),
+  },
   { label: "About", href: "/admin/about", match: (path: string) => path === "/admin/about" },
   {
     label: "Guestbook",
     href: "/admin/guestbook",
     match: (path: string) => path === "/admin/guestbook",
   },
+  { label: "Site Settings", href: "/admin/site", match: (path: string) => path === "/admin/site" },
   {
     label: "Analytics",
     href: "/admin/analytics",
