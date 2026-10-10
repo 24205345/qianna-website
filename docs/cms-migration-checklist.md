@@ -1,316 +1,77 @@
-# CMS 全站迁移 Checklist（P1–P9 + 后续）
+# CMS 与媒体迁移验收清单
 
-> 原则：每步小而可验证，完成一步 commit 一步，不要一次性大改。
+最后更新：2026-10-10。当前状态以本清单和 [开发指南](developer-guide.md) 为准；早期阶段规划见历史执行记录。提交与推送仅在用户明确要求时执行。
 
----
+## 1. 当前交付状态
 
-## 当前进度总览
-
-| 阶段 | 状态 | 说明 |
+| 模块 | 状态 | 实现与验收入口 |
 |---|---|---|
-| Phase 0 基础设施 | ✅ | Supabase DB/Storage/Auth、RLS、`.env.local` |
-| R2 媒体存储适配 | 生产迁移完成，验收通过 | 160 文件 / 101.36 MiB、159 行；原对象保留，真实上传和公开交付通过；见 [执行记录](exec-mcp-storage-2026-10-10.md) |
-| Projects 列表 CMS | ✅ | `/projects` + `/admin/projects` |
-| Projects 媒体 CMS | ✅ | 画廊图、封面、顶部视频已上传 Storage |
-| **P1 Projects 详情补完** | ✅ | 动态 `[slug]`、Overview/Details/Intro 视频可编辑 |
-| **P2 Photography** | ✅ | 3 系列 46 张、前台读库、后台 CRUD + 迁移脚本 |
-| **P3 Visual Works** | ✅ | 3 分类 22 张、前台读库、后台 CRUD + 迁移脚本 |
-| **P4 Field Notes** | ✅ | 5 旅程、63 图 + 4 视频、动态 [slug]、双模板 |
-| **P5 Home Hero** | ✅ | `site_settings` + `/admin/site`，首页 Hero 可后台编辑；后台 UI 已统一英文 |
-| **P5.5 Site Navigation Copy** | ✅ | 首页入口卡片 + 对应子页面页眉共用 `site_navigation_items` |
-| **P6 About** | ✅ | `/about` + `/admin/about`；Timeline + 16:9 个人照片裁切上传 |
-| **P7 Notes** | ✅ | 独立 Notes 模块：MD + TOC；首页 Notes 区块在 Projects Preview 上方；`/admin/notes` |
-| **P8 Traces Hub** | ✅ | 首页四板块；`/traces` 三 Tab；`0012_traces_navigation.sql` |
-| **P9 Guestbook** | ✅ | 首页 About Me 下预览 3 条；先审后发；`/admin/guestbook`；`0013`/`0014` |
-| **P10 Analytics** | ✅ | PV/UV/停留时长；`/admin/analytics`；Vercel Speed Insights |
-| **P11 Admin UX** | ✅ | 左侧边栏导航；About 照片 `react-easy-crop` 裁切 |
+| Supabase Postgres / Auth / RLS | 已接入 | 内容与登录保留在 Supabase；媒体迁移未修改 schema / RLS |
+| Projects | 已完成 | 列表、动态详情、后台；thesis / xicaoshi / portfolio 模板 |
+| Photography / Drawings | 已完成 | 46 张照片、22 幅作品；分类与媒体 CRUD |
+| Field Notes | 已完成 | 5 旅程、62 张图 + 4 外链视频；gallery / narrative 双模板 |
+| Hero / Site Navigation | 已完成 | `site_settings`、`site_navigation_items`、`/admin/site`；上传自动压缩 |
+| About | 已完成 | Timeline、16:9 照片裁切；照片仅出现在详情页 |
+| Notes | 已完成 | 双语 Markdown、Tiptap、TOC、统一附件上传 |
+| Traces / Guestbook | 已完成 | 三 Tab、专项旧路径、留言审核与可选 Turnstile |
+| Analytics / Admin | 已完成 | `page_views`、Analytics 面板、`AdminShell` 侧栏布局 |
+| Workbench | 代码完成，生产表待部署 | 前台静态回退；后台持久化依赖 `0019` |
+| R2 存量迁移 | 已完成并验收 | 160 文件 / 106,278,846 字节（101.36 MiB），159 行引用；生产 provider 为 `r2` |
+| 本地代理 DNS 裂图修复 | 已完成并验收 | 仅 development 的直读开关，首页 8 张图片成功加载 |
+| 大文件签名直传 | 待实现 | 当前仍经 Server Actions 上传 |
 
----
+首页顺序：Hero → Projects → Traces → Notes → Workbench → About + Guestbook。R2 与裂图修复提交：[`0064c9f`](https://github.com/24205345/qianna-website/commit/0064c9f21b44dbb702040ce788320b698fe82c7e)，已推送 `main`。
 
-## P1：Projects 详情补完 ✅
+## 2. 内容模块回归
 
-### 已完成内容
-- [x] 数据库新增：`overview_paragraphs`、`project_details`、`intro_video_url`、`layout_template`
-- [x] 灌入 thesis / xicaoshi 现有文字数据
-- [x] 详情页改为 `app/projects/[slug]/page.tsx` 动态路由
-- [x] 保留两种视觉模板：`thesis` / `xicaoshi`
-- [x] 后台表单可编辑 Overview、Project Details、Intro 视频 URL、Layout template
+以下供后续变更验收使用，不表示本次重新执行了全部写操作。初始化脚本不要当作生产测试步骤重跑。
 
-### 验证方式
-1. 访问 `/projects/thesis` — 视频、Overview、Details、Google Drive iframe、8 张画廊
-2. 访问 `/projects/xicaoshi-red-temple` — 封面、Overview、12 张网格画廊
-3. 后台编辑 thesis → 改 Overview 一段文字 → 保存 → 刷新前台确认
-
-### 涉及文件
-- `app/projects/[slug]/page.tsx`
-- `app/projects/_components/*`
-- `lib/projects/queries.ts`、`parse-form.ts`
-- `app/admin/projects/ProjectForm.tsx`、`actions.ts`
-
----
-
-## P2：Photography 模块
-
-### 目标
-46 张照片（Getty 18 + Venice 18 + Portraits 10）可在后台管理，前台 `/photography` 从 Supabase 读取。
-
-### 建议表结构（二选一，推荐 A）
-
-**方案 A（推荐）：专用表**
-```sql
-photography_collections (id, slug, title, description, sort_order)
-photography_photos (id, collection_id, url, title, date, location, description, sort_order)
-```
-
-**方案 B：复用 projects 模式** — 每个系列当一个 "project"，过于 hack，不推荐。
-
-### 分步 Checklist
-
-| 步骤 | 任务 | 修改文件 | 验证 |
-|---|---|---|---|
-| P2-1 | 建表 + RLS + GRANT | `supabase/migrations/0002_photography.sql` | Supabase 表可见 |
-| P2-2 | 扩展 `migrate:media` 或新建 `migrate:photography` | `scripts/` | 46 张压缩上传成功 |
-| P2-3 | 灌入 46 条 photo 记录 + 3 个 collection | SQL 或脚本 | 后台能查到 |
-| P2-4 | 前台 `/photography` 改读 Supabase | `app/photography/page.tsx`、`lib/photography/queries.ts` | 页面视觉不变 |
-| P2-5 | 后台 `/admin/photography` 列表 + 编辑 | `app/admin/photography/**` | 可改标题/图注 |
-| P2-6 | `npm run lint` + `npm run build` | — | 通过 |
-| P2-7 | commit | — | — |
-
-**预估**：Agent 5–8h，你验证 1h
-
----
-
-## P2：Photography 模块 ✅
-
-### 已完成内容
-- [x] 建表 `photography_collections` + `photography_photos` + RLS + GRANT
-- [x] 灌入 3 个系列元数据（seed-photography.sql）
-- [x] 前台 `/photography` 读 Supabase，静态 `_data` 回退
-- [x] 后台 `/admin/photography` 系列 CRUD + PhotoManager
-- [x] 迁移脚本 `npm run migrate:photography` + 下载脚本 `download-photography-media.ps1`
-
-### 验证方式
-1. 若本地无 `public/photography/`：先跑 `scripts/download-photography-media.ps1`
-2. 跑 `npm run migrate:photography` 上传 46 张到 Storage
-3. 访问 `/photography` — 3 个系列、46 张图、lightbox 正常
-4. 后台 `/admin/photography` — 可编辑系列标题、上传/删除照片
-
-### 涉及文件
-- `supabase/migrations/0002_photography.sql`
-- `lib/photography/queries.ts`
-- `app/photography/page.tsx`、`PhotoGallery.tsx`
-- `app/admin/photography/**`
-- `scripts/migrate-photography.mjs`
-
----
-
-## P3：Visual Works 模块
-
-### 目标
-22 幅作品（pen 6 + pen&wash 10 + watercolor 6），结构比 Photography 更简单（无 location）。
-
-### 分步 Checklist
-
-| 步骤 | 任务 | 修改文件 | 验证 |
-|---|---|---|---|
-| P3-1 | 建表 `visual_works` + `visual_work_categories` | `supabase/migrations/0003_visual_works.sql` | 表可见 |
-| P3-2 | 迁移 22 张图到 Storage | `scripts/migrate-visual-works.mjs` | 上传成功 |
-| P3-3 | 前台 `/visual-works` 读 Supabase | `app/visual-works/page.tsx` | 视觉不变 |
-| P3-4 | 后台 `/admin/visual-works` | `app/admin/visual-works/**` | 可编辑 |
-| P3-5 | lint/build + commit | — | 通过 |
-
-**预估**：Agent 3–5h（大量复制 P2 模式）
-
----
-
-## P3：Visual Works 模块 ✅
-
-### 已完成内容
-- [x] 建表 `visual_work_categories` + `visual_works` + RLS + GRANT
-- [x] 前台 `/visual-works` 读 Supabase，静态回退
-- [x] 后台 `/admin/visual-works` 分类 CRUD + WorkManager
-- [x] `npm run migrate:visual-works` + `download-visual-works-media.ps1`
-
-### 验证方式
-1. `scripts/download-visual-works-media.ps1` → `npm run migrate:visual-works`
-2. 访问 `/visual-works` — 3 分类、22 张、lightbox 正常
-3. 后台 `/admin/visual-works` — 可编辑分类、上传/删除作品
-
----
-
-## P4：Field Notes 模块 ✅
-
-### 已完成内容
-- [x] 建表 `field_notes` + `field_note_media` + RLS + GRANT
-- [x] 5 条旅程元数据 + 62 张图 + 4 个 Google Drive 视频写入 Supabase
-- [x] 列表 `/field-notes` 读 Supabase，静态 `_data` 回退
-- [x] 详情改 `app/field-notes/[slug]` 动态路由
-- [x] 双模板：`gallery`（nanjiluo / yubeng / whitecliffs / gliding）+ `narrative`（snowboard）
-- [x] 后台 `/admin/field-notes` CRUD + MediaManager（图片 + 视频外链）
-- [x] `npm run migrate:field-notes` + `download-field-notes-media.ps1`
-
-### 验证方式
-1. `/field-notes` — 5 张卡片
-2. `/field-notes/gliding` — 画廊 + 2 个视频 iframe
-3. `/field-notes/snowboard` — 叙事区块 + Scroll 提示 + In Motion 视频
-4. `/admin/field-notes` — 可编辑旅程与媒体
-
-### 涉及文件
-- `supabase/migrations/0004_field_notes.sql`
-- `app/_data/field-note-details.ts`
-- `lib/field-notes/queries.ts`
-- `app/field-notes/[slug]/page.tsx`
-- `app/field-notes/_components/GalleryFieldNoteView.tsx`
-- `app/field-notes/_components/NarrativeFieldNoteView.tsx`
-- `app/admin/field-notes/**`
-- `scripts/migrate-field-notes.mjs`
-
----
-
-## P4（原规划参考）
-
-### 目标
-5 条旅程列表 + 5 个详情页，约 63 张图，4 个 Google Drive 视频 iframe（gliding×2、snowboard×2）。
-
-### 建议表结构
-```sql
-field_notes (id, slug, title, date, location, description, cover_image_url,
-             intro_video_urls text[], layout_template, sort_order, status)
-field_note_media (id, field_note_id, type, url, title, caption, sort_order)
-```
-
-`intro_video_urls` 存多个 Google Drive preview URL（数组）。
-
-### 分步 Checklist
-
-| 步骤 | 任务 | 验证 |
+| 模块 | 前台检查 | 后台检查 |
 |---|---|---|
-| P4-1 | 建表 + RLS | 表可见 |
-| P4-2 | 迁移 63 张图（gliding 最大，注意压缩） | Storage 有文件 |
-| P4-3 | 灌入 5 条 field_notes + 视频 URL | 数据完整 |
-| P4-4 | 列表页 `/field-notes` 读 Supabase | 5 张卡片正常 |
-| P4-5 | 详情页改 `app/field-notes/[slug]/page.tsx` 动态路由 | 5 个 URL 全通 |
-| P4-6 | 后台 `/admin/field-notes` CRUD + 媒体管理 | 可增删改 |
-| P4-7 | lint/build + commit | 通过 |
+| Projects | 分类、状态、详情图廊、portfolio 翻页、MP4 与外链视频 | 文案/状态保存，封面/图廊上传返回 R2 URL |
+| Photography / Drawings | 系列、分类、图注、lightbox | 分类和媒体编辑、上传、删除记录 |
+| Field Notes | 5 slug、双模板、gliding / snowboard 外链视频 | 封面、section_key / layout / caption 保存 |
+| Hero / Site | 图片与文案、板块和相关页眉同步 | 压缩上传生成 `site/home-hero-<uuid>.webp`，保存后刷新首页 |
+| About | 详情照片与 Timeline，首页文字摘要 | 16:9 裁切、文案保存 |
+| Notes | 双语、表格/代码/图片/附件、TOC、Hidden 不展示 | Tiptap 图片粘贴、双语编辑、附件上传与发布 |
+| Guestbook | approved 列表、首页 3 条预览、Turnstile（启用时） | 审核、隐藏、删除 |
+| Analytics | 页面浏览事件与路径 | 区间筛选、聚合 |
+| Workbench | 静态回退；部署表后验证数据库读取 | 部署表后测试保存、初始化与排序持久化 |
 
-**预估**：Agent 8–12h，你验证 1–2h
+文件索引见 [开发指南 §6](developer-guide.md#6-关键文件索引)，数据流程见 [架构](architecture.md)。
 
----
+## 3. R2 迁移实际结果
 
-## P5：Home Hero CMS ✅
+- [x] R2 Standard / APAC `portfolio-media` 创建完成；自定义域名与 TLS active。
+- [x] 本桶 Object Read & Write 凭据配置在本地与 Vercel Production，密钥未进入 Git。
+- [x] 160 文件复制至 `legacy/portfolio-media/<原对象键>`，源 / S3 GET / 公开 URL 的 SHA-256 一致。
+- [x] 159 行并发保护更新，清单状态全为 `applied`；逐行匹配 after 值，扫描字段无原桶 URL 残留。
+- [x] 外链、静态路径及未命中原桶 URL 的 Notes 正文保留。
+- [x] 先部署双域名版本，再 apply DB，最后切换生产 provider 并重新部署。
+- [x] 真实 Notes 后台认证上传返回 R2 URL，内容校验通过；测试文章未提交，测试对象已清理。
+- [x] 生产 Next.js 图片请求 200、MP4 Range 206、缓存头验证通过。
+- [x] 20 项媒体测试、lint、类型检查、构建通过；迁移提交前再次运行媒体测试。
+- [x] Supabase 原对象与正式本地回滚清单保留；2026-10-10 只读复核源仍为 160 对象 / 106,278,846 字节。
 
-### 已完成内容
-- [x] 建表 `site_settings`（单行 `singleton_key = 'home'`）+ RLS + GRANT
-- [x] 首页 `/` 读取 Supabase，未配置或查询失败时回退 `app/_data/site-settings.ts`
-- [x] 后台 `/admin/site` 可编辑 Hero title / subtitle / CTA / image URL / alt
-- [x] 后台支持可选上传新 Hero 图片到 `portfolio-media/site/`
-- [x] `npm run migrate:home` 可压缩上传本地 `public/images/hero-image.jpg` 并写入 `site_settings`
+数据库改写分布：Projects 2、project_media 20、photography_photos 46、visual_works 22、field_notes 5、field_note_media 62、site_settings 1、about_page_content 1，共 159 行。对象数与行数不是同一口径，也不等于全部业务记录数。实测 101.36 MiB 替代早期 50–80 MB 估算。
 
-### 验证方式
-1. 在 Supabase SQL Editor 执行 `supabase/migrations/0005_site_settings.sql`
-2. 若本地缺图，先运行 `scripts/download-home-hero.ps1`
-3. 运行 `npm run migrate:home`
-4. 访问 `/` — Hero 图和文案来自 Supabase
-5. 登录 `/admin/site` — 修改 Hero 文案或上传图片，保存后刷新首页确认
+证据与部署快照见 [执行记录](exec-mcp-storage-2026-10-10.md)；复制、校验、并发保护与回滚命令见 [R2 步骤](exec-cloudflare-r2-2026-10-09.md)。
 
-### 涉及文件
-- `supabase/migrations/0005_site_settings.sql`
-- `app/_data/site-settings.ts`
-- `lib/site/queries.ts`
-- `app/page.tsx`
-- `app/admin/site/**`
-- `scripts/migrate-home-hero.mjs`
+## 4. 后续部署与回滚检查
 
----
+- [ ] 新部署确认 Production 的完整 R2 配置与双域名白名单，Preview 环境单独配置。
+- [ ] 观察实际媒体请求与图片加载；页面 HTTP 200 不等于图片正常。
+- [ ] 受控备份 `.media-migration/r2-plan.json`，该清单不在 Git 或部署包内。
+- [ ] 回滚先暂停编辑并按清单恢复 DB，再切换 provider、部署；迁移后的新上传另行核对。
+- [ ] 生产回滚演练尚未执行；已有自动化测试不能写成已做生产演练。
 
-## P5.5：Site Navigation Copy ✅
+配置、裂图诊断与回滚见 [媒体运维](experience-media-storage.md)。删除业务记录不会自动删除对象；源文件、R2 文件与静态资产清理需独立盘点。
 
-### 已完成内容
-- [x] 新增 `site_navigation_items` 表，用于管理首页入口卡片与对应子页面页眉
-- [x] 首页 `Projects Preview`、三类 project 卡片、Photography / Visual Works / Field Notes / About 卡片均改读 CMS
-- [x] `/projects?category=...` 分类页标题/描述与首页 project 分类卡片共用同一份文案
-- [x] `/photography`、`/visual-works`、`/field-notes`、`/about` 页眉与首页入口卡片同步
-- [x] `/admin/site` 增加 Homepage Cards & Page Headings 编辑区
-- [x] 未配置 Supabase 或未执行迁移时保留 `app/_data/site-navigation.ts` 静态回退
+## 5. 待办与执行约定
 
-### 验证方式
-1. `supabase/migrations/0006_site_navigation_items.sql` 已在 Supabase 执行；如需复验，可确认 `site_navigation_items` 表有 8 条默认记录且 RLS 开启
-2. 登录 `/admin/site`
-3. 修改 Photography 卡片 Title 或 Description 后保存
-4. 刷新首页 `/` 和 `/photography`，两处应同步更新
-5. 修改任一 project category 文案后，首页 project 卡片和对应 `/projects?category=...` 页眉应同步
+1. 实现认证后的短时签名直传、CORS 与服务端完成验证；应用 20 MB 配置不能突破 Vercel 4.5 MB 请求体限制。
+2. 部署并验证 `0019_workbench_pipelines.sql` 的 RLS / GRANT、后台持久化与前台读库；2026-10-10 只读复核表仍不存在。
+3. 独立处理依赖安全更新与完整回归；资产元数据和引用管理按实际需求推进。
+4. 继续 Notes 内容、GSC 与 Analytics 观察。
 
-### 涉及文件
-- `supabase/migrations/0006_site_navigation_items.sql`
-- `app/_data/site-navigation.ts`
-- `lib/site/queries.ts`
-- `app/page.tsx`
-- `app/projects/page.tsx`
-- `app/photography/page.tsx`
-- `app/visual-works/page.tsx`
-- `app/field-notes/page.tsx`
-- `app/about/page.tsx`
-- `app/admin/site/**`
-
----
-
-## P6：About ✅
-
-- [x] `about_page_content` + `/admin/about`（Timeline、Working Across、Current Focus）
-- [x] 页头 title/description 同步 `site_navigation_items.about`
-- [x] `/about` 16:9 个人照片（`0016_about_profile_image.sql`）；后台裁切上传；**首页 About 卡片不显示照片**
-
----
-
-## P7：Notes ✅
-
-### 已完成内容
-- [x] 建表 `notes` + RLS + GRANT（`supabase/migrations/0010_notes.sql`）
-- [x] `site_navigation_items` 增加 `notes-preview` section（与 Projects Preview 同级）
-- [x] 首页 Notes 区块在 Projects Preview **上方**，展示最新 3 篇标题 + 短 excerpt
-- [x] `/notes` 列表 + `/notes/[slug]` Markdown 渲染与 TOC
-- [x] `/admin/notes` CRUD（Markdown + 预览、Excerpt 单独字段）
-- [x] Admin Projects 列表按三类分组
-
-### 验证方式
-1. `/admin/notes` 新建一篇，设为 Hidden → 首页与 `/notes` 不可见
-2. Publish → 首页 Notes 区块与 `/notes` 出现
-3. 正文含多个 `##` → 详情页 Contents 可跳转
-
----
-
-## 全站完成后 Storage 估算
-
-| 模块 | 压缩后大小 |
-|---|---|
-| Projects（已完成） | ~6 MB |
-| Photography | ~15–25 MB |
-| Visual Works | ~8–12 MB |
-| Field Notes | ~20–35 MB |
-| Home Hero | ~0.5–1 MB |
-| **合计** | **~50–80 MB**（Supabase 免费 1GB 内） |
-
----
-
-## 给 Coding Agent 的执行约定
-
-0. 先读根目录 **`AGENTS.md`**、**`docs/developer-guide.md`** 与 **`docs/architecture.md`**；按任务查 **`docs/README.md`**
-1. **一次只做一个阶段/功能**，验证后再开下一项
-2. 每步结束：`npm run lint` → `npm run build` → `git commit`
-3. 密钥只放 `.env.local`，不提交 GitHub
-4. 媒体迁移用管理员账号登录脚本，不用 service_role
-5. 大视频一律 Google Drive / 外链，不上传 Supabase
-6. 前台必须保留静态回退（Supabase 未配置时仍能 build）
-
----
-
-## 推荐下一步
-
-CMS 与 Analytics 主线已完成。可继续：
-
-1. **内容运营**：Notes 发文、About 照片、各模块 Publish
-2. **生产域名**：`https://www.qiannawang.com` — 见 `docs/exec-vercel-domain-2026-08-11.md`
-3. **Supabase Auth Redirect URLs** 与自定义域名对齐
-4. 可选：Markdown 编辑器增强、更多项目 slug 模板
-
-本地开发、sparse-checkout、下载脚本等详见 **`docs/developer-guide.md` 第 3–4 节**。
+先读 `AGENTS.md`、架构与开发指南。React/TS 改动运行 lint，媒体逻辑改动运行媒体测试，按范围补充类型检查、构建和浏览器验收。仅明确要求时 commit / push；本地凭据、MCP OAuth 和回滚清单不提交。

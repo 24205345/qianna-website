@@ -1,12 +1,12 @@
 # Cloudflare R2 媒体存储改造与执行步骤
 
-更新时间：2026-10-10（Asia/Shanghai）。代码基线：GitHub `main` / `decd6ac`。最新接入和执行状态见 [MCP 接入记录](exec-mcp-storage-2026-10-10.md)。
+更新时间：2026-10-10（Asia/Shanghai）。迁移前基线为 `main` / `decd6ac`；迁移与裂图修复已提交推送为 [`0064c9f`](https://github.com/24205345/qianna-website/commit/0064c9f21b44dbb702040ce788320b698fe82c7e)。结果见 [迁移记录](exec-mcp-storage-2026-10-10.md)，维护见 [媒体运维](experience-media-storage.md)。
 
 ## 1. 决策与项目理解
 
 这是 Next.js 16.2.1 / React 19 的个人作品集，Vercel 运行前台和私有 Admin CMS。页面通过 `lib/*/queries.ts` 读取 Supabase，失败时使用 `app/_data/*` 静态回退。数据库维护 Projects、Photography、Visual Works、Field Notes、首页、About、Notes、Guestbook、Analytics 和 Workbench；Admin 写操作集中在 Server Actions。Supabase Auth 验证管理员，Postgres RLS 管理内容读写，Turnstile 保护留言。
 
-媒体迁移建议：**保留 Supabase Postgres / Auth，将公开媒体对象移到 Cloudflare R2，业务表继续保存媒体公开 URL。** 这样无需同时改造数据库、登录和前台呈现，可以逐步验收。R2 负责文件存储；图片尺寸优化继续由现有 sharp / next/image 完成。
+媒体迁移决策（已实施）：**保留 Supabase Postgres / Auth，将公开媒体对象移到 Cloudflare R2，业务表继续保存媒体公开 URL。** 无需同时改造数据库、登录和前台呈现。R2 负责文件存储；图片尺寸优化由现有 sharp / next/image 完成。
 
 本次读取了 AGENTS、开发指南、架构、CMS 清单、SQL 迁移、查询层和全部后台上传入口。没有 `.codegraph/` 索引，使用文件检索定位。仓库已有 Supabase 媒体迁移记录，但未找到独立的 R2 方案。
 
@@ -15,8 +15,8 @@ flowchart LR
   Admin[管理员] --> Actions[Next.js Server Actions]
   Actions --> Auth[Supabase Auth 校验]
   Actions --> Adapter[统一媒体存储接口]
-  Adapter -->|默认| Storage[Supabase Storage]
-  Adapter -->|配置 r2| R2[Cloudflare R2]
+  Adapter -.->|未指定 provider 时默认| Storage[Supabase Storage / 保留源]
+  Adapter -->|生产 r2| R2[Cloudflare R2]
   Actions --> DB[(Supabase Postgres / RLS)]
   DB -->|媒体公开 URL| Pages[Next.js 页面]
   R2 --> Domain[media.qiannawang.com]
@@ -61,7 +61,9 @@ flowchart LR
 
 存量对象复制到 `legacy/portfolio-media/<原路径>`。保留目录与原文件字节；新上传继续采用各模块已有目录。数据库无需新增列或修改 RLS。
 
-## 4. Cloudflare 和 Vercel 配置
+## 4. Cloudflare 和 Vercel 配置（首次切换步骤）
+
+下列 `supabase` provider 是首次兼容部署的阶段值；当前生产已为 `r2`，不要照抄旧阶段配置覆盖生产。
 
 1. 创建 R2 Standard 桶，例如 `portfolio-media`。该桶只放网站公开媒体。
 2. 将媒体子域名加入桶的 Custom Domains，并等待 Active。域名须属于同一 Cloudflare 账户中的 zone；非 Cloudflare DNS 域名应按官方支持的 zone 接入流程配置，不能直接 CNAME 到 `r2.dev`。
@@ -82,6 +84,8 @@ R2_PUBLIC_BASE_URL=https://media.qiannawang.com
 自定义域名支持 Cloudflare 缓存；`r2.dev` 是有限速的开发入口，不作为生产地址。新对象使用长缓存与唯一 URL；旧初始化脚本的可覆盖路径使用 1 小时缓存。若以后改变缓存规则，保留这一区分。当前上传从服务器到 R2，不需要浏览器 PUT CORS；以后签名直传再配置明确的允许来源与请求头。
 
 ## 5. 正式迁移顺序
+
+此流程已执行完成，保留为首次迁移/恢复参考。当前正式清单不能覆盖；日常验收无需重跑 copy / apply 或初始化脚本。
 
 需要 Node 24（项目已有 v24.16.0），脚本用 Node 原生 TypeScript stripping 与 `parseEnv`。保留当前 Supabase 管理员登录方式，不使用 service_role。以下每步成功后再执行下一步；清点、计划失败时先修复，不要继续。
 
@@ -120,7 +124,7 @@ npm run migrate:r2 -- --rollback
 2. **签名直传处理大文件。** 目前后台仍将文件传到 Server Actions；Vercel Functions 请求/响应体限制是 4.5 MB，`bodySizeLimit: 20mb` 无法改变托管平台限制。大图/视频下一步用经过 Auth 校验的短时签名 PUT，再在服务端校验对象大小、类型和存在性后写 DB；保留 Hero 压缩流程。
 3. **补齐 Workbench 数据表。** 仓库 `0019` 已有 SQL，但线上表缺失；这是独立的 CMS 部署缺口。
 4. **资产元数据与清理机制。** 确有跨模块管理需要时，增加 provider、bucket、object_key、content_type、bytes、checksum 等资产信息及引用关系，再做孤立对象清理。第一步不必同时重写全部业务表。
-5. **依赖安全维护。** 当前 npm audit 报告 16 项（含 Next、sharp 等既有依赖）；新增 `@aws-sdk/client-s3` 不在审计问题名单中。另开依赖更新工作，升级后完整回归；此次没有运行强制修复。
+5. **依赖安全维护。** 迁移时 npm audit 快照为 16 项（含 Next、sharp 等既有依赖）；当时新增 `@aws-sdk/client-s3` 不在审计问题名单中。审计数据会变化，后续更新前重新检查并完整回归；此次没有运行强制修复。
 
 ## 7. 验证与限制
 

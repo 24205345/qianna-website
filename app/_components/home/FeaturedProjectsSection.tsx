@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { FeaturedProject } from "@/lib/projects/queries";
 import type { SiteNavigationItem } from "@/lib/site/queries";
 import Reveal from "@/app/_components/Reveal";
+import { FEATURED_LEAD_SIZES, FEATURED_COMPANION_SIZES } from "@/lib/media/image-sizes";
 
 interface FeaturedProjectsSectionProps {
   projects: FeaturedProject[];
@@ -70,7 +71,7 @@ export default function FeaturedProjectsSection({
                   src={leadProject.coverImageUrl}
                   alt={leadProject.title}
                   fill
-                  sizes="(min-width: 1024px) 58vw, 100vw"
+                  sizes={FEATURED_LEAD_SIZES}
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025]"
                 />
                 <div className="absolute top-3 left-3 rounded-full bg-stone-900/75 px-3 py-1 text-xs text-stone-100 backdrop-blur-xs">
@@ -165,7 +166,7 @@ export default function FeaturedProjectsSection({
                     src={companionProject.coverImageUrl}
                     alt={companionProject.title}
                     fill
-                    sizes="(min-width: 1024px) 42vw, 100vw"
+                    sizes={FEATURED_COMPANION_SIZES}
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025]"
                   />
                   <div className="absolute top-3 left-3 rounded-full bg-stone-900/75 px-3 py-1 text-xs text-stone-100 backdrop-blur-xs">

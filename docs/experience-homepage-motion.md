@@ -94,10 +94,10 @@ export const HERO_DISTORTION_ENABLED = false;
 
 | 层级 | 做法 |
 |------|------|
-| 前台 | `next/image` + `fill` + `priority` + `sizes="100vw"` — Vercel 按视口宽度输出 WebP/AVIF |
-| 后台上传 | `compressHeroImage` → WebP 1920px / q75 → `site/home-hero.webp` |
-| 重新迁移 | `npm run migrate:home`（需本地 `public/images/hero-image.jpg`） |
+| 前台 | `next/image` + `fill` + `priority` + `sizes="100vw"` ；当前默认优化格式为 WebP，未配置 AVIF |
+| 后台上传 | `compressHeroImage` → WebP 1920px / q75 → 统一存储接口 → R2 `site/home-hero-<uuid>.webp` |
+| 首次初始化 | `npm run migrate:home`（需本地源图，会更新 Hero，不用于日常排障） |
 
-勿用裸 `<img src={supabaseUrl}>` 加载全尺寸 Storage 文件（LCP 慢）。
+生产保留 next/image 优化，避免全尺寸源图影响 LCP。开发代理 DNS 故障可临时设 `DEV_IMAGE_UNOPTIMIZED=true`，恢复正常 DNS 后关闭并重启。Next.js 16 已弃用 `priority`，后续更新时评估 `preload`；当前仍使用 `priority`。配置与诊断见 [媒体运维](experience-media-storage.md)。
 
 常量：`lib/media/hero-image.ts` · 压缩：`lib/media/compress-hero-image.ts`

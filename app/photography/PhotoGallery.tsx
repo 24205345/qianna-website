@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { PHOTO_GRID_SIZES } from "@/lib/media/image-sizes";
 import { useState, useEffect, useCallback } from "react";
 
 export interface GalleryPhoto {
@@ -86,7 +87,7 @@ export default function PhotoGallery({ photos, basePath = "" }: PhotoGalleryProp
                 alt={photo.title}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                sizes={PHOTO_GRID_SIZES}
               />
             </div>
             <div className="mt-3">

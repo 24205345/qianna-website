@@ -1,7 +1,7 @@
 # 进度检查记录（2026-07-19）
 
 > **历史快照**：记录当时拉代码后的状态，**不代表当前进度**。  
-> 最新状态请以 `docs/developer-guide.md` 与 `docs/cms-migration-checklist.md` 为准（截至 2026-08-11 已含 Notes / Traces / Guestbook / Analytics / Admin 侧栏 / 自定义域名等）。
+> 最新状态见 [开发指南](developer-guide.md) 与 [Checklist](cms-migration-checklist.md)（2026-10-10 已完成 R2 生产迁移与本地裂图修复；Workbench 表待部署）。
 
 > 本机路径：`D:\projects\personal_website`  
 > 远程：`https://github.com/24205345/qianna-website.git`  

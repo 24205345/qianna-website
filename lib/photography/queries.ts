@@ -66,26 +66,43 @@ export async function getPhotographyPageData(
   if (error || !collections?.length) return fallback;
 
   const result: PhotographyCollection[] = [];
+  const photosByCollection = new Map<string, PhotographyPhoto[]>();
+  const collectionIds = collections.map((col) => col.id);
+
+  // Batch all published collections. Pagination prevents the REST row cap from
+  // silently truncating a growing gallery; today's 46 photos fit in one request.
+  let offset = 0;
+  while (true) {
+    const { data: photos, error: photoError, count } = await supabase
+      .from("photography_photos")
+      .select("id, collection_id, url, title, date, location, description, sort_order", { count: "exact" })
+      .in("collection_id", collectionIds)
+      .order("collection_id", { ascending: true })
+      .order("sort_order", { ascending: true })
+      .order("id", { ascending: true })
+      .range(offset, offset + 999);
+
+    if (photoError) {
+      photosByCollection.clear();
+      break;
+    }
+    for (const photo of photos ?? []) {
+      const group = photosByCollection.get(photo.collection_id) ?? [];
+      group.push({
+        id: photo.id, url: photo.url, title: photo.title, date: photo.date ?? "",
+        location: photo.location ?? undefined, description: photo.description ?? "",
+      });
+      photosByCollection.set(photo.collection_id, group);
+    }
+    offset += photos?.length ?? 0;
+    if (!photos?.length || count === null || offset >= count) break;
+  }
 
   for (const col of collections) {
-    const { data: photos, error: photoError } = await supabase
-      .from("photography_photos")
-      .select("id, url, title, date, location, description, sort_order")
-      .eq("collection_id", col.id)
-      .order("sort_order", { ascending: true });
-
     const staticCol = fallback.find((f) => f.slug === col.slug);
+    const collectionPhotos = photosByCollection.get(col.id);
     const mappedPhotos: PhotographyPhoto[] =
-      photoError || !photos?.length
-        ? (staticCol?.photos ?? [])
-        : photos.map((p) => ({
-            id: p.id,
-            url: p.url,
-            title: p.title,
-            date: p.date ?? "",
-            location: p.location ?? undefined,
-            description: p.description ?? "",
-          }));
+      collectionPhotos?.length ? collectionPhotos : (staticCol?.photos ?? []);
 
     result.push({
       id: col.id,

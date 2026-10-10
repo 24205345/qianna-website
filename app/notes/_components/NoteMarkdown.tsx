@@ -5,9 +5,12 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { headingIdFromText } from "@/lib/notes/markdown";
 import CopyButton from "./CopyButton";
+import NoteImage from "./NoteImage";
+import type { PublicImagePattern } from "@/lib/media/image-config";
 
 interface NoteMarkdownProps {
   markdown: string;
+  imagePatterns: PublicImagePattern[];
 }
 
 function getTextContent(node: unknown): string {
@@ -44,7 +47,7 @@ function DarkCodeBlock({ text }: { text: string }) {
   );
 }
 
-export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
+export default function NoteMarkdown({ markdown, imagePatterns }: NoteMarkdownProps) {
   const usedIds = new Map<string, number>();
 
   return (
@@ -156,12 +159,7 @@ export default function NoteMarkdown({ markdown }: NoteMarkdownProps) {
             </blockquote>
           ),
           img: ({ src, alt }) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={typeof src === "string" ? src : undefined}
-              alt={alt ?? ""}
-              className="my-4 w-full rounded-xl border border-stone-200"
-            />
+            <NoteImage src={typeof src === "string" ? src : undefined} alt={alt ?? ""} imagePatterns={imagePatterns} />
           ),
           hr: () => <hr className="border-stone-200" />,
         }}

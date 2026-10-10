@@ -4,6 +4,8 @@ import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
 import { getNoteBySlug } from "@/lib/notes/queries";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import NoteDetailView from "../_components/NoteDetailView";
+import { getPublicImagePatterns } from "@/lib/media/image-config";
+import { PUBLIC_SUPABASE_URL } from "@/lib/supabase/public-env";
 
 export async function generateMetadata({
   params,
@@ -41,7 +43,7 @@ export default async function NoteDetailPage({
   return (
     <>
       <PageViewTracker contentType="note" contentSlug={slug} />
-      <NoteDetailView note={note} />
+      <NoteDetailView note={note} imagePatterns={getPublicImagePatterns(PUBLIC_SUPABASE_URL, process.env.R2_PUBLIC_BASE_URL)} />
     </>
   );
 }

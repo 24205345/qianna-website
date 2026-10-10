@@ -1,6 +1,6 @@
 # 执行记录：Notes 所见即所得富文本编辑器升级（参考 AI-Learning-Hub）
 
-最后更新：2026-09-16（原 2026-07-23 方案 A 演进升级）
+最后更新：2026-10-10（Tiptap 升级后核对 R2 上传与配置）
 
 ## 演进背景
 
@@ -10,7 +10,7 @@
 
 1. **所见即所得与 Markdown 双向零破坏转换**：
    - 依赖：`@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/markdown`, `@tiptap/extension-table*`, `@tiptap/extension-image`, `@tiptap/extension-link`；
-   - 载入时以 Markdown 形式喂入，编辑中实时渲染排版；提交与保存时通过 `editor.storage.markdown.getMarkdown()` 导出纯净 Markdown；
+   - 载入时以 Markdown 形式喂入，编辑中实时渲染排版；提交与保存时通过 `editor.getMarkdown()` 导出纯净 Markdown；
    - 完美兼容现有数据库、前台 `/notes/[slug]` 渲染与静态回退数据；
    - 保留“Markdown 源码”双向切换开关，可随时切回代码模式微调。
 
@@ -26,7 +26,9 @@
    - 光标处于表格内时，工具栏浮现专属增删行/增删列/删表控制按钮，告别手写 Markdown 管道符。
 
 4. **极速图片插入与截图粘贴（Ctrl+V）**：
-   - 原生监听粘贴事件与拖拽事件，剪切板截图直接 `Ctrl+V` 即可上传至 Supabase Storage（`portfolio-media/notes/attachments/`）并在光标处插入渲染。
+   - 原生监听粘贴和拖拽，经 NoteForm 回调调用 `uploadNoteAttachmentAction`。`auth.getUser()` 校验后使用统一 `uploadMediaObject`，插入返回的公开 URL。
+   - 生产为 R2 `portfolio-media`，对象键 `notes/attachments/<唯一路径>`。配置与上传限制见 [媒体运维](experience-media-storage.md)。
+   - 2026-10-10 线上真实粘贴上传返回 R2 URL，S3 / 公开读取字节校验通过；测试文章未提交，测试对象已清理。
 
 5. **性能优化**：
    - `NoteForm.tsx` 采用 `next/dynamic(..., { ssr: false })` 对编辑器进行异步懒加载，避免重型依赖拖慢初始渲染。

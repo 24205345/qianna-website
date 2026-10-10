@@ -4,12 +4,14 @@ import { useMemo, useState } from "react";
 import type { NoteDetail } from "@/app/_data/notes";
 import { extractTocFromMarkdown } from "@/lib/notes/markdown";
 import NoteMarkdown from "./NoteMarkdown";
+import type { PublicImagePattern } from "@/lib/media/image-config";
 import NoteToc from "./NoteToc";
 
 type Lang = "en" | "zh";
 
 interface NoteDetailViewProps {
   note: NoteDetail;
+  imagePatterns: PublicImagePattern[];
 }
 
 function formatDate(value: string | null, lang: Lang): string | null {
@@ -23,7 +25,7 @@ function formatDate(value: string | null, lang: Lang): string | null {
   });
 }
 
-export default function NoteDetailView({ note }: NoteDetailViewProps) {
+export default function NoteDetailView({ note, imagePatterns }: NoteDetailViewProps) {
   const [lang, setLang] = useState<Lang>("en");
 
   const title = lang === "en" ? note.titleEn : note.titleZh;
@@ -99,7 +101,7 @@ export default function NoteDetailView({ note }: NoteDetailViewProps) {
           </aside>
 
           <article className="order-1 min-w-0 lg:order-2">
-            <NoteMarkdown markdown={body} />
+            <NoteMarkdown markdown={body} imagePatterns={imagePatterns} />
           </article>
         </div>
       </main>

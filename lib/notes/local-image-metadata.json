@@ -1,0 +1,54 @@
+{
+  "/notes/ai-video-downloader-summarizer/image001.jpg": {
+    "width": 830,
+    "height": 343
+  },
+  "/notes/ai-video-downloader-summarizer/image002.jpg": {
+    "width": 829,
+    "height": 279
+  },
+  "/notes/ai-video-downloader-summarizer/image003.jpg": {
+    "width": 830,
+    "height": 295
+  },
+  "/notes/ai-video-downloader-summarizer/image010.jpg": {
+    "width": 830,
+    "height": 482
+  },
+  "/notes/aliyun-ecs-deploy/01-ecs-instance-tier.png": {
+    "width": 1674,
+    "height": 595
+  },
+  "/notes/aliyun-ecs-deploy/02-ecs-remote-connect.png": {
+    "width": 1610,
+    "height": 508
+  },
+  "/notes/aliyun-ecs-deploy/03-workbench-login.png": {
+    "width": 1487,
+    "height": 629
+  },
+  "/notes/aliyun-ecs-deploy/04-workbench-upload-zip.png": {
+    "width": 1407,
+    "height": 853
+  },
+  "/notes/aliyun-ecs-deploy/05-security-group-list.png": {
+    "width": 1501,
+    "height": 390
+  },
+  "/notes/aliyun-ecs-deploy/06-security-group-inbound.png": {
+    "width": 933,
+    "height": 156
+  },
+  "/notes/aliyun-ecs-deploy/07-security-group-add-rule.png": {
+    "width": 951,
+    "height": 786
+  },
+  "/notes/aliyun-ecs-deploy/08-github-secrets.png": {
+    "width": 1566,
+    "height": 781
+  },
+  "/notes/aliyun-ecs-deploy/09-github-actions-run.png": {
+    "width": 1569,
+    "height": 480
+  }
+}

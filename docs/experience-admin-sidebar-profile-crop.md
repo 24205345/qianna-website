@@ -2,6 +2,8 @@
 
 > 适用场景：模块较多的 `/admin` 后台；Singleton CMS 字段需上传**固定比例**展示图（如 About 头像、Hero）
 
+2026-10-10 核对：当前布局为 `AdminShell`，生产媒体使用 R2；配置与上传限制见 [媒体运维](experience-media-storage.md)。
+
 ---
 
 ## Admin 侧栏模式
@@ -16,7 +18,7 @@
 ```
 app/admin/layout.tsx              → Server layout 壳
 app/admin/_components/
-  AdminDashboardLayout.tsx        → Client：pathname 判断 public 页
+  AdminShell.tsx                  → Client：public 页、侧栏折叠与移动端状态
   AdminSidebar.tsx                → Client：usePathname + useSearchParams
   AdminPageHeader.tsx             → 仅 title + actions（nav / sign out 不进 header）
 ```
@@ -35,7 +37,7 @@ app/admin/_components/
 
 ### Suspense
 
-`AdminSidebar` 使用 `useSearchParams` 时，外层需 `<Suspense>`（见 `AdminDashboardLayout`）。
+`AdminSidebar` 使用 `useSearchParams` 时，外层需 `<Suspense>`（见 `AdminShell`）。
 
 ---
 
@@ -50,7 +52,7 @@ profile_image_url text not null default ''
 profile_image_alt text not null default '...'
 ```
 
-Storage：`portfolio-media/<module>/profile-{timestamp}.{ext}`
+对象键：`about/profile-{timestamp}.{ext}`；上传到当前 provider 的 `portfolio-media` 桶，完整公开 URL 写入 singleton 字段。
 
 ### Server Action 模式（与 Hero 一致）
 
@@ -60,6 +62,8 @@ const profileImageUrl = uploadedUrl ?? optionalText(formData.get("profile_image_
 ```
 
 新上传优先；否则保留 URL 字段。
+
+`uploadProfileImage` 内部经 `uploadMediaObject` 上传，Server Action 先调用 `auth.getUser()` 校验。Hero 额外做 sharp 压缩且使用 UUID 新路径；About 在客户端裁切，不能将两者写成完全相同的压缩流程。存储配置失败应报错，删除记录或替换 URL 不会自动清理原对象。
 
 ### 前台裁切 UI（react-easy-crop）
 

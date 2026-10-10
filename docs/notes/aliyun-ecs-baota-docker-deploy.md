@@ -4,7 +4,7 @@
 >
 > **与上一篇的关系**：若你更习惯 Workbench 命令行手装 Docker，请看 [阿里云 ECS 部署教程](/notes/aliyun-ecs-docker-deploy)（Workbench 路径）。本文推荐路径是：**装宝塔 → 面板管 Docker / 改配置 / 反代 HTTPS → 终端只跑必要命令**。
 >
-> **说明**：本文为通用指南，项目名、目录、端口均为占位符。本站 [qiannawang.com](https://www.qiannawang.com) 本身用 Vercel + Supabase，不走本文 ECS 方案。示例会偶尔提到带 `deploy.sh` 的项目（如内部 AI Learning Hub），换你自己的 Compose 项目同样适用。
+> **说明**：本文为通用指南，项目名、目录、端口均为占位符。本站 [qiannawang.com](https://www.qiannawang.com) 使用 Vercel 托管、Supabase 数据库/认证与 Cloudflare R2 媒体存储。示例会偶尔提到带 `deploy.sh` 的项目（如内部 AI Learning Hub），换你自己的 Compose 项目同样适用。
 
 ---
 

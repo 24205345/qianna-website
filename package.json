@@ -15,7 +15,10 @@
     "recompress:home": "node scripts/recompress-home-hero.mjs",
     "migrate:photography": "node --experimental-strip-types scripts/migrate-photography.mjs",
     "migrate:visual-works": "node --experimental-strip-types scripts/migrate-visual-works.mjs",
-    "migrate:field-notes": "node --experimental-strip-types scripts/migrate-field-notes.mjs"
+    "migrate:field-notes": "node --experimental-strip-types scripts/migrate-field-notes.mjs",
+    "generate:note-images": "node scripts/generate-note-image-metadata.mjs",
+    "prebuild": "npm run generate:note-images",
+    "test:performance": "node --test tests/image-performance.test.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1148.0",

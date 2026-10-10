@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { CONTENT_IMAGE_SIZES } from "@/lib/media/image-sizes";
 
 export interface FieldNoteTripCard {
   href: string;
@@ -26,7 +27,7 @@ export default function FieldNotesList({ trips }: FieldNotesListProps) {
                 alt={trip.title}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                sizes="(max-width: 1024px) 100vw, 1024px"
+                sizes={CONTENT_IMAGE_SIZES}
               />
             </div>
             <div className="px-6 py-6 md:px-8 md:py-7">

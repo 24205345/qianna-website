@@ -4,6 +4,8 @@
 
 **Agent 入口：** [`AGENTS.md`](../AGENTS.md) → [`developer-guide.md`](developer-guide.md) · [`architecture.md`](architecture.md)
 
+最后核对：2026-10-10。生产为 Vercel + Supabase Postgres/Auth + Cloudflare R2；迁移已完成，Workbench 表待部署。核心文档描述现状，日期执行记录保留当时结果与明确的后续说明。
+
 ---
 
 ## 第一层：每次开发必读
@@ -14,6 +16,7 @@
 | [`developer-guide.md`](developer-guide.md) | 项目进度、本地环境、路由速查、文件索引 |
 | [`architecture.md`](architecture.md) | 系统架构、分层、数据流、横切能力 |
 | [`cms-migration-checklist.md`](cms-migration-checklist.md) | 各 CMS 模块完成度与验证步骤 |
+| [`experience-media-storage.md`](experience-media-storage.md) | 当前媒体配置、裂图排查、部署验收与回滚 |
 
 ---
 
@@ -42,14 +45,17 @@
 | [`experience-notes-editor.md`](experience-notes-editor.md) | Notes 编辑器 |
 | [`experience-notes-markdown-ui.md`](experience-notes-markdown-ui.md) | Notes Markdown / TOC 前台 |
 | [`experience-notes-i18n.md`](experience-notes-i18n.md) | Notes 多语言 |
+| [`experience-undergraduate-portfolio.md`](experience-undergraduate-portfolio.md) | 静态作品集导出、翻页与部署 |
 
 ### 基础设施与早期改造
 
 | 文档 | 何时读 |
 |------|--------|
 | [`exec-cloudflare-r2-2026-10-09.md`](exec-cloudflare-r2-2026-10-09.md) | R2 媒体存储适配、线上清点、迁移步骤、回滚和后续直传 |
-| [`exec-mcp-storage-2026-10-10.md`](exec-mcp-storage-2026-10-10.md) | Supabase / Cloudflare 官方 MCP 配置、OAuth 状态与后续迁移接续 |
-| [`supabase-cms-改造记录.md`](supabase-cms-改造记录.md) | Phase 0–3、Auth 配置、历史经验条目 |
+| [`exec-mcp-storage-2026-10-10.md`](exec-mcp-storage-2026-10-10.md) | MCP、R2 迁移结果、部署验收、本地裂图修复与 Git 交付 |
+| [`exec-docs-sync-2026-10-10.md`](exec-docs-sync-2026-10-10.md) | 文档核对依据、修正范围及未完成事项 |
+| [`exec-image-performance-2026-10-10.md`](exec-image-performance-2026-10-10.md) | 图片慢加载实测、缓存与取数评估、优化优先级及验收方法 |
+| [`exec-image-performance-p1-2026-10-10.md`](exec-image-performance-p1-2026-10-10.md) | 前三项性能优化实现、批量查询对比、本地验证与上线边界 |
 | [`exec-notes-i18n-2026-07-24.md`](exec-notes-i18n-2026-07-24.md) | Notes i18n 执行记录 |
 
 ### 历史快照（勿当现状）
@@ -57,6 +63,9 @@
 | 文档 | 说明 |
 |------|------|
 | [`progress-check-2026-07-19.md`](progress-check-2026-07-19.md) | 2026-07-19 拉代码时的快照；现状以 developer-guide 为准 |
+| [`supabase-cms-改造记录.md`](supabase-cms-改造记录.md) | 早期 Phase 0–3；待办、存储与验证状态只适用于当时 |
+
+其他日期 `exec-*` 同样是当次交付快照。沿用旧操作前先查看当前架构与媒体运维；历史“未提交”“需建项目”等不是当前待办。
 
 ### Notes 正文（发布到 `/notes` 的草稿，非工程文档）
 
@@ -78,7 +87,9 @@
 | 一次性功能交付 | 新增 `exec-<主题>-<日期>.md` |
 | 会反复碰到的坑或模式 | 新增或追加 `experience-<主题>.md` |
 | Agent 行为 / 项目级约束 | 更新 `AGENTS.md` |
-| 对外站点说明 | 仅更新根目录 `README.md`（访客向，保持简短） |
+| 对外站点说明 / 开发入口 | 更新根目录 `README.md`，保持简短并链接工程文档 |
+| 存储 / 部署配置 | 同步架构、开发指南、Checklist 和媒体运维；证据另记 `exec-*` |
+| 历史记录过时 | 保留当时事实，添加日期边界与当前文档链接 |
 
 **不要**再维护已删除的 `DIRECTORY.md`；路由以 `developer-guide.md` §2 速查表为准。
 
@@ -87,11 +98,13 @@
 ## 本地开发速查
 
 ```powershell
-$env:Path = "G:\node-v24.16.0-win-x64;" + $env:Path
+$env:Path = "G:\project\.runtimes\node-v24.16.0-win-x64;" + $env:Path
 cd G:\project\qianna-website
-.\scripts\start-dev.ps1   # 或 npm run dev
+npm ci
+# 按 developer-guide 配置 .env.local
+npm run dev
 ```
 
-验证：`npm run lint` · `npm run build`
+应用验证按范围运行：`npm run lint` · `npx tsc --noEmit` · `npm run test:media` · `npm run build`。仅改文档核对链接与 `git diff --check`；commit / push 仅在用户明确要求时执行。
 
 细节见 [`developer-guide.md`](developer-guide.md) §3–§4。

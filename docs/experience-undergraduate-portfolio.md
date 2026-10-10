@@ -18,10 +18,11 @@
 2. **导出**：`python scripts/extract-undergraduate-portfolio.py`（PyMuPDF）→ `public/projects/undergraduate-portfolio/pages/01.jpg` …
 3. **前台**：`layout_template: portfolio` → 封面/封底单页 + 中间对页（3600px spread 拆左右）→ `react-pageflip` landscape 翻书；全屏居中自适应。
 4. **导出**：PDF 第 1/15 页宽 841pt（单页），第 2–14 页宽 1683pt（对页）；脚本按页宽分别导出 1800 / 3600。
-5. **部署**：spread 图片需 **commit + push** 后 Vercel 才能访问；仅写 DB 不够。
+5. **部署**：当前 spread 仍用 `public/projects/undergraduate-portfolio/pages/` 静态路径，需包含在部署产物中；仅写 DB 不够。R2 迁移未搬移这些文件，commit / push 须用户要求。
 
 ## 注意
 
 - `(none-info)` 版仍可能在 PDF 文本层留联系方式；若需彻底匿名，应在 InDesign 重新导出或修 PDF。
 - 与现有 `xicaoshi-red-temple` 可能内容重叠（同一课题不同呈现）；列表里保留两个入口即可。
 - sparse-checkout 环境用 `scripts/download-project-media.ps1` 拉取 `undergraduate-portfolio/pages/*.jpg`。
+- 2026-10-10 核对：此作品集静态路径保留；未来如搬到 R2，需同时检查封面、内容页及静态回退，见 [媒体运维](experience-media-storage.md)。

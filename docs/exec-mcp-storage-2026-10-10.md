@@ -1,6 +1,8 @@
-# Supabase / Cloudflare MCP 接入记录
+# Supabase / Cloudflare MCP 接入与 R2 生产迁移执行记录
 
 日期：2026-10-10（Asia/Shanghai）。延续 [R2 迁移方案](exec-cloudflare-r2-2026-10-09.md)。
+
+本文记录当次执行与验收快照；后续配置与排障以 [媒体运维](experience-media-storage.md) 和 [架构](architecture.md) 为准。
 
 ## 已完成
 
@@ -42,7 +44,7 @@ url = "https://mcp.cloudflare.com/mcp"
 | 真实上传测试 | 统一 helper 的认证上传通过；线上 Notes 编辑器经 `uploadNoteAttachmentAction` 实际上传，返回 R2 URL，S3 / 公开域名字节校验通过。生成的测试对象已清理，没有创建文章 |
 | Vercel 项目 | `24205345s-projects/qianna-site`，`prj_G2J2hoE9HzYaytzTGgUqiVlCaIgH`，对应 `www.qiannawang.com`，CLI 已登录并关联 |
 | 正式回滚清单 | `.media-migration/r2-plan.json`，160 对象 / 159 引用对象 / 159 applied 行；保存源字段原值和 SHA-256，被 Git 忽略 |
-| 生产部署 | `https://qianna-site-2yf921rr4-24205345s-projects.vercel.app`，READY，已关联 `https://www.qiannawang.com` |
+| 当次生产部署快照 | `https://qianna-site-2yf921rr4-24205345s-projects.vercel.app`，当次验收为 READY，关联 `https://www.qiannawang.com`；后续部署可能替换此别名目标 |
 | 公开页面 | 首页、About、Projects 及两条详情、Photography、Visual Works、Field Notes 及两条详情、Notes 及文章详情、Traces、Workbench、后台登录页均返回 200 |
 | 媒体交付 | 生产 `/_next/image` 处理 R2 图片返回 200；MP4 Range 返回 206、正确 Content-Range / Content-Type；对象长缓存头正确 |
 | 源对象保留 | Supabase 仍为 160 对象、106,278,846 字节；R2 清理测试对象后仍为 160 对象 |
@@ -64,14 +66,16 @@ url = "https://mcp.cloudflare.com/mcp"
 
 本地验收记录：`.media-migration/migration-check.json`、`production-check.json`、`production-upload-check.json`；控制台与生产后台截图：`r2-migrated.png`、`r2-production-upload.png`。浏览器文件选择器因扩展未开启本地文件访问而失败，改用编辑器原有图片粘贴功能完成真实生产上传，没有修改浏览器权限。测试文章未提交，测试图片已删除。
 
-20 项存储 / 迁移测试、lint、TypeScript 检查和生产构建通过。所有清单被 Git 忽略，密钥不进入 Git。迁移及本地图片修复代码纳入同一次 Git 提交，供后续 GitHub 部署使用；本地配置、验收截图和回滚清单继续独立保留。
+20 项存储 / 迁移测试、lint、TypeScript 检查和生产构建通过。迁移及本地图片修复已提交为 [`0064c9f`](https://github.com/24205345/qianna-website/commit/0064c9f21b44dbb702040ce788320b698fe82c7e)（`feat(media): migrate storage to Cloudflare R2`），2026-10-10 已推送 `origin/main`，提交后工作区干净、本地与远程同步。35 个暂存文件检查未含本地密钥或私有清单，提交前媒体测试再次全数通过。
+
+本地配置、验收截图与回滚清单被 Git 忽略，继续独立保留并需受控备份；本次后续文档核对的未提交改动不包含在上述提交内。
 
 本次也通过 Context7 查询了 Cloudflare R2 官方文档，复核 S3 客户端、桶级凭据和启用订阅流程。Firecrawl 工具仍未出现在当前会话中。
 
 ## 后续维护与回滚
 
 1. 保留 Supabase 原对象和正式清单。不要重跑会清空内容的初始化脚本。后续新增媒体走 R2，实际模块仍使用统一上传接口。
-2. 回滚时运行 `npm run migrate:r2 -- --rollback`，脚本按原值比较逐行恢复；如迁移后编辑了相同字段则停止人工核对。另将 Vercel provider 改为 `supabase` 并重新部署。开关本身不会恢复已迁移的 URL。
+2. 回滚先暂停编辑、备份清单，运行 `npm run migrate:r2 -- --rollback`，脚本比较当前值与清单后逐行恢复；如迁移后编辑相同字段则停止人工核对。另将本地和 Vercel provider 改为 `supabase` 并重新部署。切换后新上传需单独核对并保留 R2 对象；开关本身不会恢复已迁移 URL。生产回滚尚未实际演练。
 3. 大图 / 视频下一步使用认证后短时签名直传，解决现有 Vercel Server Actions 的 4.5 MB 平台请求体限制。当前 20 MB 应用配置不能扩大平台上限。
 4. Workbench 的 `0019` 表缺失是独立问题，前台保留静态回退；本次未部署该 SQL。详情见迁移方案。
 

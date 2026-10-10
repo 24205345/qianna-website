@@ -4,7 +4,7 @@
 >
 > **Related article**: Prefer Workbench and installing Docker by hand? See [Aliyun ECS Deployment Guide](/notes/aliyun-ecs-docker-deploy.en) (Workbench path). This guide recommends: **install Baota → manage Docker / edit config / reverse-proxy HTTPS in the panel → use the terminal only when needed**.
 >
-> **Note**: This is a generic guide. Project names, directories, and ports are placeholders. This site, [qiannawang.com](https://www.qiannawang.com), runs on Vercel + Supabase—not the ECS approach here. Examples may mention projects that ship a `deploy.sh` (e.g. an internal AI Learning Hub); any Compose app can follow the same flow.
+> **Note**: This is a generic guide. Project names, directories, and ports are placeholders. This site, [qiannawang.com](https://www.qiannawang.com), uses Vercel hosting, Supabase database/authentication, and Cloudflare R2 media storage. Examples may mention projects that ship a `deploy.sh` (e.g. an internal AI Learning Hub); any Compose app can follow the same flow.
 
 ---
 

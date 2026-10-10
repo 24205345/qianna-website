@@ -1,5 +1,7 @@
 # Google Search Console + Vercel 生产 SEO 配置记录
 
+> **历史执行记录**：保留当次方案、提交与验收状态，不代表当前待办。2026-10-10 已完成 R2 生产迁移并推送代码；当前配置、首页顺序和未完成事项见 [开发指南](developer-guide.md)、[架构](architecture.md) 与 [媒体运维](experience-media-storage.md)。旧建库、初始化或未提交步骤不要直接重跑。
+
 > 日期：2026-08-20  
 > 状态：已完成（域名已验证、站点地图成功、首页已收录）
 

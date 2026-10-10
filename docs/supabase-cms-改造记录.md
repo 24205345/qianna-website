@@ -1,5 +1,7 @@
 # Supabase CMS 改造记录
 
+> **历史执行记录**：保留当次方案、提交与验收状态，不代表当前待办。2026-10-10 已完成 R2 生产迁移并推送代码；当前配置、首页顺序和未完成事项见 [开发指南](developer-guide.md)、[架构](architecture.md) 与 [媒体运维](experience-media-storage.md)。旧建库、初始化或未提交步骤不要直接重跑。
+
 > 分支：`feature/supabase-cms`
 > 目标：把硬编码在页面里的作品集内容迁移到 Supabase，并搭建一个最小后台（admin）用于管理 `projects`。
 > 技术栈：Next.js 16.2.1（App Router）+ React 19 + TypeScript + Tailwind v4 + `@supabase/ssr`。

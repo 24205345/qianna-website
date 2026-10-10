@@ -18,12 +18,12 @@
 2. 查询层 `mapDetail`：列表/首页的 `title`/`excerpt` **优先英文**，缺省回退中文。
 3. 详情页客户端组件持有 `lang`，切换时换标题/摘要/正文与 TOC。
 4. TOC 放左侧，`sticky` + 独立 `max-h` + `overflow-y-auto`，与正文滚动分离。
-5. 配图放 `public/notes/<slug>/`，正文用相对站点路径引用；勿把闲聊截图当正文插图。
+5. 既有配图保留 `public/notes/<slug>/`；后台新图片/附件上传到 R2 并保存完整公开 URL。静态路径不由 R2 脚本改写。
 
 ## 大正文写入注意
 
-Supabase MCP `execute_sql` 对超长字符串不稳定：用 **清空字段 + base64 分块 `||` 追加**，中英分字段分别追加，避免半截写入后重复执行导致重复内容（半截时先清空再重跑）。
+历史导入曾用分块 SQL。日常通过 Admin 完整保存 Markdown；批量导入先备份并校验完整字段更新，避免清空后追加留下半成品。R2 迁移仅改写指定旧桶 URL，并发保护阻止覆盖计划后已编辑字段。
 
 ## 部署
 
-`public/notes/...` 图片与代码改动需 **commit + push** 后 Vercel 才会带上；仅更新 DB 不够。
+静态图片和代码需随部署产物发布；R2 文件无需放进 Git。内容更新后仍需 revalidate / 刷新验收。仅用户要求时 commit / push；见 [媒体运维](experience-media-storage.md)。
