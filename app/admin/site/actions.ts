@@ -8,8 +8,7 @@ import {
 } from "@/lib/media/hero-image";
 import { compressHeroImage } from "@/lib/media/compress-hero-image";
 import { createClient } from "@/lib/supabase/server";
-
-const BUCKET = "portfolio-media";
+import { uploadMediaObject } from "@/lib/media/storage";
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
@@ -74,20 +73,9 @@ async function uploadHeroImage(
   const raw = Buffer.from(await file.arrayBuffer());
   const compressed = await compressHeroImage(raw);
 
-  const { error } = await supabase.storage.from(BUCKET).upload(
-    HERO_IMAGE_STORAGE_PATH,
-    compressed,
-    {
-      upsert: true,
-      contentType: "image/webp",
-    }
-  );
-  if (error) {
-    throw new Error(`Hero image upload failed: ${error.message}`);
-  }
-
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(HERO_IMAGE_STORAGE_PATH);
-  return data.publicUrl;
+  // Versioned URL prevents stale CDN and next/image covers.
+  const path = HERO_IMAGE_STORAGE_PATH.replace(".webp", `-${crypto.randomUUID()}.webp`);
+  return uploadMediaObject(supabase, path, compressed, { contentType: "image/webp" });
 }
 
 export async function updateSiteSettingsAction(formData: FormData) {

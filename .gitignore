@@ -13,6 +13,9 @@
 # testing
 /coverage
 
+# Local media inventory and rollback journal (contains original CMS values)
+/.media-migration/
+
 # next.js
 /.next/
 /out/

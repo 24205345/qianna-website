@@ -3,13 +3,13 @@
 > **稳定架构说明**——技术栈、分层、数据流、横切能力。  
 > 进度、本地环境、文件索引见 [`developer-guide.md`](developer-guide.md)；Agent 入口见 [`AGENTS.md`](../AGENTS.md)。
 
-最后更新：2026-08-20
+最后更新：2026-10-10
 
 ---
 
 ## 1. 系统上下文
 
-个人作品集站点：**Next.js App Router** 渲染前台与 Admin CMS，**Supabase** 提供 Postgres、Auth、Storage。
+个人作品集站点：**Next.js App Router** 渲染前台与 Admin CMS，**Supabase** 提供 Postgres、Auth。媒体通过统一接口选择 Supabase Storage（默认）或 Cloudflare R2；当前生产媒体尚未执行 R2 切换。
 
 ```mermaid
 flowchart LR
@@ -31,22 +31,29 @@ flowchart LR
     Storage[(Storage portfolio-media)]
   end
 
+  R2[(Cloudflare R2 / 可选)]
+  Adapter[Media storage adapter]
+
   Visitor --> Next
   Admin --> MW --> Next
   Next --> RSC
   Next --> SA
   RSC --> PG
   SA --> PG
-  SA --> Storage
+  SA --> Adapter
+  Adapter --> Storage
+  Adapter --> R2
   MW --> Auth
   Next --> Storage
+  Next --> R2
 ```
 
 | 项 | 值 |
 |---|---|
 | 生产 URL | https://www.qiannawang.com |
 | 托管 | Vercel（`main` 自动部署） |
-| 数据库 / Auth / 媒体 | Supabase Project `aqsdwfocoocnzyxopvvg` |
+| 数据库 / Auth | Supabase Project `aqsdwfocoocnzyxopvvg` |
+| 媒体 | 默认 Supabase Storage；配置 `MEDIA_STORAGE_PROVIDER=r2` 可启用 R2 |
 | 公开媒体 Bucket | `portfolio-media`（匿名可读） |
 
 ---
@@ -84,7 +91,7 @@ lib/
   <module>/queries.ts           # 读库 + isSupabaseConfigured() 回退
   supabase/                     # server / client / public-env
   seo/                          # metadata、canonical、sitemap 数据
-  media/                        # Hero 压缩管线（compress-hero-image.ts）
+  media/                        # Hero 压缩 + storage.ts / storage-core.ts 存储接口
   admin/, analytics/, guestbook/, notes/, projects/ …
 
 supabase/migrations/            # 0001–0018 SQL（建表、RLS、GRANT）
@@ -113,7 +120,7 @@ middleware.ts                   # /admin 鉴权；首页 Auth 参数转发
 3. 全局 `app/admin/loading.tsx` 骨架屏：路由切换时 <50ms 即时渲染过渡骨架，配合 `prefetch={true}` 实现秒开体验
 4. 页面读操作与关联资源采用 `Promise.all` 并发查询；富文本等重型组件使用 `next/dynamic`（`ssr: false`）按需加载
 5. 未配置 Supabase 环境变量时 middleware **放行**（本地 / CI build 友好）
-6. 表单提交 → **Server Actions** → Postgres / Storage → `revalidatePath`
+6. 表单提交 → **Server Actions** → Postgres / 媒体存储接口 → `revalidatePath`；上传前通过 `auth.getUser()` 校验会话
 
 ### 4.3 Next.js 16 注意点
 
@@ -127,7 +134,7 @@ middleware.ts                   # /admin 鉴权；首页 Auth 参数转发
 
 ## 5. 数据架构
 
-### 5.1 Postgres 模块（迁移 0001–0018）
+### 5.1 Postgres 模块（迁移 0001–0019）
 
 | 迁移 | 领域 |
 |------|------|
@@ -141,6 +148,7 @@ middleware.ts                   # /admin 鉴权；首页 Auth 参数转发
 | 0015 | page_views (analytics) |
 | 0017 | undergraduate portfolio |
 | 0018 | hide xicaoshi project |
+| 0019 | workbench_pipelines（2026-10-09 实测线上尚未部署，查询层走静态回退） |
 
 每张业务表：**RLS** + 对 `anon` / `authenticated` 的 **GRANT**（公开读、Admin 写）。
 
@@ -155,10 +163,15 @@ Supabase 可用且查询有数据 → DB
 
 ### 5.3 Storage
 
-- Bucket：`portfolio-media`
-- 路径约定：`site/home-hero.webp`、各模块 slug 目录等
-- 上传：Admin Server Action → `sharp` 压缩（Hero 1920px WebP q75）→ upload → `getPublicUrl`
-- 大视频（如 Field Notes gliding）：**仅存 Google Drive 外链**，不上传 Storage
+- 统一接口：`lib/media/storage.ts`（server-only）→ `storage-core.ts`；`MEDIA_STORAGE_PROVIDER` 默认 `supabase`，可显式切为 `r2`。
+- 2026-10-10 生产已显式配置 `r2`：160 对象复制并校验，159 行媒体引用切换；Supabase 原对象保留，数据库与 Auth 不变。见 [执行记录](exec-mcp-storage-2026-10-10.md)。
+- Supabase Bucket：`portfolio-media`。R2 桶由 `R2_BUCKET_NAME` 配置，公开 URL 使用 `R2_PUBLIC_BASE_URL` 自定义域名；S3 凭据仅保存在服务端。
+- 路径采用模块目录；新 Hero 使用 `site/home-hero-<uuid>.webp`。旧 `site/home-hero.webp` 引用仍可读取。
+- 上传：Admin Server Action → Hero `sharp` 压缩（1920px WebP q75）→ 统一接口 → 公开 URL 写入数据库。已切换 R2 时，不因配置/上传失败静默回退。
+- 迁移脚本：`npm run migrate:r2`，明确分清点、计划、复制、公开校验、更新引用与回滚阶段，复制存量到 `legacy/portfolio-media/`，不删除源对象。
+- `next.config.ts` 同时允许 Supabase 与配置的 R2 域名，支持渐进切换；图片优化继续使用 next/image。
+- Field Notes 的 Google Drive 大视频只存外链，迁移时保留。浏览器签名直传尚未实现，当前后台上传仍受 Vercel 请求体限制。
+- 执行方案、实测清点与回滚见 [`exec-cloudflare-r2-2026-10-09.md`](exec-cloudflare-r2-2026-10-09.md)。
 
 ---
 

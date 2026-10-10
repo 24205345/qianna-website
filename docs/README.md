@@ -47,6 +47,8 @@
 
 | 文档 | 何时读 |
 |------|--------|
+| [`exec-cloudflare-r2-2026-10-09.md`](exec-cloudflare-r2-2026-10-09.md) | R2 媒体存储适配、线上清点、迁移步骤、回滚和后续直传 |
+| [`exec-mcp-storage-2026-10-10.md`](exec-mcp-storage-2026-10-10.md) | Supabase / Cloudflare 官方 MCP 配置、OAuth 状态与后续迁移接续 |
 | [`supabase-cms-改造记录.md`](supabase-cms-改造记录.md) | Phase 0–3、Auth 配置、历史经验条目 |
 | [`exec-notes-i18n-2026-07-24.md`](exec-notes-i18n-2026-07-24.md) | Notes i18n 执行记录 |
 

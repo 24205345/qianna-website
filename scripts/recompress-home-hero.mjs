@@ -6,14 +6,14 @@
 
 import { createClient } from "@supabase/supabase-js";
 import sharp from "sharp";
+import { uploadScriptMedia } from "./lib/media-upload.mjs";
 import { existsSync, readFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SOURCE = join(ROOT, "public", "images", "hero-image.jpg");
-const BUCKET = "portfolio-media";
-const STORAGE_PATH = "site/home-hero.webp";
+const STORAGE_PATH = `site/home-hero-${crypto.randomUUID()}.webp`;
 const HERO_IMAGE_MAX_WIDTH = 1920;
 const HERO_IMAGE_WEBP_QUALITY = 75;
 const DEFAULT_SOURCE_URL =
@@ -85,20 +85,12 @@ async function main() {
   console.log(`压缩后: ${(buffer.length / 1024).toFixed(0)} KB`);
 
   console.log(`上传到 Storage: ${STORAGE_PATH}`);
-  const { error: uploadError } = await supabase.storage
-    .from(BUCKET)
-    .upload(STORAGE_PATH, buffer, {
-      contentType: "image/webp",
-      upsert: true,
-    });
-  if (uploadError) throw new Error(`上传失败: ${uploadError.message}`);
-
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(STORAGE_PATH);
+  const publicUrl = await uploadScriptMedia(supabase, STORAGE_PATH, buffer, "image/webp");
 
   const { error: upsertError } = await supabase.from("site_settings").upsert(
     {
       singleton_key: "home",
-      hero_image_url: data.publicUrl,
+      hero_image_url: publicUrl,
     },
     { onConflict: "singleton_key" }
   );
@@ -107,7 +99,7 @@ async function main() {
   }
 
   console.log(`\n✅ Hero 已重新压缩并上传`);
-  console.log(data.publicUrl);
+  console.log(publicUrl);
 }
 
 main().catch((err) => {

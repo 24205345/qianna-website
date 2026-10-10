@@ -3,9 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { uploadMediaObject } from "@/lib/media/storage";
 import { getNextStatus } from "@/lib/admin/content-status";
-
-const BUCKET = "portfolio-media";
 
 function emptyToNull(value: FormDataEntryValue | null): string | null {
   const str = value == null ? "" : String(value).trim();
@@ -25,12 +24,11 @@ async function uploadCover(supabase: Awaited<ReturnType<typeof createClient>>, f
   if (!file || file.size === 0) return null;
   const ext = file.name.includes(".") ? file.name.split(".").pop() : "jpg";
   const path = `field-notes/covers/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-  const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+  const publicUrl = await uploadMediaObject(supabase, path, file, {
     contentType: file.type || "image/jpeg",
     upsert: false,
   });
-  if (error) throw new Error(`Cover upload failed: ${error.message}`);
-  return supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+  return publicUrl;
 }
 
 function buildPayload(formData: FormData, coverUrl: string | null) {

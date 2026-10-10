@@ -249,7 +249,7 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
 
       <div>
         <label className={labelClass} htmlFor="cover">
-          Cover image (uploads to portfolio-media; leave blank to keep current)
+          Cover image (leave blank to keep current)
         </label>
         {d.cover_image_url ? (
           <p className="mt-1 text-xs text-stone-500 break-all">Current: {d.cover_image_url}</p>

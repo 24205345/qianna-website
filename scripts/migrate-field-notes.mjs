@@ -5,13 +5,13 @@
 
 import { createClient } from "@supabase/supabase-js";
 import sharp from "sharp";
+import { uploadScriptMedia } from "./lib/media-upload.mjs";
 import { readFileSync, existsSync } from "fs";
 import { join, extname } from "path";
 import { fileURLToPath } from "url";
 import { fieldNoteDetails } from "../app/_data/field-note-details.ts";
 
 const ROOT = join(fileURLToPath(import.meta.url), "..", "..");
-const BUCKET = "portfolio-media";
 
 function loadEnvLocal() {
   const envPath = join(ROOT, ".env.local");
@@ -48,9 +48,7 @@ function slugify(name) {
 }
 
 async function uploadBuffer(client, storagePath, buffer, contentType) {
-  const { error } = await client.storage.from(BUCKET).upload(storagePath, buffer, { contentType, upsert: true });
-  if (error) throw new Error(`Upload failed (${storagePath}): ${error.message}`);
-  return client.storage.from(BUCKET).getPublicUrl(storagePath).data.publicUrl;
+  return uploadScriptMedia(client, storagePath, buffer, contentType);
 }
 
 async function uploadLocalImage(client, slug, localRelative, storageName) {

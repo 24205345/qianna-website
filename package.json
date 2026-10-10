@@ -8,6 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test:media": "node --test tests/media-storage.test.mjs tests/r2-migration.test.mjs",
+    "migrate:r2": "node scripts/migrate-storage-to-r2.mjs",
     "migrate:media": "node scripts/migrate-project-media.mjs",
     "migrate:home": "node scripts/migrate-home-hero.mjs",
     "recompress:home": "node scripts/recompress-home-hero.mjs",
@@ -16,6 +18,7 @@
     "migrate:field-notes": "node --experimental-strip-types scripts/migrate-field-notes.mjs"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "3.1148.0",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.108.0",
     "@tiptap/extension-image": "^3.31.3",

@@ -3,8 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-
-const BUCKET = "portfolio-media";
+import { uploadMediaObject } from "@/lib/media/storage";
 
 async function requireUser() {
   const supabase = await createClient();
@@ -30,18 +29,15 @@ export async function addProjectMediaAction(projectId: string, formData: FormDat
   const ext = file.name.includes(".") ? file.name.split(".").pop() : "jpg";
   const path = `projects/${projectId}/images/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
-  const { error: uploadError } = await supabase.storage.from(BUCKET).upload(path, file, {
+  const publicUrl = await uploadMediaObject(supabase, path, file, {
     contentType: file.type || "image/jpeg",
     upsert: false,
   });
-  if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`);
-
-  const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(path);
 
   const { error } = await supabase.from("project_media").insert({
     project_id: projectId,
     type: "image",
-    url: urlData.publicUrl,
+    url: publicUrl,
     title: title || null,
     caption: caption || null,
     sort_order: sortOrder,

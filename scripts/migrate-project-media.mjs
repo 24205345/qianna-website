@@ -8,6 +8,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 import sharp from "sharp";
+import { uploadScriptMedia } from "./lib/media-upload.mjs";
 import { readFileSync, existsSync } from "fs";
 import { join, extname, basename } from "path";
 import { fileURLToPath } from "url";
@@ -41,7 +42,6 @@ if (!url || !anonKey || !email || !password) {
 
 const supabase = createClient(url, anonKey);
 
-const BUCKET = "portfolio-media";
 
 const thesisGallery = [
   {
@@ -130,14 +130,8 @@ function slugify(name) {
     .slice(0, 80);
 }
 
-async function uploadBuffer(supabaseClient, storagePath, buffer, contentType) {
-  const { error } = await supabaseClient.storage.from(BUCKET).upload(storagePath, buffer, {
-    contentType,
-    upsert: true,
-  });
-  if (error) throw new Error(`Storage upload failed (${storagePath}): ${error.message}`);
-  const { data } = supabaseClient.storage.from(BUCKET).getPublicUrl(storagePath);
-  return data.publicUrl;
+async function uploadBuffer(client, storagePath, buffer, contentType) {
+  return uploadScriptMedia(client, storagePath, buffer, contentType);
 }
 
 async function uploadRawFile(supabaseClient, storagePath, filePath, contentType) {

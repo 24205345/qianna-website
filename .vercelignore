@@ -1,0 +1,13 @@
+.git
+.env*
+.media-migration
+.vercel
+.cursor
+.agents
+.codex
+.aws
+*.pem
+*.tsbuildinfo
+*.log
+node_modules
+.next

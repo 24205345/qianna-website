@@ -3,8 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-
-const BUCKET = "portfolio-media";
+import { uploadMediaObject } from "@/lib/media/storage";
 
 async function requireUser() {
   const supabase = await createClient();
@@ -46,13 +45,10 @@ export async function addFieldNoteMediaAction(fieldNoteId: string, formData: For
 
     const ext = file.name.includes(".") ? file.name.split(".").pop() : "jpg";
     const path = `field-notes/${slug}/images/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const { error: uploadError } = await supabase.storage.from(BUCKET).upload(path, file, {
+    const publicUrl = await uploadMediaObject(supabase, path, file, {
       contentType: file.type || "image/jpeg",
       upsert: false,
     });
-    if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`);
-
-    const publicUrl = supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
     const { error } = await supabase.from("field_note_media").insert({
       field_note_id: fieldNoteId,
       type: "image",

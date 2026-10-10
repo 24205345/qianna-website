@@ -7,8 +7,7 @@ import {
   parseTimelineEntriesFromFormData,
 } from "@/lib/about/parse-form";
 import { createClient } from "@/lib/supabase/server";
-
-const BUCKET = "portfolio-media";
+import { uploadMediaObject } from "@/lib/media/storage";
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
@@ -39,16 +38,11 @@ async function uploadProfileImage(
   const ext = file.name.includes(".") ? file.name.split(".").pop() : "bin";
   const path = `about/profile-${Date.now()}.${ext}`;
 
-  const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
-    upsert: false,
+  const publicUrl = await uploadMediaObject(supabase, path, file, {
     contentType: file.type || undefined,
+    upsert: false,
   });
-  if (error) {
-    throw new Error(`Profile image upload failed: ${error.message}`);
-  }
-
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-  return data.publicUrl;
+  return publicUrl;
 }
 
 export async function updateAboutPageAction(formData: FormData) {

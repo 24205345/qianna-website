@@ -9,6 +9,7 @@
 | 阶段 | 状态 | 说明 |
 |---|---|---|
 | Phase 0 基础设施 | ✅ | Supabase DB/Storage/Auth、RLS、`.env.local` |
+| R2 媒体存储适配 | 生产迁移完成，验收通过 | 160 文件 / 101.36 MiB、159 行；原对象保留，真实上传和公开交付通过；见 [执行记录](exec-mcp-storage-2026-10-10.md) |
 | Projects 列表 CMS | ✅ | `/projects` + `/admin/projects` |
 | Projects 媒体 CMS | ✅ | 画廊图、封面、顶部视频已上传 Storage |
 | **P1 Projects 详情补完** | ✅ | 动态 `[slug]`、Overview/Details/Intro 视频可编辑 |

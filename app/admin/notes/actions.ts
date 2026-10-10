@@ -10,6 +10,7 @@ import {
   truncateExcerpt,
 } from "@/lib/notes/parse-form";
 import { createClient } from "@/lib/supabase/server";
+import { uploadMediaObject } from "@/lib/media/storage";
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
@@ -196,8 +197,6 @@ export async function toggleNoteStatusAction(id: string) {
   revalidateNotePaths(data.slug);
 }
 
-const BUCKET = "portfolio-media";
-
 /** Upload an image/file for Notes editor; returns public URL for Markdown insert. */
 export async function uploadNoteAttachmentAction(
   formData: FormData
@@ -215,15 +214,9 @@ export async function uploadNoteAttachmentAction(
     .toString(36)
     .slice(2)}-${safeName || `file.${ext}`}`;
 
-  const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+  const publicUrl = await uploadMediaObject(supabase, path, file, {
     contentType: file.type || undefined,
     upsert: false,
   });
-
-  if (error) {
-    throw new Error(`Upload failed: ${error.message}`);
-  }
-
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-  return { url: data.publicUrl, fileName: file.name };
+  return { url: publicUrl, fileName: file.name };
 }

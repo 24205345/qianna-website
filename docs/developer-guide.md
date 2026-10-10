@@ -4,7 +4,7 @@
 >
 > 项目路径：`G:\project\qianna-website`  
 > 分支：`main`（CMS P1–P11 已完成；2026-09 首页策展风改版、Notes 富文本升级与后台极速渲染重构已完成）  
-> 最后更新：2026-09-16  
+> 最后更新：2026-10-10<br>
 > 生产域名：**https://www.qiannawang.com**
 
 ---
@@ -16,6 +16,7 @@ Next.js 16.2.1 + React 19 + TypeScript + Tailwind v4 **个人作品集网站**�
 - GitHub：`24205345/qianna-website`
 - Supabase Project ID：`aqsdwfocoocnzyxopvvg`
 - Storage Bucket：`portfolio-media`（公开读）
+- 新增统一 Cloudflare R2 媒体接口，2026-10-10 生产已切换 R2；未指定 provider 的环境仍默认 Supabase。迁移方案见 [`exec-cloudflare-r2-2026-10-09.md`](exec-cloudflare-r2-2026-10-09.md)，完成证据见 [`exec-mcp-storage-2026-10-10.md`](exec-mcp-storage-2026-10-10.md)。
 
 ---
 
@@ -37,6 +38,8 @@ Next.js 16.2.1 + React 19 + TypeScript + Tailwind v4 **个人作品集网站**�
 | **首页策展改版** | ✅ | 双字体 Serif/Sans、Sub-rail 细线与悬浮指示、无下划线 | — | 见 `exec-homepage-editorial-admin-overhaul-2026-09-16.md` |
 | **后台极速渲染** | ✅ | — | `/admin/*` | 全局 `loading.tsx` 骨架屏 + Header 鉴权透传 + 路由 prefetch |
 | **SEO** | ✅ | canonical / JSON-LD / sitemap | — | GSC 已验证；见 `experience-seo-metadata.md` |
+| **Workbench** | 前台静态回退；后台待部署表 | `/workbench` | `/admin/workbench` | GitHub 已有 0019；2026-10-09 线上返回 PGRST205，表尚未部署 |
+| **R2 媒体适配** | 生产已迁移，验收通过 | `media.qiannawang.com` | 所有上传入口 | 160 文件 / 159 行；`npm run migrate:r2` 支持回滚 |
 
 Admin 导航：**左侧边栏** + Projects / Traces 二级嵌套 + 全局预载与秒级骨架屏，详见 `docs/exec-homepage-editorial-admin-overhaul-2026-09-16.md`。
 
