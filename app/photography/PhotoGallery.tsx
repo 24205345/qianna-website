@@ -1,5 +1,7 @@
 "use client";
 
+import { resolvePublicMedia } from "@/lib/media/public-media";
+
 import Image from "next/image";
 import { PHOTO_GRID_SIZES } from "@/lib/media/image-sizes";
 import { useState, useEffect, useCallback } from "react";
@@ -83,7 +85,7 @@ export default function PhotoGallery({ photos, basePath = "" }: PhotoGalleryProp
           >
             <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-stone-100">
               <Image
-                src={photoSrc(photo, basePath)}
+                src={resolvePublicMedia(photoSrc(photo, basePath))}
                 alt={photo.title}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -142,7 +144,7 @@ export default function PhotoGallery({ photos, basePath = "" }: PhotoGalleryProp
           >
             <div className="relative flex-1 w-full max-h-[80vh]">
               <Image
-                src={photoSrc(photos[selectedIndex], basePath)}
+                src={resolvePublicMedia(photoSrc(photos[selectedIndex], basePath))}
                 alt={photos[selectedIndex].title}
                 fill
                 className="object-contain"

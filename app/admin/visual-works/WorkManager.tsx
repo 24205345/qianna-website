@@ -1,5 +1,7 @@
 "use client";
 
+import MediaUploadForm from "@/app/admin/_components/MediaUploadForm";
+
 import { useTransition } from "react";
 import type { VisualWorkRow } from "@/lib/visual-works/queries";
 import { addWorkAction, deleteWorkAction } from "./work-actions";
@@ -51,12 +53,8 @@ export default function WorkManager({ categoryId, works }: WorkManagerProps) {
         <p className="mt-4 text-sm text-stone-500">No works yet. Run npm run migrate:visual-works to bulk import.</p>
       )}
 
-      <form
-        action={(formData) =>
-          startTransition(async () => {
-            await addWorkAction(categoryId, formData);
-          })
-        }
+      <MediaUploadForm resetOnSuccess fields={{work: "visual-work"}}
+        action={(formData) => addWorkAction(categoryId, formData)}
         className="mt-6 flex flex-col gap-3 rounded-lg border border-dashed border-stone-300 bg-stone-50/50 p-4"
       >
         <p className="text-sm font-medium text-stone-700">Add Work</p>
@@ -68,7 +66,7 @@ export default function WorkManager({ categoryId, works }: WorkManagerProps) {
         <button type="submit" disabled={pending} className="self-start rounded-md bg-stone-800 px-4 py-2 text-sm text-white hover:bg-stone-700 disabled:opacity-50">
           {pending ? "Uploading..." : "Upload Work"}
         </button>
-      </form>
+      </MediaUploadForm>
     </section>
   );
 }

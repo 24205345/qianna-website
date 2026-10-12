@@ -9,6 +9,7 @@ import {
   isSupabaseConfigured,
 } from "@/lib/supabase/server";
 import { getSiteNavigationItems } from "@/lib/site/queries";
+import { getHomeFeaturedImageSettings } from "@/lib/site/featured-images-server";
 import { getFeaturedProjects } from "@/lib/projects/queries";
 import { getFeaturedTraces } from "@/lib/traces/queries";
 import { getLatestNotes } from "@/lib/notes/queries";
@@ -18,6 +19,7 @@ import SiteSettingsForm from "./SiteSettingsForm";
 import { updateSiteSettingsAction } from "./actions";
 
 interface SiteSettingsRow {
+  updated_at: string | null;
   hero_title: string | null;
   hero_subtitle: string | null;
   hero_cta_label: string | null;
@@ -55,6 +57,7 @@ export default async function AdminSitePage() {
   const supabase = await createClient();
 
   const [
+    featuredImageSettings,
     settingsResult,
     navigationItems,
     featuredProjects,
@@ -62,10 +65,11 @@ export default async function AdminSitePage() {
     latestNotes,
     aboutContent,
   ] = await Promise.all([
+    getHomeFeaturedImageSettings(),
     supabase
       .from("site_settings")
       .select(
-        "hero_title, hero_subtitle, hero_cta_label, hero_image_url, hero_image_alt"
+        "updated_at, hero_title, hero_subtitle, hero_cta_label, hero_image_url, hero_image_alt"
       )
       .eq("singleton_key", "home")
       .maybeSingle(),
@@ -95,10 +99,18 @@ export default async function AdminSitePage() {
           </p>
         ) : null}
 
+        {featuredImageSettings.error ? (
+          <p role="alert" className="mt-8 rounded-md bg-amber-50 px-4 py-3 text-sm text-amber-700">
+            首页展示图配置未就绪：{featuredImageSettings.error}。请执行
+            {" "}<code>supabase/migrations/20261012031537_home_featured_images.sql</code>。
+          </p>
+        ) : null}
         <div className="mt-8">
           <SiteSettingsForm
+            key={(data as SiteSettingsRow | null)?.updated_at ?? "home"}
             action={updateSiteSettingsAction}
             defaults={defaults}
+            featuredImages={featuredImageSettings.images}
             navigationItems={navigationItems}
             featuredProjects={featuredProjects}
             featuredTraces={featuredTraces}

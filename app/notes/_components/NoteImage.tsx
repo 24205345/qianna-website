@@ -4,6 +4,7 @@ import { getImageProps } from "next/image";
 import { useState } from "react";
 import { isOptimizableImageSource, type PublicImagePattern } from "@/lib/media/image-config";
 import { NOTE_IMAGE_SIZES } from "@/lib/media/image-sizes";
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import localImageMetadata from "@/lib/notes/local-image-metadata.json";
 
 interface NoteImageProps {
@@ -18,6 +19,7 @@ export default function NoteImage({ src, alt, imagePatterns }: NoteImageProps) {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   if (!src) return null;
   const metadata = dimensions[src];
+  src = resolvePublicMedia(src);
   const optimize = src !== failedSrc && isOptimizableImageSource(src, imagePatterns);
   // Unknown remote aspect ratios must not acquire an invented width/height ratio.
   // getImageProps supplies the responsive URLs; only measured dimensions reach img.

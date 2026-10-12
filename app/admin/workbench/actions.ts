@@ -24,6 +24,7 @@ async function requireUser(supabase: SupabaseServerClient) {
   if (!user) {
     redirect("/admin/login");
   }
+  if (user.is_anonymous || user.app_metadata?.cms_role !== "admin") throw new Error("CMS admin permission is required. Refresh your login after permission changes.");
 }
 
 export async function updateWorkbenchPipelineAction(formData: FormData) {

@@ -1,3 +1,5 @@
+
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import Image from "next/image";
 import type { FieldNoteFull } from "@/lib/field-notes/queries";
 import type { FieldNoteNarrativeBlock } from "@/app/_data/field-note-details";
@@ -20,7 +22,7 @@ function NarrativeSection({ block }: { block: FieldNoteNarrativeBlock }) {
           <p className="text-[10px] tracking-[0.26em] text-stone-400 uppercase mb-8">{block.sectionTitle}</p>
           <div className="overflow-hidden rounded-2xl">
             <div className={`relative ${aspectClass}`}>
-              <Image src={imageSrc(block)} alt={block.sectionTitle} fill className="object-cover" />
+              <Image src={resolvePublicMedia(imageSrc(block))} alt={block.sectionTitle} fill className="object-cover" />
             </div>
           </div>
           {block.footerCaption ? (
@@ -34,7 +36,7 @@ function NarrativeSection({ block }: { block: FieldNoteNarrativeBlock }) {
   const imageBlock = (
     <div className="overflow-hidden rounded-2xl">
       <div className={`relative ${aspectClass}`}>
-        <Image src={imageSrc(block)} alt={block.sectionTitle} fill className="object-cover" />
+        <Image src={resolvePublicMedia(imageSrc(block))} alt={block.sectionTitle} fill className="object-cover" />
       </div>
     </div>
   );
@@ -73,7 +75,7 @@ export default function NarrativeFieldNoteView({ note }: Props) {
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
       <section className="relative h-screen w-full overflow-hidden">
-        <Image src={note.cover_image_url} alt={note.title} fill priority className="object-cover" />
+        <Image src={resolvePublicMedia(note.cover_image_url)} alt={note.title} fill priority className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/60" />
         <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-16 md:px-10 md:pb-20">
           <div className="mx-auto max-w-5xl">

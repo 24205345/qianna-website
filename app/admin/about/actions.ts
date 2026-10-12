@@ -7,9 +7,7 @@ import {
   parseTimelineEntriesFromFormData,
 } from "@/lib/about/parse-form";
 import { createClient } from "@/lib/supabase/server";
-import { uploadMediaObject } from "@/lib/media/storage";
-
-type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
+import { getFormMediaUrl } from "@/lib/media/form-upload";
 
 function requiredText(value: FormDataEntryValue | null, fallback = ""): string {
   const text = value == null ? "" : String(value).trim();
@@ -29,21 +27,6 @@ async function requireUser() {
   return supabase;
 }
 
-async function uploadProfileImage(
-  supabase: SupabaseServerClient,
-  file: File | null
-): Promise<string | null> {
-  if (!file || file.size === 0) return null;
-
-  const ext = file.name.includes(".") ? file.name.split(".").pop() : "bin";
-  const path = `about/profile-${Date.now()}.${ext}`;
-
-  const publicUrl = await uploadMediaObject(supabase, path, file, {
-    contentType: file.type || undefined,
-    upsert: false,
-  });
-  return publicUrl;
-}
 
 export async function updateAboutPageAction(formData: FormData) {
   const supabase = await requireUser();
@@ -56,10 +39,7 @@ export async function updateAboutPageAction(formData: FormData) {
     formData.get("current_focus"),
     "Today, I am interested in AI products that help people observe, organize, and act on complex information, especially in spatial, industrial, and operational contexts."
   );
-  const uploadedProfileUrl = await uploadProfileImage(
-    supabase,
-    formData.get("profile_image") as File | null
-  );
+  const uploadedProfileUrl = await getFormMediaUrl(supabase, formData, "profile_image", "about-profile");
   const profileImageUrl =
     uploadedProfileUrl ?? optionalText(formData.get("profile_image_url"));
   const profileImageAlt = requiredText(

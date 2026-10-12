@@ -1,3 +1,5 @@
+
+import MediaUploadForm from "@/app/admin/_components/MediaUploadForm";
 import StatusSelect from "@/app/admin/_components/StatusSelect";
 
 export interface FieldNoteFormDefaults {
@@ -27,7 +29,7 @@ export default function FieldNoteForm({ action, defaults, submitLabel }: FieldNo
   const d = defaults ?? {};
 
   return (
-    <form action={action} className="mt-8 flex flex-col gap-5">
+    <MediaUploadForm fields={{cover: "field-cover"}} action={action} className="mt-8 flex flex-col gap-5">
       <div>
         <label className={labelClass} htmlFor="title">Title *</label>
         <input id="title" name="title" required defaultValue={d.title ?? ""} className={inputClass} />
@@ -80,6 +82,6 @@ export default function FieldNoteForm({ action, defaults, submitLabel }: FieldNo
         <input id="cover" name="cover" type="file" accept="image/*" className="mt-1 text-sm" />
       </div>
       <button type="submit" className="rounded-md bg-stone-900 px-5 py-2.5 text-sm text-white hover:bg-stone-700">{submitLabel}</button>
-    </form>
+    </MediaUploadForm>
   );
 }

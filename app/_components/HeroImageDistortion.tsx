@@ -1,5 +1,7 @@
 "use client";
 
+import { resolvePublicMedia } from "@/lib/media/public-media";
+
 import { useEffect, useRef, useState } from "react";
 import HeroDistortionTuner from "./HeroDistortionTuner";
 import {
@@ -728,7 +730,7 @@ export default function HeroImageDistortion({
       {/* Plain img is required for WebGL texture loading and reduced-motion fallback. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={imageUrl}
+        src={resolvePublicMedia(imageUrl)}
         alt={alt}
         className={`absolute inset-0 h-full w-full object-cover object-center ${
           !useStaticImage && isTextureReady ? "sr-only" : ""

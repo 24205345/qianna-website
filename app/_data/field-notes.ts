@@ -1,3 +1,4 @@
+import { resolvePublicMedia } from "@/lib/media/public-media";
 export interface Trip {
   href: string;
   coverImage: string;
@@ -10,7 +11,7 @@ export interface Trip {
 export const trips: Trip[] = [
   {
     href: "/field-notes/nanjiluo",
-    coverImage: "/field-notes/nanjiluo/images/00_nanjiluo_cover.jpg",
+    coverImage: resolvePublicMedia("/field-notes/nanjiluo/images/00_nanjiluo_cover.jpg"),
     title: "Hiking in Nanjiluo",
     date: "2024.9.3",
     location: "Nanjiluo, Yunnan, China",
@@ -18,7 +19,7 @@ export const trips: Trip[] = [
   },
   {
     href: "/field-notes/yubeng",
-    coverImage: "/field-notes/yubeng/images/00_yubeng_cover.jpg",
+    coverImage: resolvePublicMedia("/field-notes/yubeng/images/00_yubeng_cover.jpg"),
     title: "Hiking in Yubeng Village",
     date: "2024.9.4 – 2024.9.6",
     location: "Yubeng Village, Yunnan, China",
@@ -26,7 +27,7 @@ export const trips: Trip[] = [
   },
   {
     href: "/field-notes/whitecliffs",
-    coverImage: "/field-notes/whitecliffs/images/00_whitecliffs_cover.jpg",
+    coverImage: resolvePublicMedia("/field-notes/whitecliffs/images/00_whitecliffs_cover.jpg"),
     title: "Seven Sisters White Cliffs",
     date: "2024.10.13",
     location: "Seven Sisters, East Sussex, UK",
@@ -34,7 +35,7 @@ export const trips: Trip[] = [
   },
   {
     href: "/field-notes/gliding",
-    coverImage: "/field-notes/gliding/images/00_gliding_cover.jpg",
+    coverImage: resolvePublicMedia("/field-notes/gliding/images/00_gliding_cover.jpg"),
     title: "First Gliding Experience",
     date: "2024.10.26 – 2024.10.27",
     location: "The Long Mynd, Church Stretton, UK",
@@ -42,7 +43,7 @@ export const trips: Trip[] = [
   },
   {
     href: "/field-notes/snowboard",
-    coverImage: "/field-notes/snowboard/images/00_superdevoluy_cover_map.jpg",
+    coverImage: resolvePublicMedia("/field-notes/snowboard/images/00_superdevoluy_cover_map.jpg"),
     title: "Snowboard Days in Superdévoluy",
     date: "2025.3.31 – 2025.4.8",
     location: "Superdévoluy, France",

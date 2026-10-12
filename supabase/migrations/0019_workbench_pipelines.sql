@@ -40,18 +40,18 @@ create policy "workbench_pipelines_auth_select_all"
 drop policy if exists "workbench_pipelines_auth_insert" on public.workbench_pipelines;
 create policy "workbench_pipelines_auth_insert"
   on public.workbench_pipelines for insert to authenticated
-  with check (true);
+  with check ((select auth.jwt() -> 'app_metadata' ->> 'cms_role') = 'admin');
 
 drop policy if exists "workbench_pipelines_auth_update" on public.workbench_pipelines;
 create policy "workbench_pipelines_auth_update"
   on public.workbench_pipelines for update to authenticated
-  using (true)
-  with check (true);
+  using ((select auth.jwt() -> 'app_metadata' ->> 'cms_role') = 'admin')
+  with check ((select auth.jwt() -> 'app_metadata' ->> 'cms_role') = 'admin');
 
 drop policy if exists "workbench_pipelines_auth_delete" on public.workbench_pipelines;
 create policy "workbench_pipelines_auth_delete"
   on public.workbench_pipelines for delete to authenticated
-  using (true);
+  using ((select auth.jwt() -> 'app_metadata' ->> 'cms_role') = 'admin');
 
 insert into public.workbench_pipelines (
   id,

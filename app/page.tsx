@@ -16,6 +16,8 @@ import {
 import { getTurnstileSiteKey } from "@/lib/guestbook/turnstile";
 import { getLatestNotes } from "@/lib/notes/queries";
 import { getFeaturedProjects } from "@/lib/projects/queries";
+import { applyProjectImages, applyTraceImages } from "@/lib/site/featured-images";
+import { getHomeFeaturedImages } from "@/lib/site/featured-images-server";
 import { getFeaturedTraces } from "@/lib/traces/queries";
 import { getWorkbenchPipelines } from "@/lib/workbench/queries";
 import {
@@ -43,6 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Home() {
   const [
+    featuredImages,
     siteSettings,
     navigationItems,
     latestNotes,
@@ -53,6 +56,7 @@ export default async function Home() {
     featuredTraces,
     workbenchPipelines,
   ] = await Promise.all([
+    getHomeFeaturedImages(),
     getSiteSettings(),
     getSiteNavigationItems(),
     getLatestNotes(3),
@@ -121,14 +125,14 @@ export default async function Home() {
       >
         {/* 1. Selected Works (Featured Projects with Asymmetric Media Cards) */}
         <FeaturedProjectsSection
-          projects={featuredProjects}
+          projects={applyProjectImages(featuredProjects, featuredImages)}
           navigationSection={projectsSection}
           categories={projectCategories}
         />
 
         {/* 2. Visual Footprints (Curated Photography & Field Notes Filmstrip) */}
         <VisualFootprintsSection
-          traces={featuredTraces}
+          traces={applyTraceImages(featuredTraces, featuredImages)}
           navigationSection={tracesSection}
           categories={traceCategories}
         />

@@ -32,10 +32,10 @@ This is NOT the Next.js you know. Read `node_modules/next/dist/docs/` before wri
 ## 通用约定
 
 - 数据：Supabase + `app/_data/*` 静态回退（`isSupabaseConfigured()`）
-- 生产上传：`MEDIA_STORAGE_PROVIDER=r2`，统一调用 `lib/media/storage.ts`；未指定 provider 的环境默认 Supabase。迁移与运维见 [`docs/experience-media-storage.md`](docs/experience-media-storage.md)。
+- 生产上传：`MEDIA_STORAGE_PROVIDER=r2`；新版后台通过 `/api/admin/media` 签名直传，Server Actions 用 `lib/media/form-upload.ts` 核验收据。直传与 Workbench 写入要求服务端 `app_metadata.cms_role=admin`，变更后刷新登录。未指定 provider 的环境默认 Supabase。迁移与运维见 [`docs/experience-media-storage.md`](docs/experience-media-storage.md)。
 - 存量 R2 迁移已完成；保留 Supabase 原对象与 `.media-migration/r2-plan.json`。既有 `migrate:media` / `migrate:photography` 等是初始化脚本，可能删除并重建记录，不用于日常验收。
 - 改 React/TS 后跑 `npm run lint`
-- 改存储或迁移代码后跑 `npm run test:media`；文档更新核对代码、链接及历史状态。
+- 改存储或迁移代码后跑 `npm run test:media`；改直传后跑 `npm run test:uploads`，改静态清单后跑 `npm run test:static-media`；文档更新核对代码、链接及历史状态。
 - **仅用户要求时** commit / push；不提交 `.env.local`
 - `.media-migration/`、`.vercel/`、MCP OAuth 和 S3 凭据不进入 Git 或部署包；管理员密码只供本地脚本使用。
 - Windows PowerShell 不用 `&&`

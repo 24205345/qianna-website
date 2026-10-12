@@ -10,7 +10,7 @@ import {
   truncateExcerpt,
 } from "@/lib/notes/parse-form";
 import { createClient } from "@/lib/supabase/server";
-import { uploadMediaObject } from "@/lib/media/storage";
+import { getFormMediaUrl } from "@/lib/media/form-upload";
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
@@ -208,15 +208,7 @@ export async function uploadNoteAttachmentAction(
     throw new Error("Please choose a file to upload.");
   }
 
-  const ext = file.name.includes(".") ? file.name.split(".").pop() : "bin";
-  const safeName = file.name.replace(/[^\w.\-]+/g, "-").slice(0, 80);
-  const path = `notes/attachments/${Date.now()}-${Math.random()
-    .toString(36)
-    .slice(2)}-${safeName || `file.${ext}`}`;
-
-  const publicUrl = await uploadMediaObject(supabase, path, file, {
-    contentType: file.type || undefined,
-    upsert: false,
-  });
+  const publicUrl = await getFormMediaUrl(supabase, formData, "file", "note-attachment");
+  if (!publicUrl) throw new Error("Please choose a file to upload.");
   return { url: publicUrl, fileName: file.name };
 }

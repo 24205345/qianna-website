@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { uploadMediaObject } from "@/lib/media/storage";
+import { getFormMediaUrl } from "@/lib/media/form-upload";
 import { getNextStatus } from "@/lib/admin/content-status";
 import {
   parseOverviewParagraphs,
@@ -80,23 +80,6 @@ async function requireUser(supabase: SupabaseServerClient) {
   }
 }
 
-async function uploadCover(
-  supabase: SupabaseServerClient,
-  file: File | null
-): Promise<string | null> {
-  if (!file || file.size === 0) return null;
-
-  const ext = file.name.includes(".") ? file.name.split(".").pop() : "bin";
-  const path = `covers/${Date.now()}-${Math.random()
-    .toString(36)
-    .slice(2)}.${ext}`;
-
-  const publicUrl = await uploadMediaObject(supabase, path, file, {
-    contentType: file.type || undefined,
-    upsert: false,
-  });
-  return publicUrl;
-}
 
 function buildPayload(formData: FormData, coverUrl: string | null, slug: string) {
   const payload: Record<string, unknown> = {
@@ -127,13 +110,19 @@ export async function createProjectAction(formData: FormData) {
   const supabase = await createClient();
   await requireUser(supabase);
 
-  const coverUrl = await uploadCover(supabase, formData.get("cover") as File | null);
+  const coverUrl = await getFormMediaUrl(supabase, formData, "cover", "project-cover");
   const title = emptyToNull(formData.get("title")) ?? "";
   const slug = await resolveUniqueProjectSlug(
     supabase,
     emptyToNull(formData.get("slug")) ?? title
   );
   const payload = buildPayload(formData, coverUrl, slug);
+  const [heroUrl, introUrl] = await Promise.all([
+    getFormMediaUrl(supabase, formData, "hero_video", "project-video"),
+    getFormMediaUrl(supabase, formData, "intro_video", "project-video"),
+  ]);
+  if (heroUrl) payload.hero_video_url = heroUrl;
+  if (introUrl) payload.intro_video_url = introUrl;
 
   const { error } = await supabase.from("projects").insert(payload);
   if (error) {
@@ -150,7 +139,7 @@ export async function updateProjectAction(id: string, formData: FormData) {
   const supabase = await createClient();
   await requireUser(supabase);
 
-  const coverUrl = await uploadCover(supabase, formData.get("cover") as File | null);
+  const coverUrl = await getFormMediaUrl(supabase, formData, "cover", "project-cover");
   const title = emptyToNull(formData.get("title")) ?? "";
   const slug = await resolveUniqueProjectSlug(
     supabase,
@@ -158,6 +147,12 @@ export async function updateProjectAction(id: string, formData: FormData) {
     id
   );
   const payload = buildPayload(formData, coverUrl, slug);
+  const [heroUrl, introUrl] = await Promise.all([
+    getFormMediaUrl(supabase, formData, "hero_video", "project-video"),
+    getFormMediaUrl(supabase, formData, "intro_video", "project-video"),
+  ]);
+  if (heroUrl) payload.hero_video_url = heroUrl;
+  if (introUrl) payload.intro_video_url = introUrl;
 
   const { error } = await supabase.from("projects").update(payload).eq("id", id);
   if (error) {

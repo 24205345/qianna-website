@@ -1,5 +1,7 @@
 "use client";
 
+import { resolvePublicMedia } from "@/lib/media/public-media";
+
 import HTMLFlipBook from "react-pageflip";
 import {
   forwardRef,
@@ -87,7 +89,7 @@ const FlipLeaf = forwardRef<HTMLDivElement, { leaf: PortfolioFlipLeaf }>(
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={leaf.src}
+            src={resolvePublicMedia(leaf.src)}
             alt={leaf.alt}
             className="h-full w-full object-contain"
             draggable={false}
@@ -105,7 +107,7 @@ const FlipLeaf = forwardRef<HTMLDivElement, { leaf: PortfolioFlipLeaf }>(
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={leaf.src}
+          src={resolvePublicMedia(leaf.src)}
           alt={leaf.alt}
           className="h-full max-w-none select-none"
           style={{

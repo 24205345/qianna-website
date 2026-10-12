@@ -1,3 +1,4 @@
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import type { PhotographySection } from "@/app/_data/photography";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 
@@ -40,7 +41,7 @@ function staticToCollections(sections: PhotographySection[]): PhotographyCollect
     sort_order: section.sort_order,
     photos: section.photos.map((photo) => ({
       id: photo.id,
-      url: `${section.basePath}/${photo.filename}`,
+      url: resolvePublicMedia(`${section.basePath}/${photo.filename}`),
       title: photo.title,
       date: photo.date,
       location: photo.location,

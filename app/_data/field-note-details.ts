@@ -1,3 +1,4 @@
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import type { Trip } from "./field-notes";
 
 export type FieldNoteLayout = "gallery" | "narrative";
@@ -67,7 +68,7 @@ export const fieldNoteDetails: FieldNoteDetail[] = [
     location: "Nanjiluo, Yunnan, China",
     description: "Alpine lakes and pristine wilderness in one of Yunnan's most remote mountain areas.",
     activity: "Hiking",
-    coverImage: "/field-notes/nanjiluo/images/00_nanjiluo_cover.jpg",
+    coverImage: resolvePublicMedia("/field-notes/nanjiluo/images/00_nanjiluo_cover.jpg"),
     layoutTemplate: "gallery",
     sortOrder: 0,
     galleryBasePath: "/field-notes/nanjiluo/images",
@@ -81,7 +82,7 @@ export const fieldNoteDetails: FieldNoteDetail[] = [
     description:
       "A sacred village beneath Kawagebo Peak — pilgrimage trails through ancient forests and snow-capped vistas.",
     activity: "Hiking",
-    coverImage: "/field-notes/yubeng/images/00_yubeng_cover.jpg",
+    coverImage: resolvePublicMedia("/field-notes/yubeng/images/00_yubeng_cover.jpg"),
     layoutTemplate: "gallery",
     sortOrder: 1,
     galleryBasePath: "/field-notes/yubeng/images",
@@ -95,7 +96,7 @@ export const fieldNoteDetails: FieldNoteDetail[] = [
     description:
       "Chalk cliffs rising from the English Channel — rolling downland meets the sea along the South Downs Way.",
     activity: "Hiking",
-    coverImage: "/field-notes/whitecliffs/images/00_whitecliffs_cover.jpg",
+    coverImage: resolvePublicMedia("/field-notes/whitecliffs/images/00_whitecliffs_cover.jpg"),
     layoutTemplate: "gallery",
     sortOrder: 2,
     galleryBasePath: "/field-notes/whitecliffs/images",
@@ -108,7 +109,7 @@ export const fieldNoteDetails: FieldNoteDetail[] = [
     location: "The Long Mynd, Church Stretton, UK",
     description: "Soaring over the Shropshire Hills — silent flight above rolling moorland and ancient valleys.",
     activity: "Gliding",
-    coverImage: "/field-notes/gliding/images/00_gliding_cover.jpg",
+    coverImage: resolvePublicMedia("/field-notes/gliding/images/00_gliding_cover.jpg"),
     layoutTemplate: "gallery",
     sortOrder: 3,
     galleryBasePath: "/field-notes/gliding/images",
@@ -138,7 +139,7 @@ export const fieldNoteDetails: FieldNoteDetail[] = [
     location: "Superdévoluy, France",
     description: "Late-season snow, broad ridgelines, carved spring tracks, and a fog-softened return to base.",
     activity: "Snowboarding",
-    coverImage: "/field-notes/snowboard/images/00_superdevoluy_cover_map.jpg",
+    coverImage: resolvePublicMedia("/field-notes/snowboard/images/00_superdevoluy_cover_map.jpg"),
     layoutTemplate: "narrative",
     sortOrder: 4,
     galleryBasePath: "/field-notes/snowboard/images",

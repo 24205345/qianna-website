@@ -1,3 +1,5 @@
+
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import Image from "next/image";
 import type { FieldNoteFull } from "@/lib/field-notes/queries";
 import FieldNotePhotoGallery from "../PhotoGallery";
@@ -17,7 +19,7 @@ export default function GalleryFieldNoteView({ note }: Props) {
   return (
     <div className="min-h-screen bg-stone-50 text-stone-700 font-sans">
       <section className="relative h-screen w-full overflow-hidden">
-        <Image src={note.cover_image_url} alt={note.title} fill sizes="100vw" preload className="object-cover" />
+        <Image src={resolvePublicMedia(note.cover_image_url)} alt={note.title} fill sizes="100vw" preload className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/60" />
         <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-16 md:px-10 md:pb-20">
           <div className="mx-auto max-w-5xl">

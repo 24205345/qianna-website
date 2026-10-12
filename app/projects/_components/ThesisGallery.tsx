@@ -1,5 +1,7 @@
 "use client";
 
+import { resolvePublicMedia } from "@/lib/media/public-media";
+
 import Image from "next/image";
 import { useState } from "react";
 import type { GalleryImage } from "@/app/_data/project-galleries";
@@ -43,7 +45,7 @@ export default function ThesisGallery({ images }: ThesisGalleryProps) {
                   className="group/img relative cursor-zoom-in overflow-hidden rounded-xl bg-stone-900 text-left"
                 >
                   <Image
-                    src={img.url}
+                    src={resolvePublicMedia(img.url)}
                     alt={img.title}
                     width={1200}
                     height={0}
@@ -85,7 +87,7 @@ export default function ThesisGallery({ images }: ThesisGalleryProps) {
             ‹
           </button>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={activeImage.url} alt={activeImage.title} className="max-h-[85vh] max-w-[90vw] rounded-lg object-contain" />
+          <img src={resolvePublicMedia(activeImage.url)} alt={activeImage.title} className="max-h-[85vh] max-w-[90vw] rounded-lg object-contain" />
           <button
             type="button"
             onClick={(e) => {

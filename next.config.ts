@@ -5,6 +5,9 @@ import { getPublicImagePatterns } from "./lib/media/image-config";
 const remotePatterns = getPublicImagePatterns(PUBLIC_SUPABASE_URL, process.env.R2_PUBLIC_BASE_URL);
 
 const nextConfig: NextConfig = {
+  env: {
+    NEXT_PUBLIC_STATIC_MEDIA_BASE_URL: (process.env.STATIC_MEDIA_PROVIDER || process.env.MEDIA_STORAGE_PROVIDER) === "r2" ? (process.env.R2_PUBLIC_BASE_URL?.replace(/\/+$/, "") || "") : "",
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: "20mb",

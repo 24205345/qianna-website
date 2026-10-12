@@ -1,5 +1,7 @@
 "use client";
 
+import MediaUploadForm from "@/app/admin/_components/MediaUploadForm";
+
 import { useTransition } from "react";
 import type { ProjectMediaRow } from "@/lib/projects/queries";
 import { addProjectMediaAction, deleteProjectMediaAction } from "./media-actions";
@@ -54,12 +56,8 @@ export default function MediaManager({ projectId, media }: MediaManagerProps) {
         <p className="mt-4 text-sm text-stone-500">No gallery images yet.</p>
       )}
 
-      <form
-        action={(formData) =>
-          startTransition(async () => {
-            await addProjectMediaAction(projectId, formData);
-          })
-        }
+      <MediaUploadForm resetOnSuccess fields={{media: "project-media"}}
+        action={(formData) => addProjectMediaAction(projectId, formData)}
         className="mt-6 flex flex-col gap-3 rounded-lg border border-dashed border-stone-300 bg-stone-50/50 p-4"
       >
         <p className="text-sm font-medium text-stone-700">Add Image</p>
@@ -95,7 +93,7 @@ export default function MediaManager({ projectId, media }: MediaManagerProps) {
         >
           {pending ? "Uploading..." : "Upload Image"}
         </button>
-      </form>
+      </MediaUploadForm>
     </section>
   );
 }

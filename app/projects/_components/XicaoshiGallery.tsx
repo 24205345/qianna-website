@@ -1,5 +1,7 @@
 "use client";
 
+import { resolvePublicMedia } from "@/lib/media/public-media";
+
 import Image from "next/image";
 import { useState } from "react";
 import type { GalleryImage } from "@/app/_data/project-galleries";
@@ -29,7 +31,7 @@ export default function XicaoshiGallery({ images }: XicaoshiGalleryProps) {
               >
                 <div className="relative aspect-[4/3]">
                   <Image
-                    src={img.url}
+                    src={resolvePublicMedia(img.url)}
                     alt={img.title}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -46,7 +48,7 @@ export default function XicaoshiGallery({ images }: XicaoshiGalleryProps) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95" onClick={() => setSelectedIndex(null)}>
           <div className="relative h-[80vh] w-[95vw] max-w-7xl" onClick={(e) => e.stopPropagation()}>
             <Image
-              src={images[selectedIndex].url}
+              src={resolvePublicMedia(images[selectedIndex].url)}
               alt={images[selectedIndex].title}
               fill
               className="object-contain"

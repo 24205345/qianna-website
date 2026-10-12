@@ -1,5 +1,7 @@
 "use client";
 
+import MediaUploadForm from "@/app/admin/_components/MediaUploadForm";
+
 import { useTransition } from "react";
 import type { FieldNoteMediaRow } from "@/lib/field-notes/queries";
 import { addFieldNoteMediaAction, deleteFieldNoteMediaAction } from "./media-actions";
@@ -40,7 +42,7 @@ export default function MediaManager({ fieldNoteId, media }: MediaManagerProps) 
         <p className="mt-4 text-sm text-stone-500">No media yet. Run npm run migrate:field-notes to bulk import.</p>
       )}
 
-      <form action={(formData) => startTransition(async () => { await addFieldNoteMediaAction(fieldNoteId, formData); })} className="mt-6 flex flex-col gap-3 rounded-lg border border-dashed border-stone-300 bg-stone-50/50 p-4">
+      <MediaUploadForm resetOnSuccess fields={{media: "field-media"}} action={(formData) => addFieldNoteMediaAction(fieldNoteId, formData)} className="mt-6 flex flex-col gap-3 rounded-lg border border-dashed border-stone-300 bg-stone-50/50 p-4">
         <p className="text-sm font-medium text-stone-700">Add Image</p>
         <input name="media_type" type="hidden" value="image" />
         <input name="media" type="file" accept="image/*" className="text-sm" />
@@ -53,7 +55,7 @@ export default function MediaManager({ fieldNoteId, media }: MediaManagerProps) 
         </div>
         <input name="sort_order" type="number" defaultValue={media.length} className="rounded-md border border-stone-300 px-3 py-2 text-sm" />
         <button type="submit" disabled={pending} className="self-start rounded-md bg-stone-800 px-4 py-2 text-sm text-white hover:bg-stone-700 disabled:opacity-50">{pending ? "Uploading..." : "Upload Image"}</button>
-      </form>
+      </MediaUploadForm>
 
       <form action={(formData) => startTransition(async () => { formData.set("media_type", "video_external"); await addFieldNoteMediaAction(fieldNoteId, formData); })} className="mt-6 flex flex-col gap-3 rounded-lg border border-dashed border-stone-300 bg-stone-50/50 p-4">
         <p className="text-sm font-medium text-stone-700">Add Google Drive Video</p>

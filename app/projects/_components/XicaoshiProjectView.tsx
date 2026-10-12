@@ -1,3 +1,5 @@
+
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import Image from "next/image";
 import type { GalleryImage } from "@/app/_data/project-galleries";
 import { xicaoshiCoverFallback } from "@/app/_data/project-galleries";
@@ -15,7 +17,7 @@ export default function XicaoshiProjectView({ project, galleryImages }: Props) {
   return (
     <div className="bg-stone-950 text-stone-100 font-sans">
       <section className="relative h-screen w-full overflow-hidden">
-        <Image src={coverSrc} alt={project.title} fill priority className="object-cover" />
+        <Image src={resolvePublicMedia(coverSrc)} alt={project.title} fill priority className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
       </section>
 

@@ -4,9 +4,9 @@
 
 ## 1. 当前存储模式
 
-Supabase 提供 Postgres、Auth 和 RLS；生产公开文件使用 Cloudflare R2 `portfolio-media`，交付地址为 `https://media.qiannawang.com`。业务表仍保存公开 URL，静态 `public/` 资产和 Google Drive 外链继续使用原路径。
+Supabase 提供 Postgres、Auth 和 RLS；生产公开文件使用 Cloudflare R2 `portfolio-media`，交付地址为 `https://media.qiannawang.com`。业务表仍保存公开 URL。新版使用清单解析 `public/` 媒体别名并保留源文件；Google Drive 外链继续使用原路径。新版交付与直传代码尚未部署，实际分项状态见 [剩余迁移执行记录](exec-cms-storage-completion-2026-10-10.md)。
 
-后台上传经认证的 Server Action 调用 `lib/media/storage.ts`，核心实现为 `storage-core.ts`。`MEDIA_STORAGE_PROVIDER` 未指定时默认 `supabase`；生产显式设置 `r2`。R2 配置不完整或上传失败会报错，不会静默写入另一端。
+已部署版本的后台上传经认证的 Server Action 调用 `lib/media/storage.ts`，核心实现为 `storage-core.ts`。本轮新版改为认证的 JSON API 签名、浏览器 PUT 和 Server Action 收据核验，详见下文。`MEDIA_STORAGE_PROVIDER` 未指定时默认 `supabase`；生产显式设置 `r2`。R2 配置不完整或上传失败会报错，不会静默写入另一端。
 
 迁移已复制 160 文件，更新 159 行；`.media-migration/r2-plan.json` 保存原字段、目标字段、SHA-256 与状态。清单、两端对象和后续新上传需要共同保留，不能只保留代码。
 
@@ -16,6 +16,7 @@ Supabase 提供 Postgres、Auth 和 RLS；生产公开文件使用 Cloudflare R2
 |---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` | CMS 公开连接；访问权限仍由 Auth / RLS 控制 |
 | `MEDIA_STORAGE_PROVIDER=r2` | 新上传写入 R2；不自动改写已有 URL |
+| `STATIC_MEDIA_PROVIDER` | 可选 local / r2；默认跟随上传 provider，构建时决定静态文件公开 URL |
 | `R2_PUBLIC_BASE_URL=https://media.qiannawang.com` | 公开 URL 生成及 Next.js 图片白名单；浏览页面也需要配置 |
 | `R2_ACCOUNT_ID` / `R2_BUCKET_NAME` | 服务端 S3 目标 |
 | `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` | 仅本桶 Object Read & Write，服务端保存 |
@@ -55,11 +56,15 @@ Supabase 提供 Postgres、Auth 和 RLS；生产公开文件使用 Cloudflare R2
 4. 登录后台测试真实上传，确认返回的是 R2 公开 URL、前台能够读取。测试内容不得混入正式文章，完成后清理测试记录与对象。
 5. 修改存储代码时运行 `npm run test:media`、lint、类型检查及按范围需要的构建。仅改文档核对链接、命令与 Git diff。
 
-当前后台仍先将文件传给 Server Actions，再由服务端上传到 R2。Vercel Functions 的请求/响应体上限为 4.5 MB；应用 `bodySizeLimit: "20mb"` 不会扩大平台限制，见 [Vercel Functions limits](https://vercel.com/docs/functions/limitations)。更大上传需另行实现认证后的短时签名 PUT、精确 CORS 和服务端完成验证；本项目尚未实现直传。
+新版后台使用 `/api/admin/media` 获取 10 分钟签名 PUT，文件直接传 R2；完成核验后，Server Actions 只传文本与签名收据。图片 / 附件 32 MiB、MP4 256 MiB；真实 5.15 MiB 测试通过。CORS 必须包含所有实际发送的签名头，归属元数据不应 hoist 到 query。代码未上线前仍使用旧流程；Vercel 的 4.5 MB 请求体上限仍有效，应用 `bodySizeLimit: "20mb"` 不能扩大它，见 [Vercel Functions limits](https://vercel.com/docs/functions/limitations)。
+
+上传返回 403 时区分 API 的 CMS admin 标记与 R2 的签名 / CORS 错误；完成核验失败则检查 HEAD 的大小、类型和上传归属元数据。Preview 必须加准确 origin；不能开放所有来源。保存失败保留表单输入，未引用的对象另行盘点。
 
 ## 5. 迁移与回滚
 
-存量迁移使用 `migrate:r2` 六阶段；完整首次操作顺序见 [R2 执行步骤](exec-cloudflare-r2-2026-10-09.md#5-正式迁移顺序)。当前已完成迁移，不要重新生成或覆盖正式清单。
+静态资产使用 `npm run migrate:static-media`（默认只读）或 `-- --apply`（上传与验证）。本地代理可设 `$env:NODE_USE_ENV_PROXY = "1"`。源文件与独立进度记录保留；仅全部验证通过后发布清单。静态交付回退使用 `STATIC_MEDIA_PROVIDER=local` 并重建，不改写 CMS 已有 R2 URL。
+
+原桶存量迁移使用 `migrate:r2` 六阶段；完整首次操作顺序见 [R2 执行步骤](exec-cloudflare-r2-2026-10-09.md#5-正式迁移顺序)。当前已完成迁移，不要重新生成或覆盖正式清单。
 
 `migrate:media`、`migrate:photography`、`migrate:visual-works`、`migrate:field-notes` 是初始化脚本，可能删除并重建媒体记录；`migrate:home` 和 `recompress:home` 会更新 Hero，不属于只读验收。
 
@@ -71,3 +76,7 @@ Supabase 提供 Postgres、Auth 和 RLS；生产公开文件使用 Cloudflare R2
 4. 验证页面、优化图片和真实上传；保留 R2 对象，尤其是切换后新增内容，不要立即删除任一端文件。
 
 正式清单包含原始 CMS 值，被 Git 与部署包忽略。需在仓库外另做受控备份；GitHub 上的提交无法替代该清单。
+
+## 首页板块展示图覆盖
+
+/admin/site 的 Projects / Traces 支持逐图设置首页覆盖，scope 为 site-featured，使用同一 R2 签名直传协议、文件上限和回执校验。home_featured_images 仅保存 project:<slug> / trace:<id> 与公开 URL，null 恢复原图。原图库、项目详情资源和对象不删除。生产两项新迁移已执行；浏览器真实上传、刷新、跨标签与恢复测试通过，代码待部署。新环境按迁移历史应用表结构及 RLS 查询优化；当前执行状态和验收步骤见 [记录](exec-site-featured-images-2026-10-12.md)。

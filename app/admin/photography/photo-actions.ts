@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { uploadMediaObject } from "@/lib/media/storage";
+import { getFormMediaUrl } from "@/lib/media/form-upload";
 
 async function requireUser() {
   const supabase = await createClient();
@@ -17,30 +17,16 @@ async function requireUser() {
 export async function addPhotoAction(collectionId: string, formData: FormData) {
   const supabase = await requireUser();
 
-  const file = formData.get("photo") as File | null;
   const title = String(formData.get("title") ?? "").trim();
   const date = String(formData.get("date") ?? "").trim();
   const location = String(formData.get("location") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const sortOrder = Number(formData.get("sort_order") ?? 0) || 0;
 
-  if (!file || file.size === 0) throw new Error("Please choose an image file.");
   if (!title) throw new Error("Please enter a title.");
 
-  const { data: collection } = await supabase
-    .from("photography_collections")
-    .select("slug")
-    .eq("id", collectionId)
-    .single();
-
-  const slug = collection?.slug ?? collectionId;
-  const ext = file.name.includes(".") ? file.name.split(".").pop() : "jpg";
-  const path = `photography/${slug}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-
-  const publicUrl = await uploadMediaObject(supabase, path, file, {
-    contentType: file.type || "image/jpeg",
-    upsert: false,
-  });
+  const publicUrl = await getFormMediaUrl(supabase, formData, "photo", "photography");
+  if (!publicUrl) throw new Error("Please choose an image file.");
 
   const { error } = await supabase.from("photography_photos").insert({
     collection_id: collectionId,

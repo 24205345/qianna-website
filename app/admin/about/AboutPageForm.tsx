@@ -1,3 +1,5 @@
+
+import MediaUploadForm from "@/app/admin/_components/MediaUploadForm";
 import type { AboutPageContent } from "@/app/_data/about-page";
 import { serializeTagLines } from "@/lib/about/parse-form";
 import ProfilePhotoCropField from "./ProfilePhotoCropField";
@@ -15,7 +17,7 @@ const helpClass = "mt-1 text-xs leading-5 text-stone-500";
 
 export default function AboutPageForm({ action, defaults }: AboutPageFormProps) {
   return (
-    <form action={action} className="mt-8 flex flex-col gap-6">
+    <MediaUploadForm fields={{profile_image: "about-profile"}} action={action} className="mt-8 flex flex-col gap-6">
       <section className="flex flex-col gap-5">
         <div>
           <h2 className="font-serif text-xl text-stone-900">Page header</h2>
@@ -151,6 +153,6 @@ export default function AboutPageForm({ action, defaults }: AboutPageFormProps) 
       >
         Save About page
       </button>
-    </form>
+    </MediaUploadForm>
   );
 }

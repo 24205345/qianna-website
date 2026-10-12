@@ -1,3 +1,5 @@
+
+import MediaUploadForm from "@/app/admin/_components/MediaUploadForm";
 import Link from "next/link";
 import type { ProjectDetailItem } from "@/app/_data/project-details";
 import { PROJECT_CATEGORIES } from "@/lib/projects/categories";
@@ -52,7 +54,7 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
   const d = defaults ?? {};
 
   return (
-    <form action={action} className="mt-8 flex flex-col gap-5">
+    <MediaUploadForm fields={{cover: "project-cover", hero_video: "project-video", intro_video: "project-video"}} action={action} className="mt-8 flex flex-col gap-5">
       <div>
         <label className={labelClass} htmlFor="title">
           Title *
@@ -248,6 +250,14 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
       </div>
 
       <div>
+        <label className={labelClass} htmlFor="hero_video">Upload hero MP4 (optional)</label>
+        <input id="hero_video" name="hero_video" type="file" accept="video/mp4" className={`${inputClass} py-1.5`} />
+        <label className={labelClass} htmlFor="intro_video">Upload intro MP4 (optional)</label>
+        <input id="intro_video" name="intro_video" type="file" accept="video/mp4" className={`${inputClass} py-1.5`} />
+        <p className={helpClass}>An uploaded video replaces the corresponding URL. Maximum 256 MiB.</p>
+      </div>
+
+      <div>
         <label className={labelClass} htmlFor="cover">
           Cover image (leave blank to keep current)
         </label>
@@ -268,6 +278,6 @@ export default function ProjectForm({ action, defaults, submitLabel }: ProjectFo
           Cancel
         </Link>
       </div>
-    </form>
+    </MediaUploadForm>
   );
 }

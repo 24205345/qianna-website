@@ -1,3 +1,5 @@
+
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import Image from "next/image";
 
 interface AboutProfilePhotoProps {
@@ -33,7 +35,7 @@ export default function AboutProfilePhoto({
   return (
     <div className={`${frameClass} relative border border-stone-200/80 bg-stone-100`}>
       <Image
-        src={imageUrl}
+        src={resolvePublicMedia(imageUrl)}
         alt={alt}
         fill
         priority={priority}

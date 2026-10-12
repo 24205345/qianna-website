@@ -1,3 +1,5 @@
+
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import Link from "next/link";
 import Image from "next/image";
 import { CONTENT_IMAGE_SIZES } from "@/lib/media/image-sizes";
@@ -23,7 +25,7 @@ export default function FieldNotesList({ trips }: FieldNotesListProps) {
           <article className="overflow-hidden rounded-2xl bg-white shadow-sm transition-shadow hover:shadow-md">
             <div className="relative aspect-[16/9] overflow-hidden">
               <Image
-                src={trip.coverImage}
+                src={resolvePublicMedia(trip.coverImage)}
                 alt={trip.title}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"

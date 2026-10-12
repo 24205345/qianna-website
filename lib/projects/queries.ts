@@ -1,3 +1,4 @@
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import type { GalleryImage } from "@/app/_data/project-galleries";
 import type { ProjectDetailItem } from "@/app/_data/project-details";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
@@ -161,7 +162,7 @@ const FALLBACK_FEATURED_PROJECTS: FeaturedProject[] = [
     category: "Thesis & Spatial Research",
     description:
       "Investigates the emotional costs of London's public transport system using geospatial analysis and wearable sensors, proposing a parasitic architectural network and mobile app to transform commuting into care.",
-    coverImageUrl: "/projects/thesis/images/08_Rendering and Possibility.jpg",
+    coverImageUrl: resolvePublicMedia("/projects/thesis/images/08_Rendering and Possibility.jpg"),
     tags: ["Geospatial Analysis", "Parasitic Architecture", "Urban Care"],
     year: "2025",
     isLead: true,
@@ -173,7 +174,7 @@ const FALLBACK_FEATURED_PROJECTS: FeaturedProject[] = [
     category: "Architecture & Speculation",
     description:
       "A 4-project curated architectural monograph presented as an interactive flipbook — tracing community housing, speculative floating towers, and central-axis urban interventions.",
-    coverImageUrl: "/projects/undergraduate-portfolio/pages/01.jpg",
+    coverImageUrl: resolvePublicMedia("/projects/undergraduate-portfolio/pages/01.jpg"),
     tags: ["Monograph", "Interactive Flipbook", "Urban Interventions"],
     year: "2019–2023",
     isLead: false,
@@ -208,7 +209,7 @@ export async function getFeaturedProjects(): Promise<FeaturedProject[]> {
         coverImageUrl:
           row.cover_image_url ||
           fallbackItem?.coverImageUrl ||
-          "/projects/undergraduate-portfolio/pages/01.jpg",
+          resolvePublicMedia("/projects/undergraduate-portfolio/pages/01.jpg"),
         tags: row.tags?.length ? row.tags : (fallbackItem?.tags ?? []),
         year: row.year ?? fallbackItem?.year ?? "",
         isLead: idx === 0,

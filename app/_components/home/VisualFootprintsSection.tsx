@@ -1,3 +1,5 @@
+
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import Image from "next/image";
 import Link from "next/link";
 import type { FeaturedTraceItem } from "@/lib/traces/queries";
@@ -68,7 +70,7 @@ export default function VisualFootprintsSection({
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-stone-200/60">
                 <Image
-                  src={item.imageUrl}
+                  src={resolvePublicMedia(item.imageUrl)}
                   alt={item.title}
                   fill
                   sizes={TRACE_PAIR_SIZES}
@@ -107,7 +109,7 @@ export default function VisualFootprintsSection({
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-stone-200/60">
                 <Image
-                  src={item.imageUrl}
+                  src={resolvePublicMedia(item.imageUrl)}
                   alt={item.title}
                   fill
                   sizes={TRACE_TRIO_SIZES}

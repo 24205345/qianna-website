@@ -1,3 +1,5 @@
+
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import Image from "next/image";
 import Link from "next/link";
 import type { FeaturedProject } from "@/lib/projects/queries";
@@ -68,7 +70,7 @@ export default function FeaturedProjectsSection({
             >
               <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-stone-200/60">
                 <Image
-                  src={leadProject.coverImageUrl}
+                  src={resolvePublicMedia(leadProject.coverImageUrl)}
                   alt={leadProject.title}
                   fill
                   sizes={FEATURED_LEAD_SIZES}
@@ -163,7 +165,7 @@ export default function FeaturedProjectsSection({
                 {/* Bottom Image Block */}
                 <div className="relative mt-6 aspect-[16/10] w-full overflow-hidden rounded-xl bg-stone-200/60">
                   <Image
-                    src={companionProject.coverImageUrl}
+                    src={resolvePublicMedia(companionProject.coverImageUrl)}
                     alt={companionProject.title}
                     fill
                     sizes={FEATURED_COMPANION_SIZES}

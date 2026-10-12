@@ -10,6 +10,7 @@ function load(file, imports = {}) {
   }).outputText;
   const exports = {};
   vm.runInNewContext(output, { exports, URL, require(name) {
+    if (name === "@/lib/media/public-media") return { resolvePublicMedia: (src) => src };
     if (!(name in imports)) throw new Error("Unexpected import " + name);
     return imports[name];
   } });

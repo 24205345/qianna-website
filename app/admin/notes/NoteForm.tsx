@@ -12,6 +12,7 @@ import dynamic from "next/dynamic";
 import StatusSelect from "@/app/admin/_components/StatusSelect";
 import { extractTocFromMarkdown } from "@/lib/notes/markdown";
 import { uploadNoteAttachmentAction } from "./actions";
+import { uploadFileDirect } from "@/lib/media/upload-client";
 
 const NoteWysiwygEditor = dynamic(
   () => import("./_components/NoteWysiwygEditor"),
@@ -149,7 +150,8 @@ export default function NoteForm({
   async function handleUploadImage(file: File): Promise<string> {
     const formData = new FormData();
     formData.set("file", file);
-    const result = await uploadNoteAttachmentAction(formData);
+    const direct = await uploadFileDirect(file, "note-attachment");
+    const result = direct ? { url: direct.url, fileName: file.name } : await uploadNoteAttachmentAction(formData);
     setAttachments((prev) => {
       if (prev.some((item) => item.url === result.url)) return prev;
       return [...prev, result];

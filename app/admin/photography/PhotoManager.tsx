@@ -1,5 +1,7 @@
 "use client";
 
+import MediaUploadForm from "@/app/admin/_components/MediaUploadForm";
+
 import { useTransition } from "react";
 import type { PhotographyPhotoRow } from "@/lib/photography/queries";
 import { addPhotoAction, deletePhotoAction } from "./photo-actions";
@@ -50,12 +52,8 @@ export default function PhotoManager({ collectionId, photos }: PhotoManagerProps
         <p className="mt-4 text-sm text-stone-500">No photos yet. Run npm run migrate:photography to bulk import, or upload manually below.</p>
       )}
 
-      <form
-        action={(formData) =>
-          startTransition(async () => {
-            await addPhotoAction(collectionId, formData);
-          })
-        }
+      <MediaUploadForm resetOnSuccess fields={{photo: "photography"}}
+        action={(formData) => addPhotoAction(collectionId, formData)}
         className="mt-6 flex flex-col gap-3 rounded-lg border border-dashed border-stone-300 bg-stone-50/50 p-4"
       >
         <p className="text-sm font-medium text-stone-700">Add Photo</p>
@@ -68,7 +66,7 @@ export default function PhotoManager({ collectionId, photos }: PhotoManagerProps
         <button type="submit" disabled={pending} className="self-start rounded-md bg-stone-800 px-4 py-2 text-sm text-white hover:bg-stone-700 disabled:opacity-50">
           {pending ? "Uploading..." : "Upload Photo"}
         </button>
-      </form>
+      </MediaUploadForm>
     </section>
   );
 }

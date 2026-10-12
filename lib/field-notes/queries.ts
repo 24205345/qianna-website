@@ -1,3 +1,4 @@
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import type { Trip } from "@/app/_data/field-notes";
 import type {
   FieldNoteDetail,
@@ -52,13 +53,13 @@ function detailToFull(note: FieldNoteDetail): FieldNoteFull {
     galleryPhotos: note.galleryPhotos.map((p) => ({
       filename: p.filename,
       title: p.title,
-      url: `${note.galleryBasePath}/${p.filename}`,
+      url: resolvePublicMedia(`${note.galleryBasePath}/${p.filename}`),
     })),
     videos: note.videos ?? [],
     videosSectionTitle: note.videosSectionTitle,
     narrativeBlocks: (note.narrativeBlocks ?? []).map((block) => ({
       ...block,
-      url: `${note.galleryBasePath}/${block.filename}`,
+      url: resolvePublicMedia(`${note.galleryBasePath}/${block.filename}`),
     })),
     showTripDetailsHeading: note.showTripDetailsHeading ?? false,
     showScrollHint: note.showScrollHint ?? false,

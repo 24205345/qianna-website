@@ -1,5 +1,7 @@
 "use client";
 
+import { resolvePublicMedia } from "@/lib/media/public-media";
+
 import Image from "next/image";
 import { FIELD_NOTE_GRID_SIZES } from "@/lib/media/image-sizes";
 import { useState, useEffect, useCallback } from "react";
@@ -58,7 +60,7 @@ export default function PhotoGallery({ photos, basePath = "" }: PhotoGalleryProp
           >
             <div className="relative aspect-[4/3]">
               <Image
-                src={photoSrc(photo, basePath)}
+                src={resolvePublicMedia(photoSrc(photo, basePath))}
                 alt={photo.title}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -82,7 +84,7 @@ export default function PhotoGallery({ photos, basePath = "" }: PhotoGalleryProp
           </button>
           <div className="flex h-[90vh] w-[95vw] max-w-7xl flex-col items-center justify-center" onClick={(e) => e.stopPropagation()}>
             <div className="relative flex-1 w-full max-h-[80vh]">
-              <Image src={photoSrc(photos[selectedIndex], basePath)} alt={photos[selectedIndex].title} fill className="object-contain" sizes="95vw" priority />
+              <Image src={resolvePublicMedia(photoSrc(photos[selectedIndex], basePath))} alt={photos[selectedIndex].title} fill className="object-contain" sizes="95vw" priority />
             </div>
             <p className="mt-4 text-sm text-white/70">{selectedIndex + 1} / {photos.length}</p>
           </div>

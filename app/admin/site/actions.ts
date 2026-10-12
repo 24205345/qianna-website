@@ -3,12 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { SiteNavigationGroup } from "@/app/_data/site-navigation";
-import {
-  HERO_IMAGE_STORAGE_PATH,
-} from "@/lib/media/hero-image";
-import { compressHeroImage } from "@/lib/media/compress-hero-image";
 import { createClient } from "@/lib/supabase/server";
-import { uploadMediaObject } from "@/lib/media/storage";
+import { getFeaturedProjects } from "@/lib/projects/queries";
+import { getFeaturedTraces } from "@/lib/traces/queries";
+import { collectFeaturedImageChanges, featuredImageKey } from "@/lib/site/featured-images";
+import { getFormMediaUrl } from "@/lib/media/form-upload";
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
@@ -43,6 +42,7 @@ function parseNavigationItems(formData: FormData) {
       `item-${index}`
     );
 
+    const sortOrder = Number(formData.get(`navigation_${index}_sort_order`) ?? index);
     return {
       item_key: itemKey,
       item_group: parseNavigationGroup(formData.get(`navigation_${index}_group`)),
@@ -50,7 +50,7 @@ function parseNavigationItems(formData: FormData) {
       title: requiredText(formData.get(`navigation_${index}_title`), itemKey),
       description: optionalText(formData.get(`navigation_${index}_description`)),
       href: requiredText(formData.get(`navigation_${index}_href`), "#"),
-      sort_order: Number(formData.get(`navigation_${index}_sort_order`) ?? index) || index,
+      sort_order: Number.isFinite(sortOrder) ? sortOrder : index,
     };
   });
 }
@@ -59,33 +59,31 @@ async function requireUser(supabase: SupabaseServerClient) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) {
+  if (!user || user.is_anonymous) {
     redirect("/admin/login");
   }
+  if (user.app_metadata?.cms_role !== "admin") throw new Error("CMS admin permission is required.");
 }
 
-async function uploadHeroImage(
-  supabase: SupabaseServerClient,
-  file: File | null
-): Promise<string | null> {
-  if (!file || file.size === 0) return null;
-
-  const raw = Buffer.from(await file.arrayBuffer());
-  const compressed = await compressHeroImage(raw);
-
-  // Versioned URL prevents stale CDN and next/image covers.
-  const path = HERO_IMAGE_STORAGE_PATH.replace(".webp", `-${crypto.randomUUID()}.webp`);
-  return uploadMediaObject(supabase, path, compressed, { contentType: "image/webp" });
-}
 
 export async function updateSiteSettingsAction(formData: FormData) {
   const supabase = await createClient();
   await requireUser(supabase);
 
-  const uploadedUrl = await uploadHeroImage(
-    supabase,
-    formData.get("hero_image") as File | null
-  );
+  const uploadedUrl = await getFormMediaUrl(supabase, formData, "hero_image", "site-hero");
+
+  const [projects, traces] = await Promise.all([getFeaturedProjects(), getFeaturedTraces()]);
+  const changes = await collectFeaturedImageChanges(formData, [
+    ...projects.map(item => featuredImageKey("project", item.slug)),
+    ...traces.map(item => featuredImageKey("trace", item.id)),
+  ], field => getFormMediaUrl(supabase, formData, field, "site-featured"));
+  if (changes.length) {
+    const { data: saved, error: imageError } = await supabase.from("home_featured_images")
+      .upsert(changes, { onConflict: "item_key" }).select("item_key");
+    if (imageError || saved?.length !== changes.length) {
+      throw new Error(`首页展示图保存失败：${imageError?.message ?? "请检查管理员权限"}。请确认已执行 home_featured_images 迁移。`);
+    }
+  }
 
   const payload = {
     singleton_key: "home",

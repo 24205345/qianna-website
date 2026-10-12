@@ -3,7 +3,7 @@
 > **Agent / 开发者第一份必读。** 常驻规则见根目录 [`AGENTS.md`](../AGENTS.md)；**系统架构**见 [`architecture.md`](architecture.md)；文档索引见 [`docs/README.md`](README.md)。
 >
 > 项目路径：`G:\project\qianna-website`  
-> 分支：`main`（CMS 主线与 R2 生产迁移已完成；Workbench 表待部署）<br>
+> 分支：`main`（CMS 主线与 R2 生产迁移已完成；Workbench 表已部署，管理员授权已完成）<br>
 > 最后更新：2026-10-10<br>
 > 生产域名：**https://www.qiannawang.com**
 
@@ -38,7 +38,7 @@ Next.js 16.2.1 + React 19 + TypeScript + Tailwind v4 **个人作品集网站**�
 | **首页策展改版** | ✅ | 双字体 Serif/Sans、Sub-rail 细线与悬浮指示、无下划线 | — | 见 `exec-homepage-editorial-admin-overhaul-2026-09-16.md` |
 | **后台极速渲染** | ✅ | — | `/admin/*` | 全局 `loading.tsx` 骨架屏 + Header 鉴权透传 + 路由 prefetch |
 | **SEO** | ✅ | canonical / JSON-LD / sitemap | — | GSC 已验证；见 `experience-seo-metadata.md` |
-| **Workbench** | 前台静态回退；后台待部署表 | `/workbench` | `/admin/workbench` | 仓库已有 0019；2026-10-10 只读复核表仍不存在 |
+| **Workbench** | 表、管理员授权及本地保存验收完成 | `/workbench` | `/admin/workbench` | 0019；写入要求服务端 `app_metadata.cms_role=admin` |
 | **R2 媒体适配** | 生产已迁移，验收通过 | `media.qiannawang.com` | 所有上传入口 | 160 文件 / 159 行；`npm run migrate:r2` 支持回滚 |
 
 Admin 导航：Projects → Traces → Notes → Workbench → About → Guestbook → Site Settings → Analytics；Projects / Traces 有二级菜单。当前布局为 `AdminShell`，导航来源为 `AdminSidebar.tsx`。
@@ -226,7 +226,7 @@ CMS 四层模式、数据流、Auth / SEO / Analytics / 媒体管线等**稳定�
 0008 projects preview    0016 about profile_image
                          0017 undergraduate_portfolio
                          0018 hide_xicaoshi_project
-                         0019 workbench_pipelines（生产待部署）
+                         0019 workbench_pipelines（生产已部署；管理员授权与本地保存验收已完成）
 ```
 
 完整文件见 `supabase/migrations/`。
@@ -311,7 +311,7 @@ next.config.ts                       图片源白名单、本地开发直读开�
 | snowboard | `narrative` | Hero + Scroll 提示 + 图文叙事区块 + 2 视频 |
 
 视频 URL 格式：`https://drive.google.com/file/d/{ID}/preview`  
-当前这 4 个视频保留 Google Drive 外链。Projects 的已有 MP4 对象已迁移到 R2。大文件后台签名直传尚未实现，不要把应用 `20mb` 配置当作 Vercel 平台上传上限。
+当前这 4 个视频保留 Google Drive 外链。Projects 的已有 MP4 对象已迁移到 R2。大文件签名直传代码已实现：图片 / 附件 32 MiB、MP4 256 MiB；尚待新代码上线。Vercel 仅接收签名元数据与完成收据，文件直接上传 R2；应用 `20mb` 仍不能扩大平台请求体限制。
 
 `field_note_media` 叙事区块字段：`section_key`, `layout`, `aspect_ratio`, `caption`  
 snowboard 的 `spring_chute` 区块：`caption` 存 footer 文案（见 `queries.ts` 解析逻辑）。
@@ -323,7 +323,7 @@ snowboard 的 `spring_chute` 区块：`caption` 存 footer 文案（见 `queries
 - 数据表：`site_settings`（`singleton_key = 'home'`）
 - 前台：`lib/site/queries.ts` → `HeroImageDistortionClient`（`next/image`，`priority`）
 - 压缩：`lib/media/compress-hero-image.ts`（1920px WebP q75）；Storage 约 **399KB**
-- 后台：`/admin/site` 上传时自动压缩，写入 R2 `site/home-hero-<uuid>.webp`；URL 保存到 `site_settings`
+- 后台：新版 `/admin/site` 直传后自动压缩，写入 R2 `uploads/site-hero/<user-id>/<uuid>.webp`；URL 保存到 `site_settings`
 - 初始化与定向重压：`migrate:home` / `recompress:home` 使用可覆盖路径，需先核对目标库与 provider，不能作为日常裂图修复步骤
 
 初始化脚本需要本地源图；已经使用 R2 CMS URL 的页面不依赖本地 Hero 原图。
@@ -351,11 +351,11 @@ snowboard 的 `spring_chute` 区块：`caption` 存 footer 文案（见 `queries
 
 ## 10. 下一步（2026-10-10）
 
-R2 迁移已完成。后续按独立任务推进：
+原桶 R2 迁移已完成；182 个 public 内容资产、签名直传与 Workbench 剩余改造见 [剩余迁移执行记录](exec-cms-storage-completion-2026-10-10.md)。后续：
 
 1. **部署维护**：后续部署检查生产页面、图片优化和后台上传；保存正式回滚清单与 Supabase 原文件。
-2. **大文件直传**：认证后签名 PUT + 上传完成验证 + DB 写入，解决 Server Actions 的 Vercel 请求体限制；仍需实现。
-3. **Workbench**：部署并验证 `0019_workbench_pipelines.sql`，检查 RLS/GRANT、后台保存与前台读库；目前仅静态回退正常。
+2. **直传上线**：代码 / CORS / 真实 R2 5.15 MiB 测试已完成；CMS admin 标记与真实认证保存已验证，代码待部署后浏览器验收。
+3. **Workbench**：生产表、2 条流程与 anon 读取已验证；管理员授权与本地 Next 保存、生产 RLS 读回验收通过，详见 [授权验收](exec-cms-admin-verification-2026-10-12.md)。
 4. **依赖与内容**：单独处理依赖安全更新、Notes 发文、GSC 与 Analytics；媒体资产清理需先做引用盘点和备份。
 
 ---
@@ -382,7 +382,7 @@ R2 迁移已完成。后续按独立任务推进：
 请先读 AGENTS.md、docs/developer-guide.md 和 docs/architecture.md，然后继续 qianna-website 开发。
 
 生产站：https://www.qiannawang.com
-分支：main（R2 生产迁移已完成；Workbench 表待部署）
+分支：main（R2 生产迁移已完成；Workbench 表已部署，管理员授权已完成）
 
 先核对 git status、当前文档和相关代码，再执行目标；按改动范围验证。仅明确要求时 commit/push。
 ```
@@ -408,3 +408,9 @@ R2 迁移已完成。后续按独立任务推进：
 ```
 
 `--experimental-strip-types` 用于初始化脚本直接 import `app/_data/*.ts`。`migrate:r2 -- --help` 显示六阶段命令；不带参数默认生成计划，已有正式清单不可覆盖。运维验收不要执行初始化脚本。
+
+### 首页 Projects / Traces 展示图编辑
+
+在 /admin/site → 内容板块的每张缩略图下使用「更换图片」，右侧实时预览；点击顶部保存发布。「恢复原图」撤销首页覆盖，「取消修改」放弃未保存操作。图片最大 32 MiB，支持 JPEG、PNG、WebP、GIF、AVIF，沿用 R2 签名直传。
+
+首页覆盖独立保存在 home_featured_images（project:<slug> / trace:<id>）；项目详情与图库继续使用各自原图。生产已执行 20261012031537_home_featured_images.sql 与 20261012033201_home_featured_images_rls_initplan.sql；新环境须按顺序应用两项迁移。写入要求非匿名 CMS admin；JWT 查询按语句求值。真实浏览器上传、跨板块草稿、刷新和恢复已验证，代码待发布，详情见 [执行记录](exec-site-featured-images-2026-10-12.md)。

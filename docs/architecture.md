@@ -24,6 +24,7 @@ flowchart LR
     SA[Server Actions]
     RSC[Server Components]
     Adapter[Media storage adapter]
+    UploadAPI[Authenticated upload signing and completion]
     Optimizer[Next.js Image Optimizer]
   end
 
@@ -44,7 +45,12 @@ flowchart LR
   RSC --> PG
   SA --> PG
   SA --> Auth
-  SA --> Adapter
+  SA -.->|兼容小文件 / 脚本| Adapter
+  Admin -->|JSON 元数据| UploadAPI
+  UploadAPI --> Auth
+  Admin -->|短时签名 PUT| R2
+  UploadAPI -->|HEAD / 文件头校验| R2
+  SA -->|验证上传收据| R2
   Adapter -.->|supabase provider| Storage
   Adapter -->|生产 r2 provider| R2
   MW --> Auth
@@ -103,7 +109,7 @@ lib/
   media/                        # Hero 压缩 + storage.ts / storage-core.ts 存储接口
   admin/, analytics/, guestbook/, notes/, projects/ …
 
-supabase/migrations/            # 0001–0019 SQL（建表、RLS、GRANT；0019 线上待部署）
+supabase/migrations/            # 0001–0019 SQL（建表、RLS、GRANT；0019 生产已部署；管理员授权已完成）
 
 scripts/                        # 初始化脚本、下载脚本、migrate-storage-to-r2.mjs
 tests/                          # 存储接口与迁移流程测试
@@ -158,7 +164,7 @@ middleware.ts                   # /admin 鉴权；首页 Auth 参数转发
 | 0015 | page_views (analytics) |
 | 0017 | undergraduate portfolio |
 | 0018 | hide xicaoshi project |
-| 0019 | workbench_pipelines（2026-10-10 只读复核表仍不存在；查询层走静态回退） |
+| 0019 | workbench_pipelines（生产已部署，2 条流程；写入仅 CMS admin，异常时静态回退） |
 
 每张业务表：**RLS** + 对 `anon` / `authenticated` 的 **GRANT**（公开读、Admin 写）。
 
@@ -178,17 +184,24 @@ Supabase 查询成功 → 按模块映射数据库结果
 - 统一接口：`lib/media/storage.ts`（server-only）→ `storage-core.ts`；`MEDIA_STORAGE_PROVIDER` 默认 `supabase`，可显式切为 `r2`。
 - 2026-10-10 生产已显式配置 `r2`：160 对象复制并校验，159 行媒体引用切换；Supabase 原对象保留，数据库与 Auth 不变。见 [执行记录](exec-mcp-storage-2026-10-10.md)。
 - Supabase Bucket：`portfolio-media`。R2 桶由 `R2_BUCKET_NAME` 配置，公开 URL 使用 `R2_PUBLIC_BASE_URL` 自定义域名；S3 凭据仅保存在服务端。
-- 路径采用模块目录；新 Hero 使用 `site/home-hero-<uuid>.webp`。旧 `site/home-hero.webp` 引用仍可读取。
-- 存量迁移对象键为 `legacy/portfolio-media/<旧对象键>`；新上传直接使用模块目录。`R2_PUBLIC_BASE_URL` 是交付域名，私有 S3 endpoint 只用于服务端读写，不应写入业务表。
-- 上传：Admin Server Action 先经 Auth 校验，再调用统一接口，将公开 URL 写入数据库。Hero 额外 `sharp` 压缩（1920px WebP q75）；其余媒体按各入口处理。已切换 R2 时，配置/上传失败直接报错。
+- 路径采用模块目录；新版后台使用 `uploads/<scope>/<user-id>/<uuid>.<ext>`；Hero 完成压缩后生成新的 WebP 键。既有 `site/home-hero-<uuid>.webp` 和旧 `site/home-hero.webp` 引用继续有效。
+- 存量迁移对象键为 `legacy/portfolio-media/<旧对象键>`；新版后台直传使用 `uploads/` 的用户与 scope 目录。`R2_PUBLIC_BASE_URL` 是交付域名，S3 endpoint 用于受签名保护的读写，短时 PUT URL 可下发到管理浏览器；私钥仅在服务端，业务表保存公开 URL。
+- 新版上传：`/api/admin/media` 验证 Auth 与服务端 CMS admin 标记，签名 10 分钟 PUT；浏览器直接传 R2。完成阶段 HEAD 与文件头验证，Hero 再用 `sharp` 压缩（1920px WebP q75）。Server Action 核验绑定用户 / scope 的 HMAC 收据与对象，再写入 DB；R2 配置失败不回退。代码尚待部署，实际状态见剩余迁移记录。
 - 迁移脚本：`npm run migrate:r2`，明确分清点、计划、复制、公开校验、更新引用与回滚阶段，复制存量到 `legacy/portfolio-media/`，不删除源对象。
 - `next.config.ts` 同时允许 Supabase 与配置的 R2 域名；R2 规则限定 HTTPS、主机、路径且拒绝查询参数。生产继续使用 next/image 优化；代理 DNS 的本地预览可设 `DEV_IMAGE_UNOPTIMIZED=true`，仅 development 生效，未开启私网源访问。
 - 新对象默认 `Cache-Control: public, max-age=31536000, immutable`，不可覆盖写入使用 `If-None-Match: *`；可覆盖的初始化上传缓存为 1 小时。替换图片生成新 URL。删除业务记录不会自动清理对象，需要另行核对引用。
-- Field Notes 的 Google Drive 大视频只存外链，迁移时保留。浏览器签名直传尚未实现，当前后台上传仍受 Vercel 请求体限制。
+- Field Notes 的 Google Drive 大视频只存外链，迁移时保留。新版浏览器签名直传已实现，图片 / 附件 32 MiB、MP4 256 MiB；现有外链保持。代码上线前的旧上传仍受 Vercel 请求体限制。
 - 执行方案、实测清点与回滚见 [`exec-cloudflare-r2-2026-10-09.md`](exec-cloudflare-r2-2026-10-09.md)。
 - 日常配置、裂图排查、部署验收与回滚步骤见 [`experience-media-storage.md`](experience-media-storage.md)。
 
 ---
+
+### 静态媒体交付
+
+- `public-media-manifest.json` 记录文件路径、内容哈希与 R2 键；`resolvePublicMedia()` 只解析清单中的文件，页面路径与外链不受影响。
+- `migrate:static-media` 默认只读计划，`--apply` 上传并逐文件验证；全量校验成功后才发布清单。本轮 182 内容资产 / 574.01 MiB，6 个 SVG UI 文件保留本地。
+- `STATIC_MEDIA_PROVIDER` 默认跟随上传 provider；可设 `local` 并重新构建以独立回退静态交付。Next 只将公开域名注入前端，原文件与原桶迁移清单保留。
+- 分项状态与发布门槛见 [剩余迁移执行记录](exec-cms-storage-completion-2026-10-10.md)。
 
 ### 图片展示性能
 
@@ -250,7 +263,7 @@ scripts/download-*-media.ps1       → sparse-checkout 下补 public 文件
 
 | 能力 | 实现 |
 |------|------|
-| Hero 图源 | CMS `site_settings.hero_image_url` → R2；新上传使用 `site/home-hero-<uuid>.webp` |
+| Hero 图源 | CMS `site_settings.hero_image_url` → R2；新版直传使用 `uploads/site-hero/<user-id>/<uuid>.webp` |
 | 加载性能 | `next/image` + Admin/`recompress:home` 压缩 (~400KB) |
 | Ken Burns / 文字 stagger | `globals.css` + `page.tsx` |
 | 区块滚入 | `Reveal.tsx`（IntersectionObserver，`prefers-reduced-motion`） |
@@ -266,7 +279,7 @@ scripts/download-*-media.ps1       → sparse-checkout 下补 public 文件
 ### 7.7 Workbench
 
 - 首页 `WorkbenchSection` 与 `/workbench` 读取 `lib/workbench/queries.ts`；缺表、查询失败或空数据时使用 `app/_data/workbench.ts`。
-- `/admin/workbench` 与 `/admin/workbench/[id]` 已有编辑和初始化功能；线上 `0019_workbench_pipelines.sql` 尚未部署，不能把前台正常回退当作后台持久化已完成。
+- `/admin/workbench` 与 `/admin/workbench/[id]` 已有编辑和初始化功能；生产 `0019_workbench_pipelines.sql` 已部署；2 条流程公开读取已验证，写入要求服务端 `app_metadata.cms_role=admin`。现有唯一 CMS 账号已授权；2026-10-12 本地新版认证直传与保存、生产数据库 RLS 验收通过，新代码仍待部署。详见 [授权验收](exec-cms-admin-verification-2026-10-12.md)。
 
 ---
 
@@ -314,3 +327,7 @@ Guestbook Turnstile 见对应经验文档。迁移管理员邮箱/密码不放�
 | [`cms-migration-checklist.md`](cms-migration-checklist.md) | 模块验证清单 |
 | [`exec-*.md`](.) | 单次交付记录 |
 | [`experience-*.md`](.) | 可复用模式 |
+
+### 首页展示图覆盖（2026-10-12 数据库已执行，代码待发布）
+
+SiteSettingsForm 常驻文件输入 → site-featured 签名直传 → updateSiteSettingsAction 校验管理员、实际首页目标及回执 → home_featured_images 按稳定 item_key 写入。首页和后台预览应用覆盖 URL；null 恢复项目库/静态来源的原图。该覆盖层与原图库、项目详情分离，仅读取公开展示图片 URL；RLS 仅非匿名 CMS admin 可写。两项生产迁移已执行并验证 RLS；JWT 查询以独立 SELECT 计算，避免逐行重复求值。本地浏览器真实保存、刷新与恢复已通过，代码尚待部署。迁移与上线状态见 [执行记录](exec-site-featured-images-2026-10-12.md)。

@@ -1,3 +1,4 @@
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import type { VisualWorkSection } from "@/app/_data/visual-works";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 
@@ -38,7 +39,7 @@ function staticToCategories(sections: VisualWorkSection[]): VisualWorkCategory[]
     sort_order: section.sort_order,
     works: section.works.map((work) => ({
       id: work.id,
-      url: `${section.basePath}/${work.filename}`,
+      url: resolvePublicMedia(`${section.basePath}/${work.filename}`),
       title: work.title,
       date: work.date,
       description: work.description,

@@ -1,5 +1,7 @@
 "use client";
 
+import { resolvePublicMedia } from "@/lib/media/public-media";
+
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { HERO_DISTORTION_ENABLED } from "./hero-distortion-config";
@@ -26,7 +28,7 @@ function HeroStaticImage({
   return (
     <div className="absolute inset-0 overflow-hidden">
       <Image
-        src={imageUrl}
+        src={resolvePublicMedia(imageUrl)}
         alt={alt}
         fill
         priority

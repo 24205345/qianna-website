@@ -4,7 +4,7 @@
 
 **Agent 入口：** [`AGENTS.md`](../AGENTS.md) → [`developer-guide.md`](developer-guide.md) · [`architecture.md`](architecture.md)
 
-最后核对：2026-10-10。生产为 Vercel + Supabase Postgres/Auth + Cloudflare R2；迁移已完成，Workbench 表待部署。核心文档描述现状，日期执行记录保留当时结果与明确的后续说明。
+最后核对：2026-10-12。生产为 Vercel + Supabase Postgres/Auth + Cloudflare R2；原桶迁移已完成；Workbench 表与管理员授权已完成，本地新版上传及保存验收通过，代码待上线。静态媒体与直传改造状态见新增执行记录。核心文档描述现状，日期执行记录保留当时结果与明确的后续说明。
 
 ---
 
@@ -15,6 +15,7 @@
 | [`../AGENTS.md`](../AGENTS.md) | Cursor / Agent 常驻规则与约束 |
 | [`developer-guide.md`](developer-guide.md) | 项目进度、本地环境、路由速查、文件索引 |
 | [`architecture.md`](architecture.md) | 系统架构、分层、数据流、横切能力 |
+| [`exec-cms-storage-completion-2026-10-10.md`](exec-cms-storage-completion-2026-10-10.md) | 静态资产、签名直传、Workbench 与分项验收 / 上线状态 |
 | [`cms-migration-checklist.md`](cms-migration-checklist.md) | 各 CMS 模块完成度与验证步骤 |
 | [`experience-media-storage.md`](experience-media-storage.md) | 当前媒体配置、裂图排查、部署验收与回滚 |
 
@@ -23,6 +24,8 @@
 ## 第二层：按任务查阅
 
 ### 站点结构与功能
+
+首页展示图编辑、已执行迁移与真实浏览器验收（代码待发布）：[exec-site-featured-images-2026-10-12.md](exec-site-featured-images-2026-10-12.md)。
 
 | 文档 | 何时读 |
 |------|--------|
@@ -108,3 +111,5 @@ npm run dev
 应用验证按范围运行：`npm run lint` · `npx tsc --noEmit` · `npm run test:media` · `npm run build`。仅改文档核对链接与 `git diff --check`；commit / push 仅在用户明确要求时执行。
 
 细节见 [`developer-guide.md`](developer-guide.md) §3–§4。
+
+授权完成与实际保存验证：[2026-10-12 CMS 管理员验收](exec-cms-admin-verification-2026-10-12.md)。

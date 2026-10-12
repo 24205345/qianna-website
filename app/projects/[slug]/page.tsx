@@ -1,3 +1,4 @@
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import PageViewTracker from "@/app/_components/analytics/PageViewTracker";
@@ -49,7 +50,7 @@ const SLUG_CONFIG: Record<
       title: "Selected Works",
       subtitle: "2019–2023 · Beijing Jiaotong University",
       category: "Architecture Project",
-      cover_image_url: "/projects/undergraduate-portfolio/pages/01.jpg",
+      cover_image_url: resolvePublicMedia("/projects/undergraduate-portfolio/pages/01.jpg"),
       overviewParagraphs: undergraduatePortfolioDetailFallback.overviewParagraphs,
       projectDetails: undergraduatePortfolioDetailFallback.projectDetails,
       layoutTemplate: "portfolio",

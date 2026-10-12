@@ -1,15 +1,20 @@
 "use client";
 
+import MediaUploadForm from "@/app/admin/_components/MediaUploadForm";
+
 import {
   useCallback,
+  useEffect,
   useRef,
   useState,
-  useTransition,
   type ChangeEvent,
   type DragEvent,
   type ClipboardEvent,
 } from "react";
 import Link from "next/link";
+import FeaturedImageControls from "./FeaturedImageControls";
+import { applyProjectImages, applyTraceImages, featuredImageKey, featuredImageField, type HomeFeaturedImages } from "@/lib/site/featured-images";
+import { getUploadContentType, validateUploadInput } from "@/lib/media/direct-upload-policy";
 import type { SiteSettings } from "@/app/_data/site-settings";
 import type { SiteNavigationItem } from "@/app/_data/site-navigation";
 import type { FeaturedProject } from "@/lib/projects/queries";
@@ -42,6 +47,7 @@ interface SiteSettingsFormProps {
   navigationItems: SiteNavigationItem[];
   featuredProjects?: FeaturedProject[];
   featuredTraces?: FeaturedTraceItem[];
+  featuredImages?: HomeFeaturedImages;
   latestNotes?: NoteListItem[];
   aboutContent?: AboutPageContent;
 }
@@ -69,6 +75,7 @@ export default function SiteSettingsForm({
   navigationItems,
   featuredProjects = [],
   featuredTraces = [],
+  featuredImages = {},
   latestNotes = [],
   aboutContent,
 }: SiteSettingsFormProps) {
@@ -88,12 +95,62 @@ export default function SiteSettingsForm({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>(defaults.heroImageUrl);
   const [isDragging, setIsDragging] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
 
   // Reactive state for Navigation Items
   const [navItems, setNavItems] = useState<SiteNavigationItem[]>(navigationItems);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const featuredInputs = useRef<Record<string, HTMLInputElement | null>>({});
+  const objectUrls = useRef<Record<string, string>>({});
+  const [imageDrafts, setImageDrafts] = useState<Record<string, string>>({});
+  const [imageResets, setImageResets] = useState<Record<string, boolean>>({});
+  const [imageError, setImageError] = useState("");
+  useEffect(() => {
+    const urls = objectUrls.current;
+    return () => Object.values(urls).forEach(url => URL.revokeObjectURL(url));
+  }, []);
+  const imageKeys = [
+    ...featuredProjects.map(item => featuredImageKey("project", item.slug)),
+    ...featuredTraces.map(item => featuredImageKey("trace", item.id)),
+  ];
+  const visibleImages = { ...featuredImages, ...imageDrafts };
+  for (const key of imageKeys) if (imageResets[key]) delete visibleImages[key];
+  const previewProjects = applyProjectImages(featuredProjects, visibleImages);
+  const previewTraces = applyTraceImages(featuredTraces, visibleImages);
+  function clearImageDraft(key: string, reset: boolean) {
+    if (objectUrls.current[key]) URL.revokeObjectURL(objectUrls.current[key]);
+    delete objectUrls.current[key];
+    if (featuredInputs.current[key]) featuredInputs.current[key]!.value = "";
+    setImageDrafts(prev => { const next = { ...prev }; delete next[key]; return next; });
+    setImageResets(prev => ({ ...prev, [key]: reset }));
+    setImageError("");
+  }
+  function chooseFeaturedImage(key: string, file: File | undefined) {
+    if (!file) return;
+    try {
+      validateUploadInput({ scope: "site-featured", size: file.size, contentType: getUploadContentType(file.name, file.type), fileName: file.name });
+    } catch (error) {
+      // Clear the rejected file and its draft together so saved data matches the preview.
+      clearImageDraft(key, false);
+      setImageError(error instanceof Error ? error.message : "图片无法上传。");
+      return;
+    }
+    if (objectUrls.current[key]) URL.revokeObjectURL(objectUrls.current[key]);
+    const url = URL.createObjectURL(file);
+    objectUrls.current[key] = url;
+    setImageDrafts(prev => ({ ...prev, [key]: url }));
+    setImageResets(prev => ({ ...prev, [key]: false }));
+    setImageError("");
+  }
+  function imageControls(key: string, title: string) {
+    return <FeaturedImageControls title={title}
+      changed={Boolean(imageDrafts[key] || imageResets[key])}
+      overridden={Boolean(featuredImages[key])}
+      onPick={() => featuredInputs.current[key]?.click()}
+      onReset={() => clearImageDraft(key, true)}
+      onCancel={() => clearImageDraft(key, false)} />;
+  }
 
   const updateNavItem = (
     itemKey: string,
@@ -196,14 +253,21 @@ export default function SiteSettingsForm({
     navItems[0];
 
   return (
-    <form
-      action={(formData) => {
-        startTransition(async () => {
-          await action(formData);
-        });
-      }}
+    <MediaUploadForm fields={{hero_image: "site-hero", ...Object.fromEntries(imageKeys.map(key => [featuredImageField(key), "site-featured" as const]))}} onPendingChange={setIsPending}
+      action={action}
       className="flex flex-col gap-6"
     >
+      {/* Keep file inputs mounted across tabs so pending uploads are retained. */}
+      <div hidden>
+        {imageKeys.map(key => <div key={key}>
+          <input type="file" name={featuredImageField(key)} aria-label={`首页展示图：${key}`}
+            accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+            ref={element => { featuredInputs.current[key] = element; }}
+            onChange={event => chooseFeaturedImage(key, event.target.files?.[0])} />
+          <input type="hidden" name={featuredImageField(key) + "_reset"} value={imageResets[key] ? "1" : "0"} />
+        </div>)}
+      </div>
+      {imageError ? <p role="alert" className="text-sm text-red-600">{imageError}</p> : null}
       {/* Top Tab Bar Navigation */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-stone-200 pb-3">
         <div className="flex items-center gap-2">
@@ -410,7 +474,7 @@ export default function SiteSettingsForm({
                 </div>
               ) : (
                 <p className="text-[11px] text-stone-400 leading-normal">
-                  💡 保存时后台将自动采用高质量 WebP 格式压缩并更新至 Supabase 存储桶。
+                  保存时自动转换为高质量 WebP 并上传到媒体存储。
                 </p>
               )}
 
@@ -818,7 +882,7 @@ export default function SiteSettingsForm({
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
-                  {featuredProjects.map((proj, idx) => (
+                  {previewProjects.map((proj, idx) => (
                     <div
                       key={proj.slug}
                       className="group relative overflow-hidden rounded-lg border border-stone-200 bg-stone-100"
@@ -842,12 +906,13 @@ export default function SiteSettingsForm({
                           {proj.year} · {proj.category}
                         </p>
                       </div>
+                      {imageControls(featuredImageKey("project", proj.slug), proj.title)}
                     </div>
                   ))}
                 </div>
 
                 <p className="text-[11px] text-stone-400 leading-normal">
-                  💡 项目照片由项目库中的精选状态决定。如需更换封面照片，点击上方「管理项目库」即可编辑对应项目。
+                  点击「更换图片」设置首页展示图，右侧即时预览；点击顶部保存后生效。「恢复原图」使用项目库封面。支持 JPEG、PNG、WebP、GIF、AVIF，最大 32 MiB。
                 </p>
               </div>
             </div>
@@ -906,7 +971,7 @@ export default function SiteSettingsForm({
                 }}
               >
                 <FeaturedProjectsSection
-                  projects={featuredProjects}
+                  projects={previewProjects}
                   navigationSection={projectsNav}
                   categories={projectCategories}
                 />
@@ -1024,7 +1089,7 @@ export default function SiteSettingsForm({
                 </div>
 
                 <div className="grid grid-cols-3 gap-2">
-                  {featuredTraces.slice(0, 6).map((trace, idx) => (
+                  {previewTraces.slice(0, 6).map((trace, idx) => (
                     <div
                       key={trace.id}
                       className="group relative overflow-hidden rounded-md border border-stone-200 bg-stone-100"
@@ -1045,12 +1110,13 @@ export default function SiteSettingsForm({
                           {trace.title}
                         </p>
                       </div>
+                      {imageControls(featuredImageKey("trace", trace.id), trace.title)}
                     </div>
                   ))}
                 </div>
 
                 <p className="text-[11px] text-stone-400 leading-normal">
-                  💡 包含前台前排 2 张大焦点画框与后排 3 联拼胶卷图。如需增删，请点击「管理视觉库」。
+                  每张首页展示图均可独立更换，右侧即时预览；点击顶部保存后生效。「恢复原图」使用原始封面。支持 JPEG、PNG、WebP、GIF、AVIF，最大 32 MiB。
                 </p>
               </div>
             </div>
@@ -1109,7 +1175,7 @@ export default function SiteSettingsForm({
                 }}
               >
                 <VisualFootprintsSection
-                  traces={featuredTraces}
+                  traces={previewTraces}
                   navigationSection={tracesNav}
                   categories={traceCategories}
                 />
@@ -1346,6 +1412,6 @@ export default function SiteSettingsForm({
           </div>
         )}
       </div>
-    </form>
+    </MediaUploadForm>
   );
 }

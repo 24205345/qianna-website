@@ -1,3 +1,4 @@
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 
 export interface FeaturedTraceItem {
@@ -21,7 +22,7 @@ const FALLBACK_FEATURED_TRACES: FeaturedTraceItem[] = [
     category: "Field Note",
     date: "2024",
     caption: "Pilgrimage trails beneath Kawagebo Peak",
-    imageUrl: "/field-notes/yubeng/images/00_yubeng_cover.jpg",
+    imageUrl: resolvePublicMedia("/field-notes/yubeng/images/00_yubeng_cover.jpg"),
     href: "/field-notes/yubeng",
   },
   {
@@ -31,7 +32,7 @@ const FALLBACK_FEATURED_TRACES: FeaturedTraceItem[] = [
     category: "Photography",
     date: "2025",
     caption: "Warm light on travertine stone & geometry",
-    imageUrl: "/photography/architecture-tectonics/01_getty_travertine_curve.jpg",
+    imageUrl: resolvePublicMedia("/photography/architecture-tectonics/01_getty_travertine_curve.jpg"),
     href: "/photography",
   },
   {
@@ -42,7 +43,7 @@ const FALLBACK_FEATURED_TRACES: FeaturedTraceItem[] = [
     category: "Field Note",
     date: "2024",
     caption: "Rolling downland meets the English Channel",
-    imageUrl: "/field-notes/whitecliffs/images/00_whitecliffs_cover.jpg",
+    imageUrl: resolvePublicMedia("/field-notes/whitecliffs/images/00_whitecliffs_cover.jpg"),
     href: "/field-notes/whitecliffs",
   },
   {
@@ -53,7 +54,7 @@ const FALLBACK_FEATURED_TRACES: FeaturedTraceItem[] = [
     category: "Field Note",
     date: "2024",
     caption: "Silent soaring over ancient Shropshire valleys",
-    imageUrl: "/field-notes/gliding/images/00_gliding_cover.jpg",
+    imageUrl: resolvePublicMedia("/field-notes/gliding/images/00_gliding_cover.jpg"),
     href: "/field-notes/gliding",
   },
   {
@@ -63,7 +64,7 @@ const FALLBACK_FEATURED_TRACES: FeaturedTraceItem[] = [
     category: "Drawing",
     date: "2023–2024",
     caption: "Observation through line, rhythm, and grain",
-    imageUrl: "/drawings/pen-drawing/pen_drawing_01.jpg",
+    imageUrl: resolvePublicMedia("/drawings/pen-drawing/pen_drawing_01.jpg"),
     href: "/visual-works",
   },
 ];

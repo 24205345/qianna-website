@@ -1,0 +1,1097 @@
+{
+  "baseUrl": "https://media.qiannawang.com",
+  "assets": {
+    "/drawings/pen-and-wash/pen_and_wash_01.jpg": {
+      "key": "static/7bfcdbeb1afbf7374b5af84ee75480a7f9467feaf11f5c46d314ac4c7455002d/pen_and_wash_01.jpg",
+      "sha256": "7bfcdbeb1afbf7374b5af84ee75480a7f9467feaf11f5c46d314ac4c7455002d",
+      "size": 5398480,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-and-wash/pen_and_wash_02.jpg": {
+      "key": "static/d0d336689d6aa1c2b7c65bc2fe4aeaf3f662e4d7f5d45baf8b65c02f2de67318/pen_and_wash_02.jpg",
+      "sha256": "d0d336689d6aa1c2b7c65bc2fe4aeaf3f662e4d7f5d45baf8b65c02f2de67318",
+      "size": 4979698,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-and-wash/pen_and_wash_03.jpg": {
+      "key": "static/9b124419d637a6fd3ace4d968b6e40ed7d0fac8f7f44b74de15211fc63800e64/pen_and_wash_03.jpg",
+      "sha256": "9b124419d637a6fd3ace4d968b6e40ed7d0fac8f7f44b74de15211fc63800e64",
+      "size": 5290708,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-and-wash/pen_and_wash_04.jpg": {
+      "key": "static/7a8d2f094c3dc36e19e04a2e5322d8b409cc3376982999654c328c9a6d12a872/pen_and_wash_04.jpg",
+      "sha256": "7a8d2f094c3dc36e19e04a2e5322d8b409cc3376982999654c328c9a6d12a872",
+      "size": 7775958,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-and-wash/pen_and_wash_05.jpg": {
+      "key": "static/ef04f35378680cbeb818637181262873424368c955bb2206dde184e3faf0bcac/pen_and_wash_05.jpg",
+      "sha256": "ef04f35378680cbeb818637181262873424368c955bb2206dde184e3faf0bcac",
+      "size": 6228992,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-and-wash/pen_and_wash_06.jpg": {
+      "key": "static/83d87a84426f0fa3a08eb8eafe67eb6a2128cd04e8e7efbbe57f2dea709973b1/pen_and_wash_06.jpg",
+      "sha256": "83d87a84426f0fa3a08eb8eafe67eb6a2128cd04e8e7efbbe57f2dea709973b1",
+      "size": 6181265,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-and-wash/pen_and_wash_07.jpg": {
+      "key": "static/65801fb725f3677066027c6722ceaff675b73ff076c5e9f7d47450aa022ab0e2/pen_and_wash_07.jpg",
+      "sha256": "65801fb725f3677066027c6722ceaff675b73ff076c5e9f7d47450aa022ab0e2",
+      "size": 5821963,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-and-wash/pen_and_wash_08.jpg": {
+      "key": "static/af9aa4017fa9a65969756a9dd1f5b05a90861d88af196bc145eae644df7cf5a2/pen_and_wash_08.jpg",
+      "sha256": "af9aa4017fa9a65969756a9dd1f5b05a90861d88af196bc145eae644df7cf5a2",
+      "size": 4450510,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-and-wash/pen_and_wash_09.jpg": {
+      "key": "static/6cb0553c114d9eb466da125322eb07a960b6eb861ca0ad20b4933413ce650484/pen_and_wash_09.jpg",
+      "sha256": "6cb0553c114d9eb466da125322eb07a960b6eb861ca0ad20b4933413ce650484",
+      "size": 5273721,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-and-wash/pen_and_wash_10.jpg": {
+      "key": "static/0f8d49fa92c6de61325dfb040841a9f244dc34b11d96f6207ae3a91872b46363/pen_and_wash_10.jpg",
+      "sha256": "0f8d49fa92c6de61325dfb040841a9f244dc34b11d96f6207ae3a91872b46363",
+      "size": 4881678,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-drawing/pen_drawing_01.jpg": {
+      "key": "static/3171a0ebae00a0cc531bdb8fbe302b5cb95446538595215581ae355c389f5b7a/pen_drawing_01.jpg",
+      "sha256": "3171a0ebae00a0cc531bdb8fbe302b5cb95446538595215581ae355c389f5b7a",
+      "size": 2998884,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-drawing/pen_drawing_02.jpg": {
+      "key": "static/e1d99b56c301097fd1af2a6038d10ea10fcebc1d3aab8f078f7f29de5395deb4/pen_drawing_02.jpg",
+      "sha256": "e1d99b56c301097fd1af2a6038d10ea10fcebc1d3aab8f078f7f29de5395deb4",
+      "size": 5485747,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-drawing/pen_drawing_03.jpg": {
+      "key": "static/d5d24d9a2265e81a98272c34854b58b0416827ad797f559814d65958457e3262/pen_drawing_03.jpg",
+      "sha256": "d5d24d9a2265e81a98272c34854b58b0416827ad797f559814d65958457e3262",
+      "size": 3241784,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-drawing/pen_drawing_04.jpg": {
+      "key": "static/f7b9f7a0022779bffae2366065c2c65833b87704e70f1fef5376214b2418567a/pen_drawing_04.jpg",
+      "sha256": "f7b9f7a0022779bffae2366065c2c65833b87704e70f1fef5376214b2418567a",
+      "size": 5376791,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-drawing/pen_drawing_05.jpg": {
+      "key": "static/dcaa036de0d80e4eb9b577f192af364b730d890484a92116c0ce70ef3c077109/pen_drawing_05.jpg",
+      "sha256": "dcaa036de0d80e4eb9b577f192af364b730d890484a92116c0ce70ef3c077109",
+      "size": 3342687,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/pen-drawing/pen_drawing_06.jpg": {
+      "key": "static/7ea92d981e0dcd5da100bd76aea52814322f306c7ebec4b8f1eb0c598505adae/pen_drawing_06.jpg",
+      "sha256": "7ea92d981e0dcd5da100bd76aea52814322f306c7ebec4b8f1eb0c598505adae",
+      "size": 2127600,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/watercolor/watercolor_01.jpg": {
+      "key": "static/4abce19508627669ec9f7e334b8a720fbaa10c4f0498823035d1a96e8bed5fcc/watercolor_01.jpg",
+      "sha256": "4abce19508627669ec9f7e334b8a720fbaa10c4f0498823035d1a96e8bed5fcc",
+      "size": 3951697,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/watercolor/watercolor_02.jpg": {
+      "key": "static/aec1a314ad8e24727ba7ff531d2a9f465ed4ee4f6c9859e9fdbd597f4d5818d1/watercolor_02.jpg",
+      "sha256": "aec1a314ad8e24727ba7ff531d2a9f465ed4ee4f6c9859e9fdbd597f4d5818d1",
+      "size": 6016966,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/watercolor/watercolor_03.jpg": {
+      "key": "static/f028b30d6c2faf4a3e79c091fe5add94d6e002a91fbd998999fdaa59bce0aa75/watercolor_03.jpg",
+      "sha256": "f028b30d6c2faf4a3e79c091fe5add94d6e002a91fbd998999fdaa59bce0aa75",
+      "size": 5118740,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/watercolor/watercolor_04.jpg": {
+      "key": "static/9c5a4e0f993974181b0c2ecf6a6c8c86655cae10375d5a7d73be4207a802fc71/watercolor_04.jpg",
+      "sha256": "9c5a4e0f993974181b0c2ecf6a6c8c86655cae10375d5a7d73be4207a802fc71",
+      "size": 972350,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/watercolor/watercolor_05.jpg": {
+      "key": "static/f84e8258f2d875d5d13e778d111e1824c4fef77c6d96c90ff3454513f85b8f77/watercolor_05.jpg",
+      "sha256": "f84e8258f2d875d5d13e778d111e1824c4fef77c6d96c90ff3454513f85b8f77",
+      "size": 6920462,
+      "contentType": "image/jpeg"
+    },
+    "/drawings/watercolor/watercolor_06.jpg": {
+      "key": "static/d916df3d4d84247dc209036a65938cd24d0f90d30c3973a797732509896576a1/watercolor_06.jpg",
+      "sha256": "d916df3d4d84247dc209036a65938cd24d0f90d30c3973a797732509896576a1",
+      "size": 2946143,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/00_gliding_cover.jpg": {
+      "key": "static/c21468097bab066d1c5951e66bfda5767a8fe12a6556f879349b94d6345a85dd/00_gliding_cover.jpg",
+      "sha256": "c21468097bab066d1c5951e66bfda5767a8fe12a6556f879349b94d6345a85dd",
+      "size": 4756325,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/01_gliding_flight_1.jpg": {
+      "key": "static/b948d180ee0ea59e70810d0a15c37f21fd88c2699dd35933c649a9735333fad3/01_gliding_flight_1.jpg",
+      "sha256": "b948d180ee0ea59e70810d0a15c37f21fd88c2699dd35933c649a9735333fad3",
+      "size": 13169579,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/02_gliding_flight_2.jpg": {
+      "key": "static/54f50ecd57479975117fab3c7e80b26a81508f3aeb782d6088485b73174c7ba9/02_gliding_flight_2.jpg",
+      "sha256": "54f50ecd57479975117fab3c7e80b26a81508f3aeb782d6088485b73174c7ba9",
+      "size": 7029081,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/03_gliding_flight_3.jpg": {
+      "key": "static/4973151262c474015f4b917befce3a5c4b7f88050792208d55dfafa31b43d9a8/03_gliding_flight_3.jpg",
+      "sha256": "4973151262c474015f4b917befce3a5c4b7f88050792208d55dfafa31b43d9a8",
+      "size": 3871704,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/04_gliding_flight_4.jpg": {
+      "key": "static/ced203037f994cfd7126bb9572a9e22ac7ed11e502072a9196687f8ab6aab0ae/04_gliding_flight_4.jpg",
+      "sha256": "ced203037f994cfd7126bb9572a9e22ac7ed11e502072a9196687f8ab6aab0ae",
+      "size": 4718571,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/05_gliding_flight_5.jpg": {
+      "key": "static/1974a66bdbcb873c75ebab773ef9f4b1440d429c8ebdb36c457e01c0492349b2/05_gliding_flight_5.jpg",
+      "sha256": "1974a66bdbcb873c75ebab773ef9f4b1440d429c8ebdb36c457e01c0492349b2",
+      "size": 3859939,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/06_gliding_flight_6.jpg": {
+      "key": "static/54669aa8b70e68c9c729136075dd849c6fdb9204d09479c4e20d737cc3c212ec/06_gliding_flight_6.jpg",
+      "sha256": "54669aa8b70e68c9c729136075dd849c6fdb9204d09479c4e20d737cc3c212ec",
+      "size": 3132608,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/07_gliding_flight_7.jpg": {
+      "key": "static/2fe0de588f359b37a4af38fd33669b7daf782d6a11a9b4005aa796628bccb81c/07_gliding_flight_7.jpg",
+      "sha256": "2fe0de588f359b37a4af38fd33669b7daf782d6a11a9b4005aa796628bccb81c",
+      "size": 5135333,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/08_gliding_flight_8.jpg": {
+      "key": "static/8c6154c8946b8fd4e2d28a161ec0a60e0504ba8539bdcd090f54c580fbe0733b/08_gliding_flight_8.jpg",
+      "sha256": "8c6154c8946b8fd4e2d28a161ec0a60e0504ba8539bdcd090f54c580fbe0733b",
+      "size": 6362768,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/09_gliding_flight_9.jpg": {
+      "key": "static/172f1b44c1bdf0a392eec8cf7a88c926be54d808bbc05afd8436eff91c5075a2/09_gliding_flight_9.jpg",
+      "sha256": "172f1b44c1bdf0a392eec8cf7a88c926be54d808bbc05afd8436eff91c5075a2",
+      "size": 6184788,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/10_gliding_flight_10.jpg": {
+      "key": "static/82fc23ef0c5c7fdb9a46bb1ff31d38db22ef63a9b3bfe0adbc77b71b45ac0484/10_gliding_flight_10.jpg",
+      "sha256": "82fc23ef0c5c7fdb9a46bb1ff31d38db22ef63a9b3bfe0adbc77b71b45ac0484",
+      "size": 4806121,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/11_gliding_flight_11.jpg": {
+      "key": "static/da9524db6fdd4924471f087316019c84bfab52b3c04d35ee4a2b0aa87c943db5/11_gliding_flight_11.jpg",
+      "sha256": "da9524db6fdd4924471f087316019c84bfab52b3c04d35ee4a2b0aa87c943db5",
+      "size": 4611585,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/12_gliding_flight_12.jpg": {
+      "key": "static/29344ae83440d6ed85944a68dc7ca46af956252b161b575d2fc57cca1212efc4/12_gliding_flight_12.jpg",
+      "sha256": "29344ae83440d6ed85944a68dc7ca46af956252b161b575d2fc57cca1212efc4",
+      "size": 5046136,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/13_gliding_flight_13.jpg": {
+      "key": "static/2debe8c19351cadec7783a995c871215f2f9be06bbba67beb1204dfbaea166ca/13_gliding_flight_13.jpg",
+      "sha256": "2debe8c19351cadec7783a995c871215f2f9be06bbba67beb1204dfbaea166ca",
+      "size": 5007400,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/14_gliding_flight_14.jpg": {
+      "key": "static/ec1febda80757834a3eabd40fcc79e333fd96165b8c40bdeb348127d19773cd9/14_gliding_flight_14.jpg",
+      "sha256": "ec1febda80757834a3eabd40fcc79e333fd96165b8c40bdeb348127d19773cd9",
+      "size": 4333549,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/15_gliding_flight_15.jpg": {
+      "key": "static/06a36391c4d75b1c9933e6ae0ac0cc4393607c52f4e9be02f8db614422f14d05/15_gliding_flight_15.jpg",
+      "sha256": "06a36391c4d75b1c9933e6ae0ac0cc4393607c52f4e9be02f8db614422f14d05",
+      "size": 5685100,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/16_gliding_flight_16.jpg": {
+      "key": "static/e2689c5db6c903d22ec5897075ac05028a113d8bfa4d5ccb06444b5453cf15a4/16_gliding_flight_16.jpg",
+      "sha256": "e2689c5db6c903d22ec5897075ac05028a113d8bfa4d5ccb06444b5453cf15a4",
+      "size": 3429753,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/17_gliding_flight_17.jpg": {
+      "key": "static/3d5f1225fa4446f302fb92305cd3774f4902487ff9fc3087ca356644dd16ff81/17_gliding_flight_17.jpg",
+      "sha256": "3d5f1225fa4446f302fb92305cd3774f4902487ff9fc3087ca356644dd16ff81",
+      "size": 314197,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/18_gliding_flight_18.jpg": {
+      "key": "static/c523f85191f5119b0331968d451dc45c925d1ff5f997e68c69bcd163c5e23dee/18_gliding_flight_18.jpg",
+      "sha256": "c523f85191f5119b0331968d451dc45c925d1ff5f997e68c69bcd163c5e23dee",
+      "size": 4043712,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/19_gliding_flight_19.jpg": {
+      "key": "static/8f8516837d51da18aba8cb9db6344a942c43dbcb33b2ce83d262e134d8220b59/19_gliding_flight_19.jpg",
+      "sha256": "8f8516837d51da18aba8cb9db6344a942c43dbcb33b2ce83d262e134d8220b59",
+      "size": 3580815,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/gliding/images/20_gliding_flight_20.jpg": {
+      "key": "static/bbb43be42e08fb8664dee9eafecfe0f247b5034662b2d71c839a39b7a7972557/20_gliding_flight_20.jpg",
+      "sha256": "bbb43be42e08fb8664dee9eafecfe0f247b5034662b2d71c839a39b7a7972557",
+      "size": 411999,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/00_nanjiluo_cover.jpg": {
+      "key": "static/74c21114300de0ee187e57b658494e5b5e1fbc52dc1a8c7ba843d33f9dbfc8b3/00_nanjiluo_cover.jpg",
+      "sha256": "74c21114300de0ee187e57b658494e5b5e1fbc52dc1a8c7ba843d33f9dbfc8b3",
+      "size": 1508181,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/01_nanjiluo_hike_1.jpg": {
+      "key": "static/7087b0f0682fa9be13370c9eb02e5c9c46cec1f345d2aeb5174b0ae6a2f3d115/01_nanjiluo_hike_1.jpg",
+      "sha256": "7087b0f0682fa9be13370c9eb02e5c9c46cec1f345d2aeb5174b0ae6a2f3d115",
+      "size": 3459895,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/02_nanjiluo_hike_2.jpg": {
+      "key": "static/0f38fe8168cca5b4fcca2a8753a2989c2855b2dad03450f57cf93d788c64c75e/02_nanjiluo_hike_2.jpg",
+      "sha256": "0f38fe8168cca5b4fcca2a8753a2989c2855b2dad03450f57cf93d788c64c75e",
+      "size": 3737035,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/03_nanjiluo_hike_3.jpg": {
+      "key": "static/d44f7acb8d3183f88d0dd5d1db87f0321172a488021c8c96ab47ce3b15409cb9/03_nanjiluo_hike_3.jpg",
+      "sha256": "d44f7acb8d3183f88d0dd5d1db87f0321172a488021c8c96ab47ce3b15409cb9",
+      "size": 600502,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/04_nanjiluo_hike_4.jpg": {
+      "key": "static/5873fae8db7e494ba897826d02dd18ef3045a78e3dd9398ed5e5ca2578df3314/04_nanjiluo_hike_4.jpg",
+      "sha256": "5873fae8db7e494ba897826d02dd18ef3045a78e3dd9398ed5e5ca2578df3314",
+      "size": 786732,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/05_nanjiluo_hike_5.jpg": {
+      "key": "static/47f61d091908c82bb88fe6bff4040d703257aab8cc6eee41a15c9d6256bca5d7/05_nanjiluo_hike_5.jpg",
+      "sha256": "47f61d091908c82bb88fe6bff4040d703257aab8cc6eee41a15c9d6256bca5d7",
+      "size": 419712,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/06_nanjiluo_hike_6.jpg": {
+      "key": "static/40bf4194b31c05bc82df6e9ce9905620ca9227efb3646d8d69ce5546ce8fab19/06_nanjiluo_hike_6.jpg",
+      "sha256": "40bf4194b31c05bc82df6e9ce9905620ca9227efb3646d8d69ce5546ce8fab19",
+      "size": 870634,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/07_nanjiluo_hike_7.jpg": {
+      "key": "static/e39f75d5ccc9ce9345d8fc1fa49ad12dbba4684bcb0159760d732a28695fd19e/07_nanjiluo_hike_7.jpg",
+      "sha256": "e39f75d5ccc9ce9345d8fc1fa49ad12dbba4684bcb0159760d732a28695fd19e",
+      "size": 560376,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/08_nanjiluo_hike_8.jpg": {
+      "key": "static/615915cd48210ba2ef8d38826175ac1f41364c0fb64a9a960af94a3d87bff08d/08_nanjiluo_hike_8.jpg",
+      "sha256": "615915cd48210ba2ef8d38826175ac1f41364c0fb64a9a960af94a3d87bff08d",
+      "size": 1848584,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/09_nanjiluo_hike_9.jpg": {
+      "key": "static/ea9aa520794ad84ff2016ba85022930fb4a2bc410460d52494d5ac6fc49e6fa0/09_nanjiluo_hike_9.jpg",
+      "sha256": "ea9aa520794ad84ff2016ba85022930fb4a2bc410460d52494d5ac6fc49e6fa0",
+      "size": 461127,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/10_nanjiluo_hike_10.jpg": {
+      "key": "static/5ca2451034860e2951b3db1fa58dac66c828f38df3cfda42d569c60cc48c4105/10_nanjiluo_hike_10.jpg",
+      "sha256": "5ca2451034860e2951b3db1fa58dac66c828f38df3cfda42d569c60cc48c4105",
+      "size": 1019209,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/11_nanjiluo_hike_11.jpg": {
+      "key": "static/d8804ff8bbea67525cdd18b7117c7f9fda2fc17f17f77189dc54e7651abed5e0/11_nanjiluo_hike_11.jpg",
+      "sha256": "d8804ff8bbea67525cdd18b7117c7f9fda2fc17f17f77189dc54e7651abed5e0",
+      "size": 677342,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/12_nanjiluo_hike_12.jpg": {
+      "key": "static/c9bb463ba8a0b2805828d484ead8570bc49d9baaf67a6a759e62617297581b10/12_nanjiluo_hike_12.jpg",
+      "sha256": "c9bb463ba8a0b2805828d484ead8570bc49d9baaf67a6a759e62617297581b10",
+      "size": 898606,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/13_nanjiluo_hike_13.jpg": {
+      "key": "static/4ce0687bc7b88c39bd61899d976960e186ae0bbd181b01af698c7cffb8757443/13_nanjiluo_hike_13.jpg",
+      "sha256": "4ce0687bc7b88c39bd61899d976960e186ae0bbd181b01af698c7cffb8757443",
+      "size": 986067,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/14_nanjiluo_hike_14.jpg": {
+      "key": "static/d43622a4b354dfe3b4ac38dca3eb42fce2795589b13f452c18720795158cbc7b/14_nanjiluo_hike_14.jpg",
+      "sha256": "d43622a4b354dfe3b4ac38dca3eb42fce2795589b13f452c18720795158cbc7b",
+      "size": 647677,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/15_nanjiluo_hike_15.jpg": {
+      "key": "static/787f0c21cfa5bd6542dde27f263b4c6e5ba85cb44cda9808fee6568a91ba07be/15_nanjiluo_hike_15.jpg",
+      "sha256": "787f0c21cfa5bd6542dde27f263b4c6e5ba85cb44cda9808fee6568a91ba07be",
+      "size": 1283561,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/nanjiluo/images/16_nanjiluo_hike_16.jpg": {
+      "key": "static/04685ce8db72f4e7c4deacbb80c950ebc9a120d2551f48d91e603140d9d0e02c/16_nanjiluo_hike_16.jpg",
+      "sha256": "04685ce8db72f4e7c4deacbb80c950ebc9a120d2551f48d91e603140d9d0e02c",
+      "size": 1031902,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/snowboard/images/00_superdevoluy_cover_map.jpg": {
+      "key": "static/b3302a349e55c97164a54d6e16f03c3e176d4ee2b9c385fc4ab90247717ca021/00_superdevoluy_cover_map.jpg",
+      "sha256": "b3302a349e55c97164a54d6e16f03c3e176d4ee2b9c385fc4ab90247717ca021",
+      "size": 7664991,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/snowboard/images/01_superdevoluy_slope_panorama.jpg": {
+      "key": "static/8d05352410e1c4d7c8a5391cb64041d4a67d29194819a236ea3e4e648fbe370c/01_superdevoluy_slope_panorama.jpg",
+      "sha256": "8d05352410e1c4d7c8a5391cb64041d4a67d29194819a236ea3e4e648fbe370c",
+      "size": 5351554,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/snowboard/images/02_superdevoluy_alpine_basin.jpg": {
+      "key": "static/1ab212732f82ffd4305cc7601d1c842ba3538e1fc8c501e92fc791db0234481b/02_superdevoluy_alpine_basin.jpg",
+      "sha256": "1ab212732f82ffd4305cc7601d1c842ba3538e1fc8c501e92fc791db0234481b",
+      "size": 7086192,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/snowboard/images/03_superdevoluy_board_rest_view.jpg": {
+      "key": "static/bbbd91bdd2b0291d9de3ee16912cecce422ca071d3203a08508911ee32c63836/03_superdevoluy_board_rest_view.jpg",
+      "sha256": "bbbd91bdd2b0291d9de3ee16912cecce422ca071d3203a08508911ee32c63836",
+      "size": 8108408,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/snowboard/images/04_superdevoluy_spring_chute.jpg": {
+      "key": "static/23ddd57a92439f1a8243b332b31936f835fd4192fc095f523b39f6af70196076/04_superdevoluy_spring_chute.jpg",
+      "sha256": "23ddd57a92439f1a8243b332b31936f835fd4192fc095f523b39f6af70196076",
+      "size": 7518845,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/whitecliffs/images/00_whitecliffs_cover.jpg": {
+      "key": "static/f15c4bcfab83b47d40aef401c49011672e02ea21edf9ef464db0a7e6b461c78c/00_whitecliffs_cover.jpg",
+      "sha256": "f15c4bcfab83b47d40aef401c49011672e02ea21edf9ef464db0a7e6b461c78c",
+      "size": 1239581,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/whitecliffs/images/01_whitecliffs_hike_1.jpg": {
+      "key": "static/ccc50960d8cd7957c0d4201507a89944a72d5a1a0d8fbf7994bd77552fe2feae/01_whitecliffs_hike_1.jpg",
+      "sha256": "ccc50960d8cd7957c0d4201507a89944a72d5a1a0d8fbf7994bd77552fe2feae",
+      "size": 1621905,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/whitecliffs/images/02_whitecliffs_hike_2.jpg": {
+      "key": "static/a6f8c1d54c9d9a214e2d30fd3b5c61d35d750283546442d3b61ba41f8795ac20/02_whitecliffs_hike_2.jpg",
+      "sha256": "a6f8c1d54c9d9a214e2d30fd3b5c61d35d750283546442d3b61ba41f8795ac20",
+      "size": 1749182,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/whitecliffs/images/03_whitecliffs_hike_3.jpg": {
+      "key": "static/f6685e69621dca572bace94f3d8ba2debf04351e1da33802f78688579ec27c3d/03_whitecliffs_hike_3.jpg",
+      "sha256": "f6685e69621dca572bace94f3d8ba2debf04351e1da33802f78688579ec27c3d",
+      "size": 3724975,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/whitecliffs/images/04_whitecliffs_hike_4.jpg": {
+      "key": "static/cc80138a4c9110dc52730b6c359c9f1727cb500f1a39d013d9c4508fda6f4db5/04_whitecliffs_hike_4.jpg",
+      "sha256": "cc80138a4c9110dc52730b6c359c9f1727cb500f1a39d013d9c4508fda6f4db5",
+      "size": 1203192,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/whitecliffs/images/05_whitecliffs_hike_5.jpg": {
+      "key": "static/fec7889861f343d4f722898ffdb27f238fdcccdb2494f2310510a3a08019c8c1/05_whitecliffs_hike_5.jpg",
+      "sha256": "fec7889861f343d4f722898ffdb27f238fdcccdb2494f2310510a3a08019c8c1",
+      "size": 1003389,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/whitecliffs/images/06_whitecliffs_hike_6.jpg": {
+      "key": "static/4bc75ce15cce65d61a326f030b12d8021da0b401b41e0f7d7f762257ff530e84/06_whitecliffs_hike_6.jpg",
+      "sha256": "4bc75ce15cce65d61a326f030b12d8021da0b401b41e0f7d7f762257ff530e84",
+      "size": 1386334,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/whitecliffs/images/07_whitecliffs_hike_7.jpg": {
+      "key": "static/2d123d5baa4c2c858d0f196496640f55da8965b7fdb2d4c397866f0a6c9cf954/07_whitecliffs_hike_7.jpg",
+      "sha256": "2d123d5baa4c2c858d0f196496640f55da8965b7fdb2d4c397866f0a6c9cf954",
+      "size": 838320,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/whitecliffs/images/08_whitecliffs_hike_8.jpg": {
+      "key": "static/04a601efe0d1d717bba62561e65ed8858c9112ec333db8ce13fbeb97c923cc9e/08_whitecliffs_hike_8.jpg",
+      "sha256": "04a601efe0d1d717bba62561e65ed8858c9112ec333db8ce13fbeb97c923cc9e",
+      "size": 2841402,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/whitecliffs/images/09_whitecliffs_hike_9.jpg": {
+      "key": "static/ae98d47aacdf74010b1bfdfa1f50f4de44e436aad72c45d6bcf1405e028d146e/09_whitecliffs_hike_9.jpg",
+      "sha256": "ae98d47aacdf74010b1bfdfa1f50f4de44e436aad72c45d6bcf1405e028d146e",
+      "size": 1410844,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/whitecliffs/images/10_whitecliffs_hike_10.jpg": {
+      "key": "static/0ca3530ba9e29d833995a35eb4b8b542f0de8bc704700aa5dad6056d7b92e7a8/10_whitecliffs_hike_10.jpg",
+      "sha256": "0ca3530ba9e29d833995a35eb4b8b542f0de8bc704700aa5dad6056d7b92e7a8",
+      "size": 902591,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/yubeng/images/00_yubeng_cover.jpg": {
+      "key": "static/c5cd9936fffec4397c699533013584b0a39f0fd84bf608093fb1ed98ece67e36/00_yubeng_cover.jpg",
+      "sha256": "c5cd9936fffec4397c699533013584b0a39f0fd84bf608093fb1ed98ece67e36",
+      "size": 619753,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/yubeng/images/01_yubeng_hike_1.jpg": {
+      "key": "static/90728a3991721be60617e7c77bd4c0e063f6013f6e4eb29837b2575c0ed75e31/01_yubeng_hike_1.jpg",
+      "sha256": "90728a3991721be60617e7c77bd4c0e063f6013f6e4eb29837b2575c0ed75e31",
+      "size": 2480142,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/yubeng/images/02_yubeng_hike_2.jpg": {
+      "key": "static/8314d6cb3a636edea67ca62b1e6817edf92f2f64df6459bf7e4a314b7bd0f473/02_yubeng_hike_2.jpg",
+      "sha256": "8314d6cb3a636edea67ca62b1e6817edf92f2f64df6459bf7e4a314b7bd0f473",
+      "size": 518972,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/yubeng/images/03_yubeng_hike_3.jpg": {
+      "key": "static/dad3d37f7e43b69b458657eb7e519f08681f4c6e5cbc629826d387888a6d67dd/03_yubeng_hike_3.jpg",
+      "sha256": "dad3d37f7e43b69b458657eb7e519f08681f4c6e5cbc629826d387888a6d67dd",
+      "size": 1081280,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/yubeng/images/04_yubeng_hike_4.jpg": {
+      "key": "static/593959b5338011fdf3ff38064339904a4e3ca37cc3c10ce66da42affa7c352bd/04_yubeng_hike_4.jpg",
+      "sha256": "593959b5338011fdf3ff38064339904a4e3ca37cc3c10ce66da42affa7c352bd",
+      "size": 1323374,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/yubeng/images/05_yubeng_hike_5.jpg": {
+      "key": "static/3e0888c0b60745092b2a1bd4ccf5430b8491fe511931c5a2bd9d4ecdc778faea/05_yubeng_hike_5.jpg",
+      "sha256": "3e0888c0b60745092b2a1bd4ccf5430b8491fe511931c5a2bd9d4ecdc778faea",
+      "size": 1488900,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/yubeng/images/06_yubeng_hike_6.jpg": {
+      "key": "static/a95b557aa3ad58ce5fd6e3963e6ea8d0867cf879a4e5683a1c4b56964f9508b7/06_yubeng_hike_6.jpg",
+      "sha256": "a95b557aa3ad58ce5fd6e3963e6ea8d0867cf879a4e5683a1c4b56964f9508b7",
+      "size": 841687,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/yubeng/images/07_yubeng_hike_7.jpg": {
+      "key": "static/d106d4e2bacf39b4060d84e0b105ad9cbfc420b22f5f2dfe57c6c8f2bf693df4/07_yubeng_hike_7.jpg",
+      "sha256": "d106d4e2bacf39b4060d84e0b105ad9cbfc420b22f5f2dfe57c6c8f2bf693df4",
+      "size": 925758,
+      "contentType": "image/jpeg"
+    },
+    "/field-notes/yubeng/images/08_yubeng_hike_8.jpg": {
+      "key": "static/7403f5cd6fbac46e960e6a67e57ea030f39388382173ddfa76d5c2e46031c386/08_yubeng_hike_8.jpg",
+      "sha256": "7403f5cd6fbac46e960e6a67e57ea030f39388382173ddfa76d5c2e46031c386",
+      "size": 1022376,
+      "contentType": "image/jpeg"
+    },
+    "/images/hero-image.jpg": {
+      "key": "static/6f0c7ad6e1c2b7058f504fcbc1386fd2a20680a326a351675c152ec45d46fc19/hero-image.jpg",
+      "sha256": "6f0c7ad6e1c2b7058f504fcbc1386fd2a20680a326a351675c152ec45d46fc19",
+      "size": 16206736,
+      "contentType": "image/jpeg"
+    },
+    "/notes/ai-video-downloader-summarizer/image001.jpg": {
+      "key": "static/8712a45c551b9868cc6dcdd63998e264b82227255db1c88eba9b03002e38ef92/image001.jpg",
+      "sha256": "8712a45c551b9868cc6dcdd63998e264b82227255db1c88eba9b03002e38ef92",
+      "size": 20209,
+      "contentType": "image/jpeg"
+    },
+    "/notes/ai-video-downloader-summarizer/image002.jpg": {
+      "key": "static/c5aab1abc9a759c0aad708d7aa8909fb132445ffde90ad72cb510b3ac30810ea/image002.jpg",
+      "sha256": "c5aab1abc9a759c0aad708d7aa8909fb132445ffde90ad72cb510b3ac30810ea",
+      "size": 11462,
+      "contentType": "image/jpeg"
+    },
+    "/notes/ai-video-downloader-summarizer/image003.jpg": {
+      "key": "static/2b893d21833ad6571b69c122f405c097c519fb53ef83bf8884169b09d0e425db/image003.jpg",
+      "sha256": "2b893d21833ad6571b69c122f405c097c519fb53ef83bf8884169b09d0e425db",
+      "size": 14596,
+      "contentType": "image/jpeg"
+    },
+    "/notes/ai-video-downloader-summarizer/image010.jpg": {
+      "key": "static/a64c359dc5a107cd8b5e9c69f5ed3f9c4e02e88f397c7cbab5c8fe4eab02eff8/image010.jpg",
+      "sha256": "a64c359dc5a107cd8b5e9c69f5ed3f9c4e02e88f397c7cbab5c8fe4eab02eff8",
+      "size": 18518,
+      "contentType": "image/jpeg"
+    },
+    "/notes/aliyun-ecs-deploy/01-ecs-instance-tier.png": {
+      "key": "static/d913ea7e92c68a98b711e12128dbbd4fedb1d5fa093107bf5be8bf4491e4223e/01-ecs-instance-tier.png",
+      "sha256": "d913ea7e92c68a98b711e12128dbbd4fedb1d5fa093107bf5be8bf4491e4223e",
+      "size": 888411,
+      "contentType": "image/png"
+    },
+    "/notes/aliyun-ecs-deploy/02-ecs-remote-connect.png": {
+      "key": "static/6583196da749e9a54a9cdfee8fccb3a375f1a48331fba7848d34f5de442a0546/02-ecs-remote-connect.png",
+      "sha256": "6583196da749e9a54a9cdfee8fccb3a375f1a48331fba7848d34f5de442a0546",
+      "size": 75779,
+      "contentType": "image/png"
+    },
+    "/notes/aliyun-ecs-deploy/03-workbench-login.png": {
+      "key": "static/fb025d83780f323e312e5f25f299b12176a98816b4505a95b76b8342ebc15e6a/03-workbench-login.png",
+      "sha256": "fb025d83780f323e312e5f25f299b12176a98816b4505a95b76b8342ebc15e6a",
+      "size": 62688,
+      "contentType": "image/png"
+    },
+    "/notes/aliyun-ecs-deploy/04-workbench-upload-zip.png": {
+      "key": "static/82bb88ab9fbd156503340f1e028c0d88c860474becd8dedf6dadf21bdce2143d/04-workbench-upload-zip.png",
+      "sha256": "82bb88ab9fbd156503340f1e028c0d88c860474becd8dedf6dadf21bdce2143d",
+      "size": 211615,
+      "contentType": "image/png"
+    },
+    "/notes/aliyun-ecs-deploy/05-security-group-list.png": {
+      "key": "static/18c57d741799c24f20f20ff61c1dc7801d79ebabb9341640397bac7a66ff2046/05-security-group-list.png",
+      "sha256": "18c57d741799c24f20f20ff61c1dc7801d79ebabb9341640397bac7a66ff2046",
+      "size": 95743,
+      "contentType": "image/png"
+    },
+    "/notes/aliyun-ecs-deploy/06-security-group-inbound.png": {
+      "key": "static/272cf90ba274dcb7ff516a0b63372566b346e26b11a1b5716efac196ad49d77b/06-security-group-inbound.png",
+      "sha256": "272cf90ba274dcb7ff516a0b63372566b346e26b11a1b5716efac196ad49d77b",
+      "size": 33668,
+      "contentType": "image/png"
+    },
+    "/notes/aliyun-ecs-deploy/07-security-group-add-rule.png": {
+      "key": "static/3ae7efa36e0f2f62507d7d08b5e568d5d24bc1ce8a23cc094a5d8a11c29f7f5d/07-security-group-add-rule.png",
+      "sha256": "3ae7efa36e0f2f62507d7d08b5e568d5d24bc1ce8a23cc094a5d8a11c29f7f5d",
+      "size": 114505,
+      "contentType": "image/png"
+    },
+    "/notes/aliyun-ecs-deploy/08-github-secrets.png": {
+      "key": "static/7e28f9d2f73a632b082713e5e6091b9bd5401765d733280d1bc901b93a67de3a/08-github-secrets.png",
+      "sha256": "7e28f9d2f73a632b082713e5e6091b9bd5401765d733280d1bc901b93a67de3a",
+      "size": 159307,
+      "contentType": "image/png"
+    },
+    "/notes/aliyun-ecs-deploy/09-github-actions-run.png": {
+      "key": "static/023daf1bfeda293bd34fd405964582d08dfe73b9b0e4a9b2e43ba1e5444c1b1a/09-github-actions-run.png",
+      "sha256": "023daf1bfeda293bd34fd405964582d08dfe73b9b0e4a9b2e43ba1e5444c1b1a",
+      "size": 111969,
+      "contentType": "image/png"
+    },
+    "/photography/architecture-tectonics/01_getty_travertine_curve.jpg": {
+      "key": "static/15529c5e9890f3d1224a2112659c2829099cedb41c70e4e7ab66e545083b02b4/01_getty_travertine_curve.jpg",
+      "sha256": "15529c5e9890f3d1224a2112659c2829099cedb41c70e4e7ab66e545083b02b4",
+      "size": 5083233,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/02_getty_light_and_shadow.jpg": {
+      "key": "static/0ac33eac5b8bb301a67fc0294fa1598b2a0620c4d76a3219841e7ecda859b68a/02_getty_light_and_shadow.jpg",
+      "sha256": "0ac33eac5b8bb301a67fc0294fa1598b2a0620c4d76a3219841e7ecda859b68a",
+      "size": 7034439,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/03_getty_courtyard_view.jpg": {
+      "key": "static/01852c1d153d51f522fad1c18321a874b6e94330cc35768ea251175e863bbb29/03_getty_courtyard_view.jpg",
+      "sha256": "01852c1d153d51f522fad1c18321a874b6e94330cc35768ea251175e863bbb29",
+      "size": 7543050,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/04_getty_modern_columns.jpg": {
+      "key": "static/4d6d56b8a7ad0a366a344be4302e52d29225cf34b6143ba054f9c4473ec9af6c/04_getty_modern_columns.jpg",
+      "sha256": "4d6d56b8a7ad0a366a344be4302e52d29225cf34b6143ba054f9c4473ec9af6c",
+      "size": 9806841,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/05_getty_garden_terraces.jpg": {
+      "key": "static/d8efacf188bacbb088e0e0e6e69793fea071033c7830985f9b84bb796be5fcf6/05_getty_garden_terraces.jpg",
+      "sha256": "d8efacf188bacbb088e0e0e6e69793fea071033c7830985f9b84bb796be5fcf6",
+      "size": 4548559,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/06_getty_reflection_pool.jpg": {
+      "key": "static/461f5b2a5152a7e3146d94760c8b873e6fd27f71340e72673708f326ed362601/06_getty_reflection_pool.jpg",
+      "sha256": "461f5b2a5152a7e3146d94760c8b873e6fd27f71340e72673708f326ed362601",
+      "size": 9230236,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/07_getty_architecture_lines.jpg": {
+      "key": "static/97c9cf0b9d9d8637f910e9a569c59ffcf8e679bf5e716d79e1bc212082abccfa/07_getty_architecture_lines.jpg",
+      "sha256": "97c9cf0b9d9d8637f910e9a569c59ffcf8e679bf5e716d79e1bc212082abccfa",
+      "size": 6906126,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/08_getty_cactus_garden.jpg": {
+      "key": "static/0713911dabdc39b976c163861533a8aa70f58af085f363b096bdada30f588ed7/08_getty_cactus_garden.jpg",
+      "sha256": "0713911dabdc39b976c163861533a8aa70f58af085f363b096bdada30f588ed7",
+      "size": 3673341,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/09_getty_winding_path.jpg": {
+      "key": "static/f45e0d5dd7cce58b6ba9e6ae40d209f5d7317322b80d68f75f2a620d21fc7fbc/09_getty_winding_path.jpg",
+      "sha256": "f45e0d5dd7cce58b6ba9e6ae40d209f5d7317322b80d68f75f2a620d21fc7fbc",
+      "size": 6870318,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/10_getty_central_garden.jpg": {
+      "key": "static/457f54a4d715f474652fc2908268ad0a43b11c24dd8b7eea84be00de7b9a7187/10_getty_central_garden.jpg",
+      "sha256": "457f54a4d715f474652fc2908268ad0a43b11c24dd8b7eea84be00de7b9a7187",
+      "size": 5097641,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/11_getty_tree_silhouette.jpg": {
+      "key": "static/4b220d5224b869b8eb253cc18e33cdf4acbe4e46c3c39b31f57424690d10208a/11_getty_tree_silhouette.jpg",
+      "sha256": "4b220d5224b869b8eb253cc18e33cdf4acbe4e46c3c39b31f57424690d10208a",
+      "size": 4455655,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/12_getty_azalea_pool.jpg": {
+      "key": "static/b8a96bee842399f246d98733833a31f3bc3cd9906ed62cf0d2e910735bc6baf3/12_getty_azalea_pool.jpg",
+      "sha256": "b8a96bee842399f246d98733833a31f3bc3cd9906ed62cf0d2e910735bc6baf3",
+      "size": 3131671,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/13_getty_tram_ascending.jpg": {
+      "key": "static/b1d1cbf2443d39d483a12e85d607f012bc2211a0a35380143e49b78baf174d3e/13_getty_tram_ascending.jpg",
+      "sha256": "b1d1cbf2443d39d483a12e85d607f012bc2211a0a35380143e49b78baf174d3e",
+      "size": 6379611,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/14_getty_city_distant.jpg": {
+      "key": "static/843137b5d182fc324a9cd30072c67f9235876293bb1f523703accbc6edc34970/14_getty_city_distant.jpg",
+      "sha256": "843137b5d182fc324a9cd30072c67f9235876293bb1f523703accbc6edc34970",
+      "size": 8164104,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/15_getty_geometric_facade.jpg": {
+      "key": "static/ed7eb3e156f5bf092fe50b2579ebc6ccfb45c0f3c1ee051ec5176d791c359ca0/15_getty_geometric_facade.jpg",
+      "sha256": "ed7eb3e156f5bf092fe50b2579ebc6ccfb45c0f3c1ee051ec5176d791c359ca0",
+      "size": 5470583,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/16_getty_marble_detail.jpg": {
+      "key": "static/f8526c44b354bc8c40e0cdcd2e51fb46fee492363aa48227f0e643302889463c/16_getty_marble_detail.jpg",
+      "sha256": "f8526c44b354bc8c40e0cdcd2e51fb46fee492363aa48227f0e643302889463c",
+      "size": 6330504,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/17_getty_viewing_terrace.jpg": {
+      "key": "static/db9e6e2976c895039c138f9c49b4587a9d0f2a13bb0463a9972fe3dea29748d9/17_getty_viewing_terrace.jpg",
+      "sha256": "db9e6e2976c895039c138f9c49b4587a9d0f2a13bb0463a9972fe3dea29748d9",
+      "size": 7102531,
+      "contentType": "image/jpeg"
+    },
+    "/photography/architecture-tectonics/18_getty_evening_glow.jpg": {
+      "key": "static/94cd5c9d36edec207c2bab2b2c430a43241dbd555a72ce6cd2ebaf3aaa18deb6/18_getty_evening_glow.jpg",
+      "sha256": "94cd5c9d36edec207c2bab2b2c430a43241dbd555a72ce6cd2ebaf3aaa18deb6",
+      "size": 5608386,
+      "contentType": "image/jpeg"
+    },
+    "/photography/portraits-human-scale/01_the_cat_charmer.jpg": {
+      "key": "static/6551daa613e4127ce03f8871404174ffe74e84857289e8fa4181e950c1a633f8/01_the_cat_charmer.jpg",
+      "sha256": "6551daa613e4127ce03f8871404174ffe74e84857289e8fa4181e950c1a633f8",
+      "size": 9017920,
+      "contentType": "image/jpeg"
+    },
+    "/photography/portraits-human-scale/02_dune_scroller.jpg": {
+      "key": "static/5670f9994034344010985166b48b33d67ab26ea9afb42f722127073d7a8b37e3/02_dune_scroller.jpg",
+      "sha256": "5670f9994034344010985166b48b33d67ab26ea9afb42f722127073d7a8b37e3",
+      "size": 2088561,
+      "contentType": "image/jpeg"
+    },
+    "/photography/portraits-human-scale/03_pilgrim_in_light.jpg": {
+      "key": "static/5762d22a4c185bdd7219de8e315aae332d0ac8de3f7e1fab9ba14111f9ed58e2/03_pilgrim_in_light.jpg",
+      "sha256": "5762d22a4c185bdd7219de8e315aae332d0ac8de3f7e1fab9ba14111f9ed58e2",
+      "size": 3279492,
+      "contentType": "image/jpeg"
+    },
+    "/photography/portraits-human-scale/04_beachcomber.jpg": {
+      "key": "static/317046782b7a77e5258238de1f52075421c95d55428bd49d38cd7fa29a517406/04_beachcomber.jpg",
+      "sha256": "317046782b7a77e5258238de1f52075421c95d55428bd49d38cd7fa29a517406",
+      "size": 4284186,
+      "contentType": "image/jpeg"
+    },
+    "/photography/portraits-human-scale/05_the_arched_lovers.jpg": {
+      "key": "static/079656c22904d7ffde8efdcfe1fd83e6ffbb6981e26fe72071f59a548c55f4c3/05_the_arched_lovers.jpg",
+      "sha256": "079656c22904d7ffde8efdcfe1fd83e6ffbb6981e26fe72071f59a548c55f4c3",
+      "size": 6990451,
+      "contentType": "image/jpeg"
+    },
+    "/photography/portraits-human-scale/06_triangle_and_faith.jpg": {
+      "key": "static/dcd022ecb0a208c2a4cb73a8aaf2333d7ca1126611cb3305508d09a35cc9f20f/06_triangle_and_faith.jpg",
+      "sha256": "dcd022ecb0a208c2a4cb73a8aaf2333d7ca1126611cb3305508d09a35cc9f20f",
+      "size": 7216630,
+      "contentType": "image/jpeg"
+    },
+    "/photography/portraits-human-scale/07_the_vicens_little_guest.jpg": {
+      "key": "static/9c8941305257d0a7244095c3b0990706725ec7e57d54e0a7ef8b4b5ebb3271b9/07_the_vicens_little_guest.jpg",
+      "sha256": "9c8941305257d0a7244095c3b0990706725ec7e57d54e0a7ef8b4b5ebb3271b9",
+      "size": 5332415,
+      "contentType": "image/jpeg"
+    },
+    "/photography/portraits-human-scale/08_the_muscle_angler.jpg": {
+      "key": "static/aa80b9cd6609f0f36d0c3fe3636e141a8d8d428292a1fdc92a2dd0d6554bf184/08_the_muscle_angler.jpg",
+      "sha256": "aa80b9cd6609f0f36d0c3fe3636e141a8d8d428292a1fdc92a2dd0d6554bf184",
+      "size": 7849946,
+      "contentType": "image/jpeg"
+    },
+    "/photography/portraits-human-scale/09_seafront_solitude.jpg": {
+      "key": "static/1eb14071827abe57557da4cc7c2e15b598d9237bc6b864a996aae0218a9f1b73/09_seafront_solitude.jpg",
+      "sha256": "1eb14071827abe57557da4cc7c2e15b598d9237bc6b864a996aae0218a9f1b73",
+      "size": 4167012,
+      "contentType": "image/jpeg"
+    },
+    "/photography/portraits-human-scale/10_rex_rooftop_play.jpg": {
+      "key": "static/67d2a64a51aa52b0acb5b95968a1153f713a679b3f5f20c9186efada475ebbae/10_rex_rooftop_play.jpg",
+      "sha256": "67d2a64a51aa52b0acb5b95968a1153f713a679b3f5f20c9186efada475ebbae",
+      "size": 6922124,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/01_venice_biennale.jpg": {
+      "key": "static/468c6f1dd280530b62430b55cb166960b5f2f10dca585cc3adfe9f704b050f8e/01_venice_biennale.jpg",
+      "sha256": "468c6f1dd280530b62430b55cb166960b5f2f10dca585cc3adfe9f704b050f8e",
+      "size": 2118635,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/02_venice_biennale.jpg": {
+      "key": "static/65a55d0bdb5750350fa79268ae186d60b37cec91b9717d76316cf3f76c12f863/02_venice_biennale.jpg",
+      "sha256": "65a55d0bdb5750350fa79268ae186d60b37cec91b9717d76316cf3f76c12f863",
+      "size": 2825690,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/03_venice_biennale.jpg": {
+      "key": "static/930d53849669262a3af34f49d5bdfdd3af2357c5cf824cbfaaf11cb2c95e93ab/03_venice_biennale.jpg",
+      "sha256": "930d53849669262a3af34f49d5bdfdd3af2357c5cf824cbfaaf11cb2c95e93ab",
+      "size": 1792187,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/04_venice_biennale.jpg": {
+      "key": "static/044e33a4859f9184ec781803f10b16098588e0711eb55ee85cfab275d85f44d4/04_venice_biennale.jpg",
+      "sha256": "044e33a4859f9184ec781803f10b16098588e0711eb55ee85cfab275d85f44d4",
+      "size": 9870971,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/05_venice_biennale.jpg": {
+      "key": "static/ec195ff116f3025d1c67084a5066ca86cbc1faca8b387230261e9ca448c67dbd/05_venice_biennale.jpg",
+      "sha256": "ec195ff116f3025d1c67084a5066ca86cbc1faca8b387230261e9ca448c67dbd",
+      "size": 2061574,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/06_venice_biennale.jpg": {
+      "key": "static/401c18d08b0b649d1d4e01c89faa1c046b030c963d586e43309b4518e5b15dfa/06_venice_biennale.jpg",
+      "sha256": "401c18d08b0b649d1d4e01c89faa1c046b030c963d586e43309b4518e5b15dfa",
+      "size": 1235509,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/07_venice_biennale.jpg": {
+      "key": "static/095fa735477180be59229e2138baa98c97559e4dd98173cfac3c3ff7e4c40e68/07_venice_biennale.jpg",
+      "sha256": "095fa735477180be59229e2138baa98c97559e4dd98173cfac3c3ff7e4c40e68",
+      "size": 7104721,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/08_venice_biennale.jpg": {
+      "key": "static/9cd5ef58303877b3d86f3d9639c9579aed959a4d7ee89ead6e6d08a141fadd6e/08_venice_biennale.jpg",
+      "sha256": "9cd5ef58303877b3d86f3d9639c9579aed959a4d7ee89ead6e6d08a141fadd6e",
+      "size": 1781793,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/09_venice_biennale.jpg": {
+      "key": "static/91860f9e9abf0749789c33832751db3b1f3373dca18fa4461f61b35003cd8871/09_venice_biennale.jpg",
+      "sha256": "91860f9e9abf0749789c33832751db3b1f3373dca18fa4461f61b35003cd8871",
+      "size": 1313548,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/10_venice_biennale.jpg": {
+      "key": "static/ef0b77e7559a99300c98b80340fb444a5b7b2d77d7bfe97e085cd73cec4e2cbd/10_venice_biennale.jpg",
+      "sha256": "ef0b77e7559a99300c98b80340fb444a5b7b2d77d7bfe97e085cd73cec4e2cbd",
+      "size": 11291976,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/11_venice_biennale.jpg": {
+      "key": "static/6671adef318b82097e802fcb45fea3bdc3fdf8b0d107d8ca370c4d56dd2350be/11_venice_biennale.jpg",
+      "sha256": "6671adef318b82097e802fcb45fea3bdc3fdf8b0d107d8ca370c4d56dd2350be",
+      "size": 2054573,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/12_venice_biennale.jpg": {
+      "key": "static/6295df7d032e32b0451bc6916ba75529e2a5ba6cda457b7b0a9c285311244595/12_venice_biennale.jpg",
+      "sha256": "6295df7d032e32b0451bc6916ba75529e2a5ba6cda457b7b0a9c285311244595",
+      "size": 2932756,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/13_venice_biennale.jpg": {
+      "key": "static/50191c717c4b3776ea7a027865cbf84fc38105515aeab3f7130ccf396b7d841d/13_venice_biennale.jpg",
+      "sha256": "50191c717c4b3776ea7a027865cbf84fc38105515aeab3f7130ccf396b7d841d",
+      "size": 2081062,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/14_venice_biennale.jpg": {
+      "key": "static/977a99559f19ced9288b6cceff6e7221be0165144433ce13e49c41f6e9a65242/14_venice_biennale.jpg",
+      "sha256": "977a99559f19ced9288b6cceff6e7221be0165144433ce13e49c41f6e9a65242",
+      "size": 1747259,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/15_venice_biennale.jpg": {
+      "key": "static/c03a3814944a81bf64785ec76a3bdb7bb48ac0c49fb04b53aa1e86600b89d916/15_venice_biennale.jpg",
+      "sha256": "c03a3814944a81bf64785ec76a3bdb7bb48ac0c49fb04b53aa1e86600b89d916",
+      "size": 3643230,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/16_venice_biennale.jpg": {
+      "key": "static/4267da18792965444c554eb6c8ba171d5f388effb8bbfefbaf70021b155569b2/16_venice_biennale.jpg",
+      "sha256": "4267da18792965444c554eb6c8ba171d5f388effb8bbfefbaf70021b155569b2",
+      "size": 2174652,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/17_venice_biennale.jpg": {
+      "key": "static/9bea1e485c329ab7f82f8cee4d6c92beb8f058200de9df8c4a4eff19d591fa6b/17_venice_biennale.jpg",
+      "sha256": "9bea1e485c329ab7f82f8cee4d6c92beb8f058200de9df8c4a4eff19d591fa6b",
+      "size": 4294573,
+      "contentType": "image/jpeg"
+    },
+    "/photography/venice-biennale/18_venice_biennale.jpg": {
+      "key": "static/5959b12a0a41046306731f43ac4f34176fb127eb5b9dc2bea369fcd789483f2f/18_venice_biennale.jpg",
+      "sha256": "5959b12a0a41046306731f43ac4f34176fb127eb5b9dc2bea369fcd789483f2f",
+      "size": 2868208,
+      "contentType": "image/jpeg"
+    },
+    "/projects/thesis/images/01_Transport Gaps.jpg": {
+      "key": "static/baf95b06dc88e71e6e4d997f4b39f7533ab9b05dd28089947513b0fd4c72d848/01_Transport Gaps.jpg",
+      "sha256": "baf95b06dc88e71e6e4d997f4b39f7533ab9b05dd28089947513b0fd4c72d848",
+      "size": 1254220,
+      "contentType": "image/jpeg"
+    },
+    "/projects/thesis/images/02_Facility Services Analysis.jpg": {
+      "key": "static/187448f304fbf2aef6622030aa14930c523f031471537993a10460cb1a4b3e5c/02_Facility Services Analysis.jpg",
+      "sha256": "187448f304fbf2aef6622030aa14930c523f031471537993a10460cb1a4b3e5c",
+      "size": 1500083,
+      "contentType": "image/jpeg"
+    },
+    "/projects/thesis/images/03_Sensing Transport.jpg": {
+      "key": "static/797068c61408963dd0df064932b6d926be2b92d4e11bb38c13fc6bb4fe803423/03_Sensing Transport.jpg",
+      "sha256": "797068c61408963dd0df064932b6d926be2b92d4e11bb38c13fc6bb4fe803423",
+      "size": 1073500,
+      "contentType": "image/jpeg"
+    },
+    "/projects/thesis/images/04_T-Distributed Stochastic Neighbor Embedding (t-SNE) Spatial Clusters.jpg": {
+      "key": "static/b6f94e15569a68b81bc540e80056955a975d99c9adda84f561b59a86ce68ca41/04_T-Distributed Stochastic Neighbor Embedding (t-SNE) Spatial Clusters.jpg",
+      "sha256": "b6f94e15569a68b81bc540e80056955a975d99c9adda84f561b59a86ce68ca41",
+      "size": 809996,
+      "contentType": "image/jpeg"
+    },
+    "/projects/thesis/images/05_Principles of Data Collection.jpg": {
+      "key": "static/d54acebe72156469d83bfc7695a90b13d3303a437c8b6a2f80db9f938abe0d8e/05_Principles of Data Collection.jpg",
+      "sha256": "d54acebe72156469d83bfc7695a90b13d3303a437c8b6a2f80db9f938abe0d8e",
+      "size": 721738,
+      "contentType": "image/jpeg"
+    },
+    "/projects/thesis/images/06_Data Translation and Skeleton Generation.jpg": {
+      "key": "static/d170448b38ba8a098c0f690bf7ba04f8eabf0b2cf65c0cfda80ae6066ca08b3f/06_Data Translation and Skeleton Generation.jpg",
+      "sha256": "d170448b38ba8a098c0f690bf7ba04f8eabf0b2cf65c0cfda80ae6066ca08b3f",
+      "size": 1164233,
+      "contentType": "image/jpeg"
+    },
+    "/projects/thesis/images/07_Strategic Overview.jpg": {
+      "key": "static/43f31545232c75318336c9d7fe07433d6b928a55c6dcf3f7d91a3c0be19c87dc/07_Strategic Overview.jpg",
+      "sha256": "43f31545232c75318336c9d7fe07433d6b928a55c6dcf3f7d91a3c0be19c87dc",
+      "size": 690321,
+      "contentType": "image/jpeg"
+    },
+    "/projects/thesis/images/08_Rendering and Possibility.jpg": {
+      "key": "static/d4f5f1843611717ea3d38837c8a6550dea2112c54fecf00b8ddfc017f7fd0aad/08_Rendering and Possibility.jpg",
+      "sha256": "d4f5f1843611717ea3d38837c8a6550dea2112c54fecf00b8ddfc017f7fd0aad",
+      "size": 864339,
+      "contentType": "image/jpeg"
+    },
+    "/projects/thesis/video/01_hero_video.mp4": {
+      "key": "legacy/portfolio-media/projects/thesis/video/01_hero_video.mp4",
+      "sha256": "73a09a01141c0bcc4a754280c54e4e01cd39f9b3c4d1588abac92d3d55c776af",
+      "size": 2354226,
+      "contentType": "video/mp4"
+    },
+    "/projects/undergraduate-portfolio/pages/01.jpg": {
+      "key": "static/edbc9a3736fe547786b866fcad3b6dd8324994eb3c690ceffd01ac0f66124589/01.jpg",
+      "sha256": "edbc9a3736fe547786b866fcad3b6dd8324994eb3c690ceffd01ac0f66124589",
+      "size": 821052,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/02.jpg": {
+      "key": "static/0d65efdcfb301b93d4b2a01f4993ba62972983c8728769f52655537109cd9ac5/02.jpg",
+      "sha256": "0d65efdcfb301b93d4b2a01f4993ba62972983c8728769f52655537109cd9ac5",
+      "size": 886560,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/03.jpg": {
+      "key": "static/1de9d41e94131dc589a52a2a797a4e6a6e4ef6f8e5f059d09cbeb17f12ba0604/03.jpg",
+      "sha256": "1de9d41e94131dc589a52a2a797a4e6a6e4ef6f8e5f059d09cbeb17f12ba0604",
+      "size": 833039,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/04.jpg": {
+      "key": "static/0c5d89db83d576ea64af887cba4c715f27e4774db23f35ce45548b76698a9143/04.jpg",
+      "sha256": "0c5d89db83d576ea64af887cba4c715f27e4774db23f35ce45548b76698a9143",
+      "size": 932383,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/05.jpg": {
+      "key": "static/ce209b0fed308b90c12a73b177def156b1b894baee157e0790b1abf2cc5d79f0/05.jpg",
+      "sha256": "ce209b0fed308b90c12a73b177def156b1b894baee157e0790b1abf2cc5d79f0",
+      "size": 1134734,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/06.jpg": {
+      "key": "static/a811b193223fec8ecdfa9c462f3aee03638d2b866480d991f7a41d9010fc8bde/06.jpg",
+      "sha256": "a811b193223fec8ecdfa9c462f3aee03638d2b866480d991f7a41d9010fc8bde",
+      "size": 993061,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/07.jpg": {
+      "key": "static/467183033ba03286dc60cacba2ce8560b8aba952767e0e0219bcfadff222aef8/07.jpg",
+      "sha256": "467183033ba03286dc60cacba2ce8560b8aba952767e0e0219bcfadff222aef8",
+      "size": 738223,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/08.jpg": {
+      "key": "static/b9f1f7280544007311a06879210fd310c6d68bda26ac3f0658f8132472c4641c/08.jpg",
+      "sha256": "b9f1f7280544007311a06879210fd310c6d68bda26ac3f0658f8132472c4641c",
+      "size": 954625,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/09.jpg": {
+      "key": "static/cdec44148b9d22d68665bbdda776f1fce790496c488f9a5e5587ed0e1afade5f/09.jpg",
+      "sha256": "cdec44148b9d22d68665bbdda776f1fce790496c488f9a5e5587ed0e1afade5f",
+      "size": 986944,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/10.jpg": {
+      "key": "static/6526cdb9e9a2af6ccf8cedc7c77ccd0ec76e6eb62debabca01e9d140e22f06a0/10.jpg",
+      "sha256": "6526cdb9e9a2af6ccf8cedc7c77ccd0ec76e6eb62debabca01e9d140e22f06a0",
+      "size": 1110963,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/11.jpg": {
+      "key": "static/da8773b2417bf226abefb8c35952ff3b8c3bfda17c10493945ce222eea671744/11.jpg",
+      "sha256": "da8773b2417bf226abefb8c35952ff3b8c3bfda17c10493945ce222eea671744",
+      "size": 917339,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/12.jpg": {
+      "key": "static/75661580259ee1fa87bbed60e0f586f6e4adba05508404b7616ccff0e3021e47/12.jpg",
+      "sha256": "75661580259ee1fa87bbed60e0f586f6e4adba05508404b7616ccff0e3021e47",
+      "size": 841337,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/13.jpg": {
+      "key": "static/5cf9c046e2cdc21e05e2ada09585ce4a6ac48759399962076d61845436287aae/13.jpg",
+      "sha256": "5cf9c046e2cdc21e05e2ada09585ce4a6ac48759399962076d61845436287aae",
+      "size": 1105125,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/14.jpg": {
+      "key": "static/f8b587065621e27fea6321f05fc2d779e5bb8033317499f70bac38cecf392492/14.jpg",
+      "sha256": "f8b587065621e27fea6321f05fc2d779e5bb8033317499f70bac38cecf392492",
+      "size": 849954,
+      "contentType": "image/jpeg"
+    },
+    "/projects/undergraduate-portfolio/pages/15.jpg": {
+      "key": "static/237109265cb581cee7f61561ac21c32fe96f8ce84271a02195dbed6fcb0c1bef/15.jpg",
+      "sha256": "237109265cb581cee7f61561ac21c32fe96f8ce84271a02195dbed6fcb0c1bef",
+      "size": 455746,
+      "contentType": "image/jpeg"
+    },
+    "/projects/xicaoshi-red-temple/images/00_landscape_cover.jpg": {
+      "key": "static/5b763bd124a30da86d15b90814910aa30434a9323643e6c63568ed5888aeba6c/00_landscape_cover.jpg",
+      "sha256": "5b763bd124a30da86d15b90814910aa30434a9323643e6c63568ed5888aeba6c",
+      "size": 9839055,
+      "contentType": "image/jpeg"
+    },
+    "/projects/xicaoshi-red-temple/images/01_site_analysis.jpg": {
+      "key": "static/591c624485ec4fcad0313a29353d1e0606bb017d730070087914c12ea823ca67/01_site_analysis.jpg",
+      "sha256": "591c624485ec4fcad0313a29353d1e0606bb017d730070087914c12ea823ca67",
+      "size": 4853052,
+      "contentType": "image/jpeg"
+    },
+    "/projects/xicaoshi-red-temple/images/02_current_situation_analysis.png": {
+      "key": "static/8e24efcff2533c91801ee68294acfb29ecba2b53dac9df610183cbf3ac23f556/02_current_situation_analysis.png",
+      "sha256": "8e24efcff2533c91801ee68294acfb29ecba2b53dac9df610183cbf3ac23f556",
+      "size": 499289,
+      "contentType": "image/png"
+    },
+    "/projects/xicaoshi-red-temple/images/03_landscape_rendering.jpg": {
+      "key": "static/df6a6f57fef038ff38d87b218f5a0c4e8629cdac392a15969e39fd133ec4e5f4/03_landscape_rendering.jpg",
+      "sha256": "df6a6f57fef038ff38d87b218f5a0c4e8629cdac392a15969e39fd133ec4e5f4",
+      "size": 8369415,
+      "contentType": "image/jpeg"
+    },
+    "/projects/xicaoshi-red-temple/images/04_planning_guidelines.jpg": {
+      "key": "static/35e39611d1428bf9ee359a17677e6c3223e008e9d66e0c2752317bc1fd348088/04_planning_guidelines.jpg",
+      "sha256": "35e39611d1428bf9ee359a17677e6c3223e008e9d66e0c2752317bc1fd348088",
+      "size": 4225176,
+      "contentType": "image/jpeg"
+    },
+    "/projects/xicaoshi-red-temple/images/05_important_node_updates.png": {
+      "key": "static/3fec5c6584201f362153784ead9bbb97bf7dfb612b9680092fc5de2eba9d3991/05_important_node_updates.png",
+      "sha256": "3fec5c6584201f362153784ead9bbb97bf7dfb612b9680092fc5de2eba9d3991",
+      "size": 1080313,
+      "contentType": "image/png"
+    },
+    "/projects/xicaoshi-red-temple/images/07_courtyard_location_analysis.jpg": {
+      "key": "static/50ce0159f52245a11344709d9484e97d2f156b5651a8759c49177d81db0211a6/07_courtyard_location_analysis.jpg",
+      "sha256": "50ce0159f52245a11344709d9484e97d2f156b5651a8759c49177d81db0211a6",
+      "size": 624417,
+      "contentType": "image/jpeg"
+    },
+    "/projects/xicaoshi-red-temple/images/08_current_situation.png": {
+      "key": "static/db32b26fa0fa10ea69cd17d135faa4cfa15d72e31700e68cce35bd9117872c84/08_current_situation.png",
+      "sha256": "db32b26fa0fa10ea69cd17d135faa4cfa15d72e31700e68cce35bd9117872c84",
+      "size": 886060,
+      "contentType": "image/png"
+    },
+    "/projects/xicaoshi-red-temple/images/09_morphological_evolution.png": {
+      "key": "static/d340fd01c648163629f4416d804f61ca2c3854ff3d72661ced2a2f899f7aee4b/09_morphological_evolution.png",
+      "sha256": "d340fd01c648163629f4416d804f61ca2c3854ff3d72661ced2a2f899f7aee4b",
+      "size": 783163,
+      "contentType": "image/png"
+    },
+    "/projects/xicaoshi-red-temple/images/10_analysis_chart.png": {
+      "key": "static/3d60a854995c084f0be3274de8e9898b3a0afbb5c29601a25324e360a61f41fb/10_analysis_chart.png",
+      "sha256": "3d60a854995c084f0be3274de8e9898b3a0afbb5c29601a25324e360a61f41fb",
+      "size": 500242,
+      "contentType": "image/png"
+    },
+    "/projects/xicaoshi-red-temple/images/11_profile_view.jpg": {
+      "key": "static/9f1a399eb97f31e690c460858b856d567caa195bcd9059b42f59c1fbccd00eb3/11_profile_view.jpg",
+      "sha256": "9f1a399eb97f31e690c460858b856d567caa195bcd9059b42f59c1fbccd00eb3",
+      "size": 2013201,
+      "contentType": "image/jpeg"
+    },
+    "/projects/xicaoshi-red-temple/images/12_ground_floor_plan.jpg": {
+      "key": "static/abfd55222b24073436683334814ad3bdc0fdc71da85bbea69dbb996cdaba3d94/12_ground_floor_plan.jpg",
+      "sha256": "abfd55222b24073436683334814ad3bdc0fdc71da85bbea69dbb996cdaba3d94",
+      "size": 2405024,
+      "contentType": "image/jpeg"
+    },
+    "/projects/xicaoshi-red-temple/images/13_exploded_axonometric.jpg": {
+      "key": "static/cd558426c89355f1d224b87b580c9a3ab07f6141a17525150893a43a613dc4aa/13_exploded_axonometric.jpg",
+      "sha256": "cd558426c89355f1d224b87b580c9a3ab07f6141a17525150893a43a613dc4aa",
+      "size": 1997456,
+      "contentType": "image/jpeg"
+    }
+  }
+}

@@ -1,3 +1,5 @@
+
+import { resolvePublicMedia } from "@/lib/media/public-media";
 import type { GalleryImage } from "@/app/_data/project-galleries";
 import type { ProjectFull } from "@/lib/projects/queries";
 import ThesisGallery from "./ThesisGallery";
@@ -15,7 +17,7 @@ export default function ThesisProjectView({ project, galleryImages }: Props) {
     <div className="bg-stone-950 text-stone-100 font-sans">
       <section className="relative h-screen w-full overflow-hidden">
         <video
-          src={heroVideoSrc}
+          src={resolvePublicMedia(heroVideoSrc)}
           autoPlay
           muted
           loop
@@ -65,12 +67,24 @@ export default function ThesisProjectView({ project, galleryImages }: Props) {
           <div className="mx-auto w-full max-w-5xl px-6 py-14 md:px-10 md:py-18">
             <p className="text-[10px] tracking-[0.26em] text-stone-500 uppercase mb-8">Project Introduction</p>
             <div className="overflow-hidden rounded-2xl bg-stone-900">
-              <iframe
-                src={project.intro_video_url}
-                allow="autoplay; encrypted-media"
-                className="w-full"
-                style={{ border: "none", aspectRatio: "16/9" }}
-              />
+              {/\.mp4(?:[?#]|$)/i.test(project.intro_video_url) ? (
+                <video
+                  src={resolvePublicMedia(project.intro_video_url)}
+                  controls
+                  playsInline
+                  preload="metadata"
+                  className="aspect-video w-full"
+                  aria-label="Project introduction"
+                />
+              ) : (
+                <iframe
+                  src={project.intro_video_url}
+                  title="Project introduction"
+                  allow="autoplay; encrypted-media"
+                  className="w-full"
+                  style={{ border: "none", aspectRatio: "16/9" }}
+                />
+              )}
             </div>
           </div>
         </section>

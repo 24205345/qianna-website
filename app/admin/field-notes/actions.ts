@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { uploadMediaObject } from "@/lib/media/storage";
+import { getFormMediaUrl } from "@/lib/media/form-upload";
 import { getNextStatus } from "@/lib/admin/content-status";
 
 function emptyToNull(value: FormDataEntryValue | null): string | null {
@@ -20,16 +20,6 @@ async function requireUser() {
   return supabase;
 }
 
-async function uploadCover(supabase: Awaited<ReturnType<typeof createClient>>, file: File | null) {
-  if (!file || file.size === 0) return null;
-  const ext = file.name.includes(".") ? file.name.split(".").pop() : "jpg";
-  const path = `field-notes/covers/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-  const publicUrl = await uploadMediaObject(supabase, path, file, {
-    contentType: file.type || "image/jpeg",
-    upsert: false,
-  });
-  return publicUrl;
-}
 
 function buildPayload(formData: FormData, coverUrl: string | null) {
   const payload: Record<string, unknown> = {
@@ -49,7 +39,7 @@ function buildPayload(formData: FormData, coverUrl: string | null) {
 
 export async function createFieldNoteAction(formData: FormData) {
   const supabase = await requireUser();
-  const coverUrl = await uploadCover(supabase, formData.get("cover") as File | null);
+  const coverUrl = await getFormMediaUrl(supabase, formData, "cover", "field-cover");
   const payload = buildPayload(formData, coverUrl);
   if (!payload.cover_image_url) throw new Error("Please upload a cover image.");
 
@@ -63,7 +53,7 @@ export async function createFieldNoteAction(formData: FormData) {
 
 export async function updateFieldNoteAction(id: string, formData: FormData) {
   const supabase = await requireUser();
-  const coverUrl = await uploadCover(supabase, formData.get("cover") as File | null);
+  const coverUrl = await getFormMediaUrl(supabase, formData, "cover", "field-cover");
   const payload = buildPayload(formData, coverUrl);
 
   const { error } = await supabase.from("field_notes").update(payload).eq("id", id);
