@@ -1,5 +1,7 @@
 # 经验：Notes 双语展示（列表英文 + 详情可切换）
 
+新增和修改正文先遵循 [Notes 写作与图文标准](notes-writing-guide.md)；本文维护数据字段与 CMS 行为，不重复维护写作规则。
+
 ## 场景
 
 作品集首页/列表面向国际访客，希望默认英文；详情页仍要保留中文原文，并支持切换。
@@ -22,11 +24,13 @@
 
 ## Workbench 系列标题
 
-Workbench 的 AI 开发工作流文章使用 `【AI 开发工作流 · 01】 原中文标题` / `【AI Dev Workflow · 01】 Original English Title`。编号与 Workbench 阶段一致，不按文章发布日期重新编号；目前关联文章为 01、02、03、07，04–06 作为后续阶段的编号保留。
+Workbench 的 AI 开发工作流文章使用 `【AI 开发工作流 · 01】 原中文标题` / `【AI Dev Workflow · 01】 Original English Title`。编号与 Workbench 阶段一致，不按文章发布日期重新编号；生产关联文章为 01、02、03、07，04–06 作为后续阶段的编号保留。2026-10-30 本地新增 08（From Demo to Team Platform，六分支概念地图与视频案例），正文与资源准备完成，CMS 尚未发布，详见[执行记录](exec-enterprise-ai-production-2026-10-30.md)。
 
 系列标识写入 CMS 的 `title` / `title_en`，因此 Notes 列表、首页、详情及 SEO 元数据展示一致。同步 Workbench 的 `relatedNoteLabel` / `featured_note.title`、本地静态标题和正文源文件的文档标题；Workbench 阶段名称继续保持简洁英文。后续新增对应阶段文章时沿用相同格式，避免重复添加前缀。
 
 ## 大正文写入注意
+
+第八章以 `docs/notes/enterprise-ai-production.zh.md` / `.en.md` 为正文源。修改后运行 `node scripts/sync-enterprise-production-note.mjs`，生成 `app/_data/enterprise-production.json` 并由 `fallbackNotes` 引入；用 `--check` 检查同步状态。生成时去除首行重复 H1，保留双语标题和摘要。此命令只更新本地回退，不写 CMS；发布时需同时更新 Notes 记录与 `ai-development` 的第八阶段。Workbench 查询成功时使用 CMS 的整个 `steps` 数组，因此仅部署静态回退不会把第八阶段追加到生产工作流。
 
 历史导入曾用分块 SQL。日常通过 Admin 完整保存 Markdown；批量导入先备份并校验完整字段更新，避免清空后追加留下半成品。R2 迁移仅改写指定旧桶 URL，并发保护阻止覆盖计划后已编辑字段。
 

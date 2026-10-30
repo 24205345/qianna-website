@@ -1,0 +1,18 @@
+flowchart LR
+ U["网页：提交与查看"] <--> A["服务端：校验身份和输入"]
+ Rel_0["1 登记或读取状态"]:::relation
+ A <--> Rel_0
+ Rel_0 <--> D["数据库：归属、状态和结果位置"]
+ Rel_1["2 入队：任务编号"]:::relation
+ A --> Rel_1
+ Rel_1 --> Q["队列：等待处理的工作"]
+ Rel_2["3 领取任务"]:::relation
+ Q --> Rel_2
+ Rel_2 --> W["Worker：下载、转写与总结"]
+ Rel_3["4 保存成果"]:::relation
+ W --> Rel_3
+ Rel_3 --> F["文件存储：媒体与处理结果"]
+ Rel_4["回写进度与结果位置"]:::relation
+ W --> Rel_4
+ Rel_4 --> D
+classDef relation fill:#eef2ff,stroke:#6366f1,stroke-width:1px,color:#312e81;

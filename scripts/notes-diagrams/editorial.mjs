@@ -1,6 +1,14 @@
+import {productionEditorial} from './production-figures.mjs';
+import {videoEditorial} from './video-figure.mjs';
+import {conceptEditorial} from './concept-map.mjs';
+import {taskEditorial} from './task-flow.mjs';
 const p=(en,zh)=>({en,zh});
 // Form is chosen for the content, not for visual variety alone.
 export const editorial={
+ ...conceptEditorial,
+ ...taskEditorial,
+ ...productionEditorial,
+ ...videoEditorial,
  'environment-toolkit':{
   form:'responsibility branches',
   subtitle:p('Who defines the outcome, and which capability does what?','谁定义结果，各种能力分别负责什么？'),

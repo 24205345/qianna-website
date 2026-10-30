@@ -1,0 +1,12 @@
+sequenceDiagram
+ participant E as Executor
+ participant T as Ticket service
+ participant L as Operation ledger
+ E->>L: Store operation ID and pending state
+ E->>T: Create ticket with stable operation ID
+ Note over T: Ticket is created
+ T--xE: Response is lost
+ Note over E: Outcome unknown; show verifying status
+ E->>T: Query using the same operation ID
+ T-->>E: Existing ticket ID
+ E->>L: Confirm outcome and resume

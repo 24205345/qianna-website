@@ -1,0 +1,16 @@
+flowchart LR
+ S["Authorized source"] --> A["Audio segments with original offsets"]
+ subgraph ASR["Bounded ASR: global, tenant and job limits"]
+ X["Segment A"]
+ Y["Segment B"]
+ Z["Other segments"]
+ end
+ A --> X
+ A --> Y
+ A --> Z
+ X --> E["Align and deduplicate timestamped evidence"]
+ Y --> E
+ Z --> E
+ S -. Valid captions .-> E
+ E --> C["Facts and chapters with source references"]
+ C --> O["Coverage check and full overview"]

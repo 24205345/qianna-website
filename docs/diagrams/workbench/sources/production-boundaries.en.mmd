@@ -1,0 +1,12 @@
+flowchart LR
+ U["Employee"] --> I["Verified identity + task admission"]
+ subgraph APP["Trusted application"]
+ I --> E["Executor: state + budget"]
+ R["Authorized retrieval / memory"] --> E
+ E --> G["Tool gateway: validate + authorize + deduplicate"]
+ end
+ E --> M["External model"]
+ M -.-> E
+ G --> B["Business system"]
+ B -.-> G
+ G --> L["Operation ledger + checkpoints"]

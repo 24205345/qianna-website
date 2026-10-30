@@ -1,0 +1,24 @@
+flowchart LR
+ C["候选版本"] --> E["离线评估"]
+ Rel_0["通过"]:::relation
+ E --> Rel_0
+ Rel_0 --> S["沙箱验证"]
+ Rel_1["通过"]:::relation
+ S --> Rel_1
+ Rel_1 --> K["小流量灰度"]
+ Rel_2["通过"]:::relation
+ K --> Rel_2
+ Rel_2 --> P["生产运行与监测"]
+ Rel_3["未通过"]:::relation
+ E --> Rel_3
+ Rel_3 --> R["修订，保持稳定版本"]
+ Rel_4["未通过"]:::relation
+ S --> Rel_4
+ Rel_4 --> R
+ Rel_5["未通过"]:::relation
+ K --> Rel_5
+ Rel_5 --> R
+ R --> C
+ P -.-> D["经授权、脱敏与复核的案例"]
+ D -.-> E
+classDef relation fill:#eef2ff,stroke:#6366f1,stroke-width:1px,color:#312e81;

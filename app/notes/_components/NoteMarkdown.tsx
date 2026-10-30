@@ -49,15 +49,26 @@ function DarkCodeBlock({ text }: { text: string }) {
 
 export default function NoteMarkdown({ markdown, imagePatterns }: NoteMarkdownProps) {
   const usedIds = new Map<string, number>();
+  const nodeIds = new WeakMap<object, string>();
+
+  function headingId(text: string, node?: object): string {
+    // React can render a heading more than once (including Strict Mode).
+    // Assign an ID once per Markdown node, rather than once per invocation.
+    const cached = node ? nodeIds.get(node) : undefined;
+    if (cached) return cached;
+    const id = headingIdFromText(text, usedIds);
+    if (node) nodeIds.set(node, id);
+    return id;
+  }
 
   return (
     <div className="note-prose w-full space-y-5 text-base leading-8 text-stone-600">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          h2: ({ children }) => {
+          h2: ({ children, node }) => {
             const text = getTextContent(children);
-            const id = headingIdFromText(text, usedIds);
+            const id = headingId(text, node);
             return (
               <h2
                 id={id}
@@ -67,9 +78,9 @@ export default function NoteMarkdown({ markdown, imagePatterns }: NoteMarkdownPr
               </h2>
             );
           },
-          h3: ({ children }) => {
+          h3: ({ children, node }) => {
             const text = getTextContent(children);
-            const id = headingIdFromText(text, usedIds);
+            const id = headingId(text, node);
             return (
               <h3
                 id={id}

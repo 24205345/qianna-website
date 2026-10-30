@@ -1,6 +1,6 @@
 # Workbench 图表规范
 
-当前版本 **v3，2026-10-29**。用户要求图表形式服从内容，减少重复的分组框，并取消突兀的绿色。前三篇保留七组双语图：职责分支、MCP 拓扑、双路径合流、MVP 旅程、选型判断、可信边界、失败时序。功能验收与价值验证采用可选择的 Markdown 对照表；工程规约保留文字列表。
+当前样式 **v3，2026-10-29**，图集于 **2026-10-30** 扩展。用户要求图表形式服从内容，减少重复的分组框，并取消突兀的绿色。前三篇保留七组双语图：职责分支、MCP 拓扑、双路径合流、MVP 旅程、选型判断、可信边界、失败时序。功能验收与价值验证采用可选择的 Markdown 对照表；工程规约保留文字列表。第八篇新增任务边界、写超时恢复、发布反馈与长视频分段四组，合计十一组双语图。正文写作遵循 [Notes 标准](../../notes-writing-guide.md)。
 
 ## 配色与字体
 
@@ -41,6 +41,12 @@
 | `architecture-decisions` | 判断与修订回路 | Mermaid flowchart |
 | `architecture-boundaries` | 可信边界 | Draw.io XML |
 | `architecture-failures` | 成功／失败时序 | Mermaid sequenceDiagram |
+| `production-task-flow` | 前台、队列、Worker、数据库与文件的协作（当前正文） | Mermaid flowchart |
+| `production-map` | 个人 Demo 升级的六分支概念地图（当前正文） | Mindmap Markdown |
+| `production-boundaries` | 模型规划与服务端执行边界（工程存档） | Mermaid flowchart |
+| `production-recovery` | 写成功但响应丢失的查证时序（工程存档） | Mermaid sequenceDiagram |
+| `production-release` | 发布门禁与失败证据反馈（工程存档） | Mermaid flowchart |
+| `production-video` | 字幕捷径、有限分段并行与证据汇总 | Mermaid flowchart |
 
 ## 文件与再生成
 
@@ -48,17 +54,26 @@
 - [catalog.mjs](../../../scripts/notes-diagrams/catalog.mjs)：双语图题、图注、位置和逻辑。
 - [editorial.mjs](../../../scripts/notes-diagrams/editorial.mjs)：形式、说明和适用边界。
 - [smart-sources.mjs](../../../scripts/notes-diagrams/smart-sources.mjs)：各引擎编辑格式。
-- [native-svg.mjs](../../../scripts/notes-diagrams/native-svg.mjs)：七类原生图形的文字、几何和连线。
+- [native-svg.mjs](../../../scripts/notes-diagrams/native-svg.mjs)：原生图形的共享文字、几何和连线。
+- [task-flow.mjs](../../../scripts/notes-diagrams/task-flow.mjs)：后台任务协作图的双语逻辑与布局。
+- [concept-map.mjs](../../../scripts/notes-diagrams/concept-map.mjs)：当前第八章的六分支概念地图、双语标签和布局。
+- [production-figures.mjs](../../../scripts/notes-diagrams/production-figures.mjs)：第八篇工程存档的三组双语逻辑与排版，复用同一套样式与绘图函数。
+- [video-figure.mjs](../../../scripts/notes-diagrams/video-figure.mjs)：长视频分段与汇总的双语源文和布局。
 - [render.mjs](../../../scripts/notes-diagrams/render.mjs)：导出 SVG / WebP、源码和 [manifest.json](manifest.json)。
 
-统一 1040 单位宽，按内容定高度，WebP 为两倍分辨率。保留中英文字间空格，并检查英文换行和标签与连线。`rendered/` 只保留当前 14 张 WebP 及对应 SVG；`sources/` 保留编辑格式和辅助 Mermaid 逻辑。
+统一 1040 单位宽，按内容定高度，WebP 为两倍分辨率。保留中英文字间空格，并检查英文换行和标签与连线。`rendered/` 保留当前 26 张 WebP 及对应 SVG（前三篇 14 张、第八篇当前正文 6 张、工程存档 6 张）；`sources/` 保留编辑格式和辅助 Mermaid 逻辑。
 
 ```powershell
 node scripts/notes-diagrams/render.mjs --smartdiagram 'G:\project\SmartDiagram'
 # 仅输出单幅双语预览，不改正式清单：
 node scripts/notes-diagrams/render.mjs --smartdiagram 'G:\project\SmartDiagram' --preview scope-paths
+# 只更新第八篇，保留其他文章的清单和图像：
+node scripts/notes-diagrams/render.mjs --smartdiagram 'G:\project\SmartDiagram' --note enterprise-ai-production
+node scripts/notes-diagrams/sync-production-figures.mjs
+node scripts/sync-enterprise-production-note.mjs
+npm run generate:note-images
 ```
 
-公开图使用 `notes/workbench-diagrams/v3/<id>.<lang>-<hash>.webp` 独立对象，不覆盖旧图。渲染不会自动上传或写 CMS。
+前三篇已发布图使用 `notes/workbench-diagrams/v3/<id>.<lang>-<hash>.webp` 独立对象，不覆盖旧图。第八篇当前使用真实存在的 `public/notes/enterprise-ai-production/<id>.<lang>-<hash>.webp` 本地资产，清单标记 `delivery: local`；随应用部署提供静态文件，不虚构尚未上传的 R2 地址。渲染不会自动上传或写 CMS。图注同步脚本按图 ID 更新当前正文的双语图片和图注；标记 `article: false` 的三组工程图保留清单与资产，不要求出现在概念导读正文。脚本支持 `--check`；更换图片后再生成正文回退及尺寸索引。
 
-本地看图、源码核对及公开 HTML 检查不代替浏览器页面巡检。当前 Work 设置禁用浏览器操作，未完成 v3 实际页面截图、窄屏或语言切换测试；保留现有原图入口，未声称图片在移动端会自动重排。发布证据及回退方式见 [v3 执行记录](../../exec-workbench-visuals-v3-2026-10-29.md)。
+本地看图、源码核对及公开 HTML 检查不代替浏览器页面巡检。2026-10-29 的 v3 交付受当时 Work 浏览器设置限制，历史未完成项见 [v3 执行记录](../../exec-workbench-visuals-v3-2026-10-29.md)。2026-10-30 第八篇的实际页面验收单独记录于 [第八阶段执行记录](../../exec-enterprise-ai-production-2026-10-30.md)。保留现有原图入口，图片在窄屏按比例缩放，不宣称图内结构会自动重排。

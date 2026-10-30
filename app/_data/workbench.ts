@@ -8,7 +8,7 @@ export const WORKBENCH_PIPELINES: WorkflowPipeline[] = [
     badge: "AI Engineering & Indie Hacker",
     icon: "",
     summary:
-      "An agile, deliverable-first engineering loop: from agent guardrails and core path validation to split-screen UX ergonomics and containerized production deployment.",
+      "A practical engineering loop from product definition and prototype validation to deployment, bounded AI execution, and enterprise platform operations.",
     coreStack: [
       "VS Code",
       "GitHub Copilot",
@@ -484,6 +484,136 @@ Guide developers through local webhook testing with stripe listen.
 Handle essential events: checkout.session.completed, customer.subscription.updated/deleted, invoice.payment_failed.
 Security mandate: Store secret keys exclusively in backend env; verify all incoming webhook signatures.`,
             curatorNote: "Test locally using `stripe listen --forward-to localhost:8000/webhook` before touching staging environments.",
+          },
+        ],
+      },
+      {
+        id: "step-enterprise-production",
+        stepNumber: "08",
+        title: "From Demo to Team Platform",
+        subtitle: "An Upgrade Map & One Video Case",
+        tools: ["Access Control", "Background Jobs", "Streaming", "Monitoring"],
+        summary:
+          "Use six everyday questions to understand the move from a personal demo to a shared platform. Follow one video-summary tool through permissions, background jobs, faster results, more users, recovery, and ongoing operations.",
+        keyTakeaway:
+          "Start with a real user problem, learn the concept it calls for, and give a coding agent one concrete upgrade with observable acceptance checks. Build the next capability when users need it.",
+        relatedNoteHref: "/notes/enterprise-ai-production",
+        relatedNoteLabel: "Read Note: 【AI Dev Workflow · 08】 From Personal Demo to Enterprise Platform",
+        resources: [
+          {
+            id: "prompt-enterprise-readiness",
+            type: "prompt",
+            title: "Plan and Implement One Platform Upgrade",
+            description:
+              "Find gaps using the six-part map, then implement one selected improvement with concrete acceptance checks.",
+            tag: "Upgrade Task",
+            content: `Help me gradually upgrade this personal AI demo into a platform a team can use.
+
+Project and core flow: <project directory, input, processing, output>
+Current users: <myself / colleagues / multiple teams / enterprise customers>
+Current user problem: <for example: closing the tab loses a long-video task>
+Upgrade for this task: <continue in the background; reopen to see status and results>
+Data and permission boundaries: <who can access videos, transcripts and summaries; team boundaries>
+Budget and constraints: <existing stack, hosting, cost, maintenance capacity>
+
+Inspect the actual code first and explain the current flow in plain language.
+Locate gaps across six areas: identity and permissions, background tasks,
+response speed, multiple users, failure recovery, and quality and operations.
+Separate existing capabilities, missing capabilities, and unknowns.
+Explain priorities for the current users; implement only the selected upgrade here.
+
+Propose the smallest useful design and explain the concepts it needs.
+Prefer the existing stack; justify new components, alternatives, and maintenance cost.
+Implement code and necessary configuration within current authorization,
+and check the normal flow and relevant failure paths.
+Follow the project's existing authorization requirements for external publishing
+or irreversible actions.
+
+Acceptance must address the problem: for example, work survives closing the page,
+progress is available on return, registered tasks survive a service restart,
+and repeated submission does not repeat the business effect.
+For speed improvements, compare first useful output, full completion, cost, and quality.
+Do not treat generated code or an unexecuted test plan as verified results.
+Report what changed, what you actually verified, and what remains unverified.`,
+            curatorNote:
+              "Fill in the actual user problem and select one upgrade. Review the changes and verification evidence before choosing the next.",
+          },
+          {
+            id: "site-production-agent-patterns",
+            type: "site",
+            title: "Anthropic: Building Effective Agents",
+            description:
+              "Further reading on when a simple model call, workflow, or agent fits the task.",
+            tag: "Further Reading",
+            url: "https://www.anthropic.com/research/building-effective-agents",
+            curatorNote:
+              "A shared platform can start simply. Add complexity for an observed need and check whether it helps.",
+          },
+          {
+            id: "site-production-retry-design",
+            type: "site",
+            title: "AWS: Timeouts, Retries & Backoff with Jitter",
+            description:
+              "Understand why temporary failures need limited retries and why a timeout can leave an uncertain result.",
+            tag: "Reliability",
+            url: "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/",
+            curatorNote:
+              "Useful for the recovery branch: save progress and avoid repeating an external effect.",
+          },
+          {
+            id: "site-production-agent-evals",
+            type: "site",
+            title: "Anthropic: Demystifying Evals for AI Agents",
+            description:
+              "Learn to check whether a changed model or prompt makes the product better.",
+            tag: "Quality Checks",
+            url: "https://www.anthropic.com/research/demystifying-evals-for-ai-agents",
+            curatorNote:
+              "Begin with representative inputs and specific checks, such as coverage, correct numbers, and valid timestamps.",
+          },
+          {
+            id: "site-production-prompt-injection",
+            type: "site",
+            title: "OWASP: Prompt Injection",
+            description:
+              "Learn why text in a video or document must not grant the system extra permissions.",
+            tag: "Permissions & Safety",
+            url: "https://genai.owasp.org/llmrisk/llm01-prompt-injection/",
+            curatorNote:
+              "Apply access rules in the server and data layer, including generated summaries and download links.",
+          },
+          {
+            id: "site-production-queue-backlogs",
+            type: "site",
+            title: "AWS: Avoiding Queue Backlogs",
+            description:
+              "Understand how waiting work grows when submissions exceed available processing capacity.",
+            tag: "Queues & More Users",
+            url: "https://aws.amazon.com/builders-library/avoiding-insurmountable-queue-backlogs/",
+            curatorNote:
+              "A queue organizes work. Fair scheduling and limits help one long task avoid crowding out everyone else.",
+          },
+          {
+            id: "site-production-media-segments",
+            type: "site",
+            title: "FFmpeg: Segment Muxer",
+            description:
+              "Implementation reference for splitting media after you have defined the long-video workflow.",
+            tag: "Advanced: Media Segments",
+            url: "https://ffmpeg.org/ffmpeg-formats.html#segment",
+            curatorNote:
+              "Keep original time positions and handle boundaries. Cutting media and organizing chapters are separate jobs.",
+          },
+          {
+            id: "site-production-persistence",
+            type: "site",
+            title: "LangGraph: Persistence",
+            description:
+              "One framework example of saving execution progress for later recovery.",
+            tag: "Advanced: Saved Progress",
+            url: "https://docs.langchain.com/oss/python/langgraph/persistence",
+            curatorNote:
+              "Understand the recovery concept first. This framework is optional; saved progress alone does not prevent duplicate external actions.",
           },
         ],
       },

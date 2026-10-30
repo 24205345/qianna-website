@@ -31,6 +31,8 @@ This is NOT the Next.js you know. Read `node_modules/next/dist/docs/` before wri
 
 ## 通用约定
 
+- **Notes 写作必读**：新增或修改 Notes 时，先读 [`docs/notes-writing-guide.md`](docs/notes-writing-guide.md)，并对照相邻章节；Workbench 系列以第一至三章为图文参照。图表遵循 [`docs/diagrams/workbench/README.md`](docs/diagrams/workbench/README.md)，按内容选择形式，保持中性灰样式。双语正文、图注、资源入口与静态回退同步；交付时区分本地、CMS 和部署状态。
+
 - 数据：Supabase + `app/_data/*` 静态回退（`isSupabaseConfigured()`）
 - 生产上传：`MEDIA_STORAGE_PROVIDER=r2`；新版后台通过 `/api/admin/media` 签名直传，Server Actions 用 `lib/media/form-upload.ts` 核验收据。直传与 Workbench 写入要求服务端 `app_metadata.cms_role=admin`，变更后刷新登录。未指定 provider 的环境默认 Supabase。迁移与运维见 [`docs/experience-media-storage.md`](docs/experience-media-storage.md)。
 - 存量 R2 迁移已完成；保留 Supabase 原对象与 `.media-migration/r2-plan.json`。既有 `migrate:media` / `migrate:photography` 等是初始化脚本，可能删除并重建记录，不用于日常验收。

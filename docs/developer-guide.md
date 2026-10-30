@@ -4,7 +4,7 @@
 >
 > 项目路径：`G:\project\qianna-website`  
 > 分支：`main`（CMS 主线与 R2 生产迁移已完成；Workbench 表已部署，管理员授权已完成）<br>
-> 最后增量更新：2026-10-29（Notes / Workbench；下方 CMS 基础进度保留标注日期）<br>
+> 最后增量更新：2026-10-30（第八章、图集与 Notes 写作标准；下方 CMS 基础进度保留标注日期）<br>
 > 生产域名：**https://www.qiannawang.com**
 
 ---
@@ -59,6 +59,8 @@ Supabase 数据量（2026-10-10 只读复核）：
 - 针对热门查询的检查为 `npm run test:notes`；图表再生成和 CMS 发布分开，不能重跑初始化脚本覆盖日常编辑。
 
 ### 前台路由速查
+
+2026-10-30 本地新增 AI 工作流第八阶段与双语 Note `/notes/enterprise-ai-production`，现以六分支概念地图和视频总结案例讲解个人 Demo 的平台升级，配概念地图、后台任务与长视频三组中性灰双语图，正文以短解释、要点、步骤与文字对照表组织；原工程展开稿保留在 `docs/research/`。后续 Notes 写作先读 [写作与图文标准](notes-writing-guide.md)，该入口已接入根目录 AGENTS.md。正文源、回退同步与验收见[执行记录](exec-enterprise-ai-production-2026-10-30.md)；尚未写入生产 CMS，当前生产阶段状态仍以上述 2026-10-29 记录为准。
 
 | 路径 | 说明 |
 |------|------|

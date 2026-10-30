@@ -1,0 +1,24 @@
+flowchart LR
+ C["Candidate version"] --> E["Offline evaluation"]
+ Rel_0["Pass"]:::relation
+ E --> Rel_0
+ Rel_0 --> S["Sandbox validation"]
+ Rel_1["Pass"]:::relation
+ S --> Rel_1
+ Rel_1 --> K["Canary"]
+ Rel_2["Pass"]:::relation
+ K --> Rel_2
+ Rel_2 --> P["Production + monitoring"]
+ Rel_3["Fail"]:::relation
+ E --> Rel_3
+ Rel_3 --> R["Revise; keep stable release"]
+ Rel_4["Fail"]:::relation
+ S --> Rel_4
+ Rel_4 --> R
+ Rel_5["Fail"]:::relation
+ K --> Rel_5
+ Rel_5 --> R
+ R --> C
+ P -.-> D["Authorized, sanitized and reviewed cases"]
+ D -.-> E
+classDef relation fill:#eef2ff,stroke:#6366f1,stroke-width:1px,color:#312e81;

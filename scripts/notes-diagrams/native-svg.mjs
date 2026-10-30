@@ -1,6 +1,10 @@
 import {createElement} from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
 import * as icons from 'lucide-react';
+import {drawProduction} from './production-figures.mjs';
+import {drawVideo} from './video-figure.mjs';
+import {drawConceptMap} from './concept-map.mjs';
+import {drawTaskFlow} from './task-flow.mjs';
 
 const escape=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const units=s=>[...s].reduce((n,c)=>n+(/[\u2e80-\uffff]/u.test(c)?1:/[MW@]/u.test(c)?.85:/[il .,':;]/u.test(c)?.28:.55),0);
@@ -148,6 +152,14 @@ export function drawEditorial(diagram,layout,lang,style){
   path('M516 551H149',{arrow:true,dashed:true});text(L('Stable error + retry policy','稳定错误与重试规则'),190,538,{size:16,width:320});
   text(L('Keep input; offer an explicit retry','保留输入，提供显式重试'),174,595,{size:15,width:700,color:c.muted});
   foot(layout.footer[lang],651);
+ }else if(diagram.id==='production-task-flow'){
+  drawTaskFlow(diagram,layout,lang,{L,c,text,icon,line,path,box,circle,foot,add});
+ }else if(diagram.id==='production-map'){
+  drawConceptMap(diagram,layout,lang,{L,c,text,icon,line,path,box,circle,foot,add});
+ }else if(diagram.id==='production-video'){
+  drawVideo(diagram,layout,lang,{L,c,text,icon,line,path,box,circle,foot,add});
+ }else if(diagram.note==='enterprise-ai-production'){
+  drawProduction(diagram,layout,lang,{L,c,text,icon,line,path,box,circle,foot,add});
  }else throw Error('No neutral layout for '+diagram.id);
  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="title desc"><title id="title">${escape(diagram.title[lang])}</title><desc id="desc">${escape(diagram.caption[lang])}</desc><defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1L9 5L1 9Z" fill="${c.line}"/></marker><marker id="arrow-start" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M9 1L1 5L9 9Z" fill="${c.line}"/></marker></defs><rect width="${W}" height="${H}" fill="${c.paper}"/>${markup}</svg>`;
 }

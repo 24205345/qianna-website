@@ -1,0 +1,18 @@
+flowchart LR
+ U["Page: submit and view"] <--> A["Server: validate identity and input"]
+ Rel_0["1. Save or read status"]:::relation
+ A <--> Rel_0
+ Rel_0 <--> D["Database: owner, state and result locations"]
+ Rel_1["2. Enqueue task identifier"]:::relation
+ A --> Rel_1
+ Rel_1 --> Q["Queue: pending work"]
+ Rel_2["3. Claim"]:::relation
+ Q --> Rel_2
+ Rel_2 --> W["Worker: download, transcribe and summarize"]
+ Rel_3["4. Save artifacts"]:::relation
+ W --> Rel_3
+ Rel_3 --> F["File storage: media and results"]
+ Rel_4["Update progress and result locations"]:::relation
+ W --> Rel_4
+ Rel_4 --> D
+classDef relation fill:#eef2ff,stroke:#6366f1,stroke-width:1px,color:#312e81;

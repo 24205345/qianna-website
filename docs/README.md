@@ -4,7 +4,7 @@
 
 **Agent 入口：** [`AGENTS.md`](../AGENTS.md) → [`developer-guide.md`](developer-guide.md) · [`architecture.md`](architecture.md)
 
-最后增量核对：2026-10-29。生产为 Vercel + Supabase Postgres/Auth + Cloudflare R2。Notes / Workbench 双语内容、系列标题及 v3 图表已通过 CMS 发布；入口返回与首页热门排序代码纳入本次 Git 交付，热门排序的生产 SQL 尚待执行。统一范围和上线边界见 [本次交付](exec-notes-workbench-delivery-2026-10-29.md)；原有媒体迁移与直传状态见各日期执行记录。
+最后增量核对：2026-10-30。新增第八章双语概念地图、视频案例、图集与 Notes 写作标准，纳入本轮 Git 交付；**未写生产 CMS**，范围与验收见[第八阶段交付](exec-enterprise-ai-production-2026-10-30.md)。生产为 Vercel + Supabase Postgres/Auth + Cloudflare R2。此前 Notes / Workbench 双语内容、系列标题及 v3 图表的 CMS 发布，以及入口返回、热门排序的 Git / SQL 边界，见 [2026-10-29 交付](exec-notes-workbench-delivery-2026-10-29.md)；媒体迁移与直传状态见各日期记录。
 
 ---
 
@@ -15,6 +15,7 @@
 | [`../AGENTS.md`](../AGENTS.md) | Cursor / Agent 常驻规则与约束 |
 | [`developer-guide.md`](developer-guide.md) | 项目进度、本地环境、路由速查、文件索引 |
 | [`architecture.md`](architecture.md) | 系统架构、分层、数据流、横切能力 |
+| [`notes-writing-guide.md`](notes-writing-guide.md) | Notes 必遵循的写作与图文标准：叙事、案例、引用、双语、图表与验收 |
 | [`exec-cms-storage-completion-2026-10-10.md`](exec-cms-storage-completion-2026-10-10.md) | 静态资产、签名直传、Workbench 与分项验收 / 上线状态 |
 | [`cms-migration-checklist.md`](cms-migration-checklist.md) | 各 CMS 模块完成度与验证步骤 |
 | [`experience-media-storage.md`](experience-media-storage.md) | 当前媒体配置、裂图排查、部署验收与回滚 |
@@ -37,6 +38,7 @@
 | [`exec-workbench-visuals-v2-2026-10-29.md`](exec-workbench-visuals-v2-2026-10-29.md) | 历史图表版本：按 VidGrab 风格重绘及后续图文错配修正，已由 v3 取代 |
 | [`exec-workbench-visuals-v3-2026-10-29.md`](exec-workbench-visuals-v3-2026-10-29.md) | 当前图表版本：核查 SmartDiagram 能力后按内容选形式，取消绿色，保留七组双语图及文字对照表 |
 | [`exec-workbench-note-series-2026-10-29.md`](exec-workbench-note-series-2026-10-29.md) | Workbench 关联 Note 的双语系列标题与阶段编号、CMS 发布及页面核对 |
+| [`exec-enterprise-ai-production-2026-10-30.md`](exec-enterprise-ai-production-2026-10-30.md) | 第八阶段：企业 AI 生产化双语文章、资源卡片、本地回退与验收；CMS 发布边界见记录 |
 | [`exec-home-most-read-notes-2026-10-29.md`](exec-home-most-read-notes-2026-10-29.md) | 首页三篇 Notes 按累计浏览量排序；本地代码与 SQL 已验证，待执行生产 SQL 和部署 |
 | [`exec-site-ia-guestbook-2026-08-04.md`](exec-site-ia-guestbook-2026-08-04.md) | 首页四板块、Traces Hub、Guestbook |
 | [`exec-homepage-motion-2026-08-17.md`](exec-homepage-motion-2026-08-17.md) | 首页 Hero 动效、涟漪关闭、Reveal 组件 |
@@ -89,6 +91,8 @@
 | [`notes/environment-infrastructure.zh.md`](notes/environment-infrastructure.zh.md) · [`English`](notes/environment-infrastructure.en.md) | Environment & Infrastructure 中英文正文：职责分支、MCP 接入拓扑与文字工程规约；2026-10-29 更新，沿用原文的模型资料日期 |
 | [`notes/scope-product-definition.zh.md`](notes/scope-product-definition.zh.md) · [`English`](notes/scope-product-definition.en.md) | Scope & Product Definition 中英文正文：路径合流、MVP 旅程及功能／价值文字对照表；起步、调研、PRD、审查与交接内容保留 |
 | [`notes/architecture-contracts.zh.md`](notes/architecture-contracts.zh.md) · [`English`](notes/architecture-contracts.en.md) | Architecture & Contracts 中英文正文：技术选型、AI 建议核查、职责、契约、权限、Mock、ADR 和交接；2026-10-29 加入三张双语图并精简重复说明 |
+| [`notes/enterprise-ai-production.zh.md`](notes/enterprise-ai-production.zh.md) · [`English`](notes/enterprise-ai-production.en.md) | 第八章：六分支升级概念地图；用视频总结案例解释权限、后台任务、速度、并发、恢复与运营，再交给 Agent 实施一项升级 |
+| [`research/enterprise-ai-production-engineering.zh.md`](research/enterprise-ai-production-engineering.zh.md) · [`English`](research/enterprise-ai-production-engineering.en.md) | 第八章概念地图重写前的工程展开稿存档；仅供进阶研究，非当前公开正文 |
 | [`notes/aliyun-ecs-docker-deploy.md`](notes/aliyun-ecs-docker-deploy.md) | ECS 部署指南 · Workbench 路径（中文） |
 | [`notes/aliyun-ecs-docker-deploy.en.md`](notes/aliyun-ecs-docker-deploy.en.md) | 同上（英文） |
 | [`notes/aliyun-ecs-baota-docker-deploy.md`](notes/aliyun-ecs-baota-docker-deploy.md) | ECS 部署指南 · 宝塔路径（中文） |

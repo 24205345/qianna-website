@@ -1,3 +1,5 @@
+import enterpriseProductionNote from "./enterprise-production.json";
+
 export interface NoteListItem {
   slug: string;
   /** Display title for list/home (English-first). */
@@ -20,6 +22,7 @@ export interface NoteDetail extends NoteListItem {
 
 /** Static fallback when Supabase is unavailable or for local notes. */
 export const fallbackNotes: NoteDetail[] = [
+  enterpriseProductionNote,
   {
     slug: "ai-infrastructure-coding-agents-and-models",
     title:

@@ -1,0 +1,12 @@
+sequenceDiagram
+ participant E as 执行器
+ participant T as 工单服务
+ participant L as 操作台账
+ E->>L: 保存操作 ID 与待执行状态
+ E->>T: 携带稳定操作 ID 创建工单
+ Note over T: 工单已创建
+ T--xE: 响应丢失
+ Note over E: 结果未知，展示核实中
+ E->>T: 使用同一操作 ID 查询
+ T-->>E: 返回已存在的工单 ID
+ E->>L: 确认结果，继续后续步骤

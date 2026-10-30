@@ -1,6 +1,14 @@
-// Logical sources and article placements for the seven retained figures.
+import {productionDiagrams} from './production-figures.mjs';
+import {videoDiagrams} from './video-figure.mjs';
+import {conceptDiagrams} from './concept-map.mjs';
+import {taskDiagrams} from './task-flow.mjs';
+// Logical sources and article placements for the retained figures.
 const pair=(en,zh)=>({en,zh});
 export const diagrams=[
+  ...conceptDiagrams,
+  ...taskDiagrams,
+  ...productionDiagrams,
+  ...videoDiagrams,
   {
     id:"environment-toolkit",note:"environment-infrastructure",icon:"Layers",
     title:pair("One workflow, different responsibilities","一条工作流，不同的工具职责"),

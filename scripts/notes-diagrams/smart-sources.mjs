@@ -1,5 +1,6 @@
 // Editable formats accepted by SmartDiagram's actual canvas adapters.
 // Native SVG is the website presentation; these sources do not claim a browser export.
+import {conceptBranches} from './concept-map.mjs';
 const xml=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\n/g,'&#10;');
 function drawio(nodes,edges){
  const cells=nodes.map(n=>`<mxCell id="${n.id}" value="${xml(n.label)}" style="${n.group?'swimlane;startSize=38;horizontal=1;':'rounded=0;'}whiteSpace=wrap;html=0;fillColor=#ffffff;strokeColor=#838383;fontColor=#202020;fontFamily=Arial;fontSize=16;" vertex="1" parent="${n.parent??'1'}"><mxGeometry x="${n.x}" y="${n.y}" width="${n.w??190}" height="${n.h??66}" as="geometry"/></mxCell>`).join('');
@@ -8,6 +9,7 @@ function drawio(nodes,edges){
 }
 export function smartSource(d,lang,mermaid){
  const L=(en,zh)=>lang==='en'?en:zh;
+ if(d.id==='production-map')return {engine:'mindmap',extension:'mindmap.md',code:`# ${L('Team-ready AI product','个人 Demo 到团队平台')}\n${conceptBranches.map(b=>`## ${b.question[lang]}\n${b.terms[lang].split('\n').map(t=>`### ${t}`).join('\n')}`).join('\n')}`};
  if(d.id==='environment-toolkit')return {engine:'mindmap',extension:'mindmap.md',code:`# Agent\n## ${L('You: goal, constraints, acceptance','你：目标、约束与验收')}\n## ${L('Model: reason and propose','模型：推理与候选')}\n## ${L('MCP / tools: read, search, act','MCP / 工具：读取、检索、执行')}\n## ${L('Runtime: run product code','运行环境：运行产品代码')}\n## ${L('Skills / project rules: methods, scope, checks','Skills / 项目规约：方法、范围、检查')}`};
  if(d.id==='environment-mcp'){
   const nodes=[{id:'host',label:L('AI application / Host','AI 应用 / Host'),x:20,y:40,w:285,h:370,group:true}];
