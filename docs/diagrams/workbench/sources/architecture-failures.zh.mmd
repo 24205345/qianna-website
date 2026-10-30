@@ -1,0 +1,15 @@
+sequenceDiagram
+ participant C as 客户端
+ participant S as 服务端
+ participant G as 生成服务
+ C->>S: 提交材料
+ S->>S: 校验输入与权限
+ S->>G: 请求生成题目
+ alt 输出符合要求
+ G-->>S: 候选题目
+ S->>S: 校验结构与内容
+ S-->>C: 返回练习
+ else 失败或超时
+ S-->>C: 稳定错误与重试规则
+ Note over C: 保留输入，显式重试
+ end

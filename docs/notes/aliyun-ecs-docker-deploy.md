@@ -1,4 +1,4 @@
-# 阿里云 ECS 部署教程
+# 【AI 开发工作流 · 07】 阿里云 ECS 部署教程：Docker Compose 单容器应用
 
 > **适用类型**：Docker Compose 单容器 Web 应用 · 国内 ECS 常见问题版 · 含 GitHub Actions 自动部署（可选）
 >

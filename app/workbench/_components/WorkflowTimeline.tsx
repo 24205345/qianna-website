@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { WorkflowStep } from "@/lib/workbench/types";
+import { getWorkbenchNoteHref } from "@/lib/workbench/navigation";
 import ResourceCard from "./ResourceCard";
 
 interface WorkflowTimelineProps {
@@ -79,7 +80,7 @@ export default function WorkflowTimeline({
               {/* Step Narrative & Note Overview Link */}
               {step.relatedNoteHref ? (
                 <Link
-                  href={step.relatedNoteHref}
+                  href={getWorkbenchNoteHref(step.relatedNoteHref)}
                   className="group/note block rounded-xl border border-stone-200/80 bg-stone-100/40 p-4 transition-all hover:border-stone-300 hover:bg-stone-100/80 hover:shadow-xs"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200/70 pb-2 mb-2.5">

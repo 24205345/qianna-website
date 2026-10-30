@@ -1,0 +1,139 @@
+{
+  "nodes": [
+    {
+      "id": "n0",
+      "type": "default",
+      "data": {
+        "label": "已有初步框架"
+      },
+      "position": {
+        "x": 30,
+        "y": 80
+      },
+      "style": {
+        "background": "#ffffff",
+        "border": "1px solid #838383",
+        "color": "#202020",
+        "width": 230
+      }
+    },
+    {
+      "id": "n1",
+      "type": "default",
+      "data": {
+        "label": "只有模糊想法"
+      },
+      "position": {
+        "x": 30,
+        "y": 300
+      },
+      "style": {
+        "background": "#ffffff",
+        "border": "1px solid #838383",
+        "color": "#202020",
+        "width": 230
+      }
+    },
+    {
+      "id": "n2",
+      "type": "default",
+      "data": {
+        "label": "梳理并质疑假设"
+      },
+      "position": {
+        "x": 360,
+        "y": 80
+      },
+      "style": {
+        "background": "#ffffff",
+        "border": "1px solid #838383",
+        "color": "#202020",
+        "width": 230
+      }
+    },
+    {
+      "id": "n3",
+      "type": "default",
+      "data": {
+        "label": "从真实经历探索"
+      },
+      "position": {
+        "x": 360,
+        "y": 300
+      },
+      "style": {
+        "background": "#ffffff",
+        "border": "1px solid #838383",
+        "color": "#202020",
+        "width": 230
+      }
+    },
+    {
+      "id": "n4",
+      "type": "default",
+      "data": {
+        "label": "共同的产品定义\n用户、场景、问题、结果、MVP 与验收"
+      },
+      "position": {
+        "x": 730,
+        "y": 190
+      },
+      "style": {
+        "background": "#ffffff",
+        "border": "1px solid #838383",
+        "color": "#202020",
+        "width": 260
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "source": "n0",
+      "target": "n2",
+      "type": "smoothstep",
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "style": {
+        "stroke": "#838383"
+      }
+    },
+    {
+      "id": "e1",
+      "source": "n1",
+      "target": "n3",
+      "type": "smoothstep",
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "style": {
+        "stroke": "#838383"
+      }
+    },
+    {
+      "id": "e2",
+      "source": "n2",
+      "target": "n4",
+      "type": "smoothstep",
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "style": {
+        "stroke": "#838383"
+      }
+    },
+    {
+      "id": "e3",
+      "source": "n3",
+      "target": "n4",
+      "type": "smoothstep",
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "style": {
+        "stroke": "#838383"
+      }
+    }
+  ]
+}

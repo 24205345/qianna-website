@@ -1,0 +1,139 @@
+{
+  "nodes": [
+    {
+      "id": "n0",
+      "type": "default",
+      "data": {
+        "label": "An initial outline"
+      },
+      "position": {
+        "x": 30,
+        "y": 80
+      },
+      "style": {
+        "background": "#ffffff",
+        "border": "1px solid #838383",
+        "color": "#202020",
+        "width": 230
+      }
+    },
+    {
+      "id": "n1",
+      "type": "default",
+      "data": {
+        "label": "A vague idea"
+      },
+      "position": {
+        "x": 30,
+        "y": 300
+      },
+      "style": {
+        "background": "#ffffff",
+        "border": "1px solid #838383",
+        "color": "#202020",
+        "width": 230
+      }
+    },
+    {
+      "id": "n2",
+      "type": "default",
+      "data": {
+        "label": "Organize and challenge"
+      },
+      "position": {
+        "x": 360,
+        "y": 80
+      },
+      "style": {
+        "background": "#ffffff",
+        "border": "1px solid #838383",
+        "color": "#202020",
+        "width": 230
+      }
+    },
+    {
+      "id": "n3",
+      "type": "default",
+      "data": {
+        "label": "Explore real experiences"
+      },
+      "position": {
+        "x": 360,
+        "y": 300
+      },
+      "style": {
+        "background": "#ffffff",
+        "border": "1px solid #838383",
+        "color": "#202020",
+        "width": 230
+      }
+    },
+    {
+      "id": "n4",
+      "type": "default",
+      "data": {
+        "label": "Shared product definition\nUser, situation, problem, outcome, MVP, acceptance"
+      },
+      "position": {
+        "x": 730,
+        "y": 190
+      },
+      "style": {
+        "background": "#ffffff",
+        "border": "1px solid #838383",
+        "color": "#202020",
+        "width": 260
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "source": "n0",
+      "target": "n2",
+      "type": "smoothstep",
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "style": {
+        "stroke": "#838383"
+      }
+    },
+    {
+      "id": "e1",
+      "source": "n1",
+      "target": "n3",
+      "type": "smoothstep",
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "style": {
+        "stroke": "#838383"
+      }
+    },
+    {
+      "id": "e2",
+      "source": "n2",
+      "target": "n4",
+      "type": "smoothstep",
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "style": {
+        "stroke": "#838383"
+      }
+    },
+    {
+      "id": "e3",
+      "source": "n3",
+      "target": "n4",
+      "type": "smoothstep",
+      "markerEnd": {
+        "type": "arrowclosed"
+      },
+      "style": {
+        "stroke": "#838383"
+      }
+    }
+  ]
+}

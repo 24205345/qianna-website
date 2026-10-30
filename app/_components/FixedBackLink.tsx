@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Suspense } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const SECTION_LABELS: Record<string, string> = {
   projects: "Projects",
@@ -70,6 +71,19 @@ function isPortfolioViewer(pathname: string): boolean {
   return pathname === "/projects/undergraduate-portfolio";
 }
 
+function NoteBackLink({ className }: { className: string }) {
+  const searchParams = useSearchParams();
+  const fromWorkbench = searchParams.get("from") === "workbench";
+  const href = fromWorkbench ? "/workbench" : "/notes";
+  const label = fromWorkbench ? "← Back to Workbench" : "← Back to Notes";
+
+  return (
+    <Link href={href} className={className} aria-label={label}>
+      {label}
+    </Link>
+  );
+}
+
 export default function FixedBackLink() {
   const pathname = usePathname();
   const backLink = getBackLink(pathname);
@@ -84,7 +98,7 @@ export default function FixedBackLink() {
       ? "fixed bottom-6 left-6 z-40 text-sm text-stone-50/85 underline decoration-stone-50/40 underline-offset-4 transition-colors hover:text-stone-50/95 hover:decoration-stone-50/55"
       : "fixed bottom-6 left-6 z-40 text-sm text-stone-600 underline decoration-stone-600/45 underline-offset-4 transition-colors hover:text-stone-900 hover:decoration-stone-900/70";
 
-  return (
+  const defaultLink = (
     <Link
       href={backLink.href}
       className={linkClass}
@@ -93,4 +107,14 @@ export default function FixedBackLink() {
       {backLink.label}
     </Link>
   );
+
+  if (pathname.startsWith("/notes/")) {
+    return (
+      <Suspense fallback={defaultLink}>
+        <NoteBackLink className={linkClass} />
+      </Suspense>
+    );
+  }
+
+  return defaultLink;
 }

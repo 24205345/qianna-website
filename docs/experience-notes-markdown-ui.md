@@ -16,3 +16,9 @@
 - `react-markdown` 的 fenced code 会同时走 `pre` 与 `code`；**外壳只放在 `pre`**：`code` 仅保留 `language-*` class，由 `pre` 识别 `prompt` / 普通代码并各渲染一层 + 一个复制按钮。切勿在 `code` 里再包一层卡片，否则会出现双层嵌套与两个复制图标。
 - Admin 预览共用 `NoteMarkdown`，表格与复制按钮会一并生效，通常是期望行为。
 - TOC 的 mask / 细滚动条仅在 `lg+` 启用；移动端目录跟在正文后，不做全高 sticky。
+
+## 详情页返回入口
+
+- Workbench 的阶段文章、精选文章和资源详情中的站内 Note 链接统一追加 `from=workbench`；保留已有查询参数和正文锚点，不修改外站或 Project 链接。
+- Note 详情左下角根据这个标记显示 `Back to Workbench` 并返回 `/workbench`；从 Notes、首页或直接打开无标记的文章，默认显示 `Back to Notes` 并返回 `/notes`。不依赖浏览器历史，新标签页和刷新后也可识别入口。
+- 查询参数只在 Note 的返回链接子组件里通过 `useSearchParams` 读取，外包 `Suspense`，避免改变其他页面的返回规则；文章 canonical URL 仍使用无查询参数的 `/notes/[slug]`。

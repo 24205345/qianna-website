@@ -18,6 +18,11 @@ interface NoteRow {
   published_at: string | null;
 }
 
+type NotePreviewRow = Pick<
+  NoteRow,
+  "slug" | "title" | "title_en" | "excerpt" | "excerpt_en" | "tags" | "published_at"
+>;
+
 function pickEnglish(primary: string | null | undefined, fallback: string): string {
   const value = primary?.trim();
   return value ? value : fallback;
@@ -110,6 +115,34 @@ export async function getLatestNotes(limit = 3): Promise<NoteListItem[]> {
     .map(toListItem);
 
   return [...supabaseNotes, ...additionalFallbacks].slice(0, limit);
+}
+
+/** Homepage selection by all-time note PV; unpublished notes never enter the ranking. */
+export async function getMostViewedNotes(limit = 3): Promise<NoteListItem[]> {
+  const count = Number.isFinite(limit)
+    ? Math.max(0, Math.min(12, Math.floor(limit)))
+    : 3;
+  if (count === 0) return [];
+  if (!isSupabaseConfigured()) return getLatestNotes(count);
+
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc("get_most_viewed_notes", {
+      p_limit: count,
+    });
+
+    if (error || !data) return getLatestNotes(count);
+
+    return (data as NotePreviewRow[]).map((row) => ({
+      slug: row.slug,
+      title: pickEnglish(row.title_en, row.title),
+      excerpt: pickEnglish(row.excerpt_en, row.excerpt ?? ""),
+      publishedAt: row.published_at,
+      tags: row.tags ?? [],
+    }));
+  } catch {
+    return getLatestNotes(count);
+  }
 }
 
 export async function getNoteBySlug(slug: string): Promise<NoteDetail | null> {

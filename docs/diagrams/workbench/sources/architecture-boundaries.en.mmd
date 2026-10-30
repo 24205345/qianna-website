@@ -1,0 +1,9 @@
+flowchart TB
+ A["Client<br/>Input, state, answers, review"] --> B
+ subgraph SERVER["Trusted application server"]
+ B["Validate input + permissions"] --> C["Call generation with server secret"]
+ D["Check output + return result"]
+ end
+ C --> E["External generation service<br/>Returns candidate content"]
+ E --> D
+ D --> F["Client receives checked result"]

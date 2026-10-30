@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import type { AttachedResource } from "@/lib/workbench/types";
+import { getWorkbenchNoteHref } from "@/lib/workbench/navigation";
 
 interface ResourceCardProps {
   resource: AttachedResource;
@@ -285,7 +286,7 @@ export default function ResourceCard({ resource }: ResourceCardProps) {
           <div className="flex items-center gap-2">
             {resource.url ? (
               <a
-                href={resource.url}
+                href={getWorkbenchNoteHref(resource.url)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 rounded-md bg-stone-100 px-2.5 py-1 text-xs font-medium text-stone-600 hover:bg-stone-200/80 hover:text-stone-900 transition-colors"

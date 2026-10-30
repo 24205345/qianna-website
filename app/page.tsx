@@ -14,7 +14,7 @@ import {
   getApprovedGuestbookMessages,
 } from "@/lib/guestbook/queries";
 import { getTurnstileSiteKey } from "@/lib/guestbook/turnstile";
-import { getLatestNotes } from "@/lib/notes/queries";
+import { getMostViewedNotes } from "@/lib/notes/queries";
 import { getFeaturedProjects } from "@/lib/projects/queries";
 import { applyProjectImages, applyTraceImages } from "@/lib/site/featured-images";
 import { getHomeFeaturedImages } from "@/lib/site/featured-images-server";
@@ -48,7 +48,7 @@ export default async function Home() {
     featuredImages,
     siteSettings,
     navigationItems,
-    latestNotes,
+    mostViewedNotes,
     aboutContent,
     guestbookPreview,
     guestbookTotal,
@@ -59,7 +59,7 @@ export default async function Home() {
     getHomeFeaturedImages(),
     getSiteSettings(),
     getSiteNavigationItems(),
-    getLatestNotes(3),
+    getMostViewedNotes(3),
     getAboutPageContent(),
     getApprovedGuestbookMessages(3),
     getApprovedGuestbookMessageCount(),
@@ -139,7 +139,7 @@ export default async function Home() {
 
         {/* 3. Essays & Working Notes */}
         <EditorialNotesSection
-          notes={latestNotes}
+          notes={mostViewedNotes}
           navigationSection={notesSection}
         />
 

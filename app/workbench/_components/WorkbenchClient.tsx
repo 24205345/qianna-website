@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import type { WorkflowPipeline } from "@/lib/workbench/types";
+import { getWorkbenchNoteHref } from "@/lib/workbench/navigation";
 import WorkflowTimeline from "./WorkflowTimeline";
 
 interface WorkbenchClientProps {
@@ -131,7 +132,7 @@ export default function WorkbenchClient({
           {currentPipeline.featuredNote ? (
             <div>
               <Link
-                href={currentPipeline.featuredNote.href}
+                href={getWorkbenchNoteHref(currentPipeline.featuredNote.href)}
                 className="group inline-flex items-center gap-1.5 text-xs text-stone-500 transition-colors hover:text-stone-900"
               >
                 <span className="text-stone-400">Case Study:</span>

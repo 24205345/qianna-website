@@ -1,0 +1,33 @@
+{
+  "version": 3,
+  "name": "Workbench neutral technical figures",
+  "colors": {
+    "paper": "#ffffff",
+    "surface": "#f9f9f9",
+    "rule": "#d9d9d9",
+    "line": "#838383",
+    "muted": "#646464",
+    "ink": "#202020"
+  },
+  "fonts": {
+    "heading": "Georgia, SimSun, serif",
+    "body": "Arial, Microsoft YaHei, sans-serif"
+  },
+  "iconStroke": 1.6,
+  "canvasWidth": 1040,
+  "exportScale": 2,
+  "references": [
+    "https://www.radix-ui.com/colors/docs/palette-composition/composing-a-palette",
+    "https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale",
+    "https://raw.githubusercontent.com/radix-ui/colors/main/src/light.ts",
+    "https://www.ibm.com/design/language/color/"
+  ],
+  "principles": [
+    "Choose the form from the question: branches, topology, merge, journey, decision, boundary or sequence.",
+    "Use only neutral grays. No accent-colored title bars, gradients, shadows or decorative frames.",
+    "Position, arrows, labels and line styles carry meaning; gray intensity never implies a measured quantity.",
+    "Remove a figure when a short list or selectable table explains the content better.",
+    "Keep labels concise, preserve Chinese/Latin spacing, and inspect both language exports.",
+    "Preserve prompts and code as text. Do not invent numeric data to justify a chart."
+  ]
+}

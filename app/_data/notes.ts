@@ -23,7 +23,7 @@ export const fallbackNotes: NoteDetail[] = [
   {
     slug: "ai-infrastructure-coding-agents-and-models",
     title:
-      "Environment & Infrastructure: A Practical Guide to Models, Agents & Guardrails",
+      "【AI Dev Workflow · 01】 Environment & Infrastructure: A Practical Guide to Models, Agents & Guardrails",
     excerpt:
       "A calm, practical guide (updated September 21, 2026) for setting up an AI engineering stack. Compares mainstream models (Claude Sonnet / Fable, GPT Sol / Astra, Gemini 3.8, DeepSeek-V4, Qwen3.8, Kimi K3), evaluates leading coding agents (Cursor, Trae, Copilot, Claude Code, Cline, Kiro), and establishes foundational workflow guardrails.",
     publishedAt: "2026-09-21T08:00:00.000Z",
@@ -38,9 +38,9 @@ export const fallbackNotes: NoteDetail[] = [
       "Domestic & Global AI",
     ],
     titleEn:
-      "Environment & Infrastructure: A Practical Guide to Models, Agents & Guardrails",
+      "【AI Dev Workflow · 01】 Environment & Infrastructure: A Practical Guide to Models, Agents & Guardrails",
     titleZh:
-      "基建与环境准备：大模型、Coding Agent 与环境配置实践指南",
+      "【AI 开发工作流 · 01】 基建与环境准备：大模型、Coding Agent 与环境配置实践指南",
     excerptEn:
       "A practical guide for solo AI developers (updated September 21, 2026). Compares mainstream models and coding agents, covering frictionless billing, practical MCP & Skills ecosystems, and harness guardrails before writing code.",
     excerptZh:

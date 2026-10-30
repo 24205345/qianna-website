@@ -3,7 +3,7 @@
 > **稳定架构说明**——技术栈、分层、数据流、横切能力。  
 > 进度、本地环境、文件索引见 [`developer-guide.md`](developer-guide.md)；Agent 入口见 [`AGENTS.md`](../AGENTS.md)。
 
-最后更新：2026-10-10
+最后增量更新：2026-10-29（Notes / Workbench）；其他模块沿用各自执行记录的验收日期。
 
 ---
 
@@ -165,6 +165,7 @@ middleware.ts                   # /admin 鉴权；首页 Auth 参数转发
 | 0017 | undergraduate portfolio |
 | 0018 | hide xicaoshi project |
 | 0019 | workbench_pipelines（生产已部署，2 条流程；写入仅 CMS admin，异常时静态回退） |
+| 20261029101219 | get_most_viewed_notes：仅返回已发布文章预览的累计 PV 排名；本地已验证，生产 SQL 待执行 |
 
 每张业务表：**RLS** + 对 `anon` / `authenticated` 的 **GRANT**（公开读、Admin 写）。
 
@@ -252,6 +253,7 @@ scripts/download-*-media.ps1       → sparse-checkout 下补 public 文件
 - 前台：`PageViewTracker`（Client）→ Server Action → `page_views`
 - 后台：`/admin/analytics` 聚合展示
 - 路径规范化：`lib/analytics/paths.ts`
+- 首页热门 Note：`getMostViewedNotes(3)` → `get_most_viewed_notes`，按全部历史 Note PV 排名，只返回公开文章预览；同量按发布日期与 slug 排序。统计不可用时回退最新文章。该 SQL 尚待生产执行，不公开 `page_views` 原始记录；见 [实现与验证](exec-home-most-read-notes-2026-10-29.md)。
 
 ### 7.4 Guestbook
 
@@ -280,6 +282,8 @@ scripts/download-*-media.ps1       → sparse-checkout 下补 public 文件
 
 - 首页 `WorkbenchSection` 与 `/workbench` 读取 `lib/workbench/queries.ts`；缺表、查询失败或空数据时使用 `app/_data/workbench.ts`。
 - `/admin/workbench` 与 `/admin/workbench/[id]` 已有编辑和初始化功能；生产 `0019_workbench_pipelines.sql` 已部署；2 条流程公开读取已验证，写入要求服务端 `app_metadata.cms_role=admin`。现有唯一 CMS 账号已授权；2026-10-12 本地新版认证直传与保存、生产数据库 RLS 验收通过，新代码仍待部署。详见 [授权验收](exec-cms-admin-verification-2026-10-12.md)。
+- 2026-10-29 内容增量：前三阶段双语文章和七组共 14 张中性灰图已发布，四篇关联 Note 使用双语系列标识与阶段编号；源文、图表规范与生成脚本保存在 `docs/notes/`、`docs/diagrams/workbench/`、`scripts/notes-diagrams/`。
+- `lib/workbench/navigation.ts` 对站内文章入口附加 `from=workbench`，详情的固定返回链接据此返回 Workbench；Notes / 无标记入口返回 Notes。仅 Note 返回链接通过带 `Suspense` 的子组件读取查询参数，不依赖浏览器历史。代码纳入本次交付，随应用部署生效。
 
 ---
 

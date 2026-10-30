@@ -4,7 +4,7 @@
 >
 > 项目路径：`G:\project\qianna-website`  
 > 分支：`main`（CMS 主线与 R2 生产迁移已完成；Workbench 表已部署，管理员授权已完成）<br>
-> 最后更新：2026-10-10<br>
+> 最后增量更新：2026-10-29（Notes / Workbench；下方 CMS 基础进度保留标注日期）<br>
 > 生产域名：**https://www.qiannawang.com**
 
 ---
@@ -51,6 +51,13 @@ Supabase 数据量（2026-10-10 只读复核）：
 
 详细 checklist：`docs/cms-migration-checklist.md`
 
+### Notes / Workbench 增量（2026-10-29）
+
+- 前三篇 Workbench 文章的双语源文、英文资源卡片、中性灰 v3 图表与系列标题已通过 CMS 发布。图表规范及 14 张双语图的编辑源文、SVG / WebP、生成脚本现纳入仓库；见 [统一交付记录](exec-notes-workbench-delivery-2026-10-29.md)。
+- 文章详情的返回目标由入口决定：Workbench 链接携带 `from=workbench`，返回 `/workbench`；从 Notes 或无标记的直接入口返回 `/notes`。代码随应用部署生效，文章 canonical 不含来源参数。
+- 首页调用 `getMostViewedNotes(3)` 展示累计 PV 前三篇；只选已发布 Note，并列按发布日期、slug 排序。`20261029101219_home_most_viewed_notes.sql` 尚未执行到生产，当前需要先执行 SQL 再完成排名验收；缺少函数时兼容回退最新文章。详见 [热门排序记录](exec-home-most-read-notes-2026-10-29.md)。
+- 针对热门查询的检查为 `npm run test:notes`；图表再生成和 CMS 发布分开，不能重跑初始化脚本覆盖日常编辑。
+
 ### 前台路由速查
 
 | 路径 | 说明 |
@@ -60,7 +67,7 @@ Supabase 数据量（2026-10-10 只读复核）：
 | `/projects`, `/projects/[slug]` | 项目汇总与详情 |
 | `/traces` | Traces Hub（Photography / Drawings / Field Notes Tab） |
 | `/photography`, `/visual-works`, `/field-notes`, `/field-notes/[slug]` | 专项列表与详情，旧路径保留 |
-| `/workbench` | 工作流与资源；当前使用静态回退 |
+| `/workbench` | CMS 工作流与资源；查询失败或空数据时使用静态回退 |
 | `/about` | About 页（标题、描述、16:9 照片、Timeline） |
 | `/guestbook` | 留言簿完整列表 |
 | `/admin/*` | 私有 CMS（login / reset-password 无侧栏） |

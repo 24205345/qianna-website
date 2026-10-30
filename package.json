@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test:notes": "node --test tests/popular-notes.test.mjs",
     "test:media": "node --test tests/media-storage.test.mjs tests/r2-migration.test.mjs",
     "migrate:r2": "node scripts/migrate-storage-to-r2.mjs",
     "migrate:media": "node scripts/migrate-project-media.mjs",

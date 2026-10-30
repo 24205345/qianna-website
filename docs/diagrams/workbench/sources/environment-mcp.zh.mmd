@@ -1,0 +1,12 @@
+flowchart LR
+ subgraph HOST["AI application / Host"]
+ C1["MCP Client 1"]
+ C2["MCP Client 2"]
+ C3["MCP Client 3"]
+ end
+ C1 <--> S1["Context7 MCP"]
+ C2 <--> S2["Firecrawl MCP"]
+ C3 <--> S3["Playwright MCP"]
+ S1 <--> D["文档资料"]
+ S2 <--> W["网页内容"]
+ S3 <--> B["浏览器操作"]

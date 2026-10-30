@@ -1,0 +1,18 @@
+infographic sequence-timeline-simple
+data
+  title MVP 保留完整的价值流程
+  sequences
+    - label 粘贴材料
+      desc 保留原文
+    - label 生成题目
+      desc 校验结构与材料相关性
+    - label 作答与反馈
+      desc 给出答案与解释
+    - label 回看盲点
+      desc 回到原文理解
+theme
+  palette
+    - #202020
+    - #646464
+    - #838383
+    - #202020

@@ -1,0 +1,18 @@
+infographic sequence-timeline-simple
+data
+  title MVP keeps the whole value journey
+  sequences
+    - label Paste material
+      desc Keep the source
+    - label Generate questions
+      desc Check structure and relevance
+    - label Answer and feedback
+      desc Explain the answer
+    - label Review gaps
+      desc Return to the source
+theme
+  palette
+    - #202020
+    - #646464
+    - #838383
+    - #202020

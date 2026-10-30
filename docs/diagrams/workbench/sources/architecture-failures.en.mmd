@@ -1,0 +1,15 @@
+sequenceDiagram
+ participant C as Client
+ participant S as Server
+ participant G as Generator
+ C->>S: Submit material
+ S->>S: Validate input / permissions
+ S->>G: Request questions
+ alt Valid output
+ G-->>S: Candidate questions
+ S->>S: Check structure + content
+ S-->>C: Exercise
+ else Failure / timeout
+ S-->>C: Stable error + retry policy
+ Note over C: Keep input and offer retry
+ end

@@ -1,0 +1,8 @@
+flowchart TB
+ A["PRD + platform + team constraints"] --> B["Compare a few feasible options"]
+ B --> C["Check official version docs"]
+ C --> D["Run the smallest critical experiment"]
+ D --> E{"Fits the product?"}
+ E --> F["Yes: record choice + trade-offs"]
+ E --> G["No: revise the candidate"]
+ G -.-> B
