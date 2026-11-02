@@ -6,7 +6,7 @@ Coding agents can implement much of the software. The builder still needs to kno
 
 One teaching example runs throughout: a personal tool that accepts a video and produces a timestamped summary, gradually opening to colleagues, teams, and enterprise customers. These are proposed upgrades, not claims about an existing implementation or a mandatory tool list. Technical references were checked on October 30, 2026.
 
-## 1. Start with a map of the upgrade
+## 1. The upgrade map
 
 When you use a tool alone, you know where its files live, can rerun scripts yourself, and may tolerate waiting. Once other people depend on it, the product needs to handle these responsibilities. Start with six questions:
 
@@ -16,7 +16,7 @@ When you use a tool alone, you know where its files live, can rerun scripts your
 
 The branches interact. Background tasks need an owner, queues need a scheduling policy, and speed must respect permissions and completeness. This is a capability map to fill in as needs emerge. A production platform can begin with one application, one database, and a few background workers.
 
-## 2. Who can use it: establish data and action boundaries
+## 2. Identity and permissions
 
 **Video case:** A uploads an internal meeting; B changes a URL and reads its summary. The missing capability is **identity and access management**.
 
@@ -44,7 +44,7 @@ The branches interact. Background tasks need an owner, queues need a scheduling 
 
 **Acceptance:** use two accounts and two teams to attempt cross-account reads, edits, and downloads. Remove a member and check old entry points. Keep secrets on the server; malicious transcript instructions must not expand authority. See [OWASP's prompt injection guidance](https://genai.owasp.org/llmrisk/llm01-prompt-injection/).
 
-## 3. How work runs: let processing outlive the page
+## 3. Background jobs
 
 **Video case:** closing the page halfway through a long video forces the user to start again. Separate processing from a single web request.
 
@@ -75,7 +75,7 @@ Here is how they connect to the web service, database, and file storage:
 
 **Acceptance:** work survives closing the page; signing back in reveals progress; service restarts preserve registered tasks and saved results.
 
-## 4. How it feels faster: deliver something useful sooner
+## 4. Faster results
 
 **Video case:** work now runs in the background, but users still wait too long. Establish which wait you want to improve.
 
@@ -115,7 +115,7 @@ A model's **time to first token (TTFT)** measures only part of this journey. An 
 
 **Acceptance:** compare first useful output, full completion, expense, and summary quality together. Segmentation, streaming, or more workers alone cannot demonstrate a speedup.
 
-## 5. What happens with more people: share finite resources fairly
+## 5. Concurrency and scheduling
 
 **Video case:** one long video launches every segment request, leaving other people's short clips waiting. This is a **concurrency and scheduling** problem.
 
@@ -142,7 +142,7 @@ Explain excessive waits or temporarily decline new work. Preserve capacity for s
 
 **Acceptance:** mix simultaneous users, long and short inputs, and sustained heavy submissions. Check ordinary users can complete work, long jobs do not crowd out others, waits are understandable, and spending remains bounded. Set targets from measurements.
 
-## 6. What happens after failure: preserve progress and resume
+## 6. Failure and recovery
 
 **Video case:** the service restarts after 27 of 30 segments finish. Users expect the remaining work to continue without repeating the whole video's time and expense.
 
@@ -171,7 +171,7 @@ A timeout does not prove the remote action failed. See [AWS's retry guidance](ht
 2. **Repeat a submission:** the same operation does not repeat its business effect.
 3. **Keep a step failing:** retries stop within budget, errors are visible, and input correction, retry, or administrator recovery is available.
 
-## 7. How it keeps working: manage quality, failures, and spending
+## 7. Quality, cost, and operations
 
 **Video case:** a model update produces smoother prose but misses the latter half of the video. A successful response does not establish a useful result.
 
@@ -205,7 +205,7 @@ A timeout does not prove the remote action failed. See [AWS's retry guidance](ht
 
 **Acceptance:** detect quality regressions, locate failed tasks, explain spending, restore data, and give users a responsible contact. Administration can grow with usage.
 
-## 8. Choose an order around the next users' needs
+## 8. Upgrade priorities
 
 Use the map to find omissions, then prioritize. The following stages illustrate one path; basic permissions and data protection matter from the first shared release.
 
@@ -218,7 +218,7 @@ Use the map to find omissions, then prioritize. The following stages illustrate 
 
 Choose the most consequential current problem and complete its path across interface, server, and storage before moving on. One application can host these capabilities. Microservices, additional agents, and complex infrastructure need a concrete problem and supporting evidence. [Anthropic's architecture guidance](https://www.anthropic.com/research/building-effective-agents) likewise recommends starting simply and adding complexity as tasks require it.
 
-## 9. Give a coding agent a verifiable upgrade task
+## 9. Assign the agent a task
 
 The map turns “make this enterprise-grade” into a specific request: “keep processing after the tab closes, and let me return to progress and results.” You establish users, priorities, access boundaries, and acceptable outcomes. The agent can inspect the implementation, explain gaps, change code, and execute checks.
 

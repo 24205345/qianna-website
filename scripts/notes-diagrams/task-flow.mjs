@@ -4,7 +4,7 @@ export const taskDiagrams = [{
   id: 'production-task-flow', note: 'enterprise-ai-production', icon: 'Database', localAsset: true,
   title: pair('How background work continues after the page closes', '网页离开后，后台任务怎样继续'),
   caption: pair('Separate admission from execution; the page reads saved task status and results.', '前台接单与后台执行分开；页面读取已保存的任务状态与结果。'),
-  anchor: pair('## 3. How work runs: let processing outlive the page', '## 3. 任务怎样运行：网页离开了，工作仍能继续'),
+  anchor: pair('## 3. Background jobs', '## 3. 后台任务与异步处理'),
   code: lang => lang === 'en' ? `flowchart LR
  U["Page: submit and view"] <--> A["Server: validate identity and input"]
  A <-->|"1. Save or read status"| D["Database: owner, state and result locations"]

@@ -4,7 +4,7 @@ export const videoDiagrams = [{
   id: 'production-video', note: 'enterprise-ai-production', icon: 'Clapperboard', localAsset: true,
   title: pair('Long videos: parallel segments, ordered evidence', '长视频：分段并行，按时间轴归并'),
   caption: pair('Valid captions take a shorter path. Resume segments independently; publish the full overview after coverage checks.', '可用字幕走捷径；分段独立恢复，完整概览通过覆盖检查后发布。'),
-  anchor: pair('## 4. How it feels faster: deliver something useful sooner', '## 4. 怎样更快：让用户尽早拿到有用的结果'),
+  anchor: pair('## 4. Faster results', '## 4. 响应速度与分段处理'),
   code: lang => lang === 'en' ? `flowchart LR
  S["Authorized source"] --> A["Audio segments with original offsets"]
  subgraph ASR["Bounded ASR: global, tenant and job limits"]

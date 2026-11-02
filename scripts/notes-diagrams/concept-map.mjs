@@ -13,7 +13,7 @@ export const conceptDiagrams = [{
   id: 'production-map', note: 'enterprise-ai-production', icon: 'Network', localAsset: true,
   title: pair('From personal demo to a team-ready platform', '从个人 Demo 到团队平台：六个升级问题'),
   caption: pair('Start with the problem, then learn the concept and choose the next useful upgrade.', '先找到产品遇到的问题，再认识相关概念，决定下一步值得做的升级。'),
-  anchor: pair('## 1. Start with a map of the upgrade', '## 1. 先看全貌：平台升级可以从六个问题展开'),
+  anchor: pair('## 1. The upgrade map', '## 1. 六个升级方向'),
   code: lang => `mindmap\n  root((${lang === 'en' ? 'Team-ready AI product' : '个人 Demo 到团队平台'}))\n${conceptBranches.map(b => `    ${b.question[lang]}\n${b.terms[lang].split('\n').map(t => `      ${t.replace(/ · /g, ' / ')}`).join('\n')}`).join('\n')}`,
 }];
 
