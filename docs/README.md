@@ -4,7 +4,7 @@
 
 **Agent 入口：** [`AGENTS.md`](../AGENTS.md) → [`developer-guide.md`](developer-guide.md) · [`architecture.md`](architecture.md)
 
-最后增量核对：2026-10-30。新增第八章双语概念地图、视频案例、图集与 Notes 写作标准，纳入本轮 Git 交付；**未写生产 CMS**，范围与验收见[第八阶段交付](exec-enterprise-ai-production-2026-10-30.md)。生产为 Vercel + Supabase Postgres/Auth + Cloudflare R2。此前 Notes / Workbench 双语内容、系列标题及 v3 图表的 CMS 发布，以及入口返回、热门排序的 Git / SQL 边界，见 [2026-10-29 交付](exec-notes-workbench-delivery-2026-10-29.md)；媒体迁移与直传状态见各日期记录。
+最后增量核对：2026-11-02。第八章双语正文和 Workbench 第八阶段已通过管理员接口发布到生产 CMS，匿名读回与正式站点核对通过，见[生产发布记录](exec-enterprise-ai-production-publish-2026-11-02.md)。正文、图集与写作标准的 Git 交付见[第八阶段交付](exec-enterprise-ai-production-2026-10-30.md)。生产为 Vercel + Supabase Postgres/Auth + Cloudflare R2。此前 Notes / Workbench 双语内容、系列标题及 v3 图表的 CMS 发布，以及入口返回、热门排序的 Git / SQL 边界，见 [2026-10-29 交付](exec-notes-workbench-delivery-2026-10-29.md)；媒体迁移与直传状态见各日期记录。
 
 ---
 
@@ -39,6 +39,7 @@
 | [`exec-workbench-visuals-v3-2026-10-29.md`](exec-workbench-visuals-v3-2026-10-29.md) | 当前图表版本：核查 SmartDiagram 能力后按内容选形式，取消绿色，保留七组双语图及文字对照表 |
 | [`exec-workbench-note-series-2026-10-29.md`](exec-workbench-note-series-2026-10-29.md) | Workbench 关联 Note 的双语系列标题与阶段编号、CMS 发布及页面核对 |
 | [`exec-enterprise-ai-production-2026-10-30.md`](exec-enterprise-ai-production-2026-10-30.md) | 第八阶段：企业 AI 生产化双语文章、资源卡片、本地回退与验收；CMS 发布边界见记录 |
+| [`exec-enterprise-ai-production-publish-2026-11-02.md`](exec-enterprise-ai-production-publish-2026-11-02.md) | 第八章生产发布：管理员接口写入、原七阶段保护、匿名读回及正式页面验收 |
 | [`exec-home-most-read-notes-2026-10-29.md`](exec-home-most-read-notes-2026-10-29.md) | 首页三篇 Notes 按累计浏览量排序；本地代码与 SQL 已验证，待执行生产 SQL 和部署 |
 | [`exec-site-ia-guestbook-2026-08-04.md`](exec-site-ia-guestbook-2026-08-04.md) | 首页四板块、Traces Hub、Guestbook |
 | [`exec-homepage-motion-2026-08-17.md`](exec-homepage-motion-2026-08-17.md) | 首页 Hero 动效、涟漪关闭、Reveal 组件 |

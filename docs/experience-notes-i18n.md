@@ -24,7 +24,7 @@
 
 ## Workbench 系列标题
 
-Workbench 的 AI 开发工作流文章使用 `【AI 开发工作流 · 01】 原中文标题` / `【AI Dev Workflow · 01】 Original English Title`。编号与 Workbench 阶段一致，不按文章发布日期重新编号；生产关联文章为 01、02、03、07，04–06 作为后续阶段的编号保留。2026-10-30 本地新增 08（From Demo to Team Platform，六分支概念地图与视频案例），正文与资源准备完成，CMS 尚未发布，详见[执行记录](exec-enterprise-ai-production-2026-10-30.md)。
+Workbench 的 AI 开发工作流文章使用 `【AI 开发工作流 · 01】 原中文标题` / `【AI Dev Workflow · 01】 Original English Title`。编号与 Workbench 阶段一致，不按文章发布日期重新编号；生产关联文章为 01、02、03、07、08，04–06 作为后续阶段的编号保留。第八章（From Demo to Team Platform，六分支概念地图与视频案例）于 2026-10-30 完成 Git 交付，2026-11-02 已通过管理员接口发布双语正文与工作流入口，见[内容交付](exec-enterprise-ai-production-2026-10-30.md)和[生产发布记录](exec-enterprise-ai-production-publish-2026-11-02.md)。
 
 系列标识写入 CMS 的 `title` / `title_en`，因此 Notes 列表、首页、详情及 SEO 元数据展示一致。同步 Workbench 的 `relatedNoteLabel` / `featured_note.title`、本地静态标题和正文源文件的文档标题；Workbench 阶段名称继续保持简洁英文。后续新增对应阶段文章时沿用相同格式，避免重复添加前缀。
 
