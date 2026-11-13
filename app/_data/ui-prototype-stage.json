@@ -1,0 +1,107 @@
+{
+  "id": "step-ui-prototype",
+  "stepNumber": "04",
+  "title": "UI Prototype & Ergonomics",
+  "subtitle": "Task Flows, UI States & Interaction",
+  "tools": [
+    "Clickable Prototype",
+    "Component Patterns",
+    "Responsive UI"
+  ],
+  "summary": "Turn product tasks and API contracts into understandable views, responsive interactions, and recoverable states. Try the interface lab to describe behavior precisely.",
+  "keyTakeaway": "Describe the object, trigger, visible change, and completion rules. Validate one real task and a failure path before replacing mock data with live services.",
+  "resources": [
+    {
+      "id": "prompt-density-ux",
+      "type": "prompt",
+      "title": "Split-Screen Density & Auto-Trigger UX Prompt",
+      "description": "Guides agents to consolidate fragmented panels onto a single screen and automate next-action triggers.",
+      "tag": "UX Refinement",
+      "content": "You are optimizing the UX of Universal Video Downloader.\nDownload and summarization are functional. Review existing code and PRD first.\n\n## Objective\nPresent video metadata and summary notes side-by-side on the same viewport.\nAutomatically initiate AI summary after video resolution completes, saving one click.\n\n## Guardrails\nConfirm ambiguous UX requirements before writing code. Commit modifications in small, atomic Git steps.",
+      "curatorNote": "Pairs with responsive CSS grids: vertical stack on mobile, dual-column split on desktop."
+    },
+    {
+      "id": "site-interface-lab",
+      "type": "site",
+      "title": "Interface Lab: Try & Describe",
+      "description": "Compare four presets, inspect ten page regions, and adjust layout, surface and motion while generating a mixed-language or English page prompt.",
+      "tag": "Interactive Reference",
+      "url": "/notes/ui-prototype-ergonomics/interface-lab.html?lang=en",
+      "curatorNote": "Chinese/bilingual controls; English prompt selected by this entry. CSS motion preview, no model calls or persistent settings."
+    },
+    {
+      "id": "prompt-visual-brief",
+      "title": "Visual Brief for One View",
+      "description": "Translate references and visual goals into scoped, observable design rules before editing.",
+      "tag": "Visual Direction",
+      "type": "prompt",
+      "content": "Prepare a visual brief for one view. Do not edit code in this pass.\n\n- View and core task: [for example, answer a question and inspect source evidence on demand]\n- Existing pages / reference screenshots: [attach; identify whether each informs layout, typography, or atmosphere]\n- Fonts, palette, components, and content to retain: [attach]\n\nInspect the project's existing styles first. For typography and hierarchy, layout and spacing, color and backgrounds, and motion and feedback, specify the exact object, proposed rule, and verification method. Turn adjectives such as quiet or polished into observable decisions. Mark unknowns explicitly.\n\nDescribe desktop and narrow-screen content order, wrapping for long Chinese headings and body text, keyboard focus, and reduced-motion behavior. List existing text, screenshots, and working behavior to preserve. Reuse fonts and dependencies unless there is a justified need to change them.\n\nDeliver a visual brief for the prototype implementation, recording references, adopted rules and open checks. Distinguish requirements directly supported by references from your own suggestions. Update existing project design notes first, using DESIGN.md if helpful; do not overwrite the project with the reference product's entire visual system.",
+      "curatorNote": "Adapt the visual direction to existing project rules. This brief does not authorize a full redesign."
+    },
+    {
+      "id": "prompt-clickable-prototype",
+      "title": "Clickable Prototype from Contracts",
+      "description": "Create controllable mock scenarios while preserving established content and components.",
+      "tag": "UI Prototype",
+      "type": "prompt",
+      "content": "Build a clickable UI prototype in the existing project.\n\nInputs:\n- PRD and scope: [attach]\n- Architecture and API contracts: [attach]\n- Existing visual references and components: [attach]\n- Task: provide material → generate a quiz → answer → review explanation and source.\n\nFirst inspect existing UI patterns. Summarize the proposed views, states and unknowns before editing. Preserve existing content, screenshots and working features.\n\nImplement the scoped flow with clearly labeled mock data. Include empty, invalid input, running, partial, success, failure and canceled states where applicable. Allow deliberate switching between mock scenarios. Do not call real paid services or claim backend integration is complete.\n\nKeep source review from losing an answer draft. Define desktop and narrow-screen behavior, keyboard focus and reduced-motion alternatives. Separate mock data from presentation so the real API can replace it later.\n\nDeliver a runnable prototype, a state list and unresolved contract questions. Verify the main task and one failure path; report actual checks and remaining gaps.",
+      "curatorNote": "The prompt matches the English chapter. Mock behavior does not establish real service support."
+    },
+    {
+      "id": "prompt-prototype-review",
+      "title": "Prototype Task Review",
+      "description": "Review task completion, failure recovery, narrow screens and contract gaps.",
+      "tag": "Validation",
+      "type": "prompt",
+      "content": "Review this prototype against one task: use the supplied material to complete a quiz, inspect the source for a wrong answer, and return without losing progress.\n\nInspect the running UI and the relevant contracts. Check the normal path, generation failure, cancel/retry behavior, long content, a narrow viewport, keyboard navigation and focus return. Distinguish observed behavior from assumptions; do not report a check as passed unless you performed it.\n\nList issues by their effect on task completion. Propose the smallest corrections, preserving current content and working behavior. Return evidence, remaining unknowns and a handoff checklist for real API integration. Do not mark user validation complete on behalf of real users.",
+      "curatorNote": "The prompt matches the English chapter. Mock behavior does not establish real service support."
+    },
+    {
+      "id": "site-refero-styles",
+      "title": "Refero Styles: Extract Design Rules",
+      "description": "Inspect typography, color, spacing and component rules, then write a visual brief for your own project.",
+      "tag": "Visual Direction",
+      "url": "https://styles.refero.design/",
+      "curatorNote": "Extract rules rather than importing an entire brand. These interpreted examples are not official brand source code.",
+      "type": "site"
+    },
+    {
+      "id": "site-cta-gallery",
+      "title": "CTA.gallery: Explain the Next Action",
+      "description": "Compare action wording, placement and priority. Leave with a primary action and its resulting states.",
+      "tag": "Action Design",
+      "url": "https://www.cta.gallery/",
+      "curatorNote": "Marketing examples are references, not evidence of conversion gains. Check waiting and failure separately.",
+      "type": "site"
+    },
+    {
+      "id": "site-footer-design",
+      "title": "Footer.design: Organize the Page Ending",
+      "description": "Inspect footer typography and link grouping; keep only the routes your readers need.",
+      "tag": "Page Structure",
+      "url": "https://www.footer.design/",
+      "curatorNote": "Keep important task actions in the main area. Gallery access does not grant asset redistribution rights.",
+      "type": "site"
+    },
+    {
+      "id": "site-scrolltide",
+      "title": "Scrolltide: Describe One Motion",
+      "description": "Optional advanced reference: isolate one object, then specify its trigger, movement and end state.",
+      "tag": "Optional Motion",
+      "url": "https://www.scrolltide.co/",
+      "curatorNote": "Code and exports may require payment. Check license, touch, reduced motion and performance in your own project.",
+      "type": "site"
+    },
+    {
+      "id": "site-scroll-shaders",
+      "title": "Scroll Shaders: Assess a Background",
+      "description": "Optional advanced reference: compare motion intensity and check readability with your own text and a static alternative.",
+      "tag": "Optional Background",
+      "url": "https://scrollshaders.com/",
+      "curatorNote": "Code and exports may require payment. Finished-project use and reusable asset redistribution have different permissions.",
+      "type": "site"
+    }
+  ],
+  "relatedNoteHref": "/notes/ui-prototype-ergonomics",
+  "relatedNoteLabel": "【AI Dev Workflow · 04】 UI Prototype & Ergonomics: From Product Flows to Usable Interfaces"
+}

@@ -1,6 +1,6 @@
 # Workbench 图表规范
 
-当前样式 **v3，2026-10-29**，图集于 **2026-10-30** 扩展。用户要求图表形式服从内容，减少重复的分组框，并取消突兀的绿色。前三篇保留七组双语图：职责分支、MCP 拓扑、双路径合流、MVP 旅程、选型判断、可信边界、失败时序。功能验收与价值验证采用可选择的 Markdown 对照表；工程规约保留文字列表。第八篇新增任务边界、写超时恢复、发布反馈与长视频分段四组，合计十一组双语图。正文写作遵循 [Notes 标准](../../notes-writing-guide.md)。
+当前样式 **v3，2026-10-29**，图集于 **2026-11-02** 扩展。用户要求图表形式服从内容，减少重复的分组框，并取消突兀的绿色。前三篇保留七组双语图：职责分支、MCP 拓扑、双路径合流、MVP 旅程、选型判断、可信边界、失败时序。第八篇保留三组在用图和三组工程存档图；视频项目实践新增学习闭环与处理流水线两组；第四篇新增任务旅程、作答线框与响应式对照三组，合计十八组双语图。功能比较采用可选择的 Markdown 表格，工程规约保留文字列表。正文写作遵循 [Notes 标准](../../notes-writing-guide.md)。
 
 ## 配色与字体
 
@@ -47,6 +47,11 @@
 | `production-recovery` | 写成功但响应丢失的查证时序（工程存档） | Mermaid sequenceDiagram |
 | `production-release` | 发布门禁与失败证据反馈（工程存档） | Mermaid flowchart |
 | `production-video` | 字幕捷径、有限分段并行与证据汇总 | Mermaid flowchart |
+| `vidgrab-learning-loop` | 视频资料、学习交互、回看与主动分享 | Mermaid flowchart |
+| `vidgrab-processing` | 字幕或 ASR、顺序合并与分块综合 | Mermaid flowchart |
+| `ui-task-pages` | 任务旅程与恢复分支 | Mermaid flowchart |
+| `ui-reading-order` | 作答界面的阅读顺序与操作层次 | Mermaid flowchart + 原生 SVG 线框 |
+| `ui-responsive-order` | 桌面与手机任务顺序的对照 | Mermaid flowchart + 原生 SVG 布局 |
 
 ## 文件与再生成
 
@@ -59,9 +64,10 @@
 - [concept-map.mjs](../../../scripts/notes-diagrams/concept-map.mjs)：当前第八章的六分支概念地图、双语标签和布局。
 - [production-figures.mjs](../../../scripts/notes-diagrams/production-figures.mjs)：第八篇工程存档的三组双语逻辑与排版，复用同一套样式与绘图函数。
 - [video-figure.mjs](../../../scripts/notes-diagrams/video-figure.mjs)：长视频分段与汇总的双语源文和布局。
+- [video-case.mjs](../../../scripts/notes-diagrams/video-case.mjs)：VidGrab 项目实践的学习闭环、处理流水线与实现边界。
 - [render.mjs](../../../scripts/notes-diagrams/render.mjs)：导出 SVG / WebP、源码和 [manifest.json](manifest.json)。
 
-统一 1040 单位宽，按内容定高度，WebP 为两倍分辨率。保留中英文字间空格，并检查英文换行和标签与连线。`rendered/` 保留当前 26 张 WebP 及对应 SVG（前三篇 14 张、第八篇当前正文 6 张、工程存档 6 张）；`sources/` 保留编辑格式和辅助 Mermaid 逻辑。
+统一 1040 单位宽，按内容定高度，WebP 为两倍分辨率。保留中英文字间空格，并检查英文换行和标签与连线。`rendered/` 保留当前 36 张 WebP 及对应 SVG（前三篇 14 张、第八篇当前正文 6 张、工程存档 6 张、视频项目实践 4 张、第四篇 6 张）；`sources/` 保留编辑格式和辅助 Mermaid 逻辑。
 
 ```powershell
 node scripts/notes-diagrams/render.mjs --smartdiagram 'G:\project\SmartDiagram'
@@ -72,8 +78,13 @@ node scripts/notes-diagrams/render.mjs --smartdiagram 'G:\project\SmartDiagram' 
 node scripts/notes-diagrams/sync-production-figures.mjs
 node scripts/sync-enterprise-production-note.mjs
 npm run generate:note-images
+# 只更新视频项目实践的两组双语图；上传并验证公开对象后再发布正文：
+node scripts/notes-diagrams/render.mjs --smartdiagram 'G:\project\SmartDiagram' --note ai-video-downloader-summarizer
+node scripts/sync-ai-video-note.mjs
 ```
 
 前三篇已发布图使用 `notes/workbench-diagrams/v3/<id>.<lang>-<hash>.webp` 独立对象，不覆盖旧图。第八篇当前使用真实存在的 `public/notes/enterprise-ai-production/<id>.<lang>-<hash>.webp` 本地资产，清单标记 `delivery: local`；随应用部署提供静态文件，不虚构尚未上传的 R2 地址。渲染不会自动上传或写 CMS。图注同步脚本按图 ID 更新当前正文的双语图片和图注；标记 `article: false` 的三组工程图保留清单与资产，不要求出现在概念导读正文。脚本支持 `--check`；更换图片后再生成正文回退及尺寸索引。
 
 本地看图、源码核对及公开 HTML 检查不代替浏览器页面巡检。2026-10-29 的 v3 交付受当时 Work 浏览器设置限制，历史未完成项见 [v3 执行记录](../../exec-workbench-visuals-v3-2026-10-29.md)。2026-10-30 第八篇的实际页面验收单独记录于 [第八阶段执行记录](../../exec-enterprise-ai-production-2026-10-30.md)。保留现有原图入口，图片在窄屏按比例缩放，不宣称图内结构会自动重排。
+
+视频项目实践的四张图于 2026-11-02 上传到 R2 的独立哈希对象，公开读取的 SHA-256 与清单一致；旧图不覆盖。CMS、源稿与页面验收见 [视频 Note 更新记录](../../exec-ai-video-note-update-2026-11-02.md)。

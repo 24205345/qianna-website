@@ -1,3 +1,5 @@
+import {uiPrototypeDiagrams} from './ui-prototype.mjs';
+import {videoCaseDiagrams} from './video-case.mjs';
 import {productionDiagrams} from './production-figures.mjs';
 import {videoDiagrams} from './video-figure.mjs';
 import {conceptDiagrams} from './concept-map.mjs';
@@ -5,6 +7,8 @@ import {taskDiagrams} from './task-flow.mjs';
 // Logical sources and article placements for the retained figures.
 const pair=(en,zh)=>({en,zh});
 export const diagrams=[
+  ...uiPrototypeDiagrams,
+  ...videoCaseDiagrams,
   ...conceptDiagrams,
   ...taskDiagrams,
   ...productionDiagrams,

@@ -5,6 +5,15 @@ import { getPublicImagePatterns } from "./lib/media/image-config";
 const remotePatterns = getPublicImagePatterns(PUBLIC_SUPABASE_URL, process.env.R2_PUBLIC_BASE_URL);
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ["127.0.0.1"],
+  async rewrites() {
+    return {
+      beforeFiles: [{
+        source: "/notes/ui-prototype-ergonomics/interface-lab.html",
+        destination: "/notes/ui-prototype-ergonomics/interface-lab",
+      }],
+    };
+  },
   env: {
     NEXT_PUBLIC_STATIC_MEDIA_BASE_URL: (process.env.STATIC_MEDIA_PROVIDER || process.env.MEDIA_STORAGE_PROVIDER) === "r2" ? (process.env.R2_PUBLIC_BASE_URL?.replace(/\/+$/, "") || "") : "",
   },

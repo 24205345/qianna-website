@@ -1,106 +1,51 @@
 /**
- * 更新 ai-video-downloader-summarizer 中文正文，并同步英文章节六（部署）
- * 用法：node scripts/update-ai-video-note-zh.mjs
+ * Publish the complete bilingual VidGrab note. Default is a read-only plan.
+ * node scripts/sync-ai-video-note.mjs
+ * node scripts/update-ai-video-note-zh.mjs [--apply] [--expected-updated-at <timestamp>]
+ * No initialization, table recreation, workflow reset, or media upload.
  */
-
-import { createClient } from "@supabase/supabase-js";
-import { existsSync, readFileSync } from "fs";
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
-
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const MARKDOWN_PATH = join(
-  ROOT,
-  "docs",
-  "notes",
-  "ai-video-downloader-summarizer.zh.md"
-);
-const SLUG = "ai-video-downloader-summarizer";
-
-const DEPLOYMENT_SECTION_EN = `## 6. Deployment
-
-Production uses **Alibaba Cloud ECS + Docker Compose**:
-
-1. Install Docker on Linux ECS and start the app with the repo's \`compose.yaml\`
-2. Inject API keys, database, and Stripe settings via \`.env.docker\` / \`.env\`
-3. *(Optional)* Put Baota or Nginx in front of the container port for domain + HTTPS
-4. *(Optional)* Wire GitHub Actions to rsync and \`docker compose up\` on \`git push\`
-
-For the full walkthrough (mirror tuning, firewall, health checks, production webhooks, etc.), see **[Aliyun ECS Deployment Guide: Docker Compose Single-Container Apps](/notes/aliyun-ecs-docker-deploy)**.`;
-
-const EN_OVERVIEW_ITEM_5_OLD = "5. **Deploy** (still to be documented)";
-const EN_OVERVIEW_ITEM_5_NEW =
-  "5. **Deploy** (ECS + Docker Compose—see Section 6)";
-
-function loadEnvLocal() {
-  const envPath = join(ROOT, ".env.local");
-  if (!existsSync(envPath)) throw new Error(".env.local 不存在");
-  const text = readFileSync(envPath, "utf8");
-  const env = {};
-  for (const line of text.split("\n")) {
-    const t = line.trim();
-    if (!t || t.startsWith("#")) continue;
-    const i = t.indexOf("=");
-    if (i === -1) continue;
-    env[t.slice(0, i).trim()] = t.slice(i + 1).trim().replace(/\r$/, "");
+import { createClient } from '@supabase/supabase-js';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { isDeepStrictEqual } from 'node:util';
+const root = fileURLToPath(new URL('../', import.meta.url));
+const sync = spawnSync(process.execPath, [join(root, 'scripts/sync-ai-video-note.mjs'), '--check'], { encoding: 'utf8' });
+if (sync.status !== 0) throw new Error(sync.stderr || 'Local source check failed');
+process.loadEnvFile(join(root, '.env.local'));
+if (new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname !== 'aqsdwfocoocnzyxopvvg.supabase.co') throw new Error('Unexpected CMS project');
+const note = JSON.parse(readFileSync(join(root, 'app/_data/ai-video-note.json'), 'utf8'));
+const options = { auth: { persistSession: false, autoRefreshToken: false } };
+const client = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY, options);
+try {
+  const { data: auth, error: ae } = await client.auth.signInWithPassword({ email: process.env.SUPABASE_ADMIN_EMAIL, password: process.env.SUPABASE_ADMIN_PASSWORD });
+  if (ae || auth.user?.is_anonymous || auth.user?.app_metadata?.cms_role !== 'admin') throw new Error('CMS administrator authorization failed');
+  const { data: current, error: re } = await client.from('notes').select('*').eq('slug', note.slug).single();
+  if (re || !current.updated_at) throw new Error('Existing note read failed');
+  const patch = { title: note.titleZh, title_en: note.titleEn, excerpt: note.excerptZh, excerpt_en: note.excerptEn, body_markdown: note.bodyMarkdownZh, body_markdown_en: note.bodyMarkdownEn, tags: note.tags };
+  const changed = Object.keys(patch).filter(key => !isDeepStrictEqual(patch[key], current[key]));
+  const expectedIndex = process.argv.indexOf('--expected-updated-at');
+  const expected = expectedIndex === -1 ? undefined : process.argv[expectedIndex + 1];
+  if (expectedIndex !== -1 && (!expected || expected !== current.updated_at)) throw new Error('CMS changed since the reviewed snapshot; refresh the plan');
+  console.log(JSON.stringify({ slug: note.slug, updated_at: current.updated_at, changedFields: changed, mode: process.argv.includes('--apply') ? 'apply' : 'read-only plan' }));
+  if (!process.argv.includes('--apply') || changed.length === 0) process.exitCode = 0;
+  else {
+    const dir = join(tmpdir(), 'qianna-video-note-publications'); mkdirSync(dir, { recursive: true });
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const log = { readAt: new Date().toISOString(), before: current, patch, saved: false };
+    const file = join(dir, stamp + '.json');
+    writeFileSync(file, JSON.stringify(log, null, 2));
+    const { data: updated, error: we } = await client.from('notes').update(patch).eq('id', current.id).eq('updated_at', current.updated_at).select('id,updated_at').single();
+    if (we) throw new Error('Publication failed or concurrent edit detected: ' + we.message);
+    log.saved = true; log.result = updated; writeFileSync(file, JSON.stringify(log, null, 2));
+    const anon = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY, options);
+    const { data: verified, error: ve } = await anon.from('notes').select('*').eq('id', current.id).single();
+    if (ve) throw new Error('Anonymous readback failed after publication');
+    for (const [key, value] of Object.entries(patch)) if (!isDeepStrictEqual(verified[key], value)) throw new Error('Published field mismatch: ' + key);
+    for (const [key, value] of Object.entries(current)) if (!(key in patch) && key !== 'updated_at' && !isDeepStrictEqual(verified[key], value)) throw new Error('Unexpected metadata change: ' + key);
+    log.verifiedAt = new Date().toISOString(); writeFileSync(file, JSON.stringify(log, null, 2));
+    console.log('Published and anonymously verified both languages; slug, original publication date, status, cover, and other metadata preserved.');
   }
-  return env;
-}
-
-function prepareBodyMarkdown(raw) {
-  const lines = raw.replace(/^\uFEFF/, "").split(/\r?\n/);
-  let start = 0;
-  if (lines[start]?.startsWith("# ")) start += 1;
-  while (start < lines.length && lines[start].trim() === "") start += 1;
-  return lines.slice(start).join("\n").trim();
-}
-
-function patchEnglishDeployment(bodyMarkdownEn) {
-  let next = bodyMarkdownEn.replace(EN_OVERVIEW_ITEM_5_OLD, EN_OVERVIEW_ITEM_5_NEW);
-  next = next.replace(
-    /## 6\. Deployment[\s\S]*?(?=\n---\n\n## Appendix: prompt index)/,
-    `${DEPLOYMENT_SECTION_EN}\n\n---\n\n`
-  );
-  if (next === bodyMarkdownEn) {
-    throw new Error("未能匹配英文章节六，请检查 body_markdown_en 结构");
-  }
-  return next;
-}
-
-async function main() {
-  const env = loadEnvLocal();
-  const supabase = createClient(
-    env.NEXT_PUBLIC_SUPABASE_URL,
-    env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
-  const { error: authError } = await supabase.auth.signInWithPassword({
-    email: env.SUPABASE_ADMIN_EMAIL,
-    password: env.SUPABASE_ADMIN_PASSWORD,
-  });
-  if (authError) throw new Error(`登录失败: ${authError.message}`);
-
-  const body_markdown = prepareBodyMarkdown(readFileSync(MARKDOWN_PATH, "utf8"));
-
-  const { data: existing, error: fetchError } = await supabase
-    .from("notes")
-    .select("body_markdown_en")
-    .eq("slug", SLUG)
-    .single();
-
-  if (fetchError) throw new Error(`读取失败: ${fetchError.message}`);
-
-  const body_markdown_en = patchEnglishDeployment(existing.body_markdown_en);
-
-  const { error } = await supabase
-    .from("notes")
-    .update({ body_markdown, body_markdown_en })
-    .eq("slug", SLUG);
-
-  if (error) throw new Error(`更新失败: ${error.message}`);
-  console.log(`已更新中英文正文: /notes/${SLUG}`);
-}
-
-main().catch((error) => {
-  console.error(error.message);
-  process.exit(1);
-});
+} finally { await client.auth.signOut(); }

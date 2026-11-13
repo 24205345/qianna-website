@@ -21,6 +21,7 @@ const TRACES_LEGACY_ROUTES: Record<string, string> = {
 function getBackLink(pathname: string): { href: string; label: string } | null {
   if (
     pathname === "/" ||
+    pathname.startsWith("/notes/ui-prototype-ergonomics/interface-lab") ||
     pathname.startsWith("/admin") ||
     pathname.startsWith("/auth")
   ) {

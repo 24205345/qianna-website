@@ -1,3 +1,5 @@
+import uiPrototypeNote from "./ui-prototype-note.json";
+import aiVideoNote from "./ai-video-note.json";
 import enterpriseProductionNote from "./enterprise-production.json";
 
 export interface NoteListItem {
@@ -22,7 +24,9 @@ export interface NoteDetail extends NoteListItem {
 
 /** Static fallback when Supabase is unavailable or for local notes. */
 export const fallbackNotes: NoteDetail[] = [
+  uiPrototypeNote,
   enterpriseProductionNote,
+  aiVideoNote,
   {
     slug: "ai-infrastructure-coding-agents-and-models",
     title:

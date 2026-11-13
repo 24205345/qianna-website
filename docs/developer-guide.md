@@ -1,10 +1,12 @@
 # 开发者指南（qianna-website）
 
+第四章 UI Prototype & Ergonomics 包含双语正文、三组中性灰双语图和四组十四例交互页；中文提示词已本地化，扩充布局、文字排版和页面动效，并对照首页样式调整页面。文章和第四阶段入口已写入生产 CMS，保留其余七阶段和旧资源。维护、发布与检查边界见 [交互页维护](ui-prototype-lab.md)、[初版交付](exec-ui-prototype-2026-11-02.md)及 [本地化与扩充](exec-ui-prototype-refinement-2026-11-02.md)。本轮未新增 Git 提交或应用部署。
+
 > **Agent / 开发者第一份必读。** 常驻规则见根目录 [`AGENTS.md`](../AGENTS.md)；**系统架构**见 [`architecture.md`](architecture.md)；文档索引见 [`docs/README.md`](README.md)。
 >
 > 项目路径：`G:\project\qianna-website`  
 > 分支：`main`（CMS 主线与 R2 生产迁移已完成；Workbench 表已部署，管理员授权已完成）<br>
-> 最后增量更新：2026-11-02（第八章及 Workbench 生产发布；下方 CMS 基础进度保留标注日期）<br>
+> 最后增量更新：2026-11-02（第八章及 Workbench 生产发布、VidGrab 双语 Note 更新；下方 CMS 基础进度保留标注日期）<br>
 > 生产域名：**https://www.qiannawang.com**
 
 ---
@@ -51,12 +53,13 @@ Supabase 数据量（2026-10-10 只读复核）：
 
 详细 checklist：`docs/cms-migration-checklist.md`
 
-### Notes / Workbench 增量（2026-10-29）
+### Notes / Workbench 增量（2026-10-29 起）
 
 - 前三篇 Workbench 文章的双语源文、英文资源卡片、中性灰 v3 图表与系列标题已通过 CMS 发布。图表规范及 14 张双语图的编辑源文、SVG / WebP、生成脚本现纳入仓库；见 [统一交付记录](exec-notes-workbench-delivery-2026-10-29.md)。
 - 文章详情的返回目标由入口决定：Workbench 链接携带 `from=workbench`，返回 `/workbench`；从 Notes 或无标记的直接入口返回 `/notes`。代码随应用部署生效，文章 canonical 不含来源参数。
 - 首页调用 `getMostViewedNotes(3)` 展示累计 PV 前三篇；只选已发布 Note，并列按发布日期、slug 排序。`20261029101219_home_most_viewed_notes.sql` 尚未执行到生产，当前需要先执行 SQL 再完成排名验收；缺少函数时兼容回退最新文章。详见 [热门排序记录](exec-home-most-read-notes-2026-10-29.md)。
 - 针对热门查询的检查为 `npm run test:notes`；图表再生成和 CMS 发布分开，不能重跑初始化脚本覆盖日常编辑。
+- 2026-11-02 按 `free-video-downloader` 当前代码增量补充视频下载总结器 Note：保留原文、四张操作截图和六段提示词，仅新增第七节说明学习功能、长视频、记录、社区及当前版本差异。双语源稿经 `scripts/sync-ai-video-note.mjs` 生成静态回退，`scripts/update-ai-video-note-zh.mjs` 默认只读、显式 `--apply` 才发布双语；四张新图已上传 R2，CMS 已更新。验证与应用部署边界见 [更新记录](exec-ai-video-note-update-2026-11-02.md)。
 
 ### 前台路由速查
 

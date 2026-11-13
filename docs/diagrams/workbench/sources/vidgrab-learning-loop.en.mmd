@@ -1,0 +1,6 @@
+flowchart LR
+ I["Upload or authorized link"] --> R["Summary, chapters, transcript, mind map"]
+ R --> Q["Questions and quizzes"] --> V["Review source by timestamp"]
+ V --> Q
+ R --> H["Account history in PostgreSQL"]
+ R -.-> C["Explicit community publication"]

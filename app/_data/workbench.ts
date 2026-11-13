@@ -1,4 +1,5 @@
-import type { WorkflowPipeline } from "@/lib/workbench/types";
+import uiPrototypeStage from "./ui-prototype-stage.json";
+import type { WorkflowPipeline, WorkflowStep } from "@/lib/workbench/types";
 
 export const WORKBENCH_PIPELINES: WorkflowPipeline[] = [
   {
@@ -357,36 +358,7 @@ npx skills add nextlevelbuilder/ui-ux-pro-max-skill`,
           }
         ]
       },
-      {
-        id: "step-ui-prototype",
-        stepNumber: "04",
-        title: "UI Prototype & Ergonomics",
-        subtitle: "UI Prototype & High-Density UX",
-        tools: ["Tailwind CSS", "Vue 3", "Responsive Grid"],
-        summary:
-          "Optimize for fewer clicks and higher information density. Craft real-time responsive split-screen layouts tailored for AI interactions.",
-        keyTakeaway:
-          "Progressive Disclosure: collapse decorative hero sections once results arrive, giving prime viewport real estate to core deliverables.",
-        resources: [
-          {
-            id: "prompt-density-ux",
-            type: "prompt",
-            title: "Split-Screen Density & Auto-Trigger UX Prompt",
-            description: "Guides agents to consolidate fragmented panels onto a single screen and automate next-action triggers.",
-            tag: "UX Refinement",
-            content: `You are optimizing the UX of Universal Video Downloader.
-Download and summarization are functional. Review existing code and PRD first.
-
-## Objective
-Present video metadata and summary notes side-by-side on the same viewport.
-Automatically initiate AI summary after video resolution completes, saving one click.
-
-## Guardrails
-Confirm ambiguous UX requirements before writing code. Commit modifications in small, atomic Git steps.`,
-            curatorNote: "Pairs with responsive CSS grids: vertical stack on mobile, dual-column split on desktop.",
-          },
-        ],
-      },
+      uiPrototypeStage as WorkflowStep,
       {
         id: "step-development",
         stepNumber: "05",

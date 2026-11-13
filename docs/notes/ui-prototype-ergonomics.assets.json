@@ -1,0 +1,67 @@
+{
+  "verifiedAt": "2026-11-04T02:47:40.179Z",
+  "assets": [
+    {
+      "id": "ui-task-pages",
+      "lang": "en",
+      "file": "docs/diagrams/workbench/rendered/ui-task-pages.en.webp",
+      "key": "notes/workbench-diagrams/v3/ui-task-pages.en-3941ad3d64e4.webp",
+      "sha256": "3941ad3d64e41242df9dd13db7f1423a7bd9be9528e768ebd7a095d3424774d5",
+      "contentType": "image/webp",
+      "url": "https://media.qiannawang.com/notes/workbench-diagrams/v3/ui-task-pages.en-3941ad3d64e4.webp"
+    },
+    {
+      "id": "ui-task-pages",
+      "lang": "zh",
+      "file": "docs/diagrams/workbench/rendered/ui-task-pages.zh.webp",
+      "key": "notes/workbench-diagrams/v3/ui-task-pages.zh-e83b03632a70.webp",
+      "sha256": "e83b03632a704cd4b616054c163883acc042870854aa7ee112f9e08bf8b3a2a4",
+      "contentType": "image/webp",
+      "url": "https://media.qiannawang.com/notes/workbench-diagrams/v3/ui-task-pages.zh-e83b03632a70.webp"
+    },
+    {
+      "id": "ui-reading-order",
+      "lang": "en",
+      "file": "docs/diagrams/workbench/rendered/ui-reading-order.en.webp",
+      "key": "notes/workbench-diagrams/v3/ui-reading-order.en-f351e5b8a295.webp",
+      "sha256": "f351e5b8a295437ade13b02b220a5fa1eb4b3b7b87427d17626bff9742f98886",
+      "contentType": "image/webp",
+      "url": "https://media.qiannawang.com/notes/workbench-diagrams/v3/ui-reading-order.en-f351e5b8a295.webp"
+    },
+    {
+      "id": "ui-reading-order",
+      "lang": "zh",
+      "file": "docs/diagrams/workbench/rendered/ui-reading-order.zh.webp",
+      "key": "notes/workbench-diagrams/v3/ui-reading-order.zh-39574b3d725b.webp",
+      "sha256": "39574b3d725b57f4b502b82b96e9bb7003e54bcff1e08b44cb5a55672de90b96",
+      "contentType": "image/webp",
+      "url": "https://media.qiannawang.com/notes/workbench-diagrams/v3/ui-reading-order.zh-39574b3d725b.webp"
+    },
+    {
+      "id": "ui-responsive-order",
+      "lang": "en",
+      "file": "docs/diagrams/workbench/rendered/ui-responsive-order.en.webp",
+      "key": "notes/workbench-diagrams/v3/ui-responsive-order.en-a96298f2c9ad.webp",
+      "sha256": "a96298f2c9ade36edc1d3f41c02bc3ffaa1ce6ae57b3b4c7d18c90dbd7df06b1",
+      "contentType": "image/webp",
+      "url": "https://media.qiannawang.com/notes/workbench-diagrams/v3/ui-responsive-order.en-a96298f2c9ad.webp"
+    },
+    {
+      "id": "ui-responsive-order",
+      "lang": "zh",
+      "file": "docs/diagrams/workbench/rendered/ui-responsive-order.zh.webp",
+      "key": "notes/workbench-diagrams/v3/ui-responsive-order.zh-bc9f52d2a6a1.webp",
+      "sha256": "bc9f52d2a6a18e7e807f32811700d3af811e5af1f522b8e165d6dc74f8704831",
+      "contentType": "image/webp",
+      "url": "https://media.qiannawang.com/notes/workbench-diagrams/v3/ui-responsive-order.zh-bc9f52d2a6a1.webp"
+    },
+    {
+      "id": "interface-lab",
+      "file": "public/notes/ui-prototype-ergonomics/interface-lab.html",
+      "key": "notes/ui-prototype-ergonomics/interface-lab-6539c5cfcf1a.html",
+      "sha256": "6539c5cfcf1abd8a9a2274011faf593b655dfd2a2eaf582540a7d5f2c2f6e7aa",
+      "contentType": "text/html; charset=utf-8",
+      "url": "https://media.qiannawang.com/notes/ui-prototype-ergonomics/interface-lab-6539c5cfcf1a.html"
+    }
+  ]
+}

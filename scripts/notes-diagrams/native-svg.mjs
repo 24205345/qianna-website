@@ -1,3 +1,5 @@
+import {drawUiPrototype} from './ui-prototype.mjs';
+import {drawVideoCase} from './video-case.mjs';
 import {createElement} from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
 import * as icons from 'lucide-react';
@@ -50,7 +52,9 @@ export function drawEditorial(diagram,layout,lang,style){
  text(diagram.title[lang],24,36,{size:24,font:serif,width:992,maxLines:1});
  text(layout.subtitle[lang],24,68,{size:15,color:c.muted,width:992,maxLines:1});
 
- if(diagram.id==='environment-toolkit'){
+ if(diagram.note==='ui-prototype-ergonomics'){
+  drawUiPrototype(diagram,layout,lang,{L,c,text,icon,line,path,box,circle,foot,add});
+ }else if(diagram.id==='environment-toolkit'){
   icon('UserRound',66,233,34);text(L('You','你'),83,301,{align:'middle',width:110,size:19,weight:600});
   text(L('Goal + limits\nAcceptance','目标、约束\n与验收'),83,330,{align:'middle',width:145,size:15,color:c.muted});
   circle(350,265,49,c.surface);icon('Workflow',331,246,38);
@@ -152,6 +156,8 @@ export function drawEditorial(diagram,layout,lang,style){
   path('M516 551H149',{arrow:true,dashed:true});text(L('Stable error + retry policy','稳定错误与重试规则'),190,538,{size:16,width:320});
   text(L('Keep input; offer an explicit retry','保留输入，提供显式重试'),174,595,{size:15,width:700,color:c.muted});
   foot(layout.footer[lang],651);
+ }else if(diagram.note==='ai-video-downloader-summarizer'){
+  drawVideoCase(diagram,layout,lang,{L,c,text,icon,line,path,box,circle,foot,add});
  }else if(diagram.id==='production-task-flow'){
   drawTaskFlow(diagram,layout,lang,{L,c,text,icon,line,path,box,circle,foot,add});
  }else if(diagram.id==='production-map'){

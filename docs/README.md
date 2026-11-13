@@ -4,7 +4,9 @@
 
 **Agent 入口：** [`AGENTS.md`](../AGENTS.md) → [`developer-guide.md`](developer-guide.md) · [`architecture.md`](architecture.md)
 
-最后增量核对：2026-11-02。第八章双语正文和 Workbench 第八阶段已通过管理员接口发布到生产 CMS，匿名读回与正式站点核对通过，见[生产发布记录](exec-enterprise-ai-production-publish-2026-11-02.md)。正文、图集与写作标准的 Git 交付见[第八阶段交付](exec-enterprise-ai-production-2026-10-30.md)。生产为 Vercel + Supabase Postgres/Auth + Cloudflare R2。此前 Notes / Workbench 双语内容、系列标题及 v3 图表的 CMS 发布，以及入口返回、热门排序的 Git / SQL 边界，见 [2026-10-29 交付](exec-notes-workbench-delivery-2026-10-29.md)；媒体迁移与直传状态见各日期记录。
+第四章包含 UI 原型双语正文、三组双语图和四组十四例交互实验室；补充视觉说明与单维度迭代，中英文各三段提示词。正文与 Workbench 第四阶段已发布 CMS，R2 资产已校验。浏览器巡检因 Work 设置关闭控制而未完成；历史见 [初版](exec-ui-prototype-2026-11-02.md)、[本地化与扩充](exec-ui-prototype-refinement-2026-11-02.md)、[体验问题修正](exec-ui-prototype-audit-2026-11-03.md)，最新补充见 [视觉说明](exec-ui-prototype-aesthetics-2026-11-04.md)，维护见 [交互实验室](ui-prototype-lab.md)。
+
+最后增量核对：2026-11-02。视频下载总结器 Note 已按 VidGrab 当前代码更新双语正文，两组新图已上传 R2，CMS 与正式页面已验证，见[视频 Note 更新记录](exec-ai-video-note-update-2026-11-02.md)。第八章双语正文和 Workbench 第八阶段已通过管理员接口发布到生产 CMS，见[生产发布记录](exec-enterprise-ai-production-publish-2026-11-02.md)。正文、图集与写作标准的 Git 交付见[第八阶段交付](exec-enterprise-ai-production-2026-10-30.md)。生产为 Vercel + Supabase Postgres/Auth + Cloudflare R2。此前 Notes / Workbench 双语内容、系列标题及 v3 图表的 CMS 发布，以及入口返回、热门排序的 Git / SQL 边界，见 [2026-10-29 交付](exec-notes-workbench-delivery-2026-10-29.md)；媒体迁移与直传状态见各日期记录。
 
 ---
 
@@ -40,6 +42,7 @@
 | [`exec-workbench-note-series-2026-10-29.md`](exec-workbench-note-series-2026-10-29.md) | Workbench 关联 Note 的双语系列标题与阶段编号、CMS 发布及页面核对 |
 | [`exec-enterprise-ai-production-2026-10-30.md`](exec-enterprise-ai-production-2026-10-30.md) | 第八阶段：企业 AI 生产化双语文章、资源卡片、本地回退与验收；CMS 发布边界见记录 |
 | [`exec-enterprise-ai-production-publish-2026-11-02.md`](exec-enterprise-ai-production-publish-2026-11-02.md) | 第八章生产发布：管理员接口写入、原七阶段保护、匿名读回及正式页面验收 |
+| [`exec-ai-video-note-update-2026-11-02.md`](exec-ai-video-note-update-2026-11-02.md) | VidGrab 项目复核、双语视频 Note、两组中性灰图、R2 / CMS 发布及页面验收 |
 | [`exec-home-most-read-notes-2026-10-29.md`](exec-home-most-read-notes-2026-10-29.md) | 首页三篇 Notes 按累计浏览量排序；本地代码与 SQL 已验证，待执行生产 SQL 和部署 |
 | [`exec-site-ia-guestbook-2026-08-04.md`](exec-site-ia-guestbook-2026-08-04.md) | 首页四板块、Traces Hub、Guestbook |
 | [`exec-homepage-motion-2026-08-17.md`](exec-homepage-motion-2026-08-17.md) | 首页 Hero 动效、涟漪关闭、Reveal 组件 |
@@ -88,10 +91,12 @@
 
 | 文档 | 说明 |
 |------|------|
-| [`notes/ai-video-downloader-summarizer.zh.md`](notes/ai-video-downloader-summarizer.zh.md) | AI 视频笔记 |
+| [`notes/ai-video-downloader-summarizer.zh.md`](notes/ai-video-downloader-summarizer.zh.md) · [`English`](notes/ai-video-downloader-summarizer.en.md) | 保留原开发教程、四张操作截图与六段提示词；2026-11-02 仅新增第七节，补充学习功能、长视频、记录和社区 |
 | [`notes/environment-infrastructure.zh.md`](notes/environment-infrastructure.zh.md) · [`English`](notes/environment-infrastructure.en.md) | Environment & Infrastructure 中英文正文：职责分支、MCP 接入拓扑与文字工程规约；2026-10-29 更新，沿用原文的模型资料日期 |
 | [`notes/scope-product-definition.zh.md`](notes/scope-product-definition.zh.md) · [`English`](notes/scope-product-definition.en.md) | Scope & Product Definition 中英文正文：路径合流、MVP 旅程及功能／价值文字对照表；起步、调研、PRD、审查与交接内容保留 |
 | [`notes/architecture-contracts.zh.md`](notes/architecture-contracts.zh.md) · [`English`](notes/architecture-contracts.en.md) | Architecture & Contracts 中英文正文：技术选型、AI 建议核查、职责、契约、权限、Mock、ADR 和交接；2026-10-29 加入三张双语图并精简重复说明 |
+| [`notes/ui-prototype-ergonomics.zh.md`](notes/ui-prototype-ergonomics.zh.md) · [`English`](notes/ui-prototype-ergonomics.en.md) | 第四章：任务、视觉说明、单维度迭代、交互描述与恢复；三段提示词、三组双语图和四组十四例 |
+| [`ui-prototype-lab.md`](ui-prototype-lab.md) | 交互参考页设计、源文件、DOM 检查与定向发布流程 |
 | [`notes/enterprise-ai-production.zh.md`](notes/enterprise-ai-production.zh.md) · [`English`](notes/enterprise-ai-production.en.md) | 第八章：六分支升级概念地图；用视频总结案例解释权限、后台任务、速度、并发、恢复与运营，再交给 Agent 实施一项升级 |
 | [`research/enterprise-ai-production-engineering.zh.md`](research/enterprise-ai-production-engineering.zh.md) · [`English`](research/enterprise-ai-production-engineering.en.md) | 第八章概念地图重写前的工程展开稿存档；仅供进阶研究，非当前公开正文 |
 | [`notes/aliyun-ecs-docker-deploy.md`](notes/aliyun-ecs-docker-deploy.md) | ECS 部署指南 · Workbench 路径（中文） |

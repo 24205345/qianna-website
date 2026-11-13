@@ -1,0 +1,16 @@
+flowchart TD
+ I["Uploaded media / authorized URL"] --> C["Available platform captions"]
+ I --> A["Audio chunks: cloud ASR / permitted local fallback"]
+ C --> T["Ordered timestamped transcript"]
+ A --> T
+ Rel_0["Short input"]:::relation
+ T --> Rel_0
+ Rel_0 --> D["Direct synthesis"]
+ Rel_1["Long input"]:::relation
+ T --> Rel_1
+ Rel_1 --> M["Bounded parallel chunk notes"]
+ D --> R["Structured learning result"]
+ Rel_2["Restore source order"]:::relation
+ M --> Rel_2
+ Rel_2 --> R
+classDef relation fill:#eef2ff,stroke:#6366f1,stroke-width:1px,color:#312e81;

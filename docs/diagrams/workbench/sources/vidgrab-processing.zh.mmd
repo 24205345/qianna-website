@@ -1,0 +1,16 @@
+flowchart TD
+ I["上传素材 / 授权链接"] --> C["可用平台字幕"]
+ I --> A["音频分段：云 ASR / 按模式回退本地"]
+ C --> T["带原始时间位置的有序转写"]
+ A --> T
+ Rel_0["短文本"]:::relation
+ T --> Rel_0
+ Rel_0 --> D["直接总结"]
+ Rel_1["长文本"]:::relation
+ T --> Rel_1
+ Rel_1 --> M["有限并行生成分块笔记"]
+ D --> R["结构化学习结果"]
+ Rel_2["恢复原始顺序"]:::relation
+ M --> Rel_2
+ Rel_2 --> R
+classDef relation fill:#eef2ff,stroke:#6366f1,stroke-width:1px,color:#312e81;
