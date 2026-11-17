@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from 'react';
+import { STUDY_TERMS, EXPERIMENTS, getExperiment, getOption, buildStudyPrompt } from './curriculum';
+import { useLearningLab, StudyToolbar, StudyExplanation, PromptScopeControls, LearningScene, PreviewSiteLayout, LearningWorkspace, studySurfaceStyle } from './LearningLab';
+import LabSettings from './LabSettings';
+import { resolveAccent, accentVariables, LIBRARY_TREATMENTS, SURFACE_TREATMENTS } from './visualTheme';
 import {
   Sparkles,
   ScanEye,
-  Layers,
-  Palette,
   Box,
   Zap,
   Copy,
@@ -17,7 +19,6 @@ import {
   Terminal,
   Play,
   CheckCircle2,
-  LayoutGrid,
   Wand2
 } from 'lucide-react';
 
@@ -126,6 +127,8 @@ const ANATOMY_TERMS = {
 };
 
 // ==================== 预设配置方案 (Presets) ====================
+const ALL_TERMS = { ...ANATOMY_TERMS, ...STUDY_TERMS };
+
 const PRESETS = [
   {
     id: 'linear-saas',
@@ -234,22 +237,22 @@ const OPTIONS = {
     {
       value: 'shadcn',
       label: 'shadcn/ui',
-      en: 'shadcn/ui (Radix + Tailwind)',
-      desc: '当下最火的极简无边框感设计，大量使用细腻 1px 边框与低饱和对比',
+      en: 'Fine borders · Regular spacing',
+      desc: '细边框、轻阴影与中等控件间距的视觉示例',
       promptEn: 'Follow shadcn/ui design language: subtle 1px borders (border-slate-200/800), zinc/slate neutral palette, clean typography, and minimal shadows.'
     },
     {
       value: 'antd',
       label: 'Ant Design',
-      en: 'Ant Design Enterprise',
+      en: 'Compact · Structured',
       desc: '阿里企业级设计规范，间距紧凑、边界清晰、状态反馈极其明确',
       promptEn: 'Follow Ant Design enterprise guidelines: structured card containers, clear primary color highlights, compact spacing, and standardized form controls.'
     },
     {
       value: 'mui',
       label: 'Material UI',
-      en: 'Material You (MUI v6)',
-      desc: 'Google 设计体系，强调柔和的表面层级（Elevation）与大圆角亲和力',
+      en: 'Roomy · Tonal elevation',
+      desc: '宽松控件、色调填充与层次阴影的视觉示例',
       promptEn: 'Follow Material Design 3 (Material You) style: tonal surface elevation, generous pill corners, and tactile ripple-like state feedback.'
     },
     {
@@ -270,10 +273,10 @@ const OPTIONS = {
     },
     {
       value: 'minimal',
-      label: '瑞士极简留白',
-      en: 'Swiss Minimalist',
-      desc: '克制装饰，依靠字重对比、网格对齐与充足留白传递高级感',
-      promptEn: 'Apply a clean Swiss Minimalist aesthetic with generous whitespace, crisp hairline dividers, and strong typographic hierarchy.'
+      label: '纯净实色',
+      en: 'Plain Solid',
+      desc: '不透明的纯色表面，不额外增加纹理或投影',
+      promptEn: 'Use opaque solid surfaces without additional texture or decorative shadows.'
     },
     {
       value: 'brutal',
@@ -285,7 +288,7 @@ const OPTIONS = {
     {
       value: 'soft',
       label: '柔和弥散渐变',
-      en: 'Soft Mesh & Bento',
+      en: 'Soft Diffusion',
       desc: '温润的浅色底纹与顶部环境光晕（Ambient Glow）',
       promptEn: 'Apply soft diffused radial gradients in the background with smooth tonal cards and gentle ambient shadows.'
     }
@@ -314,7 +317,7 @@ const OPTIONS = {
     },
     {
       value: 'fade',
-      label: '丝滑渐显平移',
+      label: '柔和淡入',
       en: 'Smooth Ease-Out Fade',
       desc: '克制稳重的阻尼渐显，适合严肃商业与数据密集型界面',
       promptEn: 'Use subtle, fast ease-out opacity and translateY transitions (200ms) for a distraction-free experience.'
@@ -393,11 +396,11 @@ const THEME_COLORS = {
 
   // X-Ray 包装器组件：在透视模式下为页面部位添加可悬停/点击的术语高亮框与不折行角标
 function XRayWrapper({ termId, children, className = '', badgeAlign = 'left', xrayMode, activeAnatomyId, setActiveAnatomyId }) {
-    const term = ANATOMY_TERMS[termId];
+    const term = ALL_TERMS[termId];
     const isSelected = activeAnatomyId === termId;
 
     if (!xrayMode) {
-      return <div className={className}>{children}</div>;
+      return <div data-anatomy={termId} className={className}>{children}</div>;
     }
 
     const posClass =
@@ -432,7 +435,7 @@ function XRayWrapper({ termId, children, className = '', badgeAlign = 'left', xr
           className={`absolute ${posClass} z-30 flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium whitespace-nowrap shadow-md transition-all pointer-events-none ${
             isSelected
               ? 'bg-cyan-400 text-slate-950 scale-105 opacity-100'
-              : 'bg-slate-900/95 text-cyan-300 border border-cyan-500/40 opacity-85 group-hover/xray:opacity-100'
+              : 'bg-slate-900/95 text-cyan-300 border border-cyan-500/40 opacity-0 group-hover/xray:opacity-100 group-focus-within/xray:opacity-100'
           }`}
         >
           <ScanEye className="w-3 h-3 shrink-0" />
@@ -452,7 +455,7 @@ export default function FrontendPromptLab({ initialPromptLanguage = 'mixed' }) {
   // X-Ray 透视解剖模式开关（默认开启，方便小白一眼看到效果）
   const [xrayMode, setXrayMode] = useState(true);
   // 当前悬停或点击锁定的解剖部位
-  const [activeAnatomyId, setActiveAnatomyId] = useState('bentoGrid');
+  const [activeAnatomyId, setActiveAnatomyId] = useState('hero');
   // 动画重播计数器
   const [animKey, setAnimKey] = useState(0);
   // 预览画布内部的交互状态（让画布里的组件真能点！）
@@ -470,24 +473,34 @@ export default function FrontendPromptLab({ initialPromptLanguage = 'mixed' }) {
   useEffect(() => () => clearTimeout(copyTimer.current), []);
   // 最近修改的字段（用于触发右侧 Prompt 联动高亮）
   const [lastChangedField, setLastChangedField] = useState(null);
+  const [dictionaryQuery, setDictionaryQuery] = useState('');
+  const education = useLearningLab(setActiveAnatomyId, () => setAnimKey(key => key + 1));
+  const rawTerm = ALL_TERMS[activeAnatomyId] || ALL_TERMS.regions;
+  const selectedTermOption = rawTerm.lessonId ? getOption(getExperiment(rawTerm.lessonId), education.viewSettings) : null;
+  const activeTerm = selectedTermOption ? { ...rawTerm, promptCn: selectedTermOption.request, promptEn: selectedTermOption.requestEn } : rawTerm;
+  const dictionaryTerms = Object.values(ALL_TERMS).filter(item => `${item.cn} ${item.en}`.toLowerCase().includes(dictionaryQuery.trim().toLowerCase()));
 
-  const updateConfig = (key, value) => {
-    setConfig((prev) => ({ ...prev, [key]: value }));
+  const updateConfig = (key, value, { replay = true } = {}) => {
+    setConfig((prev) => ({ ...prev, [key]: value, ...(key === 'customColor' ? { themeColor: 'custom' } : {}) }));
     setActivePresetId(null);
     setLastChangedField(key);
-    if (['motionType', 'stiffness', 'damping', 'layout'].includes(key)) {
+    if (replay && ['motionType', 'stiffness', 'damping', 'layout'].includes(key)) {
       setAnimKey((k) => k + 1);
     }
   };
 
   const applyPreset = (preset) => {
     setConfig(preset.config);
+    education.changeSetting('motion', preset.config.motionType === 'fade' ? 'fade' : 'lift');
     setActivePresetId(preset.id);
     setLastChangedField('preset');
-    setAnimKey((k) => k + 1);
   };
 
-  const theme = THEME_COLORS[config.themeColor] || THEME_COLORS.indigo;
+  const accent = resolveAccent(config);
+  const theme = {
+    hex: accent, primaryBg: 'demo-accent-fill', primaryText: 'demo-accent-text',
+    lightBg: 'demo-accent-soft', borderGlow: 'demo-accent-glow', gradient: 'demo-accent-gradient',
+  };
 
   // 根据圆角配置计算类名
   const radiusClass = useMemo(() => {
@@ -512,42 +525,20 @@ export default function FrontendPromptLab({ initialPromptLanguage = 'mixed' }) {
     return map[config.radius] || 'rounded-xl';
   }, [config.radius]);
 
-  // 根据组件库与风格计算卡片容器样式
-  const getCardStyle = () => {
-    const isDark = config.darkMode;
-    if (config.designSystem === 'neobrutalism' || config.visualStyle === 'brutal') {
-      return `${
-        isDark ? 'bg-slate-900 text-white border-white shadow-[4px_4px_0px_#ffffff]' : 'bg-white text-slate-900 border-slate-950 shadow-[4px_4px_0px_#0f172a]'
-      } border-2`;
-    }
-    if (config.visualStyle === 'glass') {
-      return `${
-        isDark
-          ? 'bg-slate-900/65 text-slate-100 border-white/10 shadow-xl shadow-black/20'
-          : 'bg-white/75 text-slate-800 border-slate-200/80 shadow-lg shadow-slate-200/50'
-      } backdrop-blur-xl border`;
-    }
-    if (config.designSystem === 'antd') {
-      return `${
-        isDark ? 'bg-slate-900 text-slate-100 border-slate-800' : 'bg-white text-slate-800 border-slate-200 shadow-sm'
-      } border`;
-    }
-    return `${
-      isDark ? 'bg-slate-900/90 text-slate-100 border-slate-800/80 shadow-md' : 'bg-white text-slate-800 border-slate-200/70 shadow-md shadow-slate-200/40'
-    } border`;
-  };
+  // Library geometry and surface finish compose independently in the canvas CSS.
+  const getCardStyle = () => 'demo-panel';
 
   // 根据悬停效果计算类名
   const getHoverClass = () => {
     switch (config.hoverEffect) {
       case 'lift':
-        return 'transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl';
+        return 'demo-hover-lift transition-all duration-300 hover:-translate-y-1.5';
       case 'glow':
         return `transition-all duration-300 ${theme.borderGlow} hover:shadow-lg`;
       case 'scale':
         return 'transition-all duration-300 hover:scale-[1.02]';
       case 'tilt':
-        return 'transition-all duration-300 hover:[transform:perspective(800px)_rotateX(2deg)_rotateY(-2deg)] hover:shadow-xl';
+        return 'demo-hover-lift transition-all duration-300 hover:[transform:perspective(800px)_rotateX(2deg)_rotateY(-2deg)]';
       default:
         return 'transition-all duration-200';
     }
@@ -565,72 +556,20 @@ export default function FrontendPromptLab({ initialPromptLanguage = 'mixed' }) {
       easing = `cubic-bezier(0.22, ${overshoot.toFixed(2)}, 0.36, 1)`;
     }
     return {
-      animation: `labEnter ${duration}ms ${easing} ${delay}ms both`
+      animation: education.reducedMotion || education.viewSettings.access === 'reduced' || education.viewSettings.motion === 'none'
+        ? 'none' : `${education.viewSettings.motion === 'fade' ? (animKey % 2 ? 'studyFadeAlternate' : 'studyFade') : (animKey % 2 ? 'labEnterAlternate' : 'labEnter')} ${duration}ms ${easing} ${delay}ms both`
     };
   };
 
-  // 生成最终结构化 AI 提示词
-  const generatedPrompt = useMemo(() => {
-    const layoutObj = OPTIONS.layout.find((o) => o.value === config.layout);
-    const dsObj = OPTIONS.designSystem.find((o) => o.value === config.designSystem);
-    const styleObj = OPTIONS.visualStyle.find((o) => o.value === config.visualStyle);
-    const motionObj = OPTIONS.motionType.find((o) => o.value === config.motionType);
-    const hoverObj = OPTIONS.hoverEffect.find((o) => o.value === config.hoverEffect);
-
-    const radiusMap = {
-      none: 'sharp 0px corners (rounded-none)',
-      sm: 'small compact corners (rounded-md / 6px)',
-      md: 'balanced medium corners (rounded-xl / 12px)',
-      lg: 'generous modern corners (rounded-2xl / 16px)',
-      full: 'pill and super-rounded corners (rounded-3xl / rounded-full)'
-    };
-
-    if (promptTab === 'en') {
-      return `### Role & Tech Stack
-Act as a Senior Frontend Engineer & UI/UX Designer. Build a modern, responsive React + Tailwind CSS web page using Lucide icons and Framer Motion.
-
-### 1. Page Architecture & Layout
-- **Layout Pattern**: ${layoutObj?.en} — ${layoutObj?.promptEn}
-- **Anatomy Sections**:
-  1. **Sticky Navbar**: Top navigation with backdrop-blur, brand identity, nav links, and primary CTA.
-  2. **Hero Section**: Announcement pill badge above a bold display headline, muted subheadline, and dual CTA button group (Primary solid + Secondary ghost).
-  3. **KPI Metrics Bar**: 3-column social proof statistics bar with tabular numbers.
-  4. **Feature Bento Grid & Interactive Showcase**: Segmented control tabs, interactive feature cards, and a collapsible FAQ Accordion.
-${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loader placeholders for async data cards.\n' : ''}${config.showToast ? '  6. **Feedback Layer**: Floating non-blocking Toast notification bar.\n' : ''}
-### 2. Component Library & Visual Direction
-- **Design System Reference**: ${dsObj?.en} — ${dsObj?.promptEn}
-- **Surface Aesthetic**: ${styleObj?.en} — ${styleObj?.promptEn}
-- **Color Palette**: ${config.darkMode ? 'Dark Mode (Slate-950 canvas, Slate-900 cards, high-contrast light text)' : 'Light Mode (Clean Slate-50 canvas, pure white surfaces, crisp dark typography)'} with **${theme.name}** (${theme.hex}) as primary accent.
-- **Border Radius Token**: Use ${radiusMap[config.radius]}.
-
-### 3. Motion & Micro-Interactions
-- **Entrance Animation**: ${motionObj?.en} — ${motionObj?.promptEn}
-- **Spring Physics Parameters**: \`{ type: "spring", stiffness: ${config.stiffness}, damping: ${config.damping} }\`
-- **Hover Feedback**: Apply **${hoverObj?.en}** (${hoverObj?.desc}) on interactive cards and buttons.`;
-    }
-
-    return `# Role: 资深前端架构师与 UI/UX 设计师
-请使用 **React + Tailwind CSS + Lucide Icons + Framer Motion** 为我开发一个现代响应式网页。具体页面部位术语、视觉规范与交互要求如下：
-
-## 1. 页面宏观布局与部位构成 (Page Anatomy & Layout)
-- **核心布局模式**：${layoutObj?.label}（\`${layoutObj?.en}\`）—— ${layoutObj?.desc}。
-- **包含的标准页面部位**：
-  - **顶部导航栏 (\`Sticky Navbar\`)**：固定在顶部，带毛玻璃模糊（\`backdrop-blur\`），左侧品牌标识，右侧主行动按钮（\`Primary CTA\`）。
-  - **首屏视觉区 (\`Hero Section\`)**：顶部放置胶囊公告徽章（\`Announcement Pill Badge\`），中间为高对比度大标题（\`Display Headline\`）与副标题（\`Subheadline\`），下方配主次双按钮组（\`Primary Button + Ghost Button\`）。
-  - **核心指标栏 (\`KPI Metrics Bar\`)**：三列等宽数字统计条，建立数据信任感。
-  - **核心内容区 (\`${config.layout === 'bento' ? 'Bento Grid 便当盒网格' : 'Feature Showcase Cards'}\`)**：内置分段控制器标签页（\`Segmented Control Tabs\`）与手风琴折叠问答面板（\`Collapsible Accordion\`）。${config.showSkeleton ? '\n  - **加载占位符 (`Skeleton Loader`)**：为异步数据卡片配备带呼吸动画（`animate-pulse`）的骨架屏。' : ''}${config.showToast ? '\n  - **反馈通知 (`Toast Notification`)**：包含非阻塞式的悬浮轻提示反馈条。' : ''}
-
-## 2. 组件库气质与视觉规范 (Design System & Visual Tokens)
-- **组件库设计风格**：参考 **${dsObj?.label}**（\`${dsObj?.en}\`）—— ${dsObj?.desc}。
-- **表面质感**：采用 **${styleObj?.label}**（\`${styleObj?.en}\`）。
-- **色彩与明暗模式**：${config.darkMode ? '暗黑模式（`Dark Mode`，深邃灰黑背景配微光边框）' : '明亮模式（`Light Mode`，清爽浅灰底色配纯白卡片）'}，主强调色采用 **${theme.name}**（\`${theme.hex}\`）。
-- **圆角规范 (\`Border Radius\`)**：全局组件统一采用 \`${radiusMap[config.radius]}\`。
-
-## 3. 动效与微交互参数 (Motion & Micro-interactions)
-- **入场动画**：**${motionObj?.label}**（\`${motionObj?.en}\`）。
-- **物理弹簧参数**：Framer Motion 配置 \`transition={{ type: "spring", stiffness: ${config.stiffness}, damping: ${config.damping} }}\`。
-- **鼠标悬停反馈 (\`Hover State\`)**：所有可交互卡片应用 **${hoverObj?.label}**（\`${hoverObj?.en}\`）。`;
-  }, [config, promptTab, theme]);
+  // Requirements follow the selected region, output scope and current settings.
+  const generatedPrompt = buildStudyPrompt({
+    lesson: activeTerm.lessonId ? getExperiment(activeTerm.lessonId) : education.lesson, settings: education.viewSettings,
+    language: promptTab, scope: education.scope, term: activeTerm, config,
+    library: OPTIONS.designSystem.find(item => item.value === config.designSystem)?.label,
+    surface: OPTIONS.visualStyle.find(item => item.value === config.visualStyle)?.en,
+    hover: OPTIONS.hoverEffect.find(item => item.value === config.hoverEffect)?.en,
+    includeTech: education.includeTech, reducedMotion: education.reducedMotion,
+  });
 
   const handleCopyPrompt = async () => {
     clearTimeout(copyTimer.current); setCopied(false); setCopyError(false);
@@ -646,10 +585,9 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
   };
   useEffect(() => { if (copyError) { manualCopy.current?.focus(); manualCopy.current?.select(); } }, [copyError]);
 
-  const activeTerm = ANATOMY_TERMS[activeAnatomyId] || ANATOMY_TERMS.bentoGrid;
 
   return (
-    <div lang="zh-CN" className="frontend-prompt-lab h-screen overflow-hidden bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+    <div lang="zh-CN" style={accentVariables(accent, config.darkMode)} className="frontend-prompt-lab h-screen overflow-hidden bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
       {/* 注入全局无最外层滚动条约束 + 定制暗色/亮色纤细滚动条样式 + 关键帧动画 */}
       <style>{`
         .frontend-prompt-lab { height: 100dvh; margin: 0; }
@@ -662,6 +600,10 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
             opacity: 1;
             transform: translateY(0) scale(1);
           }
+        }
+        @keyframes labEnterAlternate {
+          0% { opacity: 0; transform: translateY(22px) scale(0.96); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
         }
         /* 左栏、右栏与暗黑预览画布的纤细科技感滚动条 */
         .lab-scroll-dark {
@@ -720,7 +662,7 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
                 Frontend Prompt Lab 前端提示词实验室
               </h1>
               <p className="text-[11px] text-slate-400 hidden sm:block">
-                边玩边认网页部位术语 · 实时预览组件库与动效 · 自动编译专业 AI Prompt
+                选择风格，预览效果，把想要的界面说清楚。
               </p>
             </div>
           </div>
@@ -755,300 +697,13 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
       <main className="lab-workspace flex-1 min-h-0 max-w-[1800px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-3.5 p-3 overflow-hidden">
         {/* ==================== 左栏：预设方案 + 参数与术语操作台 (独立滚动条) ==================== */}
         <aside aria-label="配置工作台" className="lab-settings lg:col-span-3 h-full min-h-0 overflow-y-auto lab-scroll-dark space-y-3 pr-1.5 pb-2">
-          {/* 顶部新增：经典预设风格方案 (2x2 网格置于左栏最上方) */}
-          <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 space-y-2.5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-semibold text-white">
-                <Sparkles className="w-4 h-4 text-cyan-400" />
-                <span>经典风格预设 (Presets)</span>
-              </div>
-              <span className="text-[10px] font-mono text-slate-400">Quick Start</span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-1.5">
-              {PRESETS.map((preset) => {
-                const isActive = activePresetId === preset.id;
-                return (
-                  <button
-                    key={preset.id}
-                    onClick={() => applyPreset(preset)}
-                    className={`p-2 rounded-xl border text-left transition-all flex flex-col justify-between gap-1 ${
-                      isActive
-                        ? 'bg-cyan-500/15 border-cyan-400 text-white shadow-sm shadow-cyan-500/10'
-                        : 'bg-slate-950/60 border-slate-800/80 text-slate-300 hover:border-slate-700 hover:bg-slate-900'
-                    }`}
-                  >
-                    <div className="text-xs font-semibold truncate">{preset.name}</div>
-                    <div>
-                      <span
-                        className={`inline-block text-[10px] px-1.5 py-0.5 rounded font-medium ${
-                          isActive
-                            ? 'bg-cyan-400/20 text-cyan-300'
-                            : 'bg-indigo-500/15 text-indigo-300'
-                        }`}
-                      >
-                        {preset.badge}
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 模块 1：页面宏观布局 */}
-          <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 space-y-2.5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-semibold text-white">
-                <Layers className="w-4 h-4 text-indigo-400" />
-                <span>1. 页面宏观布局 (Layout)</span>
-              </div>
-              <span className="text-[10px] font-mono text-slate-400">Structure</span>
-            </div>
-
-            <div className="grid grid-cols-1 gap-1.5">
-              {OPTIONS.layout.map((item) => {
-                const active = config.layout === item.value;
-                return (
-                  <button
-                    key={item.value}
-                    onClick={() => updateConfig('layout', item.value)}
-                    className={`text-left p-2.5 rounded-xl border transition-all ${
-                      active
-                        ? 'bg-indigo-600/20 border-indigo-500 text-white'
-                        : 'bg-slate-950/60 border-slate-800/80 text-slate-300 hover:border-slate-700'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-1">
-                      <span className="text-xs font-semibold">{item.label}</span>
-                      <span className="text-[10px] font-mono text-indigo-300 truncate">{item.en}</span>
-                    </div>
-                    <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">{item.desc}</p>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 模块 2：组件库气质与视觉风格 */}
-          <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 space-y-3.5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-semibold text-white">
-                <Palette className="w-4 h-4 text-pink-400" />
-                <span>2. 组件库与视觉体系 (Style)</span>
-              </div>
-              <button
-                onClick={() => updateConfig('darkMode', !config.darkMode)}
-                className="text-[11px] px-2 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700"
-              >
-                {config.darkMode ? '暗色画布' : '亮色画布'}
-              </button>
-            </div>
-
-            {/* 组件库选择 */}
-            <div className="space-y-1.5">
-              <label className="text-[11px] text-slate-400 block">主流组件库气质 (Component Library)</label>
-              <div className="grid grid-cols-2 gap-1.5">
-                {OPTIONS.designSystem.map((item) => {
-                  const active = config.designSystem === item.value;
-                  return (
-                    <button
-                      key={item.value}
-                      onClick={() => updateConfig('designSystem', item.value)}
-                      className={`p-2 rounded-xl border text-left transition-all ${
-                        active
-                          ? 'bg-pink-500/20 border-pink-500 text-white'
-                          : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className="text-xs font-semibold">{item.label}</div>
-                      <div className="text-[10px] text-slate-400 truncate mt-0.5">{item.desc}</div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* 表面质感 */}
-            <div className="space-y-1.5">
-              <label className="text-[11px] text-slate-400 block">表面材质感 (Surface Aesthetic)</label>
-              <div className="grid grid-cols-2 gap-1.5">
-                {OPTIONS.visualStyle.map((item) => {
-                  const active = config.visualStyle === item.value;
-                  return (
-                    <button
-                      key={item.value}
-                      onClick={() => updateConfig('visualStyle', item.value)}
-                      className={`p-2 rounded-xl border text-left transition-all ${
-                        active
-                          ? 'bg-indigo-500/20 border-indigo-400 text-white'
-                          : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className="text-xs font-semibold">{item.label}</div>
-                      <div className="text-[10px] font-mono text-slate-400 truncate">{item.en}</div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* 主题强调色与圆角 */}
-            <div className="grid grid-cols-2 gap-2.5 pt-1">
-              <div>
-                <label className="text-[11px] text-slate-400 block mb-1.5">主强调色 (Accent)</label>
-                <div className="flex items-center gap-2">
-                  {Object.entries(THEME_COLORS).map(([key, val]) => (
-                    <button
-                      key={key}
-                      onClick={() => updateConfig('themeColor', key)}
-                      title={val.name}
-                      aria-label={val.name}
-                      style={{ backgroundColor: val.hex }}
-                      className={`w-5 h-5 rounded-full transition-transform ${
-                        config.themeColor === key ? 'scale-125 ring-2 ring-white ring-offset-2 ring-offset-slate-900' : 'opacity-70 hover:opacity-100'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <label className="text-[11px] text-slate-400 block mb-1.5">圆角 (Radius)</label>
-                <div className="flex bg-slate-950 p-0.5 rounded-lg border border-slate-800">
-                  {['none', 'sm', 'md', 'lg', 'full'].map((r) => (
-                    <button
-                      key={r}
-                      onClick={() => updateConfig('radius', r)}
-                      className={`flex-1 py-1 text-[10px] font-mono rounded-md transition-all ${
-                        config.radius === r ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400 hover:text-white'
-                      }`}
-                    >
-                      {r}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 模块 3：动效与微交互实验室 */}
-          <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-semibold text-white">
-                <Zap className="w-4 h-4 text-amber-400" />
-                <span>3. 动效与物理参数 (Motion)</span>
-              </div>
-              <span className="text-[10px] font-mono text-amber-300">Framer Motion</span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-1.5">
-              {OPTIONS.motionType.map((item) => {
-                const active = config.motionType === item.value;
-                return (
-                  <button
-                    key={item.value}
-                    onClick={() => updateConfig('motionType', item.value)}
-                    className={`p-2 rounded-xl border text-left transition-all ${
-                      active
-                        ? 'bg-amber-500/20 border-amber-400 text-white'
-                        : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
-                    }`}
-                  >
-                    <div className="text-xs font-semibold">{item.label}</div>
-                    <div className="text-[10px] font-mono text-slate-400 truncate">{item.en}</div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* 弹簧刚度与阻尼滑块 */}
-            <div className="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80 space-y-2">
-              <div>
-                <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-slate-300">弹簧刚度 (Stiffness)</span>
-                  <span className="font-mono text-amber-400">{config.stiffness}</span>
-                </div>
-                <input
-                  type="range"
-                  aria-label="弹簧刚度"
-                  min="80"
-                  max="500"
-                  step="10"
-                  value={config.stiffness}
-                  onChange={(e) => updateConfig('stiffness', Number(e.target.value))}
-                  className="w-full accent-amber-400 cursor-pointer h-1.5 bg-slate-800 rounded-lg"
-                />
-              </div>
-
-              <div>
-                <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-slate-300">阻尼系数 (Damping · 越小越弹)</span>
-                  <span className="font-mono text-amber-400">{config.damping}</span>
-                </div>
-                <input
-                  type="range"
-                  aria-label="阻尼系数"
-                  min="8"
-                  max="40"
-                  step="2"
-                  value={config.damping}
-                  onChange={(e) => updateConfig('damping', Number(e.target.value))}
-                  className="w-full accent-amber-400 cursor-pointer h-1.5 bg-slate-800 rounded-lg"
-                />
-              </div>
-            </div>
-
-            {/* 悬停反馈 */}
-            <div className="space-y-1.5">
-              <label className="text-[11px] text-slate-400 block">卡片悬停微交互 (Hover Effect)</label>
-              <div className="grid grid-cols-2 gap-1.5">
-                {OPTIONS.hoverEffect.map((item) => {
-                  const active = config.hoverEffect === item.value;
-                  return (
-                    <button
-                      key={item.value}
-                      onClick={() => updateConfig('hoverEffect', item.value)}
-                      className={`p-2 rounded-xl border text-left transition-all ${
-                        active
-                          ? 'bg-emerald-500/20 border-emerald-400 text-white'
-                          : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className="text-xs font-semibold">{item.label}</div>
-                      <div className="text-[10px] font-mono text-slate-400 truncate">{item.en}</div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* 附加状态组件开关 */}
-            <div className="pt-1 flex items-center justify-between gap-2">
-              <label className="flex items-center gap-1.5 text-[11px] text-slate-300 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={config.showSkeleton}
-                  onChange={(e) => updateConfig('showSkeleton', e.target.checked)}
-                  className="rounded accent-indigo-500"
-                />
-                <span>展示骨架屏 (Skeleton)</span>
-              </label>
-              <label className="flex items-center gap-1.5 text-[11px] text-slate-300 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={config.showToast}
-                  onChange={(e) => updateConfig('showToast', e.target.checked)}
-                  className="rounded accent-indigo-500"
-                />
-                <span>展示轻提示 (Toast)</span>
-              </label>
-            </div>
-          </div>
+          <LabSettings lab={education} config={config} presets={PRESETS} options={OPTIONS} colors={THEME_COLORS}
+            activePresetId={activePresetId} onPreset={applyPreset} onConfig={updateConfig} />
         </aside>
 
         {/* ==================== 中栏：等比例缩小的桌面浏览器展示界面 (占 6 列，内嵌风格适配滚动条) ==================== */}
         <section aria-label="实时网页预览" className="lab-preview lg:col-span-6 h-full min-h-0 flex flex-col gap-2.5 overflow-hidden">
+          <StudyToolbar lab={education} />
           {/* 顶部：当前选中部位的“解剖透视词典卡片” (固定高度不挤压画布) */}
           <div className="lab-anatomy shrink-0 bg-gradient-to-r from-cyan-950/70 via-slate-900 to-indigo-950/60 border border-cyan-500/30 rounded-2xl p-3 shadow-lg">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
@@ -1154,25 +809,31 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
 
             {/* 独立滚动且支持等比例微缩的浏览器视口内容区 */}
             <div
-              key={animKey}
-              className={`flex-1 min-h-0 overflow-y-auto overflow-x-hidden relative z-10 p-4 sm:p-5 ${
+              ref={education.scrollRef}
+              className={`study-preview-scroll flex-1 min-h-0 overflow-auto relative z-10 p-4 sm:p-5 ${
                 config.darkMode ? 'lab-scroll-dark' : 'lab-scroll-light'
               }`}
             >
               {/* 等比例微缩容器：采用 CSS zoom 实现真实的桌面网页等比微缩观感并保持精准滚动高度 */}
               <div
-                data-preview-page data-dark={config.darkMode} style={{ zoom: viewportScale }}
-                className={`mx-auto max-w-[920px] rounded-xl p-4 sm:p-6 space-y-5 transition-all ${
+                ref={education.canvasRef}
+                data-preview-page data-dark={config.darkMode}
+                data-study-motion={education.viewSettings.motion} data-study-access={education.viewSettings.access}
+                data-study-regions={education.viewSettings.regions} data-study-color={education.viewSettings.color}
+                data-study-sticky={education.viewSettings.sticky} data-study-surface={config.visualStyle} data-study-system={config.designSystem}
+                style={{ ...studySurfaceStyle(education, theme.hex, config), zoom: viewportScale }}
+                className={`study-surface mx-auto max-w-[920px] rounded-xl p-4 sm:p-6 space-y-5 transition-all ${
                   config.darkMode
                     ? 'bg-slate-950/60 border border-slate-900'
                     : 'bg-slate-50/90 border border-slate-200/80 shadow-inner'
                 }`}
               >
+                <LearningScene>
                 {/* 1. 顶部粘性导航栏 (Navbar) */}
                 <XRayWrapper xrayMode={xrayMode} activeAnatomyId={activeAnatomyId} setActiveAnatomyId={setActiveAnatomyId} termId="navbar">
                   <nav
                     style={getMotionStyle(0)}
-                    className={`px-5 py-3 ${radiusClass} ${getCardStyle()} flex items-center justify-between`}
+                    className={`study-product-nav px-5 py-3 ${radiusClass} ${getCardStyle()} flex items-center justify-between`}
                   >
                     <div className="flex items-center gap-2.5 font-bold text-base">
                       <div className={`w-7 h-7 ${btnRadiusClass} ${theme.primaryBg} flex items-center justify-center text-white text-xs shadow-sm`}>
@@ -1180,13 +841,14 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
                       </div>
                       <span>AcmeUI</span>
                     </div>
-                    <div className="hidden sm:flex items-center gap-6 text-xs opacity-80 font-medium">
-                      <span className="hover:opacity-100 cursor-pointer">Features</span>
-                      <span className="hover:opacity-100 cursor-pointer">Components</span>
-                      <span className="hover:opacity-100 cursor-pointer">Pricing</span>
-                      <span className="hover:opacity-100 cursor-pointer">Docs</span>
+                    <div className="study-product-nav-links hidden sm:flex items-center gap-6 text-xs opacity-80 font-medium">
+                      <button type="button" onClick={event => { event.stopPropagation(); education.selectLesson('regions'); }}>Overview</button>
+                      <button type="button" onClick={event => { event.stopPropagation(); education.selectLesson('collection'); }}>Projects</button>
+                      <button type="button" onClick={event => { event.stopPropagation(); education.selectLesson('columns'); }}>Reading</button>
+                      <button type="button" onClick={event => { event.stopPropagation(); education.selectLesson('validation'); }}>Practice</button>
                     </div>
                     <button
+                      onClick={event => { event.stopPropagation(); education.selectLesson('validation'); }}
                       className={`px-4 py-1.5 text-xs font-semibold text-white ${btnRadiusClass} ${theme.primaryBg} ${getHoverClass()}`}
                     >
                       Get Started
@@ -1195,34 +857,12 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
                 </XRayWrapper>
 
                 {/* 根据不同布局切换主体排布 */}
-                <div className={config.layout === 'dashboard' ? 'grid grid-cols-12 gap-5' : 'space-y-6'}>
-                  {/* 如果是侧边栏控制台布局，渲染左侧边栏 */}
-                  {config.layout === 'dashboard' && (
-                    <div
-                      style={getMotionStyle(1)}
-                      className={`col-span-4 sm:col-span-3 p-3.5 ${radiusClass} ${getCardStyle()} space-y-2 h-fit`}
-                    >
-                      <div className="text-[10px] font-mono uppercase opacity-50 px-2">Sidebar Nav</div>
-                      {['Overview', 'Analytics', 'Prompt Lab', 'Settings'].map((nav, idx) => (
-                        <div
-                          key={nav}
-                          className={`px-3 py-2 text-xs font-medium ${btnRadiusClass} flex items-center gap-2 cursor-pointer ${
-                            idx === 0 ? `${theme.primaryBg} text-white` : 'opacity-70 hover:opacity-100'
-                          }`}
-                        >
-                          <LayoutGrid className="w-3.5 h-3.5 shrink-0" />
-                          <span className="truncate">{nav}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className={config.layout === 'dashboard' ? 'col-span-8 sm:col-span-9 space-y-6' : 'space-y-6'}>
+                <PreviewSiteLayout lab={education} layout={config.layout} Region={XRayWrapper} regionProps={{ xrayMode, activeAnatomyId, setActiveAnatomyId }}>
                     {/* 2. 首屏主视觉区 (Hero Section) */}
                     <XRayWrapper xrayMode={xrayMode} activeAnatomyId={activeAnatomyId} setActiveAnatomyId={setActiveAnatomyId} termId="hero">
                       <div
                         style={getMotionStyle(1)}
-                        className={`p-6 sm:p-8 ${radiusClass} ${getCardStyle()} ${
+                        className={`demo-hero p-6 sm:p-8 ${radiusClass} ${getCardStyle()} ${
                           config.layout === 'split'
                             ? 'grid grid-cols-1 sm:grid-cols-12 gap-6 items-center text-left'
                             : 'text-center space-y-5'
@@ -1266,13 +906,15 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
                                 }`}
                               >
                                 <button
-                                  className={`px-5 py-2.5 text-xs sm:text-sm font-semibold text-white flex items-center gap-2 shadow-md ${btnRadiusClass} ${theme.primaryBg} ${getHoverClass()}`}
+                                  onClick={event => { event.stopPropagation(); education.selectLesson('validation'); }}
+                                  className={`demo-primary-button px-5 py-2.5 text-xs sm:text-sm font-semibold text-white flex items-center gap-2 shadow-md ${btnRadiusClass} ${theme.primaryBg} ${getHoverClass()}`}
                                 >
                                   <span>主按钮 (Primary CTA)</span>
                                   <ArrowRight className="w-4 h-4" />
                                 </button>
                                 <button
-                                  className={`px-5 py-2.5 text-xs sm:text-sm font-semibold border ${btnRadiusClass} ${getHoverClass()} ${
+                                  onClick={event => { event.stopPropagation(); education.selectLesson('collection'); }}
+                                  className={`demo-secondary-button px-5 py-2.5 text-xs sm:text-sm font-semibold border ${btnRadiusClass} ${getHoverClass()} ${
                                     config.darkMode
                                       ? 'border-slate-700 hover:bg-slate-800'
                                       : 'border-slate-300 hover:bg-slate-100'
@@ -1307,9 +949,9 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
                         className="grid grid-cols-3 gap-4"
                       >
                         {[
-                          { num: '42+', label: '标准网页部位术语' },
-                          { num: '4 大', label: '主流组件库风格对比' },
-                          { num: '100%', label: '实时物理动效预览' }
+                          { num: String(Object.keys(ALL_TERMS).length), label: '页面与组件词条' },
+                          { num: String(EXPERIMENTS.length), label: '可操作对照实验' },
+                          { num: '4 套', label: '可切换风格预设' }
                         ].map((stat, idx) => (
                           <div
                             key={idx}
@@ -1323,6 +965,8 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
                         ))}
                       </div>
                     </XRayWrapper>
+
+                    <LearningWorkspace lab={education} Region={XRayWrapper} regionProps={{ xrayMode, activeAnatomyId, setActiveAnatomyId }} />
 
                     {/* 4. 便当盒不对称网格 (Bento Grid) */}
                     <XRayWrapper xrayMode={xrayMode} activeAnatomyId={activeAnatomyId} setActiveAnatomyId={setActiveAnatomyId} termId="bentoGrid">
@@ -1392,7 +1036,7 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
                                   type="text"
                                   readOnly
                                   value="带图标搜索框 (Input with leading icon)"
-                                  className={`w-full pl-9 pr-3 py-2 text-xs border bg-transparent ${btnRadiusClass} ${
+                                  className={`demo-input w-full pl-9 pr-3 py-2 text-xs border bg-transparent ${btnRadiusClass} ${
                                     config.darkMode ? 'border-slate-700' : 'border-slate-300'
                                   }`}
                                 />
@@ -1404,7 +1048,7 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
                         {/* 单列卡片：微交互演示卡 */}
                         <div
                           style={getMotionStyle(4)}
-                          className={`p-5 ${radiusClass} ${getCardStyle()} ${getHoverClass()} flex flex-col justify-between space-y-3`}
+                          className={`study-hover-card p-5 ${radiusClass} ${getCardStyle()} ${getHoverClass()} flex flex-col justify-between space-y-3`}
                         >
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-bold">悬停动效测试卡</span>
@@ -1503,8 +1147,8 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
                         )}
                       </div>
                     )}
-                  </div>
-                </div>
+                </PreviewSiteLayout>
+                </LearningScene>
               </div>
             </div>
           </div>
@@ -1518,11 +1162,11 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   <Terminal className="w-4 h-4 text-emerald-400" />
-                  <h2 className="text-xs font-bold text-white">AI 提示词编译器</h2>
+                  <h2 className="text-xs font-bold text-white">把效果说清楚</h2>
                 </div>
                 {lastChangedField && (
                   <span className="text-[10px] text-emerald-400 font-mono animate-pulse">
-                    ● 已更新 {lastChangedField}
+                    ● 需求已同步
                   </span>
                 )}
               </div>
@@ -1536,6 +1180,7 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
                   <button
                     key={tab.id}
                     onClick={() => setPromptTab(tab.id)}
+                    aria-pressed={promptTab === tab.id}
                     className={`py-1 rounded-lg font-medium transition-all text-center ${
                       promptTab === tab.id ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
                     }`}
@@ -1546,11 +1191,13 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
               </div>
             </div>
 
+            <StudyExplanation lab={education} activeTerm={activeTerm} config={config} onConfig={updateConfig} />
             {promptTab !== 'glossary' ? (
               <>
+                <PromptScopeControls lab={education} />
                 {/* 实时提取的术语胶囊概览 */}
                 <div className="shrink-0 py-2.5 border-b border-slate-800/80 space-y-1.5">
-                  <div className="text-[10px] text-slate-400">已注入的专业术语 Token：</div>
+                  <div className="text-[10px] text-slate-400">当前视觉方案</div>
                   <div className="flex flex-wrap gap-1">
                     <span className="px-1.5 py-0.5 rounded bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 text-[10px] font-mono">
                       {OPTIONS.layout.find((o) => o.value === config.layout)?.en}
@@ -1561,12 +1208,17 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
                     <span className="px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-[10px] font-mono">
                       {OPTIONS.visualStyle.find((o) => o.value === config.visualStyle)?.en}
                     </span>
-                    <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-mono">
+                    {education.includeTech && <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-mono">
                       stiffness:{config.stiffness} / damping:{config.damping}
-                    </span>
+                    </span>}
                   </div>
                 </div>
 
+                <dl className="study-visual-summary">
+                  <div><dt>组件形态</dt><dd>{LIBRARY_TREATMENTS[config.designSystem].cn}</dd></div>
+                  <div><dt>表面处理</dt><dd>{SURFACE_TREATMENTS[config.visualStyle].cn}</dd></div>
+                  <div><dt>主色</dt><dd><i style={{ background: accent }} />{accent.toUpperCase()}</dd></div>
+                </dl>
                 {/* 生成的 Markdown 提示词内容 (独立暗黑定制滚动条) */}
                 <div className="flex-1 min-h-0 overflow-y-auto lab-scroll-dark my-2.5 bg-slate-950 rounded-xl p-3 border border-slate-800/90 font-mono text-[11px] text-slate-200 leading-relaxed whitespace-pre-wrap select-all">
                   {generatedPrompt}
@@ -1588,7 +1240,7 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
                     ) : (
                       <>
                         <Copy className="w-4 h-4" />
-                        <span>一键复制整页 AI 提示词</span>
+                        <span>复制{education.scope === 'page' ? '整页需求' : education.scope === 'part' ? '当前部位需求' : '本次调整需求'}</span>
                       </>
                     )}
                   </button>
@@ -1597,12 +1249,17 @@ ${config.showSkeleton ? '  5. **Loading States**: Include pulsing Skeleton Loade
             ) : (
               /* 部位词典全表模式 (独立暗黑定制滚动条) */
               <div className="flex-1 min-h-0 overflow-y-auto lab-scroll-dark my-2.5 space-y-2 pr-1">
-                {Object.values(ANATOMY_TERMS).map((item) => (
+                <label className="study-dictionary-search">查找部位<input aria-label="查找部位词典" value={dictionaryQuery} placeholder="名称或英文术语" onChange={event => setDictionaryQuery(event.target.value)} /></label>
+                {!dictionaryTerms.length && <p className="study-observe" role="status">没有匹配的词条，试试中文名称或英文术语。</p>}
+                {dictionaryTerms.map((item) => (
                   <div
                     key={item.id}
+                    data-knowledge={item.id}
+                    role="button" tabIndex={0}
+                    onKeyDown={event => { if (["Enter", " "].includes(event.key)) { event.preventDefault(); setXrayMode(true); if (item.lessonId) education.selectLesson(item.lessonId); else setActiveAnatomyId(item.id); } }}
                     onClick={() => {
                       setXrayMode(true);
-                      setActiveAnatomyId(item.id);
+                      if (item.lessonId) education.selectLesson(item.lessonId); else setActiveAnatomyId(item.id);
                     }}
                     className={`p-2.5 rounded-xl border cursor-pointer transition-all ${
                       activeAnatomyId === item.id

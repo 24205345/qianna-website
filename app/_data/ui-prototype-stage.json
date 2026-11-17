@@ -24,10 +24,10 @@
       "id": "site-interface-lab",
       "type": "site",
       "title": "Interface Lab: Try & Describe",
-      "description": "Compare four presets, inspect ten page regions, and adjust layout, surface and motion while generating a mixed-language or English page prompt.",
+      "description": "Choose a style preset, preview changes on one website and explore 24 contextual comparisons. Search 34 terms and generate page, region or adjustment requirements.",
       "tag": "Interactive Reference",
       "url": "/notes/ui-prototype-ergonomics/interface-lab.html?lang=en",
-      "curatorNote": "Chinese/bilingual controls; English prompt selected by this entry. CSS motion preview, no model calls or persistent settings."
+      "curatorNote": "Chinese/bilingual controls; English prompt selected by this entry. Four original presets with layout, visuals and motion controls; region examples open on demand. Local simulated tasks, no model calls or persistent input."
     },
     {
       "id": "prompt-visual-brief",

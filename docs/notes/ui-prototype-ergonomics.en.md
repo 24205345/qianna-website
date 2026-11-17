@@ -138,17 +138,32 @@ Use the lab next to connect these decisions with examples you can operate.
 
 **[Open the interactive lab →](/notes/ui-prototype-ergonomics/interface-lab.html?lang=en)**
 
-The lab places settings on the left, a live preview in the middle, and the generated prompt on the right. Compare the Linear, Gumroad, AntD and Apple presets, then adjust layout, component-library direction, surface, accent color, corners and motion parameters. Examples run in the page without model requests or persistent settings.
+The lab places style controls on the left, a working preview in the middle, and requirements on the right. The left panel follows the reference file's four sections: classic presets, page layout, components and visuals, and motion and physics. Changes apply to the same preset website while retaining the preview's scroll position. Navigation, hero and component examples stay in place; project materials, reading notes and practice switch within the page. Examples run locally without model requests or persistent input and settings.
 
-Enable “X-Ray” to hover over or select the navigation, hero, button group, grid and other regions. The anatomy card explains their Chinese and English names and provides a requirement sentence. The right-hand glossary lists all ten regions. Turn X-Ray off to inspect the page without annotations. Controls retain the supplied Chinese/bilingual labels; this English entry starts with the English prompt, and the “中英结构版” tab offers the mixed-language version.
+Region knowledge covers six kinds of questions, with 24 comparisons available on demand:
+
+| Starting question | Decisions to compare |
+| :--- | :--- |
+| How is the page organized? | Page regions, column hierarchy, sidebars, cards / lists / tables |
+| How is content made readable? | Type hierarchy, measure and spacing, accent and semantic colors, image cropping |
+| How do people find information? | Tabs and section links, search and filters, sorting and pagination, disclosure |
+| How is an action completed? | Validation, radio / checkbox / switch, select and combobox, dialog / drawer / popover |
+| What happens while waiting or after failure? | Loading and progress, empty and no-result states, retry, streaming and interruption |
+| What changes on another screen? | Narrow-screen order, sticky navigation, fade and movement, larger text and reduced motion |
+
+Enable “X-Ray” to hover over or select a preview region and see its Chinese and English names and a requirement sentence. Annotations appear only on hover, focus or selection. The searchable glossary contains 34 page and component entries. For an entry with an interactive example, expand “用途与交互示例” to see only that region's choices, uses and behavior rules. Use “在预览中定位” to locate it when needed. Turn X-Ray off for an unannotated view. Controls remain Chinese/bilingual; the English entry starts with the English prompt, while “中英结构版” selects the mixed-language version.
 
 **Try → observe → name → describe:**
 
-1. Choose a preset, then change one setting and compare the same content.
-2. Enable X-Ray and identify the affected region by its name and explanation. Operate the preview's tabs and FAQ accordion directly.
-3. Inspect the generated page prompt. Copy it, replace its example objects, and remove technology, component and visual requirements that do not apply.
+1. Choose a style preset on the left, then adjust layout, visuals or motion and observe the same website. Its navigation and action buttons open project, reading and practice regions. Submit an empty form, search for an absent term, or pause, resume and cancel a simulated generation task.
+2. To compare a specific interaction, select its region through X-Ray or the glossary, then expand “用途与交互示例” on the right. Choose a presentation and operate it. Use the local “修改前 / 修改后” controls to compare that region or “设为对照” to save its baseline. Input, selections and other settings remain in place.
+3. Use the name, purpose and observed result to choose a whole-page brief, selected region or current adjustment. Prompts support mixed-language and English output and retain the existing project's stack by default. Replace placeholders after copying.
 
-Compare entrance styles, spring stiffness, damping and hover feedback, and toggle skeleton or toast examples. The preview approximates physical motion with CSS; validate the generated Framer Motion parameters in the finished implementation. The 75%, 85% and 100% controls change the canvas display scale. They do not test the finished page's mobile layout.
+Canvas width changes the actual layout space: fit the window, 960, 768 or 390 px. The 75%, 85% and 100% controls change only its display scale. Use the phone canvas to compare the order of the main task and source directory, and verify that input remains. The right panel's before/after comparison applies only to the selected region's setting, excluding style presets, viewport width and live task state.
+
+The style section retains Linear, Gumroad, AntD and Apple presets, layout, library direction, surfaces, accents, corners and motion. “附加组件” shows static skeleton and toast samples; loading, failure and interruption comparisons open through their corresponding region entries. Generate sits at the bottom right of the material field, with pause and cancel actions in the same area while waiting. Spring motion uses a CSS approximation; Framer Motion reference parameters enter the brief only when optional technical details are enabled and still require validation. AI examples return fixed exercise templates in stages to demonstrate states; they do not interpret the supplied material.
+
+Choose library direction and surface finish independently: the former changes control geometry, spacing and elevation; the latter changes fill, transparency, blur and decorative shadows. Compare shadcn/ui, Ant Design and Material UI with one finish, then keep the library direction and change finishes. These are CSS visual examples rather than full library implementations. Accent controls include presets, a custom color picker and a hue slider. The current hex value enters the brief, and color changes retain entered content.
 
 **Describe the page before the control.** Establish information order, primary and secondary areas, and reading rhythm. Then add component triggers and states.
 
