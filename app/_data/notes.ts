@@ -1,3 +1,4 @@
+import featureBuildNote from "./feature-build-note.json";
 import uiPrototypeNote from "./ui-prototype-note.json";
 import aiVideoNote from "./ai-video-note.json";
 import enterpriseProductionNote from "./enterprise-production.json";
@@ -24,6 +25,7 @@ export interface NoteDetail extends NoteListItem {
 
 /** Static fallback when Supabase is unavailable or for local notes. */
 export const fallbackNotes: NoteDetail[] = [
+  featureBuildNote,
   uiPrototypeNote,
   enterpriseProductionNote,
   aiVideoNote,

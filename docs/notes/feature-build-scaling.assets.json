@@ -1,0 +1,59 @@
+{
+  "verifiedAt": "2026-11-18T10:22:56.324Z",
+  "assets": [
+    {
+      "id": "build-path",
+      "lang": "en",
+      "file": "docs/diagrams/workbench/rendered/build-path.en.webp",
+      "key": "notes/workbench-diagrams/v3/build-path.en-b348952b8bbd.webp",
+      "sha256": "b348952b8bbd72c9f44dd3a257906fe019ea3fa7dec2458e2ed277df4aae3cf8",
+      "contentType": "image/webp",
+      "url": "https://media.qiannawang.com/notes/workbench-diagrams/v3/build-path.en-b348952b8bbd.webp"
+    },
+    {
+      "id": "build-path",
+      "lang": "zh",
+      "file": "docs/diagrams/workbench/rendered/build-path.zh.webp",
+      "key": "notes/workbench-diagrams/v3/build-path.zh-dcb6af3a96a5.webp",
+      "sha256": "dcb6af3a96a50c9ed2c2e55003d9c06fcc9e33f30e050c9ee0a097a5f343a610",
+      "contentType": "image/webp",
+      "url": "https://media.qiannawang.com/notes/workbench-diagrams/v3/build-path.zh-dcb6af3a96a5.webp"
+    },
+    {
+      "id": "build-validation",
+      "lang": "en",
+      "file": "docs/diagrams/workbench/rendered/build-validation.en.webp",
+      "key": "notes/workbench-diagrams/v3/build-validation.en-a11e40244611.webp",
+      "sha256": "a11e402446114d9ecb8a6d493dd3a48ea70d8f5013f0c030454c60587ad259f7",
+      "contentType": "image/webp",
+      "url": "https://media.qiannawang.com/notes/workbench-diagrams/v3/build-validation.en-a11e40244611.webp"
+    },
+    {
+      "id": "build-validation",
+      "lang": "zh",
+      "file": "docs/diagrams/workbench/rendered/build-validation.zh.webp",
+      "key": "notes/workbench-diagrams/v3/build-validation.zh-f47dc4065bd4.webp",
+      "sha256": "f47dc4065bd4b83c6e78dcb276ad5f5f9e5faf3c42f24ffa90159a996fa081f4",
+      "contentType": "image/webp",
+      "url": "https://media.qiannawang.com/notes/workbench-diagrams/v3/build-validation.zh-f47dc4065bd4.webp"
+    },
+    {
+      "id": "build-timing",
+      "lang": "en",
+      "file": "docs/diagrams/workbench/rendered/build-timing.en.webp",
+      "key": "notes/workbench-diagrams/v3/build-timing.en-4b5a49a16bce.webp",
+      "sha256": "4b5a49a16bcece10aa44a9431238bd554233f6c8d30193b5df353180f9738427",
+      "contentType": "image/webp",
+      "url": "https://media.qiannawang.com/notes/workbench-diagrams/v3/build-timing.en-4b5a49a16bce.webp"
+    },
+    {
+      "id": "build-timing",
+      "lang": "zh",
+      "file": "docs/diagrams/workbench/rendered/build-timing.zh.webp",
+      "key": "notes/workbench-diagrams/v3/build-timing.zh-51f00c8a0f14.webp",
+      "sha256": "51f00c8a0f14f0b71559aed3e71a9e8bc010fc6e2bcdf86decddf232bc7636fa",
+      "contentType": "image/webp",
+      "url": "https://media.qiannawang.com/notes/workbench-diagrams/v3/build-timing.zh-51f00c8a0f14.webp"
+    }
+  ]
+}

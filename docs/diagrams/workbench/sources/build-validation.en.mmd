@@ -1,0 +1,9 @@
+flowchart LR
+ A["AI tests"] --> B["You try it"] --> C{"Works as expected?"}
+ Rel_0["Yes"]:::relation
+ C --> Rel_0
+ Rel_0 --> D["Save this version"]
+ Rel_1["No"]:::relation
+ C --> Rel_1
+ Rel_1 --> E["Send the problem to AI"] --> F["AI fixes and tests again"] --> B
+classDef relation fill:#eef2ff,stroke:#6366f1,stroke-width:1px,color:#312e81;

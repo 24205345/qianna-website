@@ -1,5 +1,7 @@
 # 开发者指南（qianna-website）
 
+第五章 Feature Build & Scaling 双语正文、三组中性灰双语图与第五阶段资源已于 2026-11-18 发布到 CMS / R2；通过 `node scripts/sync-feature-build-note.mjs` 维护，`--check` 核对双语源稿、图片与英文提示词卡片。`publish-feature-build-assets.mjs` 上传并校验哈希图片；`publish-feature-build-note.mjs` 默认生成只读计划，使用 `--apply --plan <路径>` 发布对应版本。原视频扩展资源保留。CMS、Git 与部署状态分别见 [第五章执行记录](exec-feature-build-scaling-2026-11-18.md)。
+
 第四章 UI Prototype & Ergonomics 包含双语正文、三组中性灰双语图和四组十四例交互页；中文提示词已本地化，扩充布局、文字排版和页面动效，并对照首页样式调整页面。文章和第四阶段入口已写入生产 CMS，保留其余七阶段和旧资源。维护、发布与检查边界见 [交互页维护](ui-prototype-lab.md)、[初版交付](exec-ui-prototype-2026-11-02.md)及 [本地化与扩充](exec-ui-prototype-refinement-2026-11-02.md)。本轮未新增 Git 提交或应用部署。
 
 > **Agent / 开发者第一份必读。** 常驻规则见根目录 [`AGENTS.md`](../AGENTS.md)；**系统架构**见 [`architecture.md`](architecture.md)；文档索引见 [`docs/README.md`](README.md)。

@@ -1,3 +1,4 @@
+import featureBuildStage from "./feature-build-stage.json";
 import uiPrototypeStage from "./ui-prototype-stage.json";
 import type { WorkflowPipeline, WorkflowStep } from "@/lib/workbench/types";
 
@@ -359,44 +360,7 @@ npx skills add nextlevelbuilder/ui-ux-pro-max-skill`,
         ]
       },
       uiPrototypeStage as WorkflowStep,
-      {
-        id: "step-development",
-        stepNumber: "05",
-        title: "Feature Build & Scaling",
-        subtitle: "Iterative Engineering & Expansion",
-        tools: ["yt-dlp", "Claude 3.7", "Git"],
-        summary:
-          "Execute disciplined incremental delivery: isolate agent runs with Git, spin up fresh context threads, and benchmark edge cases.",
-        keyTakeaway:
-          "Start fresh context threads for new features. Require agents to read existing documentation first to avoid regressing verified core paths.",
-        resources: [
-          {
-            id: "prompt-expand-summary",
-            type: "prompt",
-            title: "Incremental Feature Expansion & Benchmarking Prompt",
-            description: "Safely integrates LLM video summarization and chaptering without regressing core download reliability.",
-            tag: "Feature Expansion",
-            content: `You are expanding Universal Video Downloader.
-Core download is stable. Before proposing edits, inspect current documentation and codebase.
-
-## Goal
-Add AI video summarization for rapid learning and content review.
-
-## Context Sources
-- @project-docs
-- @current-codebase
-
-## Tasks
-Competitive analysis → Architecture RFC → Implementation
-
-## Guardrails
-1) Use Context7 and live search for up-to-date documentation; avoid deprecated APIs.
-2) Prioritize additive, non-breaking modifications to the existing download pipeline.
-3) Self-test end-to-end user journeys before requesting human review.`,
-            curatorNote: "Use cost-effective models during prototype validation, and keep API keys strictly in environment variables.",
-          },
-        ],
-      },
+      featureBuildStage as WorkflowStep,
       {
         id: "step-data-storage",
         stepNumber: "06",

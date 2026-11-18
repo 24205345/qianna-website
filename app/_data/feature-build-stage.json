@@ -1,0 +1,64 @@
+{
+  "id": "step-development",
+  "stepNumber": "05",
+  "title": "Feature Build & Scaling",
+  "subtitle": "Working MVP, Manual Verification & Incremental Growth",
+  "tools": [
+    "Coding Agent",
+    "Git",
+    "TDD",
+    "Browser Testing",
+    "Load Measurement"
+  ],
+  "summary": "Choose the scope and commit existing code before development. Let AI test, try it yourself, and send errors back for repair. Then extend it and address growing demand.",
+  "keyTakeaway": "Verify the core journey with automated checks and manual use, preserve a baseline, then extend behavior and capacity using measured evidence.",
+  "resources": [
+    {
+      "id": "prompt-build-mvp",
+      "type": "prompt",
+      "title": "Build a Verifiable MVP",
+      "tag": "MVP Development",
+      "description": "Turn confirmed requirements, contracts, and prototype states into small implementation steps with explicit verification evidence.",
+      "content": "Read @requirements @technical-plan-and-interfaces @UI-prototype @current-code.\n\nBuild: paste material → generate three questions → answer → review explanations\nand source. Do not add login, community, payments, or cross-device sync.\nKeep questions and answers in the current page.\n\nPropose development steps and questions first. Start after plan confirmation.\nImplement in the order above, running checks after each step.\nFollow the prototype and identify missing states.\nCheck Context7 or official docs for the installed versions; do not guess APIs.\nWrite tests before critical behavior. Start the app and try the journey yourself.\nExplicitly report missing credentials and checks you cannot run.\n\nDeliver startup and configuration instructions, actual test results,\nand unfinished work.",
+      "curatorNote": "Use the chapter acceptance conditions and report actual checks separately from assumptions."
+    },
+    {
+      "id": "prompt-build-repair",
+      "type": "prompt",
+      "title": "Investigate a Manual Test Failure",
+      "tag": "Manual Verification",
+      "description": "Report reproduction steps, expected and actual behavior, and errors; require investigation, regression checks, and a manual retest.",
+      "content": "I found this issue while trying the app. Please fix it.\n\nSteps: [input and actions]\nExpected: [what should happen]\nActual: [visible behavior or error text; screenshot optional]\n\nInspect code and logs. Ask for specific missing evidence rather than guessing\nand making broad changes. Run checks after repair, confirm existing features\nstill work, and tell me how to repeat the steps to verify the fix.",
+      "curatorNote": "Use the chapter acceptance conditions and report actual checks separately from assumptions."
+    },
+    {
+      "id": "prompt-build-extend",
+      "type": "prompt",
+      "title": "Extend a Stable Practice Session",
+      "tag": "Feature Expansion",
+      "description": "Add one related practice question while preserving the original questions, answers, and source-review state.",
+      "content": "The existing three-question practice works. Read the current docs and code.\n\nAdd: after a wrong answer, the user can click “Try another question.”\nGenerate one related question from the same material without replacing\nexisting questions or answers. Explain insufficient material; do not invent it.\n\nIdentify affected screens and interfaces and code that can be reused.\nAfter plan confirmation, implement incrementally without unrelated rewrites.\nTest the new question, then rerun the original session and failure retry.",
+      "curatorNote": "Use the chapter acceptance conditions and report actual checks separately from assumptions."
+    },
+    {
+      "id": "prompt-build-scale",
+      "type": "prompt",
+      "title": "Investigate a Scaling Bottleneck",
+      "tag": "Scaling Evidence",
+      "description": "Establish a reproducible load baseline, locate the delay, and compare a minimal improvement under equivalent conditions.",
+      "content": "Problem: [for example, generation often fails with two simultaneous users].\nEnvironment, reproduction steps, and logs: [attach].\n\nFind where it slows or fails and explain the evidence before adding a queue\nor cache. Propose the smallest fix and its trade-offs.\nState the request scale and budget before paid real-service tests.\nCompare the same inputs and user count before and after the change,\nand check question quality too.",
+      "curatorNote": "Use the chapter acceptance conditions and report actual checks separately from assumptions."
+    },
+    {
+      "id": "prompt-expand-summary",
+      "type": "prompt",
+      "title": "Incremental Feature Expansion & Benchmarking Prompt",
+      "description": "Safely integrates LLM video summarization and chaptering without regressing core download reliability.",
+      "tag": "Feature Expansion",
+      "content": "You are expanding Universal Video Downloader.\nCore download is stable. Before proposing edits, inspect current documentation and codebase.\n\n## Goal\nAdd AI video summarization for rapid learning and content review.\n\n## Context Sources\n- @project-docs\n- @current-codebase\n\n## Tasks\nCompetitive analysis → Architecture RFC → Implementation\n\n## Guardrails\n1) Use Context7 and live search for up-to-date documentation; avoid deprecated APIs.\n2) Prioritize additive, non-breaking modifications to the existing download pipeline.\n3) Self-test end-to-end user journeys before requesting human review.",
+      "curatorNote": "Use cost-effective models during prototype validation, and keep API keys strictly in environment variables."
+    }
+  ],
+  "relatedNoteHref": "/notes/feature-build-scaling",
+  "relatedNoteLabel": "Read Note: 【AI Dev Workflow · 05】Feature Build & Scaling: Build It, Then Improve It"
+}

@@ -1,3 +1,4 @@
+import {featureBuildEditorial} from './feature-build.mjs';
 import {uiPrototypeEditorial} from './ui-prototype.mjs';
 import {videoCaseEditorial} from './video-case.mjs';
 import {productionEditorial} from './production-figures.mjs';
@@ -7,6 +8,7 @@ import {taskEditorial} from './task-flow.mjs';
 const p=(en,zh)=>({en,zh});
 // Form is chosen for the content, not for visual variety alone.
 export const editorial={
+ ...featureBuildEditorial,
  ...uiPrototypeEditorial,
  ...videoCaseEditorial,
  ...conceptEditorial,

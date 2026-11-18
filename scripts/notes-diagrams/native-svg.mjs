@@ -1,3 +1,4 @@
+import {drawFeatureBuild} from './feature-build.mjs';
 import {drawUiPrototype} from './ui-prototype.mjs';
 import {drawVideoCase} from './video-case.mjs';
 import {createElement} from 'react';
@@ -52,7 +53,9 @@ export function drawEditorial(diagram,layout,lang,style){
  text(diagram.title[lang],24,36,{size:24,font:serif,width:992,maxLines:1});
  text(layout.subtitle[lang],24,68,{size:15,color:c.muted,width:992,maxLines:1});
 
- if(diagram.note==='ui-prototype-ergonomics'){
+ if(diagram.note==='feature-build-scaling'){
+  drawFeatureBuild(diagram,layout,lang,{L,c,text,icon,line,path,box,circle,foot,add});
+ }else if(diagram.note==='ui-prototype-ergonomics'){
   const contentHeight=drawUiPrototype(diagram,layout,lang,{L,c,text,icon,line,path,box,circle,foot,add});
   if(contentHeight!==undefined)H=contentHeight;
  }else if(diagram.id==='environment-toolkit'){

@@ -24,6 +24,8 @@
 
 ## Workbench 系列标题
 
+第五章 `feature-build-scaling` 于 2026-11-18 发布双语正文及 Workbench 第五阶段，原视频扩展资源保留。源稿、回退、配图和发布方式见[第五章记录](exec-feature-build-scaling-2026-11-18.md)；下段原编号保留状态属于第五章发布前记录。
+
 Workbench 的 AI 开发工作流文章使用 `【AI 开发工作流 · 01】 原中文标题` / `【AI Dev Workflow · 01】 Original English Title`。编号与 Workbench 阶段一致，不按文章发布日期重新编号；生产关联文章为 01、02、03、04、07、08，05–06 作为后续阶段的编号保留。第四章于 2026-11-02 发布，见[交付记录](exec-ui-prototype-2026-11-02.md)。第八章（From Demo to Team Platform，六分支概念地图与视频案例）于 2026-10-30 完成 Git 交付，2026-11-02 已通过管理员接口发布双语正文与工作流入口，见[内容交付](exec-enterprise-ai-production-2026-10-30.md)和[生产发布记录](exec-enterprise-ai-production-publish-2026-11-02.md)。
 
 系列标识写入 CMS 的 `title` / `title_en`，因此 Notes 列表、首页、详情及 SEO 元数据展示一致。同步 Workbench 的 `relatedNoteLabel` / `featured_note.title`、本地静态标题和正文源文件的文档标题；Workbench 阶段名称继续保持简洁英文。后续新增对应阶段文章时沿用相同格式，避免重复添加前缀。

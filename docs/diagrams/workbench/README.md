@@ -1,5 +1,17 @@
 # Workbench 图表规范
 
+第五篇三组双语图已于 2026-11-18 上传 R2 并公开读回校验，源稿和图集清单均使用已验证的远程哈希地址；历史本地版本保留。上传收据为 `docs/notes/feature-build-scaling.assets.json`，发布过程见第五章执行记录。
+
+第五篇可读性修订新增 `build-path` 开篇路线图；`build-validation` 改用“AI 自己测试 / 你亲自试用 / 你再试一次”等直接表达。当前第五篇三组双语图，历史哈希图片保留；同步与渲染命令不变。
+
+第五篇于 2026-11-18 新增 `build-validation` 验证闭环与 `build-timing` 概念时序两组双语图，沿用以下六色和双字体。编辑源、SVG、WebP、哈希与尺寸纳入清单，本地资产位于 `public/notes/feature-build-scaling/`。定向生成后运行 `node scripts/sync-feature-build-note.mjs` 同步正文引用和回退；`--check` 只核对。执行范围见 [第五章记录](../../exec-feature-build-scaling-2026-11-18.md)。
+
+```powershell
+node scripts/notes-diagrams/render.mjs --smartdiagram 'G:\project\SmartDiagram' --note feature-build-scaling
+node scripts/sync-feature-build-note.mjs
+npm run generate:note-images
+```
+
 当前样式 **v3，2026-10-29**，图集于 **2026-11-02** 扩展。用户要求图表形式服从内容，减少重复的分组框，并取消突兀的绿色。前三篇保留七组双语图：职责分支、MCP 拓扑、双路径合流、MVP 旅程、选型判断、可信边界、失败时序。第八篇保留三组在用图和三组工程存档图；视频项目实践新增学习闭环与处理流水线两组；第四篇新增任务旅程、作答线框与响应式对照三组，合计十八组双语图。功能比较采用可选择的 Markdown 表格，工程规约保留文字列表。正文写作遵循 [Notes 标准](../../notes-writing-guide.md)。
 
 ## 配色与字体

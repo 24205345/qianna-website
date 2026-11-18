@@ -1,0 +1,11 @@
+sequenceDiagram
+ participant U as User
+ participant A as Application
+ participant G as Generator
+ U->>A: Click and submit material
+ Note over A: Request accepted
+ A->>G: Request generation
+ G-->>A: Candidate output
+ Note over A: Validate and organize
+ A-->>U: First useful content / complete result
+ Note over U: May coincide with synchronous delivery

@@ -1,0 +1,9 @@
+flowchart LR
+ A["AI 自己测试"] --> B["你亲自试用"] --> C{"用起来正常吗？"}
+ Rel_0["是"]:::relation
+ C --> Rel_0
+ Rel_0 --> D["保存这版代码"]
+ Rel_1["否"]:::relation
+ C --> Rel_1
+ Rel_1 --> E["把问题和报错贴给 AI"] --> F["AI 修复并重新测试"] --> B
+classDef relation fill:#eef2ff,stroke:#6366f1,stroke-width:1px,color:#312e81;

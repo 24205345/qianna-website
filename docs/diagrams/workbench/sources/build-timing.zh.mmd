@@ -1,0 +1,11 @@
+sequenceDiagram
+ participant U as 用户
+ participant A as 应用
+ participant G as 生成服务
+ U->>A: 点击并提交材料
+ Note over A: 收到请求
+ A->>G: 请求生成
+ G-->>A: 候选结果
+ Note over A: 检查结果
+ A-->>U: 看到题目 / 全部生成完
+ Note over U: 三题一起返回时，两者可能重合

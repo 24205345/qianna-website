@@ -1,5 +1,7 @@
 # 开发文档索引
 
+第五章双语正文、三组双语图与 Workbench 第五阶段已于 2026-11-18 发布到 CMS / R2；先讲 AI 开发自测，再讲亲自试用、反馈修复和逐步扩展。源稿见 [中文](notes/feature-build-scaling.zh.md) / [English](notes/feature-build-scaling.en.md)，维护与实际交付状态见 [执行记录](exec-feature-build-scaling-2026-11-18.md)。
+
 > 自用文档，不面向站点访客。对外说明见根目录 [`README.md`](../README.md)。
 
 **Agent 入口：** [`AGENTS.md`](../AGENTS.md) → [`developer-guide.md`](developer-guide.md) · [`architecture.md`](architecture.md)
