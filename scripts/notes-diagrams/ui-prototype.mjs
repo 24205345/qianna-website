@@ -32,7 +32,7 @@ export const uiPrototypeDiagrams=[
 ];
 export const uiPrototypeEditorial={
  'ui-task-pages':{form:'task journey with recovery branches',subtitle:p('Start from what the person is trying to finish.','先明确用户要完成什么，再决定页面和控件。'),footer:p('Generation failure keeps the material; source review returns to the same answer.','生成失败保留材料；查看原文后回到同一份作答。')},
- 'ui-reading-order':{form:'annotated wireframe',subtitle:p('Primary action, optional detail, and conditional feedback.','区分主要操作、按需查看的细节和有条件出现的反馈。'),footer:p('This is a teaching wireframe, not a measured usability result or production UI.','这是教学线框示意，不是已验证的可用性结论或正式界面。')},
+ 'ui-reading-order':{form:'annotated wireframe',subtitle:p('Primary action, optional detail, and conditional feedback.','区分主要操作、按需查看的细节和有条件出现的反馈。')},
  'ui-responsive-order':{form:'responsive layout comparison',subtitle:p('Change the arrangement without changing the user’s task.','调整布局，不改变用户正在完成的任务。'),footer:p('Check a narrow viewport, long content, keyboard focus, and closing the source view.','检查窄屏、长内容、键盘焦点，以及关闭材料后能否继续作答。')}
 };
 export function drawUiPrototype(diagram,layout,lang,canvas){
@@ -49,7 +49,8 @@ export function drawUiPrototype(diagram,layout,lang,canvas){
   [L('Choice A: an unsupported generalization','选项 A：没有依据的概括'),L('Choice B: a claim grounded in the excerpt','选项 B：由原文片段支持的结论'),L('Choice C: an unrelated statement','选项 C：与材料无关的说法')].forEach((s,i)=>{circle(150,284+i*48,7);text(s,171,290+i*48,{width:550,size:16})});
   box(140,428,190,48,{fill:c.surface,r:5});text(L('Submit answer','提交答案'),235,459,{align:'middle',width:170,size:17});text(L('View source →','查看材料 →'),520,458,{width:210,size:15,color:c.muted});
   path('M761 145H795');text(L('1  Orient','1  知道在哪'),811,151,{width:205,size:16,weight:600});path('M761 284H795');text(L('2  Answer','2  完成作答'),811,290,{width:205,size:16,weight:600});path('M761 453H795');text(L('3  Continue','3  推进任务'),811,459,{width:205,size:16,weight:600});
-  text(L('After submission: feedback and explanation appear below the question.','提交之后：在题目下方呈现反馈与解释。'),140,553,{width:750,size:16,color:c.muted});foot(layout.footer[lang],588);
+  text(L('After submission: feedback and explanation appear below the question.','提交之后：在题目下方呈现反馈与解释。'),140,553,{width:750,size:16,color:c.muted});
+  return 588;
  }else{
   text(L('Desktop','桌面'),40,124,{width:500,size:21,weight:600});box(40,147,580,305,{r:8});box(60,168,325,261,{fill:c.surface});box(401,168,198,261);text(L('Question + answer','题目与作答'),82,206,{width:280,size:20});text(L('Primary task','主要任务'),82,237,{width:275,size:15,color:c.muted});text(L('Source','参考材料'),420,206,{width:160,size:19});text(L('Optional detail','按需查阅'),420,237,{width:160,size:15,color:c.muted});line(83,270,357,270);line(83,300,357,300);box(83,355,150,42,{fill:c.paper});text(L('Submit','提交'),103,383,{width:120,size:16});
   text(L('Mobile','手机'),725,124,{width:280,size:21,weight:600});box(725,147,272,385,{r:15});text(L('Question + answer','题目与作答'),747,195,{width:230,size:19});text(L('Same draft','同一份草稿'),747,226,{width:230,size:15,color:c.muted});line(747,261,975,261);line(747,292,975,292);box(747,331,228,43,{fill:c.surface});text(L('Submit','提交'),767,360,{width:180,size:16});text(L('View source →','查看材料 →'),747,417,{width:230,size:16});text(L('Open a drawer; return here.','打开抽屉，关闭后回到这里。'),747,465,{width:230,size:15,color:c.muted,maxLines:2});

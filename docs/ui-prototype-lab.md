@@ -1,6 +1,6 @@
 # 第四章交互参考页维护
 
-## 当前入口：参考式风格工作台（更新于 2026-11-16）
+## 当前入口：参考式风格工作台（更新于 2026-11-18）
 
 在用户认可的原三栏工作台上扩充内容，保留四套风格预设与 AcmeUI 产品页主体。左栏恢复附件原参考的四块设置。`curriculum.js` 定义六类问题下的 24 个部位实验与需求句；`LabSettings.jsx` 提供全页风格设置和按部位打开的比较控件；`LearningLab.jsx` 将资料、阅读与练习整合到原预设网页，并提供真实画布宽度、局部设置对照、内容集合、表单与本地任务状态。原十个页面部位加 24 个实验词条，共 34 项可搜索内容。见 [扩充记录](exec-ui-prototype-curriculum-2026-11-13.md)。
 
@@ -13,7 +13,7 @@
 - 表单校验支持提交／离开字段时检查；组合框支持方向键与 Enter；原生 dialog、drawer、popover 处理关闭与焦点。浮层通过 portal 避开画布 zoom，弹出面板使用独立锚点。
 - 加载、空内容、无匹配、失败重试、部分结果、流式／完成后输出、暂停／继续／取消均可操作。常规练习入口直接呈现“用材料生成练习”；资料摘要加载和失败恢复通过对应部位打开。生成与任务操作放在材料输入框右下角，操作行与文字分开排布，窄屏自动换行。生成按已知固定阶段返回练习模板，不调用后台或理解材料。
 - 名称只在悬停、聚焦或选中时出现。所选部位的比较选项、用途、区别、规则在“用途与交互示例”中按需展开。整页需求包含网页主要结构与当前部位规则，避免罗列未操作的全部实验；输出仍可选择整页／部位／本次调整，默认沿用现有技术栈，可选加入 CSS 近似动效的参考参数。
-- 双语章节、文章回退和 Workbench 入口说明同步；当前扩充只在本地。此前原文件接入版已由用户要求提交并推送为 `9bfdd88`；此次扩充未再次提交，没有写入 CMS、R2，未触发部署。
+- 双语章节、文章回退和 Workbench 入口说明同步。原文件接入版已提交并推送为 `9bfdd88`；实验室扩充和参考式操作台已于 2026-11-17 提交并推送为 `5c4b22c`。第四章五站参考指引已于 2026-11-18 写入 CMS，并发布两张删去底部说明的新线框图；本地正常配置与线上双语正文均已验证。现有 React 实验室线上入口可访问，正文发布未另行部署应用；后续 Git 保存状态以提交记录为准。见 [正文更新记录](exec-ui-prototype-reference-body-2026-11-17.md)与 [发布核验记录](exec-ui-prototype-cms-fix-2026-11-18.md)。
 
 当前检查：`npm run lint`、`npx tsc --noEmit`、`node --test --test-isolation=none tests/frontend-prompt-lab.test.mjs`、`node scripts/sync-ui-prototype-note.mjs --check`。15 项行为与颜色计算检查覆盖 24 个实验全部选项、原预设、状态保留、表单、查询、分页、组合框、键盘页签、任务中断／重试、需求范围、复制回退、自定义主色与无彩色边界；额外确认左栏只保留四块风格设置、不导航到实验，右栏仅呈现当前部位的比较，局部对照不会撤销全页动效设置。实验与预设切换保持原导航、首屏及输入节点，窄屏目录顺序与草稿不丢失。尺寸、样式组合、原生浮层与滚动另由真实浏览器验证。测试依赖仍复用下文外部 jsdom 目录。
 
@@ -30,7 +30,7 @@
 
 此基线通过 5 项 DOM 检查，并检查了四套预设、参数与提示词联动、X-Ray、预览标签页／折叠问答、缩放、复制与窄屏。详见 [直接接入记录](exec-ui-prototype-direct-import-2026-11-13.md)。其逐字比对结论针对当时基线，不适用于扩充后的需求生成逻辑。
 
-**下文为旧版记录与维护方式。** `scripts/ui-prototype-lab/`、生成的公共 HTML 和其 36 项 DOM 检查保留作为历史实现，不驱动当前 Next.js 入口。原 R2 资产收据也只对应已发布的旧版；现有单 HTML 上传／CMS 发布器不支持当前 React 页面，不能用它发布或证明新版本已上线。
+**下文保留旧版实现记录。** `scripts/ui-prototype-lab/`、生成的公共 HTML 和其 36 项 DOM 检查不驱动当前 Next.js 入口。R2 收据中的 `interface-lab` 仍对应旧 HTML，不能据此判断 React 页面是否上线。CMS 发布器现在同时支持应用入口与已验证的旧哈希入口；使用应用入口前先确认线上路由可用。React 代码随应用部署，不能用 HTML 上传器发布。
 
 ## 旧版记录（截至 2026-11-12）
 
@@ -76,15 +76,15 @@
 | `app/_data/ui-prototype-note.json`、`ui-prototype-stage.json` | 文章回退与第四阶段资源；由同步脚本维护提示词 |
 | `scripts/notes-diagrams/ui-prototype.mjs` | 三组双语图的逻辑、图注和原生 SVG 排版 |
 
-既有线上实验室使用 R2 上的内容哈希 HTML。本轮本地源文和回退暂用 `/notes/ui-prototype-ergonomics/interface-lab.html`，避免新指引指向旧示例。本地静态路径随应用部署发布；若独立通过 CMS 发布，先上传新哈希对象并更新正文，不能把尚未部署的本地路径提前写到生产。
+旧实验室使用 R2 上的内容哈希 HTML。当前正文、回退与第四阶段资源统一使用 `/notes/ui-prototype-ergonomics/interface-lab.html`，由 Next.js 重写到 React 页面；2026-11-18 已确认线上入口可用后同步到 CMS。后续若更换应用路径，仍需先验证部署，不能把仅在本地存在的地址提前写入 CMS。
 
 ## 修改与验证
 
-1. 修改 `scripts/ui-prototype-lab/` 源，再运行 `node scripts/build-ui-prototype-lab.mjs`。不要直接编辑生成的 HTML。运行 DOM 行为检查并进行真实浏览器巡检，对照文章中的规则与示例。
+1. 当前实验室修改 `app/notes/ui-prototype-ergonomics/interface-lab/` 中的 React 源并随应用部署；对照文章运行相应检查与浏览器巡检。`scripts/ui-prototype-lab/` 和 `scripts/build-ui-prototype-lab.mjs` 仅维护历史 HTML，不要直接编辑生成文件。
 2. 修改图后定向生成：`node scripts/notes-diagrams/render.mjs --smartdiagram G:\project\SmartDiagram --note ui-prototype-ergonomics`。检查中英文 SVG / WebP。
-3. `node --experimental-strip-types scripts/publish-ui-prototype-assets.mjs` 默认仅列计划；显式 `--apply` 上传七个新对象并校验公开字节。HTML 必须以 `text/html` 提供。
+3. `node scripts/publish-ui-prototype-assets.mjs --diagrams-only` 默认列六张配图的计划；加 `--apply` 时按哈希条件上传并校验公开字节，保留旧 HTML 收据与已有对象。省略 `--diagrams-only` 才会同时处理历史 HTML；该文件须以 `text/html` 提供。
 4. 更新双语正文的实验室与图片链接，再运行 `node scripts/sync-ui-prototype-note.mjs`；`--check` 检查回退和英文资源提示词是否同步。同步脚本从英文正文读取实验室地址并核对中文对应地址，不自动发布。
-5. `node scripts/publish-ui-prototype-note.mjs` 先比对当前 HTML、已验证的资产收据、双语正文与资源卡地址；不一致时在读取凭据或连接 CMS 之前退出。通过后生成系统临时目录内的只读 CMS 计划，核对后用 `--apply --plan <path>` 发布。写入前重新核对源摘要和旧数据，阻止覆盖并发编辑。仅维护第四阶段的实验室、三个提示词与五个参考站入口，保留其他资源及七阶段；发布后匿名读回。
+5. `node scripts/publish-ui-prototype-note.mjs` 先核对双语正文与资源卡采用同一个实验室地址：应用入口需有对应页面，旧哈希入口还需匹配 HTML 与资产收据。发布前人工确认应用入口在线上可用。通过后生成系统临时目录内的只读 CMS 计划，核对后用 `--apply --plan <path>` 发布。写入前重新核对源摘要和旧数据，阻止覆盖并发编辑。仅维护第四阶段的实验室、三个提示词与五个参考站入口，保留其他资源及七阶段；发布后匿名读回，再用正常配置的本地页和线上页验收。
 
 脚本通过已有管理员登录与 RLS 写入，不创建迁移、不初始化数据、不部署应用。若 MCP 可用，也可以按同样保护范围执行；不能把管理员接口调用记为 MCP。
 

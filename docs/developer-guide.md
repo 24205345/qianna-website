@@ -132,7 +132,9 @@ npm ci
 npm run start:site
 ```
 
-启动器检测依赖后启动开发服务并打开 **http://localhost:3000**；服务已在运行时只打开浏览器。`scripts/start-dev.ps1` 仍含旧 Node 路径 `G:\node-v24.16.0-win-x64`，使用前先按 §3.1 设置当前 PATH。
+也可双击项目根目录的 `start.bat`。启动器会在当前 PATH 与项目旁的 `.runtimes/node-v24*-win-x64` 中查找 Node 24，检查依赖后启动开发服务，并在就绪后打开 **http://127.0.0.1:3000**。服务与日志保留在同一个窗口，按 `Ctrl+C` 或关闭窗口即可停止；重复启动会复用已就绪的服务。
+
+指定其他端口可运行 `.\scripts\start-dev.ps1 -Port 3001`，默认打开地址随端口变化；终端检查可加 `-NoBrowser`。端口冲突、依赖安装和服务启动失败会显示具体错误，双击启动失败时窗口会保留。
 
 手动启动：
 

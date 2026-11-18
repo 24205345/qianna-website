@@ -2,7 +2,7 @@
  * Apply only that reviewed plan: --apply --plan <path>. No migrations or application deployment.
  */
 import {createClient} from '@supabase/supabase-js';
-import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdirSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
@@ -12,9 +12,13 @@ const note=JSON.parse(readFileSync('app/_data/ui-prototype-note.json','utf8'));
 const localStage=JSON.parse(readFileSync('app/_data/ui-prototype-stage.json','utf8'));
 const digest=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const desiredHash=digest({note,localStage});
-// A local preview link must not silently replace the published, immutable resource.
+// The current lab is an application route; legacy standalone links still require an asset receipt.
 const lab=JSON.parse(readFileSync(`docs/notes/${slug}.assets.json`,'utf8')).assets.find(a=>a.id==='interface-lab');
-if(!lab||createHash('sha256').update(readFileSync(`public/notes/${slug}/interface-lab.html`)).digest('hex')!==lab.sha256||!note.bodyMarkdownZh.includes(lab.url+'?lang=zh')||!note.bodyMarkdownEn.includes(lab.url+'?lang=en')||!localStage.resources.some(r=>r.id==='site-interface-lab'&&r.url===lab.url+'?lang=en'))throw Error('Publish the current lab asset, verify its receipt, update both article links, then resync before CMS publication.');
+const appLabUrl=`/notes/${slug}/interface-lab.html`;
+const hasLabLinks=url=>note.bodyMarkdownZh.includes(`](${url}?lang=zh)`)&&note.bodyMarkdownEn.includes(`](${url}?lang=en)`)&&localStage.resources.some(r=>r.id==='site-interface-lab'&&r.url===url+'?lang=en');
+const hasAppLab=hasLabLinks(appLabUrl)&&existsSync(`app/notes/${slug}/interface-lab/page.tsx`);
+const hasVerifiedLegacyLab=lab&&hasLabLinks(lab.url)&&createHash('sha256').update(readFileSync(`public/notes/${slug}/interface-lab.html`)).digest('hex')===lab.sha256;
+if(!hasAppLab&&!hasVerifiedLegacyLab)throw Error('Keep both article languages and the Workbench resource on the same application lab route or verified immutable asset, then resync before CMS publication.');
 process.loadEnvFile('.env.local');
 if(new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname!=='aqsdwfocoocnzyxopvvg.supabase.co')throw Error('Unexpected CMS destination');
 const options={auth:{persistSession:false,autoRefreshToken:false}};

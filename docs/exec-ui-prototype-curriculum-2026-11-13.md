@@ -1,6 +1,6 @@
 # 交互实验室内容扩充 · 2026-11-13
 
-用户要求先 `git commit & push`，再按已讨论方案扩充。已将原文件接入版及关联笔记提交为 `9bfdd88`（`feat(workbench): add interface lab and update learning notes`），推送到 `origin/main`。本轮新增课程仍留在工作区，未再次提交或推送。
+用户要求先 `git commit & push`，再按已讨论方案扩充。已将原文件接入版及关联笔记提交为 `9bfdd88`（`feat(workbench): add interface lab and update learning notes`），推送到 `origin/main`。下文记录的扩充与操作台调整，随后于 2026-11-17 按用户要求提交并推送为 `5c4b22c`。
 
 ## 实现范围
 
@@ -84,6 +84,7 @@
 ## 当前发布状态
 
 - 原基线：已提交、已推送 `9bfdd88`；托管端部署结果未检查。
-- 当前扩充：本地工作区，尚未提交／推送。
-- CMS、R2：未更新。
+- 实验室扩充与参考操作台：已于 2026-11-17 提交并推送 `5c4b22c`（`feat(workbench): expand interface lab and restore reference controls`）至 `origin/main`。
+- 随后新增的第四章参考站正文指引：已于 2026-11-18 写入 CMS；Git 保存状态以对应提交记录为准。源稿安排见 [正文更新记录](exec-ui-prototype-reference-body-2026-11-17.md)，实际发布见 [CMS 核验记录](exec-ui-prototype-cms-fix-2026-11-18.md)。
+- CMS 已同步第四章中英文正文与对应资源；R2 只新增两张删去底部说明的线框图，保留旧对象。线上正文及现有 React 实验室入口已实测可访问。
 - 旧静态 HTML 及其 36 项测试仍保留作历史实现，不驱动当前入口，也不代表新课程通过验证。

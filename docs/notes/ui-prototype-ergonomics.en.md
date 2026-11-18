@@ -33,13 +33,21 @@ Start with one task: **“Practice using this material, find what I misunderstoo
 
 This list defines the prototype scope. **Do not add accounts, history, or billing merely because a template includes them.**
 
+### Plan the Page Ending
+
+The main content supports the current task. A footer gives the page a clear ending and a place for help, contact details or usage information. [Footer.design](https://www.footer.design/) collects footer examples organized by styles such as grids, typography, illustration and animation. Identify the information groups before considering decoration.
+
+For the quiz tool, a footer could include “Help,” “Report a problem” and “Privacy.” A few links can share one row. With more categories, group help and feedback under support and keep policy information together. Keep “Generate practice,” “Submit answer” and “View source” near the tasks they serve.
+
+**You could request:** Place a fine divider and footer after the main content, retaining the existing help, feedback and information links. Arrange them horizontally on desktop and let them wrap on mobile. Use descriptive link text and visible keyboard focus, with the footer scrolling in normal document flow.
+
 ## 2. Establish Information Hierarchy
 
 An interface should answer: **Where am I? What can I do now? What happens next?** Check those questions in a wireframe before refining color, spacing, and decoration.
 
-[![Give the next action a clear place — A wireframe for the answering state. Explanations appear after submission.](https://media.qiannawang.com/notes/workbench-diagrams/v3/ui-reading-order.en-f351e5b8a295.webp)](https://media.qiannawang.com/notes/workbench-diagrams/v3/ui-reading-order.en-f351e5b8a295.webp)
+[![Give the next action a clear place — A wireframe for the answering state. Explanations appear after submission.](https://media.qiannawang.com/notes/workbench-diagrams/v3/ui-reading-order.en-cfdde482e12e.webp)](https://media.qiannawang.com/notes/workbench-diagrams/v3/ui-reading-order.en-cfdde482e12e.webp)
 
-*A wireframe for the answering state. Explanations appear after submission. [View full-size](https://media.qiannawang.com/notes/workbench-diagrams/v3/ui-reading-order.en-f351e5b8a295.webp)*
+*A wireframe for the answering state. Explanations appear after submission. [View full-size](https://media.qiannawang.com/notes/workbench-diagrams/v3/ui-reading-order.en-cfdde482e12e.webp)*
 
 Answering is the primary task, so the question and choices lead. Source material is available on demand; feedback appears after submission. Establish this order before making every module an equally prominent card.
 
@@ -109,6 +117,8 @@ Deliver a visual brief for the prototype implementation, recording references, a
 > **Specific:** On pointer hover, raise the practice card by 4 px over 200 ms and darken its border; restore it on pointer leave. Use an outline for keyboard focus and direct activation on touch. Remove the movement when reduced motion is requested.
 
 The duration and distance are adjustable example parameters. They describe a visual transition, not a promise that a business request finishes in 200 ms.
+
+Turn observations into requirements through **see the effect → learn its name → identify adjustable decisions → describe your own requirement**. Identify the object on screen, record the wording, position, spacing or state to change, then check the result using your own content.
 
 ### Describe an Action Entry
 
@@ -194,15 +204,23 @@ The lab demonstrates common page and component behavior. **It does not replace a
 
 ### Explore with a Question
 
-Alongside Refero Styles and CTA.gallery above, choose a resource for the question you currently face. Leave with a requirement in your own words, beyond saving a screenshot.
+Start with Refero Styles, CTA.gallery and Footer.design to understand page rules, primary actions and page endings. Scrolltide and Scroll Shaders are optional advanced resources once the task, content hierarchy and recovery are clear. Choose one question at a time and leave with a requirement in your own words.
 
-| Your question | What to inspect and take away |
-| :--- | :--- |
-| What belongs at the end of a page? | Inspect typography and grouping in [Footer.design](https://www.footer.design/). List the navigation, contact or explanatory routes you need; keep the main action in the main content |
-| How should an object change on scroll? | Choose one local effect in [Scrolltide](https://www.scrolltide.co/). Record its object, trigger, movement and ending; add touch and reduced-motion behavior |
-| Does an animated background help? | Inspect backgrounds in [Scroll Shaders](https://scrollshaders.com/). Check contrast, attention and a static alternative with your own text before adopting one |
+| Where you are stuck | Reference | What to take away |
+| :--- | :--- | :--- |
+| You like a page but cannot describe its style | [Refero Styles](https://styles.refero.design/) | Extract typography, color, spacing and component rules into your visual brief or `DESIGN.md` |
+| You need to clarify the next action | [CTA.gallery](https://www.cta.gallery/) | Specify action wording, position, priority, and waiting and result states |
+| You need to decide how a page ends | [Footer.design](https://www.footer.design/) | List retained links and groups, with desktop and mobile arrangements |
+| You need to describe a scroll effect | [Scrolltide](https://www.scrolltide.co/) | Select one object and specify its trigger, movement, ending, touch behavior and reduced-motion alternative |
+| You need to assess an animated background | [Scroll Shaders](https://scrollshaders.com/) | Compare color, speed and intensity with your text; record readability and a static alternative |
 
-The last two are optional advanced references. Establish the task, content hierarchy and failure recovery first. A working preview does not validate performance on your own devices and page.
+**First distinguish the scroll trigger.** Scrolltide offers scroll-related templates, components and generation prompts. For one local effect, distinguish “play once on entering the viewport” from “continuously follow scroll progress.” Hold content, layout and color constant, then compare one change at a time.
+
+For example: **Fade the explanation region in once when it first enters the viewport; keep it visible when returning. Let body content scroll normally and show it immediately when reduced motion is requested.** For continuous scroll effects, also define where the change starts, ends and reverses. Turn observations into these rules before asking an agent to implement them.
+
+**Check text readability before choosing a background.** Scroll Shaders presents WebGL backgrounds and related components. Overlay your headings and body text while comparing color, speed and intensity. Does text remain readable throughout, does motion keep pulling attention, and does the page still work when the effect stops?
+
+For the quiz tool, keep questions and choices on a static surface. Try motion in an introductory area if atmosphere serves a purpose, with a still image or solid color as an alternative. A working preview does not validate performance on your devices and page; check an actual phone and long content.
 
 **Check the design lesson and asset permissions separately.** The lab does not embed templates or shaders from these reference sites. Scrolltide's [terms](https://www.scrolltide.co/terms) and Scroll Shaders' [license](https://scrollshaders.com/license) distinguish finished-project use from resource redistribution. Check the specific permissions before copying code, downloading assets or offering reusable examples. Public references were checked in November 2026; changing catalog counts and prices are not selection criteria here.
 

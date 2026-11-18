@@ -53,7 +53,8 @@ export function drawEditorial(diagram,layout,lang,style){
  text(layout.subtitle[lang],24,68,{size:15,color:c.muted,width:992,maxLines:1});
 
  if(diagram.note==='ui-prototype-ergonomics'){
-  drawUiPrototype(diagram,layout,lang,{L,c,text,icon,line,path,box,circle,foot,add});
+  const contentHeight=drawUiPrototype(diagram,layout,lang,{L,c,text,icon,line,path,box,circle,foot,add});
+  if(contentHeight!==undefined)H=contentHeight;
  }else if(diagram.id==='environment-toolkit'){
   icon('UserRound',66,233,34);text(L('You','你'),83,301,{align:'middle',width:110,size:19,weight:600});
   text(L('Goal + limits\nAcceptance','目标、约束\n与验收'),83,330,{align:'middle',width:145,size:15,color:c.muted});
