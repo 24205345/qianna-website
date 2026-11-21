@@ -1,5 +1,7 @@
 # 开发文档索引
 
+个人网站文章的双语修订稿已于 2026-11-21 发布，源稿见 [中文](notes/building-qianna-portfolio.zh.md) / [English](notes/building-qianna-portfolio.en.md)。保留原标题与参考网站，补充从静态展示到后台管理的演进过程；删去架构及前台实现章节，将数据库与后台两章合并。当前两种语言均为 12 个主章节，CMS 与静态回退已同步，发布与检查见 [执行记录](exec-portfolio-note-publish-2026-11-21.md)。
+
 第五章双语正文、三组双语图与 Workbench 第五阶段已于 2026-11-18 发布到 CMS / R2；先讲 AI 开发自测，再讲亲自试用、反馈修复和逐步扩展。源稿见 [中文](notes/feature-build-scaling.zh.md) / [English](notes/feature-build-scaling.en.md)，维护与实际交付状态见 [执行记录](exec-feature-build-scaling-2026-11-18.md)。
 
 > 自用文档，不面向站点访客。对外说明见根目录 [`README.md`](../README.md)。

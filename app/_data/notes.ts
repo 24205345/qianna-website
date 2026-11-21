@@ -1,3 +1,4 @@
+import portfolioNote from "./portfolio-note.json";
 import featureBuildNote from "./feature-build-note.json";
 import uiPrototypeNote from "./ui-prototype-note.json";
 import aiVideoNote from "./ai-video-note.json";
@@ -28,6 +29,7 @@ export const fallbackNotes: NoteDetail[] = [
   featureBuildNote,
   uiPrototypeNote,
   enterpriseProductionNote,
+  portfolioNote,
   aiVideoNote,
   {
     slug: "ai-infrastructure-coding-agents-and-models",
